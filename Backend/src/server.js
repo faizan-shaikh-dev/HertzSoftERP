@@ -12,6 +12,7 @@ import authRoutes from './modules/auth.routes.js';
 import leadRoutes from './modules/lead.routes.js';
 import clientRoutes from './modules/client.routes.js';
 import projectRoutes from './modules/project.routes.js';
+import paymentRoutes from './modules/payment.routes.js';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // Base Health Check Route
 app.get('/health', (req, res) => {
