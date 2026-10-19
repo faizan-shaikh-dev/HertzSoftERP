@@ -1,3 +1,4 @@
+//Packages Import
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -5,6 +6,9 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import pool  from './config/db.js';
 import { errorHandler } from './middleware/errorHandler.js';
+
+//Routes Import
+import authRoutes from './modules/auth.routes.js'
 
 dotenv.config();
 
@@ -16,6 +20,9 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
+
+//Endpoint Routes
+app.use('/api/auth', authRoutes);
 
 // Base Health Check Route
 app.get('/health', (req, res) => {
