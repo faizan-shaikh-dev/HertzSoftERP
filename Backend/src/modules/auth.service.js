@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import pool from '../../config/db.js';
+import pool from '../config/db.js';
 
 // JWT Token Generator Helper
 export const generateToken = (user) => {
