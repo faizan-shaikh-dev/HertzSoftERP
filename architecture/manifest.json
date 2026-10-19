@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "name": "Hertzsoft Centralized ERP & Operations System",
+  "description": "Architecture map for Hertzsoft Technologies ERP covering Student & Client Leads, Projects, Payments Tracking, and Certificate Generator.",
+  "diagrams": [
+    {
+      "id": "system-context",
+      "title": "System Context",
+      "file": "diagrams/system-context.json"
+    },
+    {
+      "id": "containers",
+      "title": "Containers & Modules Breakdown",
+      "file": "diagrams/containers.json"
+    }
+  ]
+}

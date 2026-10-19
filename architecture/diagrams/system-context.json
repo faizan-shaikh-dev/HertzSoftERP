@@ -1,0 +1,36 @@
+{
+  "nodes": [
+    {
+      "id": "user",
+      "label": "Hertzsoft Admin & Staff",
+      "type": "person",
+      "description": "Admin and operational staff managing leads, clients, projects, payments, and certificates."
+    },
+    {
+      "id": "hertzsoft-erp",
+      "label": "Hertzsoft ERP System",
+      "type": "system",
+      "description": "Unified business system for Student/Client Leads, Projects tracking, Payments, and Certificate generation.",
+      "path": "/"
+    },
+    {
+      "id": "phpmyadmin",
+      "label": "MySQL Database (phpMyAdmin)",
+      "type": "datastore",
+      "description": "Relational MySQL database (hertzsoft_crm) holding all tables, leads, projects, payments, and records.",
+      "path": "Backend/src/config/db.js"
+    }
+  ],
+  "edges": [
+    {
+      "from": "user",
+      "to": "hertzsoft-erp",
+      "relationship": "Interacts with via Web Browser (Next.js & REST API)"
+    },
+    {
+      "from": "hertzsoft-erp",
+      "to": "phpmyadmin",
+      "relationship": "Queries and stores data via mysql2 connection pool"
+    }
+  ]
+}
