@@ -8,7 +8,10 @@ import pool  from './config/db.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 //Routes Import
-import authRoutes from './modules/auth.routes.js'
+import authRoutes from './modules/auth.routes.js';
+import leadRoutes from './modules/lead.routes.js';
+import clientRoutes from './modules/client.routes.js';
+import projectRoutes from './modules/project.routes.js';
 
 dotenv.config();
 
@@ -23,6 +26,9 @@ app.use(morgan('dev'));
 
 //Endpoint Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/leads', leadRoutes);
+app.use('/api/clients', clientRoutes);
+app.use('/api/projects', projectRoutes);
 
 // Base Health Check Route
 app.get('/health', (req, res) => {

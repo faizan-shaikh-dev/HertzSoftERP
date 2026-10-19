@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS user_roles (
 -- 4. Leads Table
 CREATE TABLE IF NOT EXISTS leads (
   id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+  lead_type ENUM('Student','Client') NOT NULL DEFAULT 'Client',
   lead_number BIGINT NOT NULL AUTO_INCREMENT UNIQUE,
   name VARCHAR(150) NOT NULL,
   phone VARCHAR(30) NOT NULL,
