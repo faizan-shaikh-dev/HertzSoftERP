@@ -10,7 +10,7 @@ export const createLead = async (leadData, userId) => {
     name,
     phone,
     email = null,
-    company_name = null,w
+    company_name = null,
     requirement,
     service_interest = null, // For Students: 'Data Science', 'FullStack Development', 'Digital Marketing'
     source = 'Direct',

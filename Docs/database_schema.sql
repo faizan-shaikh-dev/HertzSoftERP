@@ -183,3 +183,26 @@ INSERT IGNORE INTO roles (id, name) VALUES
   (UUID(), 'Team Member'),
   (UUID(), 'Finance'),
   (UUID(), 'HR');
+
+-- 11. Certificates & Documents Table
+CREATE TABLE IF NOT EXISTS certificates (
+  id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+  certificate_number VARCHAR(100) NOT NULL UNIQUE,
+  candidate_name VARCHAR(150) NOT NULL,
+  candidate_email VARCHAR(150) NULL,
+  candidate_phone VARCHAR(30) NULL,
+  document_type ENUM('Course Certificate', 'Internship Certificate', 'Offer Letter') NOT NULL,
+  course_or_domain VARCHAR(150) NOT NULL,
+  start_date DATE NULL,
+  end_date DATE NULL,
+  issue_date DATE NOT NULL,
+  stipend VARCHAR(80) NULL,
+  performance_rating ENUM('Outstanding', 'Excellent', 'Very Good', 'Good') NOT NULL DEFAULT 'Excellent',
+  status ENUM('Issued', 'Revoked') NOT NULL DEFAULT 'Issued',
+  issued_by CHAR(36) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (issued_by) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE INDEX idx_certificates_number ON certificates(certificate_number);
+
