@@ -137,9 +137,10 @@ dist
 # Serverless Webpack directories
 .webpack/
 
-# Optional stylelint cache
-
 # SvelteKit build / generate output
 .svelte-kit
+
+# Local test scripts
+test_api.js
 
 # End of https://www.toptal.com/developers/gitignore/api/node

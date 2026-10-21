@@ -3,18 +3,20 @@ import * as leadService from './lead.service.js';
 // 1. Create a Lead
 export const createLead = async (req, res, next) => {
   try {
-    const { name, phone, requirement } = req.body;
+    const requirement = req.body.requirement || req.body.service_interest || (req.body.lead_type === 'Student' ? 'Course Inquiry' : null);
+    const { name, phone } = req.body;
 
     if (!name || !phone || !requirement) {
       return res.status(400).json({
         error: {
           code: 'VALIDATION_ERROR',
-          message: 'name, phone and requirement are required fields'
+          message: 'name, phone and requirement (or course) are required fields'
         }
       });
     }
 
-    const lead = await leadService.createLead(req.body, req.user.id);
+    const payload = { ...req.body, requirement };
+    const lead = await leadService.createLead(payload, req.user.id);
 
     res.status(201).json({
       success: true,
