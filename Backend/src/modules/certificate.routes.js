@@ -1,5 +1,4 @@
-import { Router } from "express";
-import { authenticateToken } from '../middleware/authMiddleware.js';
+import { authenticateToken, authorizeRoles } from '../middleware/authMiddleware.js';
 import * as certController from './certificate.controller.js';
 
 const router = Router();
@@ -8,7 +7,7 @@ const router = Router();
 router.get('/verify/:serial_no', certController.verifyCertificate);
 
 //Protected routes
-router.post('/', authenticateToken, certController.issueCertificate);
+router.post('/', authenticateToken, authorizeRoles('Administrator', 'HR'), certController.issueCertificate);
 router.get('/', authenticateToken, certController.getCertificates);
 router.get('/:id', authenticateToken, certController.getCertificateById);
 

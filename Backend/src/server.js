@@ -15,20 +15,46 @@ import projectRoutes from './modules/project.routes.js';
 import paymentRoutes from './modules/payment.routes.js';
 import certificateRoutes from './modules/certificate.routes.js';
 import dashboardRoutes from './modules/dashboard.routes.js';
+import { apiLimiter, authLimiter } from './middleware/rateLimiter.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Core Middlewares
+// Security Headers & Strict CORS
 app.use(helmet());
-app.use(cors());
-app.use(express.json());
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  process.env.CLIENT_URL
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, or Postman) or whitelisted origins
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS blocked for origin: ${origin}`));
+      }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  })
+);
+
+app.use(express.json({ limit: '1mb' })); // Limit payload size to protect against large body DoS
 app.use(morgan('dev'));
 
-//Endpoint Routes
-app.use('/api/auth', authRoutes);
+// General Rate Limiter for all APIs
+app.use('/api', apiLimiter);
+
+// Endpoint Routes
+app.use('/api/auth', authLimiter, authRoutes); // Strict rate limiting against brute-force login attempts
 app.use('/api/leads', leadRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/projects', projectRoutes);

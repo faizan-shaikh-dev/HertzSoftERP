@@ -27,3 +27,29 @@ export const authenticateToken = (req, res, next) => {
     });
   }
 };
+
+// 2. Authorize Specific Roles (RBAC Guard)
+export const authorizeRoles = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!req.user || !req.user.role) {
+      return res.status(403).json({
+        error: {
+          code: 'FORBIDDEN',
+          message: 'User role could not be verified.'
+        }
+      });
+    }
+
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({
+        error: {
+          code: 'FORBIDDEN',
+          message: `Access denied. Requires one of: [${allowedRoles.join(', ')}]. Your role: ${req.user.role}`
+        }
+      });
+    }
+
+    next();
+  };
+};
+
