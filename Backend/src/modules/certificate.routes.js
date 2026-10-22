@@ -1,3 +1,4 @@
+import { Router } from 'express';
 import { authenticateToken, authorizeRoles } from '../middleware/authMiddleware.js';
 import * as certController from './certificate.controller.js';
 
