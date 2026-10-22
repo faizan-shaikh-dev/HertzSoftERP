@@ -37,6 +37,8 @@ export function AuthProvider({ children }) {
 
     localStorage.setItem('token', jwtToken);
     localStorage.setItem('user', JSON.stringify(userData));
+    // Synchronize token to cookie so Next.js Edge Middleware can verify server-side
+    document.cookie = `token=${jwtToken}; path=/; max-age=86400; SameSite=Lax`;
 
     setUser(userData);
     setToken(jwtToken);
@@ -55,6 +57,7 @@ export function AuthProvider({ children }) {
   // 4. Terminate active session and redirect to login page
   const logout = () => {
     authService.logout();
+    document.cookie = 'token=; path=/; max-age=0';
     setUser(null);
     setToken(null);
     router.push('/login');

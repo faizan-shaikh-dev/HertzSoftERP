@@ -22,10 +22,21 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// 3. Response Interceptor: Standardize error messages from backend responses
+// 3. Response Interceptor: Handle session expiry (401) and standardize error messages
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Automatically terminate session and redirect if token is expired or invalid
+    if (error.response?.status === 401) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        if (!window.location.pathname.startsWith('/login')) {
+          window.location.href = '/login?expired=true';
+        }
+      }
+    }
+
     const serverMessage =
       error.response?.data?.error?.message ||
       error.response?.data?.message ||
