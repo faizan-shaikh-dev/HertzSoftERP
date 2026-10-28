@@ -80,9 +80,22 @@ export default function LeadsPage() {
   // Quick Inline Status Update
   const handleStatusChange = async (leadId, newStatus) => {
     try {
-      await leadService.updateLeadStatus(leadId, { status: newStatus });
+      let lostReason = null;
+      if (newStatus === 'Lost') {
+        const inputReason = window.prompt('Please enter the reason for marking this lead as Lost (optional):');
+        if (inputReason === null) {
+          // User canceled the prompt, abort status change
+          return;
+        }
+        lostReason = inputReason.trim() || 'Not specified';
+      }
+
+      await leadService.updateLeadStatus(leadId, { 
+        status: newStatus,
+        lost_reason: lostReason
+      });
       setLeads((prev) =>
-        prev.map((l) => (l.id === leadId ? { ...l, status: newStatus } : l))
+        prev.map((l) => (l.id === leadId ? { ...l, status: newStatus, lost_reason: lostReason } : l))
       );
       toast.success(`Inquiry status updated to "${newStatus}"`);
     } catch (err) {
