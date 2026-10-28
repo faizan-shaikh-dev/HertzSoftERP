@@ -25,7 +25,7 @@ import {
   Clock, 
   AlertCircle 
 } from 'lucide-react';
-import { LeadModal, ConfirmDeleteModal } from '@/components/modals';
+import { LeadModal, ConfirmDeleteModal, LostReasonModal } from '@/components/modals';
 
 const STATUS_OPTIONS = ['New', 'Contacted', 'In Discussion', 'Won', 'Lost'];
 
@@ -49,6 +49,10 @@ export default function LeadsPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState(null);
   const [deleting, setDeleting] = useState(false);
+
+  const [isLostModalOpen, setIsLostModalOpen] = useState(false);
+  const [leadForLostStatus, setLeadForLostStatus] = useState(null);
+  const [updatingLost, setUpdatingLost] = useState(false);
 
   // Fetch leads from backend
   const fetchLeads = async (isManual = false) => {
@@ -78,29 +82,44 @@ export default function LeadsPage() {
   }, []);
 
   // Quick Inline Status Update
-  const handleStatusChange = async (leadId, newStatus) => {
-    try {
-      let lostReason = null;
-      if (newStatus === 'Lost') {
-        const inputReason = window.prompt('Please enter the reason for marking this lead as Lost (optional):');
-        if (inputReason === null) {
-          // User canceled the prompt, abort status change
-          return;
-        }
-        lostReason = inputReason.trim() || 'Not specified';
-      }
+  const handleStatusChange = async (lead, newStatus) => {
+    if (newStatus === 'Lost') {
+      setLeadForLostStatus(lead);
+      setIsLostModalOpen(true);
+      return;
+    }
 
-      await leadService.updateLeadStatus(leadId, { 
-        status: newStatus,
-        lost_reason: lostReason
-      });
+    try {
+      await leadService.updateLeadStatus(lead.id, { status: newStatus });
       setLeads((prev) =>
-        prev.map((l) => (l.id === leadId ? { ...l, status: newStatus, lost_reason: lostReason } : l))
+        prev.map((l) => (l.id === lead.id ? { ...l, status: newStatus } : l))
       );
       toast.success(`Inquiry status updated to "${newStatus}"`);
     } catch (err) {
       console.error('Failed to update status:', err);
       toast.error(err.message || 'Failed to update pipeline status.');
+    }
+  };
+
+  const handleConfirmLostReason = async (reason) => {
+    if (!leadForLostStatus) return;
+    try {
+      setUpdatingLost(true);
+      await leadService.updateLeadStatus(leadForLostStatus.id, {
+        status: 'Lost',
+        lost_reason: reason
+      });
+      setLeads((prev) =>
+        prev.map((l) => (l.id === leadForLostStatus.id ? { ...l, status: 'Lost', lost_reason: reason } : l))
+      );
+      toast.success(`Inquiry marked as Lost`);
+      setIsLostModalOpen(false);
+      setLeadForLostStatus(null);
+    } catch (err) {
+      console.error('Failed to mark lead as lost:', err);
+      toast.error(err.message || 'Failed to update status.');
+    } finally {
+      setUpdatingLost(false);
     }
   };
 
@@ -447,7 +466,7 @@ export default function LeadsPage() {
                     <td className="py-3 px-4">
                       <select
                         value={lead.status}
-                        onChange={(e) => handleStatusChange(lead.id, e.target.value)}
+                        onChange={(e) => handleStatusChange(lead, e.target.value)}
                         className={`px-2 py-1 rounded text-[11px] font-bold uppercase tracking-wider outline-none border cursor-pointer ${
                           lead.status === 'Won'
                             ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -534,6 +553,18 @@ export default function LeadsPage() {
         loading={deleting}
         title="Delete Inquiry Record"
         message={`Are you sure you want to permanently delete the inquiry for "${leadToDelete?.name}"? This action cannot be undone.`}
+      />
+
+      {/* Lost Reason Modal (replaces browser prompt) */}
+      <LostReasonModal
+        isOpen={isLostModalOpen}
+        onClose={() => {
+          setIsLostModalOpen(false);
+          setLeadForLostStatus(null);
+        }}
+        onConfirm={handleConfirmLostReason}
+        leadName={leadForLostStatus?.name}
+        loading={updatingLost}
       />
     </AppLayout>
   );

@@ -126,23 +126,14 @@ export const updateLead = async (id, updateData) => {
 
 // 5. Update Lead Status
 export const updateLeadStatus = async (id, { status, lost_reason = null, on_hold_reason = null }) => {
-  if (status === 'Lost' && !lost_reason) {
-    const error = new Error('lost_reason is required when marking a lead as Lost');
-    error.statusCode = 400;
-    error.code = 'VALIDATION_ERROR';
-    throw error;
-  }
+  const finalLostReason = status === 'Lost' ? (lost_reason || 'Not specified') : null;
+  const finalOnHoldReason = status === 'On Hold' ? (on_hold_reason || 'Not specified') : null;
 
-  if (status === 'On Hold' && !on_hold_reason) {
-    const error = new Error('on_hold_reason is required when marking a lead On Hold');
-    error.statusCode = 400;
-    error.code = 'VALIDATION_ERROR';
-    throw error;
-  }
+  
 
   await pool.query(
     'UPDATE leads SET status = ?, lost_reason = ?, on_hold_reason = ? WHERE id = ?',
-    [status, lost_reason, on_hold_reason, id]
+    [status, finalLostReason, finalOnHoldReason, id]
   );
 
   return await getLeadById(id);
