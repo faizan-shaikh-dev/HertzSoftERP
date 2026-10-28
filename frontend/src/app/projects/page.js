@@ -114,15 +114,6 @@ export default function ProjectsPage() {
     });
   }, [projects, selectedStatus, searchQuery]);
 
-  // Aggregate Metrics
-  const metrics = useMemo(() => {
-    const totalCost = projects.reduce((acc, p) => acc + Number(p.total_cost || 0), 0);
-    const totalPaid = projects.reduce((acc, p) => acc + Number(p.total_paid || 0), 0);
-    const totalDue = projects.reduce((acc, p) => acc + Number(p.due_balance || 0), 0);
-    const activeCount = projects.filter((p) => p.status === 'In Progress').length;
-    return { totalCost, totalPaid, totalDue, activeCount };
-  }, [projects]);
-
   const formatCurrency = (amt) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -173,57 +164,6 @@ export default function ProjectsPage() {
             <Plus className="w-4 h-4" />
             <span>Create New Project</span>
           </button>
-        </div>
-      </div>
-
-      {/* Financial Metric Cards (template-hz style) */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-            Total Contract Values
-          </span>
-          <div className="text-2xl font-black text-slate-900 mt-1">
-            {formatCurrency(metrics.totalCost)}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-0.5">
-            Across {projects.length} recorded contracts
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
-            Total Revenue Collected
-          </span>
-          <div className="text-2xl font-black text-emerald-800 mt-1">
-            {formatCurrency(metrics.totalPaid)}
-          </div>
-          <div className="text-[11px] text-emerald-600 mt-0.5 font-medium">
-            Installments cleared
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">
-            Pending Dues
-          </span>
-          <div className="text-2xl font-black text-amber-700 mt-1">
-            {formatCurrency(metrics.totalDue)}
-          </div>
-          <div className="text-[11px] text-amber-600 mt-0.5 font-medium">
-            To be collected
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700">
-            Active Deliveries
-          </span>
-          <div className="text-2xl font-black text-blue-900 mt-1">
-            {metrics.activeCount}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-0.5">
-            Projects currently in progress
-          </div>
         </div>
       </div>
 

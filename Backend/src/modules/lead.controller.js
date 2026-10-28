@@ -3,19 +3,45 @@ import * as leadService from './lead.service.js';
 // 1. Create a Lead
 export const createLead = async (req, res, next) => {
   try {
-    const requirement = req.body.requirement || req.body.service_interest || (req.body.lead_type === 'Student' ? 'Course Inquiry' : null);
     const { name, phone } = req.body;
+    const requirement = (req.body.requirement || req.body.service_interest || '').trim();
 
-    if (!name || !phone || !requirement) {
+    if (!name || !name.trim()) {
       return res.status(400).json({
         error: {
           code: 'VALIDATION_ERROR',
-          message: 'name, phone and requirement (or course) are required fields'
+          message: 'Client name is required'
         }
       });
     }
 
-    const payload = { ...req.body, requirement };
+    if (!phone || !phone.trim()) {
+      return res.status(400).json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Phone number is required'
+        }
+      });
+    }
+
+    if (!requirement) {
+      return res.status(400).json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Project requirement is required'
+        }
+      });
+    }
+
+    const payload = { 
+      ...req.body, 
+      name: name.trim(),
+      phone: phone.trim(),
+      requirement,
+      lead_type: 'Client',
+      assigned_to: req.body.assigned_to || req.user.id
+    };
+
     const lead = await leadService.createLead(payload, req.user.id);
 
     res.status(201).json({
@@ -27,11 +53,11 @@ export const createLead = async (req, res, next) => {
   }
 };
 
-// 2. Get All Leads (supports ?status=Won&search=Faizan)
+// 2. Get All Leads (supports ?status=Won&search=Faizan&assigned_to=...&priority=...)
 export const getLeads = async (req, res, next) => {
   try {
-    const { status, search, lead_type } = req.query;
-    const leads = await leadService.getLeads({ status, search, lead_type });
+    const { status, search, lead_type, assigned_to, priority } = req.query;
+    const leads = await leadService.getLeads({ status, search, lead_type, assigned_to, priority });
 
     res.status(200).json({
       success: true,
@@ -43,7 +69,41 @@ export const getLeads = async (req, res, next) => {
   }
 };
 
-// 3. Get Single Lead by ID
+// 3. Get Active Assignees (Team Members dropdown)
+export const getAssignees = async (req, res, next) => {
+  try {
+    const assignees = await leadService.getAssignees();
+    res.status(200).json({
+      success: true,
+      data: assignees
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 4. Check Duplicate Phone (Real-time check)
+export const checkDuplicatePhone = async (req, res, next) => {
+  try {
+    const { phone, excludeLeadId } = req.query;
+    if (!phone) {
+      return res.status(200).json({
+        success: true,
+        data: { isDuplicate: false, matches: [] }
+      });
+    }
+
+    const result = await leadService.checkDuplicatePhone(phone, excludeLeadId);
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 5. Get Single Lead by ID
 export const getLeadById = async (req, res, next) => {
   try {
     const lead = await leadService.getLeadById(req.params.id);
@@ -57,7 +117,7 @@ export const getLeadById = async (req, res, next) => {
   }
 };
 
-// 4. Update Lead Details
+// 6. Update Lead Details
 export const updateLead = async (req, res, next) => {
   try {
     const updatedLead = await leadService.updateLead(req.params.id, req.body);
@@ -71,10 +131,10 @@ export const updateLead = async (req, res, next) => {
   }
 };
 
-// 5. Update Lead Status
+// 7. Update Lead Status
 export const updateLeadStatus = async (req, res, next) => {
   try {
-    const { status, lost_reason, on_hold_reason } = req.body;
+    const { status, lost_reason, on_hold_reason, revisit_date } = req.body;
 
     if (!status) {
       return res.status(400).json({
@@ -88,7 +148,8 @@ export const updateLeadStatus = async (req, res, next) => {
     const updatedLead = await leadService.updateLeadStatus(req.params.id, {
       status,
       lost_reason,
-      on_hold_reason
+      on_hold_reason,
+      revisit_date
     });
 
     res.status(200).json({
@@ -100,7 +161,7 @@ export const updateLeadStatus = async (req, res, next) => {
   }
 };
 
-// 6. Delete Lead
+// 8. Delete Lead
 export const deleteLead = async (req, res, next) => {
   try {
     const result = await leadService.deleteLead(req.params.id);

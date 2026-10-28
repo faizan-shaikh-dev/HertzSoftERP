@@ -2,7 +2,7 @@ import pool from '../config/db.js';
 
 // Helper to generate unique serial code (e.g., HZ-2026-FS-8492)
 const generateCertNumber = (docType, domain) => {
-  const prefix = docType === 'Offer Letter' ? 'HZ-OFFER' : (docType === 'Internship Certificate' ? 'HZ-INT' : 'HZ-CERT');
+  const prefix = docType === 'Offer Letter' ? 'HZ-OFFER' : (docType === 'Internship Certificate' ? 'HZ-INT' : (docType === 'Experience Letter' ? 'HZ-EXP' : 'HZ-DOC'));
   const domainCode = (domain && typeof domain === 'string' && domain.length >= 2) ? domain.substring(0, 2).toUpperCase() : 'HS';
   const randomNum = Math.floor(1000 + Math.random() * 9000);
   const year = new Date().getFullYear();
@@ -117,7 +117,7 @@ export const getCertificateHtml = async (id) => {
 
   let templateHtml = '';
 
-  if (cert.document_type === 'Course Certificate' || cert.document_type === 'Internship Certificate') {
+  if (cert.document_type === 'Internship Certificate' || cert.document_type === 'Experience Letter' || cert.document_type === 'Course Certificate') {
     templateHtml = `
       <!DOCTYPE html>
       <html>
@@ -142,12 +142,12 @@ export const getCertificateHtml = async (id) => {
       <body>
         <div class="certificate">
           <div class="logo">HERTZSOFT TECHNOLOGIES</div>
-          <div class="sublogo">Center for Software Engineering & Training</div>
+          <div class="sublogo">Enterprise Software Development & Digital Solutions</div>
           <div class="title">${cert.document_type}</div>
           <div class="subtitle">This is proudly presented to</div>
           <div class="candidate-name">${cert.candidate_name}</div>
           <div class="body-text">
-            For successfully completing the comprehensive training and practical project requirements in 
+            For successfully completing the corporate internship and software engineering requirements in 
             <span class="highlight">${cert.course_or_domain}</span> with a performance rating of 
             <span class="highlight">${cert.performance_rating}</span>.
           </div>

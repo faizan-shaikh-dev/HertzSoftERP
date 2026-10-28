@@ -2,12 +2,10 @@ import pool from '../config/db.js';
 
 // Get Consolidated ERP Dashboard Metrics
 export const getDashboardMetrics = async () => {
-  // 1. Leads Metrics (Dual Stream: Student vs Client)
+  // 1. Leads Metrics (Business Client Pipeline)
   const [leadsStats] = await pool.query(`
     SELECT 
       COUNT(*) AS total_leads,
-      SUM(CASE WHEN lead_type = 'Student' THEN 1 ELSE 0 END) AS student_leads,
-      SUM(CASE WHEN lead_type = 'Client' THEN 1 ELSE 0 END) AS client_leads,
       SUM(CASE WHEN status = 'Won' THEN 1 ELSE 0 END) AS won_leads,
       SUM(CASE WHEN status = 'Lost' THEN 1 ELSE 0 END) AS lost_leads,
       SUM(CASE WHEN status NOT IN ('Won', 'Lost') THEN 1 ELSE 0 END) AS active_pipeline_leads
@@ -69,8 +67,6 @@ export const getDashboardMetrics = async () => {
   return {
     leads: {
       total: Number(leadsStats[0]?.total_leads || 0),
-      students: Number(leadsStats[0]?.student_leads || 0),
-      clients: Number(leadsStats[0]?.client_leads || 0),
       won: Number(leadsStats[0]?.won_leads || 0),
       lost: Number(leadsStats[0]?.lost_leads || 0),
       active_pipeline: Number(leadsStats[0]?.active_pipeline_leads || 0)

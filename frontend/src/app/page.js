@@ -133,13 +133,13 @@ export default function DashboardPage() {
                   {stats?.leads?.total || 0}
                 </div>
                 <div className="mt-2 flex items-center gap-3 text-xs text-slate-600">
-                  <span className="flex items-center gap-1 font-semibold text-sky-800 bg-slate-50 px-2 py-0.5 rounded border border-slate-200 shadow-2xs">
-                    <GraduationCap className="w-3.5 h-3.5 text-sky-600" />
-                    {stats?.leads?.students || 0} Students
+                  <span className="flex items-center gap-1 font-semibold text-emerald-800 bg-slate-50 px-2 py-0.5 rounded border border-slate-200 shadow-2xs">
+                    <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
+                    {stats?.leads?.won || 0} Won Deals
                   </span>
                   <span className="flex items-center gap-1 font-semibold text-indigo-800 bg-slate-50 px-2 py-0.5 rounded border border-slate-200 shadow-2xs">
                     <Briefcase className="w-3.5 h-3.5 text-indigo-600" />
-                    {stats?.leads?.clients || 0} Clients
+                    {stats?.leads?.active_pipeline || 0} Active Deals
                   </span>
                 </div>
               </div>
@@ -220,7 +220,7 @@ export default function DashboardPage() {
                     Recent Inquiries
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Latest student registrations and project requests
+                    Latest client inquiries and project requests
                   </p>
                 </div>
                 <Link
@@ -236,9 +236,8 @@ export default function DashboardPage() {
                 <table className="w-full text-left text-sm text-slate-600">
                   <thead className="bg-slate-50/90 text-[11px] font-bold uppercase text-slate-500 border-b border-slate-200/80">
                     <tr>
-                      <th className="py-3 px-4">Lead & Contact</th>
-                      <th className="py-3 px-4">Stream</th>
-                      <th className="py-3 px-4">Course / Service</th>
+                      <th className="py-3 px-4">Client & Contact</th>
+                      <th className="py-3 px-4">Service Interest</th>
                       <th className="py-3 px-4">Status</th>
                     </tr>
                   </thead>
@@ -254,17 +253,8 @@ export default function DashboardPage() {
                               {lead.phone || lead.email || 'No contact provided'}
                             </div>
                           </td>
-                          <td className="py-3 px-4">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold ${
-                              lead.lead_type === 'Student'
-                                ? 'bg-sky-50 text-sky-700 border border-sky-200/60'
-                                : 'bg-indigo-50 text-indigo-700 border border-indigo-200/60'
-                            }`}>
-                              {lead.lead_type}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 text-xs text-slate-600 truncate max-w-[140px]">
-                            {lead.service_interest || 'General Inquiry'}
+                          <td className="py-3 px-4 text-xs text-slate-700 truncate max-w-[180px]">
+                            {lead.service_interest || 'Custom Software'}
                           </td>
                           <td className="py-3 px-4">
                             <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
@@ -281,7 +271,7 @@ export default function DashboardPage() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="4" className="py-8 text-center text-xs text-slate-400">
+                        <td colSpan="3" className="py-8 text-center text-xs text-slate-400">
                           No inquiries recorded yet.
                         </td>
                       </tr>

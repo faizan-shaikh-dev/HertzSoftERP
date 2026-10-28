@@ -19,20 +19,20 @@ import {
 } from 'lucide-react';
 
 const DOCUMENT_TYPES = [
-  'Course Completion Certificate',
-  'Internship Certificate',
   'Offer Letter',
+  'Internship Certificate',
   'Experience Letter'
 ];
 
 const DOMAIN_OPTIONS = [
-  'FullStack Development (MERN)',
-  'Data Science & AI',
-  'Python Development',
-  'Cloud & DevOps Engineering',
-  'Digital Marketing & SEO',
-  'UI/UX Design',
-  'Software Development Engineering'
+  'FullStack Software Engineer',
+  'Backend Developer (Node.js/Python)',
+  'Frontend Developer (React/Next.js)',
+  'Cloud & DevOps Engineer',
+  'Mobile App Developer (Flutter/React Native)',
+  'UI/UX Product Designer',
+  'QA & Automation Test Engineer',
+  'Data Analyst / AI Specialist'
 ];
 
 const PERFORMANCE_RATINGS = [
@@ -88,13 +88,13 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
     setError('');
 
     if (!candidateName.trim()) {
-      setError('Please provide candidate / student full name.');
+      setError('Please provide candidate / employee full name.');
       return;
     }
 
     const domainFinal = customDomain.trim() || courseOrDomain;
     if (!domainFinal.trim()) {
-      setError('Course or internship domain is required.');
+      setError('Role or specialization domain is required.');
       return;
     }
 
@@ -190,7 +190,7 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="sm:col-span-2">
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                Candidate / Student Full Name *
+                Candidate / Employee Full Name *
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -244,10 +244,10 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
             </div>
           </div>
 
-          {/* Domain / Course */}
+          {/* Domain / Role */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-              Specialization / Course Domain *
+              Role / Specialization Domain *
             </label>
             <div className="space-y-2">
               <select
@@ -267,7 +267,7 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
                   required
                   value={customDomain}
                   onChange={(e) => setCustomDomain(e.target.value)}
-                  placeholder="Type custom program or job title..."
+                  placeholder="Type custom role or job title..."
                   className="w-full px-3 py-2 bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none"
                 />
               )}

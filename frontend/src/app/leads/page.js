@@ -7,27 +7,35 @@ import leadService from '@/services/leadService';
 import { useAuth } from '@/context/AuthContext';
 import { 
   Users, 
-  GraduationCap, 
-  Briefcase, 
-  Search, 
   Plus, 
-  Filter, 
-  ArrowUpDown, 
+  Search, 
   Edit, 
   Trash2, 
   Phone, 
   Mail, 
+  Briefcase, 
   Building2, 
   IndianRupee, 
   Loader2, 
   RefreshCw, 
   CheckCircle2, 
   Clock, 
-  AlertCircle 
+  AlertCircle,
+  TrendingUp,
+  Layers
 } from 'lucide-react';
-import { LeadModal, ConfirmDeleteModal, LostReasonModal } from '@/components/modals';
+import { LeadModal, ConfirmDeleteModal, LostReasonModal, OnHoldModal } from '@/components/modals';
 
-const STATUS_OPTIONS = ['New', 'Contacted', 'In Discussion', 'Won', 'Lost'];
+const STATUS_OPTIONS = [
+  'New',
+  'Contacted',
+  'Qualified',
+  'Quotation Sent',
+  'Negotiation',
+  'Won',
+  'Lost',
+  'On Hold'
+];
 
 export default function LeadsPage() {
   const { user } = useAuth();
@@ -38,7 +46,6 @@ export default function LeadsPage() {
   const [error, setError] = useState('');
 
   // Filters
-  const [activeTab, setActiveTab] = useState('All'); // 'All' | 'Student' | 'Client'
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -54,13 +61,16 @@ export default function LeadsPage() {
   const [leadForLostStatus, setLeadForLostStatus] = useState(null);
   const [updatingLost, setUpdatingLost] = useState(false);
 
+  const [isOnHoldModalOpen, setIsOnHoldModalOpen] = useState(false);
+  const [leadForOnHoldStatus, setLeadForOnHoldStatus] = useState(null);
+  const [updatingOnHold, setUpdatingOnHold] = useState(false);
+
   // Fetch leads from backend
   const fetchLeads = async (isManual = false) => {
     try {
       setLoading(true);
       setError('');
       const res = await leadService.getLeads();
-      // res.data contains array of leads
       setLeads(res.data || []);
       if (isManual) {
         toast.success('Leads list refreshed with latest inquiries!');
@@ -89,6 +99,12 @@ export default function LeadsPage() {
       return;
     }
 
+    if (newStatus === 'On Hold') {
+      setLeadForOnHoldStatus(lead);
+      setIsOnHoldModalOpen(true);
+      return;
+    }
+
     try {
       await leadService.updateLeadStatus(lead.id, { status: newStatus });
       setLeads((prev) =>
@@ -98,6 +114,33 @@ export default function LeadsPage() {
     } catch (err) {
       console.error('Failed to update status:', err);
       toast.error(err.message || 'Failed to update pipeline status.');
+    }
+  };
+
+  const handleConfirmOnHold = async ({ reason, revisitDate }) => {
+    if (!leadForOnHoldStatus) return;
+    try {
+      setUpdatingOnHold(true);
+      await leadService.updateLeadStatus(leadForOnHoldStatus.id, {
+        status: 'On Hold',
+        on_hold_reason: reason,
+        revisit_date: revisitDate
+      });
+      setLeads((prev) =>
+        prev.map((l) =>
+          l.id === leadForOnHoldStatus.id
+            ? { ...l, status: 'On Hold', on_hold_reason: reason, revisit_date: revisitDate }
+            : l
+        )
+      );
+      toast.success('Inquiry placed On Hold');
+      setIsOnHoldModalOpen(false);
+      setLeadForOnHoldStatus(null);
+    } catch (err) {
+      console.error('Failed to put lead on hold:', err);
+      toast.error(err.message || 'Failed to update status.');
+    } finally {
+      setUpdatingOnHold(false);
     }
   };
 
@@ -144,10 +187,6 @@ export default function LeadsPage() {
   // Filtered Leads
   const filteredLeads = useMemo(() => {
     return leads.filter((lead) => {
-      // Tab filter
-      if (activeTab === 'Student' && lead.lead_type !== 'Student') return false;
-      if (activeTab === 'Client' && lead.lead_type !== 'Client') return false;
-
       // Status filter
       if (selectedStatus !== 'All' && lead.status !== selectedStatus) return false;
 
@@ -168,16 +207,7 @@ export default function LeadsPage() {
 
       return true;
     });
-  }, [leads, activeTab, selectedStatus, searchQuery]);
-
-  // Aggregate Metrics
-  const metrics = useMemo(() => {
-    const total = leads.length;
-    const students = leads.filter((l) => l.lead_type === 'Student').length;
-    const clients = leads.filter((l) => l.lead_type === 'Client').length;
-    const won = leads.filter((l) => l.status === 'Won').length;
-    return { total, students, clients, won };
-  }, [leads]);
+  }, [leads, selectedStatus, searchQuery]);
 
   const formatCurrency = (amount) => {
     if (!amount) return '—';
@@ -198,15 +228,15 @@ export default function LeadsPage() {
   };
 
   return (
-    <AppLayout title="Leads & Inquiries Management">
+    <AppLayout title="Client Leads & Business Inquiries">
       {/* Top Banner Card with Action */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-blue-50/80 via-white to-slate-50 p-5 rounded-lg border border-blue-100/80 shadow-sm">
         <div>
           <h2 className="text-xl font-bold text-slate-900 tracking-tight">
-            Centralized Inquiries Pipeline
+            Client Inquiries & Deals Pipeline
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Manage dual streams for student academic admissions and enterprise software contracts.
+            Manage prospective enterprise software clients, project requirements, budgets, and deal conversions.
           </p>
         </div>
 
@@ -228,92 +258,34 @@ export default function LeadsPage() {
             className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-sky-600 hover:from-blue-700 hover:to-sky-700 rounded-md shadow-sm transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            <span>Register New Inquiry</span>
+            <span>New Lead</span>
           </button>
-        </div>
-      </div>
-
-      {/* Metric Counters Banner (template-hz style) */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-            Total Inquiries
-          </span>
-          <div className="text-2xl font-black text-slate-900 mt-1">
-            {metrics.total}
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700">
-            Student Stream
-          </span>
-          <div className="text-2xl font-black text-sky-900 mt-1">
-            {metrics.students}
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-700">
-            Client Proposals
-          </span>
-          <div className="text-2xl font-black text-indigo-900 mt-1">
-            {metrics.clients}
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
-            Won Deals / Enrolled
-          </span>
-          <div className="text-2xl font-black text-emerald-900 mt-1">
-            {metrics.won}
-          </div>
         </div>
       </div>
 
       {/* Main Table Card */}
       <div className="bg-white rounded-lg border border-slate-200/90 shadow-sm overflow-hidden flex flex-col">
-        {/* Stream Tabs & Search Filter Header */}
-        <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-50 via-slate-50/70 to-white border-b border-slate-200/80 space-y-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-            {/* Stream Selector Tabs */}
-            <div className="flex items-center gap-1.5 p-1 bg-slate-200/60 rounded-lg w-fit">
-              <button
-                onClick={() => setActiveTab('All')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'All'
-                    ? 'bg-white text-blue-700 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Users className="w-3.5 h-3.5" />
-                <span>All ({metrics.total})</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab('Student')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'Student'
-                    ? 'bg-white text-sky-700 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <GraduationCap className="w-3.5 h-3.5" />
-                <span>Students ({metrics.students})</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab('Client')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'Client'
-                    ? 'bg-white text-indigo-700 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Briefcase className="w-3.5 h-3.5" />
-                <span>Clients ({metrics.clients})</span>
-              </button>
+        {/* Search & Status Filter Header */}
+        <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-50 via-slate-50/70 to-white border-b border-slate-200/80 space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            {/* Status Filter Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+              <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] mr-1">
+                Filter Status:
+              </span>
+              {['All', ...STATUS_OPTIONS].map((st) => (
+                <button
+                  key={st}
+                  onClick={() => setSelectedStatus(st)}
+                  className={`px-2.5 py-1 rounded text-xs font-semibold transition-colors cursor-pointer ${
+                    selectedStatus === st
+                      ? 'bg-slate-900 text-white shadow-2xs'
+                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                  }`}
+                >
+                  {st}
+                </button>
+              ))}
             </div>
 
             {/* Search Input Bar */}
@@ -325,38 +297,18 @@ export default function LeadsPage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by name, phone, course, company..."
+                placeholder="Search by client, company, service..."
                 className="w-full pl-9 pr-3 py-1.5 bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-500 outline-none transition"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-xs text-slate-400 hover:text-slate-600"
+                  className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-xs text-slate-400 hover:text-slate-600 cursor-pointer"
                 >
                   Clear
                 </button>
               )}
             </div>
-          </div>
-
-          {/* Status Filter Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-            <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] mr-1">
-              Status Filter:
-            </span>
-            {['All', ...STATUS_OPTIONS].map((st) => (
-              <button
-                key={st}
-                onClick={() => setSelectedStatus(st)}
-                className={`px-2.5 py-1 rounded text-xs font-semibold transition-colors cursor-pointer ${
-                  selectedStatus === st
-                    ? 'bg-slate-900 text-white shadow-2xs'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
-                }`}
-              >
-                {st}
-              </button>
-            ))}
           </div>
         </div>
 
@@ -364,7 +316,7 @@ export default function LeadsPage() {
         {error && (
           <div className="m-4 p-4 rounded-md bg-red-50 border border-red-200 text-xs text-red-700 flex items-center justify-between">
             <span>{error}</span>
-            <button onClick={() => fetchLeads(false)} className="font-bold underline">
+            <button onClick={() => fetchLeads(false)} className="font-bold underline cursor-pointer">
               Retry
             </button>
           </div>
@@ -372,19 +324,19 @@ export default function LeadsPage() {
 
         {/* Leads Table */}
         <div className="overflow-x-auto flex-1">
-          <table className="w-full text-left text-sm text-slate-600">
+          <table className="w-full text-left text-sm text-slate-600 border-collapse">
             <thead className="bg-slate-50/90 text-[11px] font-bold uppercase text-slate-500 border-b border-slate-200/80">
               <tr>
-                <th className="py-3 px-4">Inquiry & Contact</th>
-                <th className="py-3 px-4">Stream & Source</th>
-                <th className="py-3 px-4">Requirement / Course</th>
-                <th className="py-3 px-4">Budget / Value</th>
+                <th className="py-3 px-4">Client & Contact</th>
+                <th className="py-3 px-4">Company / Business</th>
+                <th className="py-3 px-4">Service & Scope</th>
+                <th className="py-3 px-4">Estimated Budget</th>
                 <th className="py-3 px-4">Pipeline Status</th>
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {loading && leads.length === 0 ? (
+              {loading ? (
                 <tr>
                   <td colSpan="6" className="py-16 text-center text-slate-400">
                     <Loader2 className="w-6 h-6 animate-spin text-blue-600 mx-auto mb-2" />
@@ -396,56 +348,53 @@ export default function LeadsPage() {
                   <tr key={lead.id} className="hover:bg-blue-50/30 transition-colors">
                     {/* 1. Name & Contact */}
                     <td className="py-3 px-4">
-                      <div className="font-bold text-slate-900 text-xs">
-                        {lead.name}
+                      <div className="flex items-center gap-1.5 font-bold text-slate-900 text-xs">
+                        {lead.lead_number && (
+                          <span className="font-mono text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">
+                            #{lead.lead_number}
+                          </span>
+                        )}
+                        <span>{lead.name}</span>
                       </div>
-                      <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-500">
-                        <span className="flex items-center gap-1">
+                      <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-500">
+                        <span className="flex items-center gap-1 font-mono">
                           <Phone className="w-3 h-3 text-slate-400" />
                           {lead.phone}
                         </span>
                         {lead.email && (
-                          <span className="truncate max-w-[150px] text-slate-400">
+                          <span className="truncate max-w-[140px] text-slate-400">
                             • {lead.email}
                           </span>
                         )}
                       </div>
                     </td>
 
-                    {/* 2. Stream & Source */}
+                    {/* 2. Company & Owner */}
                     <td className="py-3 px-4">
-                      <div className="flex flex-col gap-1 items-start">
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold ${
-                          lead.lead_type === 'Student'
-                            ? 'bg-sky-50 text-sky-700 border border-sky-200/60'
-                            : 'bg-indigo-50 text-indigo-700 border border-indigo-200/60'
-                        }`}>
-                          {lead.lead_type === 'Student' ? (
-                            <GraduationCap className="w-3 h-3" />
-                          ) : (
-                            <Briefcase className="w-3 h-3" />
-                          )}
-                          {lead.lead_type}
-                        </span>
-                        <span className="text-[10px] text-slate-400">
-                          {lead.source || 'Direct'}
-                        </span>
+                      <div className="flex flex-col items-start gap-0.5">
+                        <div className="text-xs font-semibold text-slate-800 flex items-center gap-1">
+                          <Building2 className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" />
+                          <span>{lead.company_name || 'Individual Client'}</span>
+                        </div>
+                        {lead.assigned_to_name ? (
+                          <span className="text-[10px] text-slate-500 font-medium">
+                            Owner: <span className="text-slate-700">{lead.assigned_to_name}</span>
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-slate-400">
+                            Source: {lead.source || 'Direct'}
+                          </span>
+                        )}
                       </div>
                     </td>
 
-                    {/* 3. Requirement / Course */}
-                    <td className="py-3 px-4">
-                      <div className="text-xs font-medium text-slate-800">
-                        {lead.service_interest || lead.requirement || 'General Inquiry'}
+                    {/* 3. Service Interest & Scope */}
+                    <td className="py-3 px-4 max-w-[280px]">
+                      <div className="text-xs font-medium text-slate-900 truncate">
+                        {lead.service_interest || 'Custom Software Solution'}
                       </div>
-                      {lead.company_name && (
-                        <div className="text-[11px] text-indigo-600 flex items-center gap-1 mt-0.5">
-                          <Building2 className="w-3 h-3" />
-                          <span>{lead.company_name}</span>
-                        </div>
-                      )}
-                      {lead.requirement && lead.requirement !== lead.service_interest && (
-                        <div className="text-[11px] text-slate-400 truncate max-w-[200px]">
+                      {lead.requirement && (
+                        <div className="text-[11px] text-slate-400 truncate max-w-[260px] mt-0.5" title={lead.requirement}>
                           {lead.requirement}
                         </div>
                       )}
@@ -458,7 +407,7 @@ export default function LeadsPage() {
                           {formatCurrency(lead.estimated_budget)}
                         </span>
                       ) : (
-                        <span className="text-slate-400">—</span>
+                        <span className="text-slate-400 font-normal">Negotiable</span>
                       )}
                     </td>
 
@@ -467,25 +416,41 @@ export default function LeadsPage() {
                       <select
                         value={lead.status}
                         onChange={(e) => handleStatusChange(lead, e.target.value)}
-                        className={`px-2 py-1 rounded text-[11px] font-bold uppercase tracking-wider outline-none border cursor-pointer ${
+                        className={`px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider outline-none border cursor-pointer ${
                           lead.status === 'Won'
                             ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                             : lead.status === 'Lost'
                             ? 'bg-red-50 text-red-700 border-red-200'
-                            : lead.status === 'In Discussion'
-                            ? 'bg-purple-50 text-purple-700 border-purple-200'
+                            : lead.status === 'Qualified'
+                            ? 'bg-teal-50 text-teal-700 border-teal-200'
+                            : lead.status === 'Quotation Sent'
+                            ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+                            : lead.status === 'Negotiation'
+                            ? 'bg-violet-50 text-violet-700 border-violet-200'
+                            : lead.status === 'On Hold'
+                            ? 'bg-amber-50 text-amber-800 border-amber-300'
                             : lead.status === 'Contacted'
                             ? 'bg-sky-50 text-sky-700 border-sky-200'
-                            : 'bg-amber-50 text-amber-700 border-amber-200'
+                            : 'bg-blue-50 text-blue-700 border-blue-200'
                         }`}
                       >
                         {STATUS_OPTIONS.map((st) => (
                           <option key={st} value={st}>{st}</option>
                         ))}
                       </select>
+                      {lead.status === 'Lost' && lead.lost_reason && (
+                        <p className="text-[10px] text-red-500 truncate max-w-[150px] mt-0.5" title={lead.lost_reason}>
+                          {lead.lost_reason}
+                        </p>
+                      )}
+                      {lead.status === 'On Hold' && lead.on_hold_reason && (
+                        <p className="text-[10px] text-amber-600 truncate max-w-[150px] mt-0.5" title={lead.on_hold_reason}>
+                          Hold: {lead.on_hold_reason}
+                        </p>
+                      )}
                     </td>
 
-                    {/* 6. Action Buttons */}
+                    {/* 6. Row Actions */}
                     <td className="py-3 px-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         <button
@@ -493,10 +458,10 @@ export default function LeadsPage() {
                             setEditingLead(lead);
                             setIsLeadModalOpen(true);
                           }}
-                          className="p-1.5 rounded text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-                          title="Edit details"
+                          className="p-1.5 rounded text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition cursor-pointer"
+                          title="Edit Inquiry Details"
                         >
-                          <Edit className="w-3.5 h-3.5" />
+                          <Edit className="w-4 h-4" />
                         </button>
 
                         {isAdmin && (
@@ -505,10 +470,10 @@ export default function LeadsPage() {
                               setLeadToDelete(lead);
                               setIsDeleteModalOpen(true);
                             }}
-                            className="p-1.5 rounded text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors"
-                            title="Delete lead"
+                            className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer"
+                            title="Delete Lead"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         )}
                       </div>
@@ -519,9 +484,9 @@ export default function LeadsPage() {
                 <tr>
                   <td colSpan="6" className="py-16 text-center text-slate-400">
                     <Users className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-                    <p className="text-xs font-semibold text-slate-600">No inquiries found</p>
+                    <p className="text-xs font-semibold text-slate-600">No client inquiries found</p>
                     <p className="text-[11px] text-slate-400 mt-0.5">
-                      Try adjusting your search query or stream filters.
+                      Register a new business lead or adjust your filter query.
                     </p>
                   </td>
                 </tr>
@@ -566,7 +531,18 @@ export default function LeadsPage() {
         leadName={leadForLostStatus?.name}
         loading={updatingLost}
       />
+
+      {/* On Hold Reason & Revisit Date Modal */}
+      <OnHoldModal
+        isOpen={isOnHoldModalOpen}
+        onClose={() => {
+          setIsOnHoldModalOpen(false);
+          setLeadForOnHoldStatus(null);
+        }}
+        onConfirm={handleConfirmOnHold}
+        leadName={leadForOnHoldStatus?.name}
+        loading={updatingOnHold}
+      />
     </AppLayout>
   );
 }
-

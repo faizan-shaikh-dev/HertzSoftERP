@@ -25,9 +25,8 @@ import { CertificateModal, CertificatePreviewModal } from '@/components/modals';
 
 const DOC_TYPES = [
   'All',
-  'Course Completion Certificate',
-  'Internship Certificate',
   'Offer Letter',
+  'Internship Certificate',
   'Experience Letter'
 ];
 
@@ -83,7 +82,20 @@ export default function CertificatesPage() {
   // Filtered Certificates
   const filteredCertificates = useMemo(() => {
     return certificates.filter((cert) => {
-      if (selectedType !== 'All' && cert.document_type !== selectedType) return false;
+      if (selectedType !== 'All') {
+        const certType = (cert.document_type || '').toLowerCase();
+        const filterType = selectedType.toLowerCase();
+
+        if (filterType.includes('internship')) {
+          if (!certType.includes('internship')) return false;
+        } else if (filterType.includes('offer')) {
+          if (!certType.includes('offer')) return false;
+        } else if (filterType.includes('experience')) {
+          if (!certType.includes('experience')) return false;
+        } else if (cert.document_type !== selectedType) {
+          return false;
+        }
+      }
 
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
@@ -98,15 +110,6 @@ export default function CertificatesPage() {
       return true;
     });
   }, [certificates, selectedType, searchQuery]);
-
-  // Aggregate Metrics
-  const metrics = useMemo(() => {
-    const total = certificates.length;
-    const courses = certificates.filter((c) => c.document_type?.includes('Course')).length;
-    const internships = certificates.filter((c) => c.document_type?.includes('Internship')).length;
-    const offers = certificates.filter((c) => c.document_type?.includes('Offer')).length;
-    return { total, courses, internships, offers };
-  }, [certificates]);
 
   const formatDate = (dateString) => {
     if (!dateString) return '—';
@@ -126,7 +129,7 @@ export default function CertificatesPage() {
             Official Credentials & Document Registry
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Issue cryptographically verifiable course completion certificates and student offer letters.
+            Issue official company credentials, employee offer letters, internship certificates, and experience documents.
           </p>
         </div>
 
@@ -147,57 +150,6 @@ export default function CertificatesPage() {
             <Plus className="w-4 h-4" />
             <span>Issue New Document</span>
           </button>
-        </div>
-      </div>
-
-      {/* Registry Metric Cards (template-hz style) */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-purple-700">
-            Total Issued Documents
-          </span>
-          <div className="text-2xl font-black text-slate-900 mt-1">
-            {metrics.total}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-0.5">
-            Unique verified records
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700">
-            Course Certifications
-          </span>
-          <div className="text-2xl font-black text-sky-900 mt-1">
-            {metrics.courses}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-0.5">
-            Graduated students
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
-            Internship Credentials
-          </span>
-          <div className="text-2xl font-black text-emerald-800 mt-1">
-            {metrics.internships}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-0.5">
-            Project completions
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg border border-slate-200/90 shadow-sm">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700">
-            Offer Letters Issued
-          </span>
-          <div className="text-2xl font-black text-blue-900 mt-1">
-            {metrics.offers}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-0.5">
-            Candidate onboarding letters
-          </div>
         </div>
       </div>
 
@@ -383,7 +335,7 @@ export default function CertificatesPage() {
                     <Award className="w-8 h-8 mx-auto text-slate-300 mb-2" />
                     <p className="text-xs font-semibold text-slate-600">No documents issued</p>
                     <p className="text-[11px] text-slate-400 mt-0.5">
-                      Generate your first student certificate or offer letter with unique serial tracking.
+                      Generate your first corporate credential, offer letter, or internship certificate with unique serial tracking.
                     </p>
                   </td>
                 </tr>
