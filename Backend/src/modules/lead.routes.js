@@ -18,7 +18,8 @@ router.use(authenticateToken);
 router.post('/', createLead);                                    // Create a new lead
 router.get('/', getLeads);                                       // Get all leads (with filters & search)
 router.get('/:id', getLeadById);                                 // Get single lead details by ID
-router.patch('/:id', updateLead);                                // Update lead details
+router.put('/:id', updateLead);                                  // Update lead details (PUT)
+router.patch('/:id', updateLead);                                // Update lead details (PATCH)
 router.patch('/:id/status', updateLeadStatus);                   // Update lead pipeline status
 router.delete('/:id', authorizeRoles('Administrator'), deleteLead); // Delete a lead (Admin only)
 

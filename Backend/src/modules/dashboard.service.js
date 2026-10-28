@@ -40,7 +40,7 @@ export const getDashboardMetrics = async () => {
 
   // 5. Recent 5 Leads
   const [recentLeads] = await pool.query(`
-    SELECT id, name, lead_type, service_interest, status, created_at 
+    SELECT id, name, phone, email, lead_type, service_interest, status, created_at 
     FROM leads 
     ORDER BY created_at DESC 
     LIMIT 5

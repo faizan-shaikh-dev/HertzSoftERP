@@ -20,7 +20,10 @@ import { apiLimiter, authLimiter } from './middleware/rateLimiter.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
+
+// Disable ETag generation to prevent 304 Not Modified and ensure fresh 200 OK responses
+app.set('etag', false);
 
 // Security Headers & Strict CORS
 app.use(helmet());
@@ -42,7 +45,7 @@ app.use(
       }
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
@@ -52,6 +55,14 @@ app.use(morgan('dev'));
 
 // General Rate Limiter for all APIs
 app.use('/api', apiLimiter);
+
+// Disable client caching on all API endpoints so updates reflect immediately
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  next();
+});
 
 // Endpoint Routes
 app.use('/api/auth', authLimiter, authRoutes); // Strict rate limiting against brute-force login attempts

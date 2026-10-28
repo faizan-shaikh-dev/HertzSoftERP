@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 import { useAuth } from '@/context/AuthContext';
 import { Mail, Lock, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 
@@ -18,10 +19,13 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await login({ email, password });
+      const res = await login({ email, password });
+      toast.success(`Welcome back, ${res?.data?.user?.full_name || 'Admin'}!`);
       // On success, AuthContext automatically redirects to '/'
     } catch (err) {
-      setError(err.message || 'Invalid email or password. Please try again.');
+      const msg = err.message || 'Invalid email or password. Please try again.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
