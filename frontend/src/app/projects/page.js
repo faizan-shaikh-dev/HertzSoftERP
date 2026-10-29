@@ -132,15 +132,15 @@ export default function ProjectsPage() {
   };
 
   return (
-    <AppLayout title="Projects & Payments Tracking">
+    <AppLayout title="Projects & Client Contracts">
       {/* Top Banner Card with Action */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-indigo-50/80 via-white to-slate-50 p-5 rounded-lg border border-indigo-100/80 shadow-sm">
         <div>
           <h2 className="text-xl font-bold text-slate-900 tracking-tight">
-            Client Contracts & Milestone Ledger
+            Projects & Client Contracts
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Real-time tracking of deal values, installment payments, and outstanding balances.
+            Manage project deliverables, contract values, milestones, and timelines.
           </p>
         </div>
 

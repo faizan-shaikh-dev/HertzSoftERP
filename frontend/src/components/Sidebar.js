@@ -12,7 +12,8 @@ import {
   Shield,
   UserCheck,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  CreditCard
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
@@ -28,9 +29,14 @@ const NAV_ITEMS = [
     icon: Users
   },
   {
-    label: 'Projects & Payments',
+    label: 'Projects',
     href: '/projects',
     icon: FolderKanban
+  },
+  {
+    label: 'Payments',
+    href: '/payments',
+    icon: CreditCard
   },
   {
     label: 'Certificates & Docs',

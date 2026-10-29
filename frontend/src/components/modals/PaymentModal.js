@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { toast } from 'react-toastify';
 import paymentService from '@/services/paymentService';
+import projectService from '@/services/projectService';
 import { 
   X, 
   CreditCard, 
@@ -11,8 +12,8 @@ import {
   Calendar, 
   FileText, 
   Loader2, 
-  CheckCircle2, 
-  Building2 
+  Building2,
+  FolderKanban
 } from 'lucide-react';
 
 const PAYMENT_METHODS = [
@@ -27,6 +28,11 @@ const PAYMENT_METHODS = [
 export default function PaymentModal({ isOpen, onClose, project = null, onSuccess }) {
   const [mounted, setMounted] = useState(false);
 
+  // Projects list for dropdown when project is not pre-selected
+  const [projectsList, setProjectsList] = useState([]);
+  const [loadingProjects, setLoadingProjects] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState('');
+
   const [amount, setAmount] = useState('');
   const [paymentDate, setPaymentDate] = useState(new Date().toISOString().slice(0, 10));
   const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHODS[0]);
@@ -40,18 +46,47 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
     setMounted(true);
   }, []);
 
+  // Fetch available projects if no specific project is provided
+  useEffect(() => {
+    if (isOpen && !project) {
+      setLoadingProjects(true);
+      projectService.getProjects()
+        .then((res) => {
+          setProjectsList(res.data || []);
+        })
+        .catch((err) => {
+          console.error('Failed to load projects for payment modal:', err);
+          setError('Failed to load projects list.');
+        })
+        .finally(() => {
+          setLoadingProjects(false);
+        });
+    }
+  }, [isOpen, project]);
+
+  // Reset or initialize form values when modal opens or project prop changes
   useEffect(() => {
     if (isOpen) {
-      setAmount(project?.due_balance > 0 ? String(project.due_balance) : '');
+      setError('');
       setPaymentDate(new Date().toISOString().slice(0, 10));
       setPaymentMethod(PAYMENT_METHODS[0]);
       setTransactionRef('');
       setNotes('');
-      setError('');
+
+      if (project) {
+        setSelectedProjectId(String(project.id));
+        setAmount(project.due_balance > 0 ? String(project.due_balance) : '');
+      } else {
+        setSelectedProjectId('');
+        setAmount('');
+      }
     }
   }, [project, isOpen]);
 
-  if (!isOpen || !mounted || !project) return null;
+  if (!isOpen || !mounted) return null;
+
+  // Active target project (either from prop or from projectsList selection)
+  const activeProject = project || projectsList.find((p) => String(p.id) === String(selectedProjectId)) || null;
 
   const formatCurrency = (amt) => {
     return new Intl.NumberFormat('en-IN', {
@@ -61,9 +96,27 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
     }).format(amt || 0);
   };
 
+  const handleProjectSelect = (e) => {
+    const projId = e.target.value;
+    setSelectedProjectId(projId);
+    setError('');
+
+    const found = projectsList.find((p) => String(p.id) === String(projId));
+    if (found && found.due_balance > 0) {
+      setAmount(String(found.due_balance));
+    } else {
+      setAmount('');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (!activeProject) {
+      setError('Please select a project to credit payment against.');
+      return;
+    }
 
     const numericAmount = Number(amount);
     if (!amount || numericAmount <= 0) {
@@ -75,7 +128,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
 
     try {
       const payload = {
-        project_id: project.id,
+        project_id: activeProject.id,
         amount_paid: numericAmount,
         payment_date: paymentDate,
         payment_method: paymentMethod,
@@ -118,7 +171,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
                 Record Payment Installment
               </h3>
               <p className="text-xs text-slate-500">
-                Credit payment against project #{project.id}
+                {activeProject ? `Credit payment against project #${activeProject.id}` : 'Record received funds against client contract'}
               </p>
             </div>
           </div>
@@ -131,26 +184,61 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
           </button>
         </div>
 
-        {/* Project Balance Summary Banner */}
-        <div className="px-6 py-3.5 bg-slate-50/90 border-b border-slate-200 flex items-center justify-between text-xs">
-          <div>
-            <div className="font-bold text-slate-900 truncate max-w-[200px]">
-              {project.title}
-            </div>
-            <div className="text-[11px] text-slate-500">
-              {project.client_company ? `${project.client_company} (${project.client_name})` : project.client_name}
-            </div>
+        {/* Project Selector (If opened without pre-selected project) */}
+        {!project && (
+          <div className="px-6 py-3.5 bg-slate-50/90 border-b border-slate-200">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center gap-1.5">
+              <FolderKanban className="w-3.5 h-3.5 text-slate-500" />
+              <span>Select Target Project *</span>
+            </label>
+            {loadingProjects ? (
+              <div className="flex items-center gap-2 text-xs text-slate-500 py-1">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" />
+                <span>Loading active client projects...</span>
+              </div>
+            ) : (
+              <select
+                value={selectedProjectId}
+                onChange={handleProjectSelect}
+                required
+                className="w-full px-3 py-2 bg-white text-slate-900 text-xs rounded-md border border-slate-300 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 outline-none transition cursor-pointer"
+              >
+                <option value="">-- Choose a Project to credit --</option>
+                {projectsList.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.title} ({p.client_company ? `${p.client_company} - ${p.client_name}` : p.client_name}) — Due: {formatCurrency(p.due_balance)}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
+        )}
 
-          <div className="text-right">
-            <span className="text-[10px] uppercase font-bold text-slate-400">
-              Due Balance
-            </span>
-            <div className="text-sm font-extrabold text-amber-600">
-              {formatCurrency(project.due_balance)}
+        {/* Project Balance Summary Banner (when project is active) */}
+        {activeProject && (
+          <div className="px-6 py-3 bg-emerald-50/50 border-b border-slate-200 flex items-center justify-between text-xs">
+            <div>
+              <div className="font-bold text-slate-900 truncate max-w-[240px]">
+                {activeProject.title}
+              </div>
+              <div className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
+                <Building2 className="w-3 h-3 text-slate-400" />
+                <span>
+                  {activeProject.client_company ? `${activeProject.client_company} (${activeProject.client_name})` : activeProject.client_name}
+                </span>
+              </div>
+            </div>
+
+            <div className="text-right">
+              <span className="text-[10px] uppercase font-bold text-slate-400">
+                Outstanding Due
+              </span>
+              <div className="text-sm font-extrabold text-amber-600">
+                {formatCurrency(activeProject.due_balance)}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Modal Form */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1">
@@ -235,7 +323,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
               rows={2}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="e.g. 2nd milestone installment received via direct bank transfer..."
+              placeholder="e.g. Milestone installment received via bank transfer..."
               className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-emerald-600 outline-none transition"
             />
           </div>
@@ -253,7 +341,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !activeProject}
               className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 rounded-md shadow-sm transition-all disabled:opacity-50 cursor-pointer"
             >
               {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
@@ -267,4 +355,3 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
 
   return createPortal(modalContent, document.body);
 }
-
