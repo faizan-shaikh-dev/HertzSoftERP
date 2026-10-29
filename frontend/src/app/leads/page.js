@@ -28,9 +28,18 @@ import {
   ChevronDown,
   ChevronUp,
   Calendar,
-  AlertTriangle
+  AlertTriangle,
+  UserCheck,
+  Sparkles
 } from 'lucide-react';
-import { LeadModal, ConfirmDeleteModal, LostReasonModal, OnHoldModal, FollowUpModal } from '@/components/modals';
+import { 
+  LeadModal, 
+  ConfirmDeleteModal, 
+  LostReasonModal, 
+  OnHoldModal, 
+  FollowUpModal,
+  ConvertToClientModal
+} from '@/components/modals';
 
 const STATUS_OPTIONS = [
   'New',
@@ -70,6 +79,10 @@ export default function LeadsPage() {
   const [isOnHoldModalOpen, setIsOnHoldModalOpen] = useState(false);
   const [leadForOnHoldStatus, setLeadForOnHoldStatus] = useState(null);
   const [updatingOnHold, setUpdatingOnHold] = useState(false);
+
+  // Convert to Client Modal State
+  const [isConvertModalOpen, setIsConvertModalOpen] = useState(false);
+  const [leadToConvert, setLeadToConvert] = useState(null);
 
   // Follow-up & Reminders State
   const [isFollowUpModalOpen, setIsFollowUpModalOpen] = useState(false);
@@ -155,6 +168,24 @@ export default function LeadsPage() {
     if (newStatus === 'On Hold') {
       setLeadForOnHoldStatus(lead);
       setIsOnHoldModalOpen(true);
+      return;
+    }
+
+    if (newStatus === 'Won') {
+      try {
+        await leadService.updateLeadStatus(lead.id, { status: 'Won' });
+        setLeads((prev) =>
+          prev.map((l) => (l.id === lead.id ? { ...l, status: 'Won' } : l))
+        );
+        toast.success(`Inquiry marked as WON! 🎉`);
+        if (!lead.converted_client_id) {
+          setLeadToConvert({ ...lead, status: 'Won' });
+          setIsConvertModalOpen(true);
+        }
+      } catch (err) {
+        console.error('Failed to update status:', err);
+        toast.error(err.message || 'Failed to update pipeline status.');
+      }
       return;
     }
 
@@ -627,6 +658,30 @@ export default function LeadsPage() {
                           Hold: {lead.on_hold_reason}
                         </p>
                       )}
+                      {lead.status === 'Won' && !lead.converted_client_id && (
+                        <div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setLeadToConvert(lead);
+                              setIsConvertModalOpen(true);
+                            }}
+                            className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-2xs transition cursor-pointer"
+                            title="Convert Won Inquiry to Active Client"
+                          >
+                            <Sparkles className="w-3 h-3" />
+                            <span>Convert to Client</span>
+                          </button>
+                        </div>
+                      )}
+                      {lead.converted_client_id && (
+                        <div className="mt-1 flex items-center gap-1">
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            <UserCheck className="w-2.5 h-2.5 text-emerald-600" />
+                            <span>Client #{lead.converted_client_number || 'Linked'}</span>
+                          </span>
+                        </div>
+                      )}
                       {lead.next_follow_up_at && (
                         <div className="mt-1 flex items-center gap-1">
                           <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-medium ${
@@ -766,6 +821,17 @@ export default function LeadsPage() {
           fetchLeads(false);
           fetchReminders();
         }}
+      />
+
+      {/* Convert Won Lead to Client Modal */}
+      <ConvertToClientModal
+        isOpen={isConvertModalOpen}
+        onClose={() => {
+          setIsConvertModalOpen(false);
+          setLeadToConvert(null);
+        }}
+        lead={leadToConvert}
+        onSuccess={fetchLeads}
       />
     </AppLayout>
   );

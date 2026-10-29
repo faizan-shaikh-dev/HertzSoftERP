@@ -80,6 +80,12 @@ export const leadService = {
   deleteFollowUp: async (id) => {
     const response = await api.delete(`/leads/follow-ups/${id}`);
     return response.data;
+  },
+
+  // 14. Convert Won Lead to Client
+  convertToClient: async (leadId, clientData = {}) => {
+    const response = await api.post(`/leads/${leadId}/convert-to-client`, clientData);
+    return response.data;
   }
 };
 

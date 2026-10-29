@@ -2,6 +2,7 @@ export { default as EditProfileModal } from './EditProfileModal';
 export { default as ConfirmDeleteModal } from './ConfirmDeleteModal';
 export { default as LeadModal } from './LeadModal';
 export { default as FollowUpModal } from './FollowUpModal';
+export { default as ConvertToClientModal } from './ConvertToClientModal';
 export { default as LostReasonModal } from './LostReasonModal';
 export { default as OnHoldModal } from './OnHoldModal';
 export { default as ProjectModal } from './ProjectModal';

@@ -12,7 +12,8 @@ import {
   getLeadFollowUps,
   getFollowUpReminders,
   completeFollowUp,
-  deleteFollowUp
+  deleteFollowUp,
+  convertLeadToClient
 } from './lead.controller.js';
 import { authenticateToken, authorizeRoles } from '../middleware/authMiddleware.js';
 
@@ -35,6 +36,7 @@ router.get('/:id', getLeadById);                                 // Get single l
 router.put('/:id', updateLead);                                  // Update lead details (PUT)
 router.patch('/:id', updateLead);                                // Update lead details (PATCH)
 router.patch('/:id/status', updateLeadStatus);                   // Update lead pipeline status (Lost reason / On Hold)
+router.post('/:id/convert-to-client', convertLeadToClient);      // Convert WON lead to Client
 router.delete('/:id', authorizeRoles('Administrator'), deleteLead); // Delete a lead (Admin only)
 
 // Lead Follow-up Records

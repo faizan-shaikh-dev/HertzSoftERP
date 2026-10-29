@@ -257,3 +257,21 @@ export const deleteFollowUp = async (req, res, next) => {
     next(error);
   }
 };
+
+// ==================== CONVERT LEAD TO CLIENT ====================
+
+// 14. Convert Won Lead to Client
+export const convertLeadToClient = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await leadService.convertLeadToClient(id, req.body, req.user.id);
+
+    res.status(201).json({
+      success: true,
+      message: `Lead successfully converted to Client #${result.client.client_number}!`,
+      data: result
+    });
+  } catch (error) {
+    next(error);
+  }
+};

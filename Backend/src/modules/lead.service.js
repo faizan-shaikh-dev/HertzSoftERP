@@ -92,9 +92,11 @@ export const getLeads = async ({ status, search, lead_type, assigned_to, priorit
   let query = `
 
 
-  SELECT l.*, 
+    SELECT l.*, 
            u.full_name as assigned_to_name, 
            creator.full_name as created_by_name,
+           c.client_number as converted_client_number,
+           c.company_name as converted_client_company,
            (SELECT COUNT(*) FROM follow_ups WHERE lead_id = l.id) AS follow_ups_count,
            (SELECT follow_up_at FROM follow_ups WHERE lead_id = l.id ORDER BY follow_up_at DESC LIMIT 1) AS last_follow_up_at,
            (SELECT outcome FROM follow_ups WHERE lead_id = l.id ORDER BY follow_up_at DESC LIMIT 1) AS last_follow_up_outcome,
@@ -102,6 +104,7 @@ export const getLeads = async ({ status, search, lead_type, assigned_to, priorit
     FROM leads l
     LEFT JOIN users u ON l.assigned_to = u.id
     LEFT JOIN users creator ON l.created_by = creator.id
+    LEFT JOIN clients c ON l.converted_client_id = c.id
     WHERE 1=1
   `;
   const params = [];
@@ -144,11 +147,14 @@ export const getLeadById = async (id) => {
     `SELECT l.*, 
             u.full_name as assigned_to_name, 
             creator.full_name as created_by_name,
+            c.client_number as converted_client_number,
+            c.company_name as converted_client_company,
             (SELECT COUNT(*) FROM follow_ups WHERE lead_id = l.id) AS follow_ups_count,
             (SELECT next_follow_up_at FROM follow_ups WHERE lead_id = l.id AND next_follow_up_at IS NOT NULL AND completed_at IS NULL ORDER BY next_follow_up_at ASC LIMIT 1) AS next_follow_up_at
      FROM leads l
      LEFT JOIN users u ON l.assigned_to = u.id
      LEFT JOIN users creator ON l.created_by = creator.id
+     LEFT JOIN clients c ON l.converted_client_id = c.id
      WHERE l.id = ?`,
     [id]
   );
@@ -423,4 +429,93 @@ export const deleteFollowUp = async (id) => {
     throw error;
   }
   return { message: 'Follow-up deleted successfully' };
+};
+
+// ==================== LEAD TO CLIENT CONVERSION ====================
+
+// 14. Convert Won Lead to Client
+export const convertLeadToClient = async (leadId, clientOverrides = {}, userId) => {
+  // 1. Fetch lead
+  const [leadRows] = await pool.query('SELECT * FROM leads WHERE id = ?', [leadId]);
+  if (leadRows.length === 0) {
+    const error = new Error('Lead record not found');
+    error.statusCode = 404;
+    error.code = 'NOT_FOUND';
+    throw error;
+  }
+
+  const lead = leadRows[0];
+
+  // 2. Check if already converted
+  if (lead.converted_client_id) {
+    const error = new Error('This lead has already been converted to a client.');
+    error.statusCode = 400;
+    error.code = 'ALREADY_CONVERTED';
+    throw error;
+  }
+
+  // 3. Prepare client details from lead + user overrides
+  const clientName = (clientOverrides.name || lead.name).trim();
+  const companyName = clientOverrides.company_name !== undefined ? clientOverrides.company_name : lead.company_name;
+  const phone = clientOverrides.phone || lead.phone;
+  const normalized_phone = normalizePhone(phone);
+  const email = clientOverrides.email !== undefined ? clientOverrides.email : lead.email;
+  const billingEmail = clientOverrides.billing_email || email;
+  const website = clientOverrides.website !== undefined ? clientOverrides.website : lead.website;
+  const billingAddress = clientOverrides.billing_address || lead.city || null;
+  const onboardingStatus = clientOverrides.onboarding_status || 'Pending';
+  
+  // Combine internal notes
+  const noteParts = [];
+  if (lead.requirement) noteParts.push(`Requirement: ${lead.requirement}`);
+  if (lead.service_interest) noteParts.push(`Service: ${lead.service_interest}`);
+  if (lead.internal_notes) noteParts.push(`Lead Notes: ${lead.internal_notes}`);
+  if (clientOverrides.internal_notes) noteParts.push(`Client Notes: ${clientOverrides.internal_notes}`);
+  const combinedNotes = noteParts.join('\n');
+
+  // 4. Insert into clients table
+  await pool.query(
+    `INSERT INTO clients 
+      (name, company_name, phone, normalized_phone, email, billing_email, website, billing_address, onboarding_status, internal_notes, converted_from_lead_id, created_by)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      clientName,
+      companyName || null,
+      phone || null,
+      normalized_phone || null,
+      email || null,
+      billingEmail || null,
+      website || null,
+      billingAddress || null,
+      onboardingStatus,
+      combinedNotes || null,
+      lead.id,
+      userId
+    ]
+  );
+
+  // 5. Retrieve created client
+  const [newClientRows] = await pool.query(
+    'SELECT * FROM clients WHERE converted_from_lead_id = ?',
+    [lead.id]
+  );
+  const newClient = newClientRows[0];
+
+  // 6. Update lead: set status to 'Won', link converted_client_id and converted_at
+  await pool.query(
+    `UPDATE leads 
+     SET status = 'Won',
+         converted_client_id = ?,
+         converted_at = CURRENT_TIMESTAMP
+     WHERE id = ?`,
+    [newClient.id, lead.id]
+  );
+
+  // 7. Return both updated lead and new client
+  const updatedLead = await getLeadById(lead.id);
+
+  return {
+    client: newClient,
+    lead: updatedLead
+  };
 };
