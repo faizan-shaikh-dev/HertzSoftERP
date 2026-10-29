@@ -13,7 +13,8 @@ import {
   UserCheck,
   ChevronLeft,
   ChevronRight,
-  CreditCard
+  CreditCard,
+  FileSpreadsheet
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
@@ -27,6 +28,11 @@ const NAV_ITEMS = [
     label: 'Leads Management',
     href: '/leads',
     icon: Users
+  },
+  {
+    label: 'Quotations',
+    href: '/quotations',
+    icon: FileSpreadsheet
   },
   {
     label: 'Projects',

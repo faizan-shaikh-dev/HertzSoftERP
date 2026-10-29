@@ -9,3 +9,5 @@ export { default as ProjectModal } from './ProjectModal';
 export { default as PaymentModal } from './PaymentModal';
 export { default as CertificateModal } from './CertificateModal';
 export { default as CertificatePreviewModal } from './CertificatePreviewModal';
+export { default as QuotationModal } from './QuotationModal';
+export { default as QuotationPreviewModal } from './QuotationPreviewModal';
