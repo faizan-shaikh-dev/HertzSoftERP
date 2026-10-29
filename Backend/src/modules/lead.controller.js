@@ -53,11 +53,20 @@ export const createLead = async (req, res, next) => {
   }
 };
 
-// 2. Get All Leads (supports ?status=Won&search=Faizan&assigned_to=...&priority=...)
+// 2. Get All Leads (supports ?status=Won&search=Faizan&assigned_to=...&priority=...&follow_up_filter=...&sort_by=...&sort_order=...)
 export const getLeads = async (req, res, next) => {
   try {
-    const { status, search, lead_type, assigned_to, priority } = req.query;
-    const leads = await leadService.getLeads({ status, search, lead_type, assigned_to, priority });
+    const { status, search, lead_type, assigned_to, priority, follow_up_filter, sort_by, sort_order } = req.query;
+    const leads = await leadService.getLeads({ 
+      status, 
+      search, 
+      lead_type, 
+      assigned_to, 
+      priority, 
+      follow_up_filter, 
+      sort_by, 
+      sort_order 
+    });
 
     res.status(200).json({
       success: true,

@@ -30,7 +30,12 @@ import {
   Calendar,
   AlertTriangle,
   UserCheck,
-  Sparkles
+  Sparkles,
+  ArrowUp,
+  ArrowDown,
+  ArrowUpDown,
+  RotateCcw,
+  SlidersHorizontal
 } from 'lucide-react';
 import { 
   LeadModal, 
@@ -63,6 +68,17 @@ export default function LeadsPage() {
   // Filters
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedOwner, setSelectedOwner] = useState('All');
+  const [selectedPriority, setSelectedPriority] = useState('All');
+  const [selectedFollowUpDue, setSelectedFollowUpDue] = useState('All');
+
+  // Sorting
+  const [sortField, setSortField] = useState('created_at');
+  const [sortDirection, setSortDirection] = useState('desc');
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // Modals state
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
@@ -271,10 +287,44 @@ export default function LeadsPage() {
   // Filtered Leads
   const filteredLeads = useMemo(() => {
     return leads.filter((lead) => {
-      // Status filter
+      // 1. Status Filter
       if (selectedStatus !== 'All' && lead.status !== selectedStatus) return false;
 
-      // Search query
+      // 2. Owner Filter
+      if (selectedOwner !== 'All') {
+        if (lead.assigned_to !== selectedOwner && lead.assigned_to_name !== selectedOwner) {
+          return false;
+        }
+      }
+
+      // 3. Priority Filter
+      if (selectedPriority !== 'All') {
+        const p = lead.priority || 'Normal';
+        if (p !== selectedPriority) return false;
+      }
+
+      // 4. Follow-up Due Date Filter
+      if (selectedFollowUpDue !== 'All') {
+        if (selectedFollowUpDue === 'overdue') {
+          if (!lead.next_follow_up_at || new Date(lead.next_follow_up_at) >= new Date()) return false;
+        } else if (selectedFollowUpDue === 'today') {
+          if (!lead.next_follow_up_at) return false;
+          const d = new Date(lead.next_follow_up_at);
+          const now = new Date();
+          const isToday = d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+          if (!isToday) return false;
+        } else if (selectedFollowUpDue === 'upcoming') {
+          if (!lead.next_follow_up_at) return false;
+          const d = new Date(lead.next_follow_up_at);
+          const now = new Date();
+          const sevenDays = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+          if (d <= now || d > sevenDays) return false;
+        } else if (selectedFollowUpDue === 'none') {
+          if (lead.next_follow_up_at) return false;
+        }
+      }
+
+      // 5. Search query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         const nameMatch = lead.name?.toLowerCase().includes(q);
@@ -291,7 +341,77 @@ export default function LeadsPage() {
 
       return true;
     });
-  }, [leads, selectedStatus, searchQuery]);
+  }, [leads, selectedStatus, selectedOwner, selectedPriority, selectedFollowUpDue, searchQuery]);
+
+  // Sorted Leads
+  const sortedLeads = useMemo(() => {
+    const list = [...filteredLeads];
+    const priorityWeights = { Urgent: 4, High: 3, Normal: 2, Low: 1 };
+
+    list.sort((a, b) => {
+      let aVal = a[sortField];
+      let bVal = b[sortField];
+
+      if (sortField === 'priority') {
+        aVal = priorityWeights[a.priority] || 2;
+        bVal = priorityWeights[b.priority] || 2;
+      } else if (sortField === 'estimated_budget') {
+        aVal = Number(a.estimated_budget) || 0;
+        bVal = Number(b.estimated_budget) || 0;
+      } else if (sortField === 'created_at') {
+        aVal = new Date(a.created_at || 0).getTime();
+        bVal = new Date(b.created_at || 0).getTime();
+      } else if (sortField === 'next_follow_up_at') {
+        aVal = a.next_follow_up_at ? new Date(a.next_follow_up_at).getTime() : (sortDirection === 'asc' ? Infinity : -Infinity);
+        bVal = b.next_follow_up_at ? new Date(b.next_follow_up_at).getTime() : (sortDirection === 'asc' ? Infinity : -Infinity);
+      } else {
+        aVal = (aVal || '').toString().toLowerCase();
+        bVal = (bVal || '').toString().toLowerCase();
+      }
+
+      if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
+      if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    return list;
+  }, [filteredLeads, sortField, sortDirection]);
+
+  // Paginated Leads
+  const totalPages = Math.ceil(sortedLeads.length / itemsPerPage) || 1;
+  const paginatedLeads = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return sortedLeads.slice(start, start + itemsPerPage);
+  }, [sortedLeads, currentPage, itemsPerPage]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedStatus, selectedOwner, selectedPriority, selectedFollowUpDue, searchQuery, itemsPerPage]);
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const hasActiveFilters = 
+    selectedStatus !== 'All' || 
+    selectedOwner !== 'All' || 
+    selectedPriority !== 'All' || 
+    selectedFollowUpDue !== 'All' || 
+    searchQuery.trim() !== '';
+
+  const handleResetFilters = () => {
+    setSelectedStatus('All');
+    setSelectedOwner('All');
+    setSelectedPriority('All');
+    setSelectedFollowUpDue('All');
+    setSearchQuery('');
+  };
 
   const formatCurrency = (amount) => {
     if (!amount) return '—';
@@ -477,11 +597,12 @@ export default function LeadsPage() {
       <div className="bg-white rounded-lg border border-slate-200/90 shadow-sm overflow-hidden flex flex-col">
         {/* Search & Status Filter Header */}
         <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-50 via-slate-50/70 to-white border-b border-slate-200/80 space-y-3">
+          {/* Row 1: Status Filter Pills + Search */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             {/* Status Filter Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
               <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] mr-1">
-                Filter Status:
+                Status:
               </span>
               {['All', ...STATUS_OPTIONS].map((st) => (
                 <button
@@ -520,6 +641,74 @@ export default function LeadsPage() {
               )}
             </div>
           </div>
+
+          {/* Row 2: Advanced Filters (Owner, Priority, Follow-up Due Date) & Quick Reset */}
+          <div className="pt-2 border-t border-slate-200/60 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] flex items-center gap-1">
+                <SlidersHorizontal className="w-3 h-3 text-slate-400" />
+                Filters:
+              </span>
+
+              {/* 1. Owner Filter */}
+              <select
+                value={selectedOwner}
+                onChange={(e) => setSelectedOwner(e.target.value)}
+                className="px-2.5 py-1.5 bg-white text-slate-700 border border-slate-200 rounded-md outline-none focus:border-blue-600 cursor-pointer shadow-2xs text-xs font-medium"
+              >
+                <option value="All">All Owners</option>
+                {assignees.map((emp) => (
+                  <option key={emp.id} value={emp.id}>
+                    {emp.full_name}
+                  </option>
+                ))}
+              </select>
+
+              {/* 2. Priority Filter */}
+              <select
+                value={selectedPriority}
+                onChange={(e) => setSelectedPriority(e.target.value)}
+                className="px-2.5 py-1.5 bg-white text-slate-700 border border-slate-200 rounded-md outline-none focus:border-blue-600 cursor-pointer shadow-2xs text-xs font-medium"
+              >
+                <option value="All">All Priorities</option>
+                <option value="Urgent">🔴 Urgent Priority</option>
+                <option value="High">🟠 High Priority</option>
+                <option value="Normal">🔵 Normal Priority</option>
+                <option value="Low">⚪ Low Priority</option>
+              </select>
+
+              {/* 3. Follow-up Due Date Filter */}
+              <select
+                value={selectedFollowUpDue}
+                onChange={(e) => setSelectedFollowUpDue(e.target.value)}
+                className="px-2.5 py-1.5 bg-white text-slate-700 border border-slate-200 rounded-md outline-none focus:border-blue-600 cursor-pointer shadow-2xs text-xs font-medium"
+              >
+                <option value="All">All Follow-ups</option>
+                <option value="overdue">🚨 Overdue Follow-ups</option>
+                <option value="today">⏰ Due Today</option>
+                <option value="upcoming">📅 Upcoming This Week</option>
+                <option value="none">No Follow-up Scheduled</option>
+              </select>
+
+              {/* Reset Filters */}
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={handleResetFilters}
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-md border border-red-200 transition cursor-pointer shadow-2xs"
+                  title="Clear all active filters"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Reset Filters</span>
+                </button>
+              )}
+            </div>
+
+            {/* Quick Results Summary */}
+            <div className="text-[11px] text-slate-400 font-medium">
+              Showing <strong>{sortedLeads.length}</strong> matching of <strong>{leads.length}</strong> total inquiries
+            </div>
+          </div>
         </div>
 
         {/* Error Notice */}
@@ -537,11 +726,68 @@ export default function LeadsPage() {
           <table className="w-full text-left text-sm text-slate-600 border-collapse">
             <thead className="bg-slate-50/90 text-[11px] font-bold uppercase text-slate-500 border-b border-slate-200/80">
               <tr>
-                <th className="py-3 px-4">Client & Contact</th>
-                <th className="py-3 px-4">Company / Business</th>
+                <th 
+                  onClick={() => handleSort('name')}
+                  className="py-3 px-4 cursor-pointer select-none hover:text-slate-800 transition"
+                  title="Click to sort by Client Name"
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Client & Contact</span>
+                    {sortField === 'name' ? (
+                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-blue-600" /> : <ArrowDown className="w-3 h-3 text-blue-600" />
+                    ) : (
+                      <ArrowUpDown className="w-3 h-3 text-slate-300" />
+                    )}
+                  </div>
+                </th>
+
+                <th 
+                  onClick={() => handleSort('company_name')}
+                  className="py-3 px-4 cursor-pointer select-none hover:text-slate-800 transition"
+                  title="Click to sort by Company"
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Company / Business</span>
+                    {sortField === 'company_name' ? (
+                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-blue-600" /> : <ArrowDown className="w-3 h-3 text-blue-600" />
+                    ) : (
+                      <ArrowUpDown className="w-3 h-3 text-slate-300" />
+                    )}
+                  </div>
+                </th>
+
                 <th className="py-3 px-4">Service & Scope</th>
-                <th className="py-3 px-4">Estimated Budget</th>
-                <th className="py-3 px-4">Pipeline Status</th>
+
+                <th 
+                  onClick={() => handleSort('estimated_budget')}
+                  className="py-3 px-4 cursor-pointer select-none hover:text-slate-800 transition"
+                  title="Click to sort by Estimated Budget"
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Estimated Budget</span>
+                    {sortField === 'estimated_budget' ? (
+                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-blue-600" /> : <ArrowDown className="w-3 h-3 text-blue-600" />
+                    ) : (
+                      <ArrowUpDown className="w-3 h-3 text-slate-300" />
+                    )}
+                  </div>
+                </th>
+
+                <th 
+                  onClick={() => handleSort('status')}
+                  className="py-3 px-4 cursor-pointer select-none hover:text-slate-800 transition"
+                  title="Click to sort by Pipeline Status"
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Pipeline Status</span>
+                    {sortField === 'status' ? (
+                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-blue-600" /> : <ArrowDown className="w-3 h-3 text-blue-600" />
+                    ) : (
+                      <ArrowUpDown className="w-3 h-3 text-slate-300" />
+                    )}
+                  </div>
+                </th>
+
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -553,8 +799,8 @@ export default function LeadsPage() {
                     <span className="text-xs font-medium">Loading inquiries pipeline...</span>
                   </td>
                 </tr>
-              ) : filteredLeads.length > 0 ? (
-                filteredLeads.map((lead) => (
+              ) : paginatedLeads.length > 0 ? (
+                paginatedLeads.map((lead) => (
                   <tr key={lead.id} className="hover:bg-blue-50/30 transition-colors">
                     {/* 1. Name & Contact */}
                     <td className="py-3 px-4">
@@ -758,6 +1004,79 @@ export default function LeadsPage() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination & Results Count Bar */}
+        {sortedLeads.length > 0 && (
+          <div className="p-3.5 sm:p-4 bg-slate-50/80 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-600">
+            <div className="flex items-center gap-3">
+              <span>
+                Showing <strong>{Math.min((currentPage - 1) * itemsPerPage + 1, sortedLeads.length)}</strong> to{' '}
+                <strong>{Math.min(currentPage * itemsPerPage, sortedLeads.length)}</strong> of{' '}
+                <strong>{sortedLeads.length}</strong> inquiries
+              </span>
+
+              <div className="flex items-center gap-1.5 border-l border-slate-200 pl-3">
+                <span className="text-slate-400">Rows:</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                  className="px-2 py-0.5 bg-white border border-slate-200 rounded text-xs font-semibold text-slate-700 outline-none cursor-pointer"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Page navigation */}
+            <div className="flex items-center gap-1 self-center">
+              <button
+                type="button"
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition cursor-pointer"
+              >
+                Previous
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => {
+                if (
+                  pg === 1 || 
+                  pg === totalPages || 
+                  (pg >= currentPage - 1 && pg <= currentPage + 1)
+                ) {
+                  return (
+                    <button
+                      key={pg}
+                      type="button"
+                      onClick={() => setCurrentPage(pg)}
+                      className={`px-3 py-1 rounded text-xs font-semibold transition cursor-pointer ${
+                        currentPage === pg
+                          ? 'bg-blue-600 text-white shadow-2xs'
+                          : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
+                      }`}
+                    >
+                      {pg}
+                    </button>
+                  );
+                } else if (pg === currentPage - 2 || pg === currentPage + 2) {
+                  return <span key={pg} className="px-1 text-slate-400">...</span>;
+                }
+                return null;
+              })}
+
+              <button
+                type="button"
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition cursor-pointer"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Lead Create / Edit Modal */}

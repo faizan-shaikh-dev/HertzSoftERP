@@ -88,10 +88,8 @@ export const createLead = async (leadData, userId) => {
 };
 
 // 2. Get all Leads (with search & filter)
-export const getLeads = async ({ status, search, lead_type, assigned_to, priority }) => {
+export const getLeads = async ({ status, search, lead_type, assigned_to, priority, follow_up_filter, sort_by = 'created_at', sort_order = 'DESC' }) => {
   let query = `
-
-
     SELECT l.*, 
            u.full_name as assigned_to_name, 
            creator.full_name as created_by_name,
@@ -135,7 +133,32 @@ export const getLeads = async ({ status, search, lead_type, assigned_to, priorit
     params.push(searchVal, searchVal, searchVal, searchVal, searchVal);
   }
 
-  query += ' ORDER BY l.created_at DESC';
+  // Follow-up due date filter
+  if (follow_up_filter === 'overdue') {
+    query += ' AND EXISTS (SELECT 1 FROM follow_ups WHERE lead_id = l.id AND next_follow_up_at < NOW() AND completed_at IS NULL)';
+  } else if (follow_up_filter === 'today') {
+    query += ' AND EXISTS (SELECT 1 FROM follow_ups WHERE lead_id = l.id AND DATE(next_follow_up_at) = CURDATE() AND completed_at IS NULL)';
+  } else if (follow_up_filter === 'upcoming') {
+    query += ' AND EXISTS (SELECT 1 FROM follow_ups WHERE lead_id = l.id AND DATE(next_follow_up_at) > CURDATE() AND DATE(next_follow_up_at) <= DATE_ADD(CURDATE(), INTERVAL 7 DAY) AND completed_at IS NULL)';
+  } else if (follow_up_filter === 'none') {
+    query += ' AND NOT EXISTS (SELECT 1 FROM follow_ups WHERE lead_id = l.id AND next_follow_up_at IS NOT NULL AND completed_at IS NULL)';
+  }
+
+  // Sorting
+  const allowedSortCols = {
+    created_at: 'l.created_at',
+    name: 'l.name',
+    company_name: 'l.company_name',
+    estimated_budget: 'l.estimated_budget',
+    priority: 'FIELD(l.priority, "Urgent", "High", "Normal", "Low")',
+    status: 'l.status',
+    next_follow_up_at: 'next_follow_up_at'
+  };
+
+  const sortCol = allowedSortCols[sort_by] || 'l.created_at';
+  const order = sort_order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+
+  query += ` ORDER BY ${sortCol} ${order}`;
 
   const [rows] = await pool.query(query, params);
   return rows;
