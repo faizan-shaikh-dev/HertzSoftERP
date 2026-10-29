@@ -90,7 +90,15 @@ export const createLead = async (leadData, userId) => {
 // 2. Get all Leads (with search & filter)
 export const getLeads = async ({ status, search, lead_type, assigned_to, priority }) => {
   let query = `
-    SELECT l.*, u.full_name as assigned_to_name, creator.full_name as created_by_name 
+
+
+  SELECT l.*, 
+           u.full_name as assigned_to_name, 
+           creator.full_name as created_by_name,
+           (SELECT COUNT(*) FROM follow_ups WHERE lead_id = l.id) AS follow_ups_count,
+           (SELECT follow_up_at FROM follow_ups WHERE lead_id = l.id ORDER BY follow_up_at DESC LIMIT 1) AS last_follow_up_at,
+           (SELECT outcome FROM follow_ups WHERE lead_id = l.id ORDER BY follow_up_at DESC LIMIT 1) AS last_follow_up_outcome,
+           (SELECT next_follow_up_at FROM follow_ups WHERE lead_id = l.id AND next_follow_up_at IS NOT NULL AND completed_at IS NULL ORDER BY next_follow_up_at ASC LIMIT 1) AS next_follow_up_at
     FROM leads l
     LEFT JOIN users u ON l.assigned_to = u.id
     LEFT JOIN users creator ON l.created_by = creator.id
@@ -133,7 +141,11 @@ export const getLeads = async ({ status, search, lead_type, assigned_to, priorit
 // 3. Get single Lead by ID
 export const getLeadById = async (id) => {
   const [rows] = await pool.query(
-    `SELECT l.*, u.full_name as assigned_to_name, creator.full_name as created_by_name 
+    `SELECT l.*, 
+            u.full_name as assigned_to_name, 
+            creator.full_name as created_by_name,
+            (SELECT COUNT(*) FROM follow_ups WHERE lead_id = l.id) AS follow_ups_count,
+            (SELECT next_follow_up_at FROM follow_ups WHERE lead_id = l.id AND next_follow_up_at IS NOT NULL AND completed_at IS NULL ORDER BY next_follow_up_at ASC LIMIT 1) AS next_follow_up_at
      FROM leads l
      LEFT JOIN users u ON l.assigned_to = u.id
      LEFT JOIN users creator ON l.created_by = creator.id
@@ -260,4 +272,155 @@ export const deleteLead = async (id) => {
     throw error;
   }
   return { message: 'Lead deleted successfully' };
+};
+
+// ==================== FOLLOW-UP SERVICES ====================
+
+// 9. Create Follow-up for a Lead
+export const createFollowUp = async (leadId, followUpData, userId) => {
+  const {
+    follow_up_at,
+    follow_up_type = 'Call',
+    outcome = null,
+    notes = null,
+    owner_id,
+    next_follow_up_at = null,
+    completed_at = null,
+    update_lead_status = null
+  } = followUpData;
+
+  // Verify lead exists
+  const [leadCheck] = await pool.query('SELECT id, status FROM leads WHERE id = ?', [leadId]);
+  if (leadCheck.length === 0) {
+    const error = new Error('Lead not found');
+    error.statusCode = 404;
+    error.code = 'NOT_FOUND';
+    throw error;
+  }
+
+  const assignedOwner = owner_id || userId;
+  const followUpTime = follow_up_at ? new Date(follow_up_at) : new Date();
+
+  await pool.query(
+    `INSERT INTO follow_ups 
+      (lead_id, owner_id, follow_up_at, follow_up_type, outcome, notes, next_follow_up_at, completed_at, created_by)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      leadId,
+      assignedOwner,
+      followUpTime,
+      follow_up_type,
+      outcome || null,
+      notes || null,
+      next_follow_up_at ? new Date(next_follow_up_at) : null,
+      completed_at ? new Date(completed_at) : null,
+      userId
+    ]
+  );
+
+  // Optional status update
+  if (update_lead_status && update_lead_status !== leadCheck[0].status) {
+    await pool.query('UPDATE leads SET status = ? WHERE id = ?', [update_lead_status, leadId]);
+  }
+
+  const [createdFollowUp] = await pool.query(
+    `SELECT f.*, u.full_name as owner_name, creator.full_name as created_by_name
+     FROM follow_ups f
+     LEFT JOIN users u ON f.owner_id = u.id
+     LEFT JOIN users creator ON f.created_by = creator.id
+     WHERE f.lead_id = ?
+     ORDER BY f.created_at DESC LIMIT 1`,
+    [leadId]
+  );
+
+  return createdFollowUp[0];
+};
+
+// 10. Get All Follow-ups for a Specific Lead
+export const getLeadFollowUps = async (leadId) => {
+  const [rows] = await pool.query(
+    `SELECT f.*, u.full_name as owner_name, creator.full_name as created_by_name
+     FROM follow_ups f
+     LEFT JOIN users u ON f.owner_id = u.id
+     LEFT JOIN users creator ON f.created_by = creator.id
+     WHERE f.lead_id = ?
+     ORDER BY f.follow_up_at DESC, f.created_at DESC`,
+    [leadId]
+  );
+  return rows;
+};
+
+// 11. Get Due and Overdue Follow-up Reminders
+export const getFollowUpReminders = async () => {
+  const query = `
+    SELECT f.*, 
+           l.lead_number, l.name as lead_name, l.phone as lead_phone, 
+           l.company_name as lead_company, l.status as lead_status,
+           u.full_name as owner_name
+    FROM follow_ups f
+    JOIN leads l ON f.lead_id = l.id
+    LEFT JOIN users u ON f.owner_id = u.id
+    WHERE f.completed_at IS NULL
+      AND (f.next_follow_up_at IS NOT NULL OR f.follow_up_at IS NOT NULL)
+    ORDER BY COALESCE(f.next_follow_up_at, f.follow_up_at) ASC
+  `;
+
+  const [rows] = await pool.query(query);
+
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+  const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+  const next7DaysEnd = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+  const overdue = [];
+  const today = [];
+  const upcoming = [];
+
+  for (const item of rows) {
+    const dueTime = new Date(item.next_follow_up_at || item.follow_up_at);
+    if (dueTime < todayStart) {
+      overdue.push(item);
+    } else if (dueTime >= todayStart && dueTime <= todayEnd) {
+      today.push(item);
+    } else if (dueTime > todayEnd && dueTime <= next7DaysEnd) {
+      upcoming.push(item);
+    }
+  }
+
+  return {
+    overdue,
+    today,
+    upcoming,
+    totalCount: rows.length,
+    overdueCount: overdue.length,
+    todayCount: today.length
+  };
+};
+
+// 12. Mark Follow-up as Completed
+export const completeFollowUp = async (id) => {
+  const [res] = await pool.query(
+    'UPDATE follow_ups SET completed_at = CURRENT_TIMESTAMP WHERE id = ?',
+    [id]
+  );
+  if (res.affectedRows === 0) {
+    const error = new Error('Follow-up record not found');
+    error.statusCode = 404;
+    error.code = 'NOT_FOUND';
+    throw error;
+  }
+  const [updated] = await pool.query('SELECT * FROM follow_ups WHERE id = ?', [id]);
+  return updated[0];
+};
+
+// 13. Delete Follow-up
+export const deleteFollowUp = async (id) => {
+  const [res] = await pool.query('DELETE FROM follow_ups WHERE id = ?', [id]);
+  if (res.affectedRows === 0) {
+    const error = new Error('Follow-up record not found');
+    error.statusCode = 404;
+    error.code = 'NOT_FOUND';
+    throw error;
+  }
+  return { message: 'Follow-up deleted successfully' };
 };

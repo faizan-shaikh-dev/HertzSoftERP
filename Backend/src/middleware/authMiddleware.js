@@ -19,9 +19,9 @@ export const authenticateToken = (req, res, next) => {
     req.user = decoded; // Attach decoded user payload (id, email, role) to request
     next();
   } catch (error) {
-    return res.status(403).json({
+    return res.status(401).json({
       error: {
-        code: 'INVALID_TOKEN',
+        code: error.name === 'TokenExpiredError' ? 'TOKEN_EXPIRED' : 'INVALID_TOKEN',
         message: 'Invalid or expired token.'
       }
     });
@@ -52,4 +52,3 @@ export const authorizeRoles = (...allowedRoles) => {
     next();
   };
 };
-

@@ -7,7 +7,12 @@ import {
   getLeadById,
   updateLead,
   updateLeadStatus,
-  deleteLead
+  deleteLead,
+  createFollowUp,
+  getLeadFollowUps,
+  getFollowUpReminders,
+  completeFollowUp,
+  deleteFollowUp
 } from './lead.controller.js';
 import { authenticateToken, authorizeRoles } from '../middleware/authMiddleware.js';
 
@@ -15,6 +20,11 @@ const router = Router();
 
 // Protect all lead routes with authentication middleware
 router.use(authenticateToken);
+
+// Follow-up Reminders (Must be before /:id)
+router.get('/follow-ups/reminders', getFollowUpReminders);       // Get due & overdue follow-up reminders
+router.patch('/follow-ups/:id/complete', completeFollowUp);      // Mark follow-up as completed
+router.delete('/follow-ups/:id', deleteFollowUp);                // Delete follow-up record
 
 // Lead Endpoints
 router.post('/', createLead);                                    // Create a new lead
@@ -26,5 +36,9 @@ router.put('/:id', updateLead);                                  // Update lead 
 router.patch('/:id', updateLead);                                // Update lead details (PATCH)
 router.patch('/:id/status', updateLeadStatus);                   // Update lead pipeline status (Lost reason / On Hold)
 router.delete('/:id', authorizeRoles('Administrator'), deleteLead); // Delete a lead (Admin only)
+
+// Lead Follow-up Records
+router.get('/:leadId/follow-ups', getLeadFollowUps);             // Get all follow-up history for a lead
+router.post('/:leadId/follow-ups', createFollowUp);              // Log a new follow-up interaction
 
 export default router;

@@ -50,6 +50,36 @@ export const leadService = {
       params: { phone, excludeLeadId }
     });
     return response.data;
+  },
+
+  // 9. Get all follow-ups for a lead
+  getFollowUps: async (leadId) => {
+    const response = await api.get(`/leads/${leadId}/follow-ups`);
+    return response.data;
+  },
+
+  // 10. Create a follow-up for a lead
+  createFollowUp: async (leadId, followUpData) => {
+    const response = await api.post(`/leads/${leadId}/follow-ups`, followUpData);
+    return response.data;
+  },
+
+  // 11. Get Due and Overdue Follow-up Reminders
+  getReminders: async () => {
+    const response = await api.get('/leads/follow-ups/reminders');
+    return response.data;
+  },
+
+  // 12. Complete Follow-up
+  completeFollowUp: async (id) => {
+    const response = await api.patch(`/leads/follow-ups/${id}/complete`);
+    return response.data;
+  },
+
+  // 13. Delete Follow-up
+  deleteFollowUp: async (id) => {
+    const response = await api.delete(`/leads/follow-ups/${id}`);
+    return response.data;
   }
 };
 

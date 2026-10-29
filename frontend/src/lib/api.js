@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // 1. Initialize Axios instance with backend API base URL
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
   headers: {
     'Content-Type': 'application/json'
   }
@@ -37,7 +37,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// 3. Response Interceptor: Silent Auto-Refresh on 401 Unauthorized
+// 3. Response Interceptor: Silent Auto-Refresh on 401 Unauthorized or Expired Token
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -51,8 +51,20 @@ api.interceptors.response.use(
       'Something went wrong';
     error.message = serverMessage;
 
-    // Only intercept 401 Unauthorized errors
-    if (!error.response || error.response.status !== 401) {
+    // Check if error is authentication-related (401 or 403 INVALID_TOKEN/TOKEN_EXPIRED)
+    const status = error.response?.status;
+    const errorCode = error.response?.data?.error?.code;
+    const isAuthExpired =
+      status === 401 ||
+      (status === 403 && (
+        errorCode === 'INVALID_TOKEN' ||
+        errorCode === 'TOKEN_EXPIRED' ||
+        serverMessage.toLowerCase().includes('expired') ||
+        serverMessage.toLowerCase().includes('invalid token')
+      ));
+
+    // If not an auth error, pass it through directly
+    if (!error.response || !isAuthExpired) {
       return Promise.reject(error);
     }
 

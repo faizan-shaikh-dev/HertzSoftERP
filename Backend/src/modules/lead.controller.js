@@ -174,3 +174,86 @@ export const deleteLead = async (req, res, next) => {
     next(error);
   }
 };
+
+// ==================== FOLLOW-UP CONTROLLERS ====================
+
+// 9. Create a Follow-up for a Lead
+export const createFollowUp = async (req, res, next) => {
+  try {
+    const { leadId } = req.params;
+    const { follow_up_type, notes } = req.body;
+
+    if (!follow_up_type) {
+      return res.status(400).json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Follow-up type is required (Call, Email, Meeting, Message, Other)'
+        }
+      });
+    }
+
+    const followUp = await leadService.createFollowUp(leadId, req.body, req.user.id);
+    res.status(201).json({
+      success: true,
+      data: followUp
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 10. Get All Follow-ups for a Specific Lead
+export const getLeadFollowUps = async (req, res, next) => {
+  try {
+    const { leadId } = req.params;
+    const followUps = await leadService.getLeadFollowUps(leadId);
+    res.status(200).json({
+      success: true,
+      count: followUps.length,
+      data: followUps
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 11. Get Follow-up Reminders (Due Today & Overdue)
+export const getFollowUpReminders = async (req, res, next) => {
+  try {
+    const reminders = await leadService.getFollowUpReminders();
+    res.status(200).json({
+      success: true,
+      data: reminders
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 12. Mark Follow-up as Completed
+export const completeFollowUp = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updated = await leadService.completeFollowUp(id);
+    res.status(200).json({
+      success: true,
+      data: updated
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 13. Delete Follow-up Record
+export const deleteFollowUp = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await leadService.deleteFollowUp(id);
+    res.status(200).json({
+      success: true,
+      message: result.message
+    });
+  } catch (error) {
+    next(error);
+  }
+};

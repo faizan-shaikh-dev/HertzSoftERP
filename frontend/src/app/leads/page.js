@@ -22,9 +22,15 @@ import {
   Clock, 
   AlertCircle,
   TrendingUp,
-  Layers
+  Layers,
+  MessageSquare,
+  Bell,
+  ChevronDown,
+  ChevronUp,
+  Calendar,
+  AlertTriangle
 } from 'lucide-react';
-import { LeadModal, ConfirmDeleteModal, LostReasonModal, OnHoldModal } from '@/components/modals';
+import { LeadModal, ConfirmDeleteModal, LostReasonModal, OnHoldModal, FollowUpModal } from '@/components/modals';
 
 const STATUS_OPTIONS = [
   'New',
@@ -65,6 +71,51 @@ export default function LeadsPage() {
   const [leadForOnHoldStatus, setLeadForOnHoldStatus] = useState(null);
   const [updatingOnHold, setUpdatingOnHold] = useState(false);
 
+  // Follow-up & Reminders State
+  const [isFollowUpModalOpen, setIsFollowUpModalOpen] = useState(false);
+  const [selectedLeadForFollowUp, setSelectedLeadForFollowUp] = useState(null);
+  const [assignees, setAssignees] = useState([]);
+  const [reminders, setReminders] = useState({
+    overdue: [],
+    today: [],
+    upcoming: [],
+    totalCount: 0,
+    overdueCount: 0,
+    todayCount: 0
+  });
+  const [showRemindersList, setShowRemindersList] = useState(false);
+  const [loadingReminders, setLoadingReminders] = useState(false);
+
+  // Fetch reminders
+  const fetchReminders = async () => {
+    try {
+      setLoadingReminders(true);
+      const res = await leadService.getReminders();
+      setReminders(res.data || {
+        overdue: [],
+        today: [],
+        upcoming: [],
+        totalCount: 0,
+        overdueCount: 0,
+        todayCount: 0
+      });
+    } catch (err) {
+      console.error('Failed to load follow-up reminders:', err);
+    } finally {
+      setLoadingReminders(false);
+    }
+  };
+
+  // Fetch assignees
+  const fetchAssignees = async () => {
+    try {
+      const res = await leadService.getAssignees();
+      setAssignees(res.data || []);
+    } catch (err) {
+      console.error('Failed to load assignees:', err);
+    }
+  };
+
   // Fetch leads from backend
   const fetchLeads = async (isManual = false) => {
     try {
@@ -72,6 +123,7 @@ export default function LeadsPage() {
       setError('');
       const res = await leadService.getLeads();
       setLeads(res.data || []);
+      fetchReminders();
       if (isManual) {
         toast.success('Leads list refreshed with latest inquiries!');
       }
@@ -89,6 +141,7 @@ export default function LeadsPage() {
 
   useEffect(() => {
     fetchLeads(false);
+    fetchAssignees();
   }, []);
 
   // Quick Inline Status Update
@@ -227,6 +280,17 @@ export default function LeadsPage() {
     });
   };
 
+  const formatDateTime = (dateString) => {
+    if (!dateString) return '—';
+    return new Date(dateString).toLocaleString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+
   return (
     <AppLayout title="Client Leads & Business Inquiries">
       {/* Top Banner Card with Action */}
@@ -262,6 +326,121 @@ export default function LeadsPage() {
           </button>
         </div>
       </div>
+
+      {/* Follow-up Reminders Alert Card */}
+      {reminders.totalCount > 0 && (
+        <div className="bg-white rounded-lg border border-slate-200/90 shadow-sm overflow-hidden transition-all">
+          <div className="p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-amber-50/60 via-white to-red-50/40 border-b border-slate-100">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-lg bg-amber-100 text-amber-700">
+                <Bell className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-900">
+                    Client Follow-up Reminders
+                  </h3>
+                  {reminders.overdueCount > 0 && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-red-100 text-red-700 border border-red-200">
+                      <AlertTriangle className="w-3 h-3" />
+                      {reminders.overdueCount} Overdue
+                    </span>
+                  )}
+                  {reminders.todayCount > 0 && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                      <Clock className="w-3 h-3" />
+                      {reminders.todayCount} Due Today
+                    </span>
+                  )}
+                  {reminders.upcoming?.length > 0 && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                      {reminders.upcoming.length} Upcoming
+                    </span>
+                  )}
+                </div>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Scheduled phone calls, demos, and pending touchpoints for client inquiries.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setShowRemindersList(!showRemindersList)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-2xs transition cursor-pointer self-start sm:self-center"
+            >
+              <span>{showRemindersList ? 'Hide Schedule' : `View Reminders (${reminders.totalCount})`}</span>
+              {showRemindersList ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </button>
+          </div>
+
+          {/* Expanded Reminders List */}
+          {showRemindersList && (
+            <div className="p-4 bg-slate-50/50 divide-y divide-slate-100 max-h-80 overflow-y-auto">
+              {[...reminders.overdue, ...reminders.today, ...reminders.upcoming].map((item) => {
+                const dueTime = new Date(item.next_follow_up_at || item.follow_up_at);
+                const isOverdue = dueTime < new Date();
+                const matchedLead = leads.find((l) => l.id === item.lead_id) || {
+                  id: item.lead_id,
+                  lead_number: item.lead_number,
+                  name: item.lead_name,
+                  phone: item.lead_phone,
+                  company_name: item.lead_company,
+                  status: item.lead_status,
+                  assigned_to: item.owner_id,
+                  assigned_to_name: item.owner_name
+                };
+
+                return (
+                  <div key={item.id} className="py-2.5 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex items-start gap-3">
+                      <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${
+                        isOverdue
+                          ? 'bg-red-100 text-red-800 border border-red-200'
+                          : 'bg-amber-100 text-amber-800 border border-amber-200'
+                      }`}>
+                        {isOverdue ? 'Overdue' : 'Due Soon'}
+                      </span>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-xs text-slate-900">
+                            {item.lead_name}
+                          </span>
+                          {item.lead_company && (
+                            <span className="text-[11px] text-slate-500">
+                              ({item.lead_company})
+                            </span>
+                          )}
+                          <span className="text-[11px] font-mono text-slate-400">
+                            • {item.lead_phone}
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-2">
+                          <span className="font-semibold text-slate-700">{item.follow_up_type}</span>
+                          {item.outcome && <span>• {item.outcome}</span>}
+                          <span>• Scheduled for: <strong className="text-slate-800">{formatDateTime(item.next_follow_up_at || item.follow_up_at)}</strong></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedLeadForFollowUp(matchedLead);
+                        setIsFollowUpModalOpen(true);
+                      }}
+                      className="inline-flex items-center gap-1 px-3 py-1 text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded transition cursor-pointer self-start sm:self-center shadow-2xs"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>Follow-up Action</span>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Main Table Card */}
       <div className="bg-white rounded-lg border border-slate-200/90 shadow-sm overflow-hidden flex flex-col">
@@ -448,11 +627,41 @@ export default function LeadsPage() {
                           Hold: {lead.on_hold_reason}
                         </p>
                       )}
+                      {lead.next_follow_up_at && (
+                        <div className="mt-1 flex items-center gap-1">
+                          <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-medium ${
+                            new Date(lead.next_follow_up_at) < new Date()
+                              ? 'bg-red-50 text-red-700 border border-red-200'
+                              : 'bg-blue-50 text-blue-700 border border-blue-200'
+                          }`}>
+                            <Clock className="w-2.5 h-2.5" />
+                            <span>{new Date(lead.next_follow_up_at) < new Date() ? 'Overdue: ' : 'Next: '}</span>
+                            <span>{formatDateTime(lead.next_follow_up_at)}</span>
+                          </span>
+                        </div>
+                      )}
                     </td>
 
                     {/* 6. Row Actions */}
                     <td className="py-3 px-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => {
+                            setSelectedLeadForFollowUp(lead);
+                            setIsFollowUpModalOpen(true);
+                          }}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-semibold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-300 transition cursor-pointer shadow-2xs mr-1"
+                          title="Log & View Follow-ups"
+                        >
+                          <MessageSquare className="w-3.5 h-3.5 text-blue-600" />
+                          <span className="hidden sm:inline">Follow-up</span>
+                          {Number(lead.follow_ups_count) > 0 && (
+                            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">
+                              {lead.follow_ups_count}
+                            </span>
+                          )}
+                        </button>
+
                         <button
                           onClick={() => {
                             setEditingLead(lead);
@@ -542,6 +751,21 @@ export default function LeadsPage() {
         onConfirm={handleConfirmOnHold}
         leadName={leadForOnHoldStatus?.name}
         loading={updatingOnHold}
+      />
+
+      {/* Follow-up Logging & History Modal */}
+      <FollowUpModal
+        isOpen={isFollowUpModalOpen}
+        onClose={() => {
+          setIsFollowUpModalOpen(false);
+          setSelectedLeadForFollowUp(null);
+        }}
+        lead={selectedLeadForFollowUp}
+        assignees={assignees}
+        onSuccess={() => {
+          fetchLeads(false);
+          fetchReminders();
+        }}
       />
     </AppLayout>
   );
