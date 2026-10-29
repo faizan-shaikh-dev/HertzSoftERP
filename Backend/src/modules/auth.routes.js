@@ -3,14 +3,15 @@ import { register, login, refresh, logout, updateProfile } from "./auth.controll
 import { validateBody } from "../middleware/validate.js";
 import { registerSchema, loginSchema, refreshTokenSchema } from "./auth.validation.js";
 import { authenticateToken } from "../middleware/authMiddleware.js";
+import { authLimiter } from "../middleware/rateLimiter.js";
 
 const router = Router();
 
-// Register Route (Sanitized & Validated)
-router.post('/register', validateBody(registerSchema), register);
+// Register Route (Sanitized, Validated & Protected against spam)
+router.post('/register', authLimiter, validateBody(registerSchema), register);
 
-// Login Route (Sanitized & Validated)
-router.post('/login', validateBody(loginSchema), login);
+// Login Route (Strict rate limiting against brute-force password guessing)
+router.post('/login', authLimiter, validateBody(loginSchema), login);
 
 // Refresh Access Token Route (Rotates refresh token)
 router.post('/refresh', validateBody(refreshTokenSchema), refresh);

@@ -2,7 +2,7 @@ import pool from '../config/db.js';
 
 // Helper to generate unique serial code (e.g., HZ-2026-FS-8492)
 const generateCertNumber = (docType, domain) => {
-  const prefix = docType === 'Offer Letter' ? 'HZ-OFFER' : (docType === 'Internship Certificate' ? 'HZ-INT' : (docType === 'Experience Letter' ? 'HZ-EXP' : 'HZ-DOC'));
+  const prefix = docType === 'Offer Letter' ? 'HZ-OFFER' : (docType === 'Appointment Letter' ? 'HZ-APPT' : (docType === 'Internship Certificate' ? 'HZ-INT' : (docType === 'Experience Letter' ? 'HZ-EXP' : 'HZ-DOC')));
   const domainCode = (domain && typeof domain === 'string' && domain.length >= 2) ? domain.substring(0, 2).toUpperCase() : 'HS';
   const randomNum = Math.floor(1000 + Math.random() * 9000);
   const year = new Date().getFullYear();
@@ -156,6 +156,106 @@ export const getCertificateHtml = async (id) => {
             <div class="sign">Authorized Signatory<br><strong>Hertzsoft Technologies</strong></div>
           </div>
           <div class="cert-id">Verification ID: ${cert.certificate_number}</div>
+        </div>
+      </body>
+      </html>
+    `;
+  } else if (cert.document_type === 'Appointment Letter') {
+    templateHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Appointment Letter - ${cert.candidate_name}</title>
+        <style>
+          body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f3f4f6; margin: 0; padding: 40px; display: flex; justify-content: center; }
+          .letter { width: 750px; background: white; padding: 50px 60px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); line-height: 1.6; color: #1f2937; position: relative; }
+          .header { border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-start; }
+          .logo { font-size: 24px; font-weight: 800; color: #1e3a8a; letter-spacing: 1px; }
+          .tagline { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+          .meta { font-size: 12px; color: #475569; text-align: right; }
+          .title-badge { display: inline-block; background: #eff6ff; color: #1d4ed8; padding: 4px 12px; border-radius: 4px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; border: 1px solid #bfdbfe; }
+          .salutation { font-size: 15px; font-weight: 700; margin-bottom: 15px; }
+          .content { font-size: 14px; margin-bottom: 16px; text-align: justify; }
+          .highlight { font-weight: 700; color: #1e3a8a; }
+          .info-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; margin: 20px 0; font-size: 13px; }
+          .info-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; }
+          .info-row:last-child { border-bottom: none; }
+          .info-label { font-weight: 600; color: #64748b; }
+          .info-val { font-weight: 700; color: #0f172a; }
+          .footer { margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+          .sign-block { font-size: 13px; color: #475569; }
+          .verify-pill { font-size: 11px; color: #94a3b8; font-family: monospace; }
+          @media print { body { padding: 0; background: none; } .letter { box-shadow: none; padding: 30px; } }
+        </style>
+      </head>
+      <body>
+        <div class="letter">
+          <div class="header">
+            <div>
+              <div class="logo">HERTZSOFT TECHNOLOGIES</div>
+              <div class="tagline">Enterprise Software Development & Digital Solutions</div>
+            </div>
+            <div class="meta">
+              <strong>Date:</strong> ${new Date(cert.issue_date).toLocaleDateString('en-GB')}<br>
+              <strong>Ref No:</strong> ${cert.certificate_number}
+            </div>
+          </div>
+
+          <div class="title-badge">Letter of Appointment</div>
+
+          <div class="salutation">To: ${cert.candidate_name}</div>
+
+          <div class="content">
+            We are pleased to formally confirm your appointment at <strong>Hertzsoft Technologies</strong> as a <span class="highlight">${cert.course_or_domain}</span>. This letter confirms your technical engagement, responsibilities, and official tenure with our software engineering operations.
+          </div>
+
+          <div class="info-box">
+            <div class="info-row">
+              <span class="info-label">Appointee Name:</span>
+              <span class="info-val">${cert.candidate_name}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Designation / Role:</span>
+              <span class="info-val">${cert.course_or_domain}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Effective Date of Appointment:</span>
+              <span class="info-val">${cert.start_date ? new Date(cert.start_date).toLocaleDateString('en-GB') : new Date(cert.issue_date).toLocaleDateString('en-GB')}</span>
+            </div>
+            ${cert.end_date ? `
+            <div class="info-row">
+              <span class="info-label">Scheduled Completion / Tenure:</span>
+              <span class="info-val">${new Date(cert.end_date).toLocaleDateString('en-GB')}</span>
+            </div>` : ''}
+            ${cert.stipend ? `
+            <div class="info-row">
+              <span class="info-label">Monthly Compensation / Stipend:</span>
+              <span class="info-val">INR ${Number(cert.stipend).toLocaleString('en-IN')}/- per month</span>
+            </div>` : ''}
+            <div class="info-row">
+              <span class="info-label">Verification Serial ID:</span>
+              <span class="info-val">${cert.certificate_number}</span>
+            </div>
+          </div>
+
+          <div class="content">
+            <strong>Official Academic / Administrative Note:</strong> This document is issued upon request to serve as authentic proof of appointment for university, college, educational institution submissions, academic NOC approvals, or other administrative verification purposes.
+          </div>
+
+          <div class="content">
+            We look forward to your valuable contributions, innovation, and continued dedication towards our engineering milestones and client deliverables.
+          </div>
+
+          <div class="footer">
+            <div class="sign-block">
+              Sincerely,<br><br>
+              <strong>Director of Human Resources & Operations</strong><br>
+              Hertzsoft Technologies
+            </div>
+            <div class="verify-pill">
+              Verify ID: ${cert.certificate_number}
+            </div>
+          </div>
         </div>
       </body>
       </html>

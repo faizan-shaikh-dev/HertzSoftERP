@@ -20,6 +20,7 @@ import {
 
 const DOCUMENT_TYPES = [
   'Offer Letter',
+  'Appointment Letter',
   'Internship Certificate',
   'Experience Letter'
 ];
@@ -331,7 +332,7 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
               </select>
             </div>
 
-            {(documentType === 'Offer Letter' || documentType === 'Internship Certificate') && (
+            {(documentType === 'Offer Letter' || documentType === 'Appointment Letter' || documentType === 'Internship Certificate') && (
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
                   Monthly Stipend / CTC (Optional)

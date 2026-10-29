@@ -26,6 +26,7 @@ import { CertificateModal, CertificatePreviewModal } from '@/components/modals';
 const DOC_TYPES = [
   'All',
   'Offer Letter',
+  'Appointment Letter',
   'Internship Certificate',
   'Experience Letter'
 ];
@@ -88,6 +89,8 @@ export default function CertificatesPage() {
 
         if (filterType.includes('internship')) {
           if (!certType.includes('internship')) return false;
+        } else if (filterType.includes('appointment')) {
+          if (!certType.includes('appointment')) return false;
         } else if (filterType.includes('offer')) {
           if (!certType.includes('offer')) return false;
         } else if (filterType.includes('experience')) {
@@ -251,6 +254,8 @@ export default function CertificatesPage() {
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold ${
                         cert.document_type?.includes('Offer')
                           ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                          : cert.document_type?.includes('Appointment')
+                          ? 'bg-indigo-50 text-indigo-700 border border-indigo-200'
                           : cert.document_type?.includes('Internship')
                           ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                           : 'bg-purple-50 text-purple-700 border border-purple-200'

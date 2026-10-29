@@ -65,7 +65,7 @@ app.use('/api', (req, res, next) => {
 });
 
 // Endpoint Routes
-app.use('/api/auth', authLimiter, authRoutes); // Strict rate limiting against brute-force login attempts
+app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/projects', projectRoutes);

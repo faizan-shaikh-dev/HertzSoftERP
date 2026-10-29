@@ -8,7 +8,7 @@ export const initRefreshTokenTable = async () => {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS refresh_tokens (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
+                user_id CHAR(36) NOT NULL,
                 token VARCHAR(500) NOT NULL,
                 expires_at DATETIME NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
