@@ -340,18 +340,28 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
         aria-modal="true"
         aria-labelledby="lead-modal-title"
       >
-        {/* Modal Header (Exact OJT style: Clean white, dark title on left, circular close on right) */}
-        <div className="px-6 pt-6 pb-4 flex items-center justify-between bg-white flex-shrink-0 border-b border-[#e9ecef]">
-          <h2 id="lead-modal-title" className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight m-0">
-            {isEdit ? 'Edit Lead' : 'Create Lead'}
-          </h2>
+        {/* Modal Header (Hertzsoft Branded) */}
+        <div className="px-6 pt-5 pb-4 flex items-center justify-between bg-white flex-shrink-0 border-b border-[#e9ecef]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#326fa8] to-[#4689C8] text-white flex items-center justify-center shadow-sm shadow-[#4689C8]/25 flex-shrink-0">
+              <Briefcase className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 id="lead-modal-title" className="text-lg sm:text-xl font-bold text-[#172b4d] tracking-tight m-0">
+                {isEdit ? 'Edit Lead Record' : 'Register New Lead'}
+              </h2>
+              <p className="text-xs text-[#8898aa] mt-0.5">
+                Client inquiry, technical scope, budget, and team assignment.
+              </p>
+            </div>
+          </div>
 
           <button
             onClick={onClose}
-            className="text-[#172b4d] hover:text-slate-600 transition cursor-pointer p-0.5 rounded-full"
+            className="text-[#8898aa] hover:text-[#172b4d] transition cursor-pointer p-1 rounded-full hover:bg-[#f6f9fc]"
             aria-label="Close modal"
           >
-            <XCircle className="w-7 h-7 stroke-[1.5]" />
+            <X className="w-6 h-6" />
           </button>
         </div>
 
@@ -722,12 +732,20 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
             </div>
           </div>
 
-          {/* OJT Full-Width Submit Button */}
-          <div className="pt-4">
+          {/* Modal Footer Actions */}
+          <div className="pt-4 border-t border-[#e9ecef] flex items-center justify-end gap-3 mt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="px-5 py-2.5 bg-white hover:bg-[#f6f9fc] border border-[#dee2e6] text-[#525f7f] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
+            >
+              Cancel
+            </button>
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-lg btn-primary btn-block w-full py-3 bg-[#4689C8] hover:bg-[#3876b0] text-white font-bold text-sm rounded shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+              className="px-6 py-2.5 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] hover:from-[#2a5d8d] hover:to-[#3876b0] text-white font-bold text-xs sm:text-sm rounded shadow-sm shadow-[#4689C8]/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin text-white" />}
               <span>{isEdit ? 'Update Lead' : 'Save Lead'}</span>

@@ -244,7 +244,7 @@ export default function QuotationsPage() {
                   setModalMode('create');
                   setIsQuotationModalOpen(true);
                 }}
-                className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-xs transition cursor-pointer"
+                className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] hover:from-[#2a5d8d] hover:to-[#3876b0] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Create Quotation</span>
@@ -598,14 +598,14 @@ export default function QuotationsPage() {
 
                             {/* 7. Action Buttons */}
                             <td className="py-3 px-3.5 text-center">
-                              <div className="flex items-center justify-center gap-1">
+                              <div className="flex items-center justify-center gap-1.5">
                                 {/* Detailed View Page */}
                                 <Link
                                   href={`/quotations/view?id=${q.id}`}
-                                  className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-[#525f7f] bg-white hover:bg-[#f6f9fc] border border-[#dee2e6] rounded shadow-2xs transition cursor-pointer"
+                                  className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#f0f7fd] hover:bg-blue-100 border border-[#4689C8]/30 rounded shadow-2xs transition cursor-pointer"
                                   title="View Quotation Scope & Report"
                                 >
-                                  <Eye className="w-3.5 h-3.5 text-[#4689C8]" />
+                                  <Eye className="w-3.5 h-3.5" />
                                   <span>View</span>
                                 </Link>
 
@@ -613,7 +613,7 @@ export default function QuotationsPage() {
                                 <button
                                   type="button"
                                   onClick={() => handleOpenPreview(q)}
-                                  className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-2xs transition cursor-pointer"
+                                  className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-2xs transition cursor-pointer"
                                   title="Preview & Download Official PDF"
                                 >
                                   <Printer className="w-3.5 h-3.5" />
@@ -625,7 +625,7 @@ export default function QuotationsPage() {
                                   <button
                                     type="button"
                                     onClick={() => handleOpenEditOrRevise(q, 'revise')}
-                                    className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-white bg-[#8965e0] hover:bg-[#724ec7] rounded shadow-2xs transition cursor-pointer"
+                                    className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-white bg-[#8965e0] hover:bg-[#724ec7] rounded shadow-2xs transition cursor-pointer"
                                     title="Create Revised Version (vX)"
                                   >
                                     <GitBranch className="w-3.5 h-3.5" />
