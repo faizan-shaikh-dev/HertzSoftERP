@@ -40,21 +40,21 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
         {/* Top Header with Brand Logo */}
         <div className="pt-10 pb-6 px-8 text-center flex flex-col items-center">
-          <div className="relative w-28 h-28 mb-4 drop-shadow-md">
+          <div className="relative w-64 h-16 mb-2 drop-shadow-xs">
             <Image
-              src="/logo.png"
-              alt="Hertzsoft Educare Logo"
+              src="/logo.svg"
+              alt="Hertzsoft Technologies"
               fill
               className="object-contain"
               priority
             />
           </div>
-          <h1 className="text-2xl font-black tracking-tight text-slate-900">
-            HERTZSOFT <span className="text-sky-600">EDUCARE</span>
-          </h1>
-          <p className="text-xs uppercase tracking-widest font-semibold text-slate-400 mt-1">
-            ERP & Operations Portal
-          </p>
+          <h1 className="text-xl font-bold tracking-tight text-slate-800">Centralized ERP Portal</h1>
+
+
+          <p className="text-xs uppercase tracking-widest font-semibold text-slate-400 mt-1">Operations & Management</p>
+
+
         </div>
 
         {/* Login Form */}
@@ -132,6 +132,7 @@ export default function LoginPage() {
             <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
               CODE <span className="mx-1">•</span> LEARN <span className="mx-1">•</span> IMPROVE <span className="mx-1">•</span> REPEAT
             </p>
+  
           </div>
         </div>
       </div>

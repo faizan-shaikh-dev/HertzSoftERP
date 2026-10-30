@@ -78,30 +78,36 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
       >
         {/* Brand Header */}
         <div className={`h-20 border-b border-slate-100 flex items-center transition-all ${
-          isCollapsed ? 'justify-center px-2' : 'justify-between px-5'
+          isCollapsed ? 'justify-center px-2' : 'justify-between px-4'
         }`}>
           <Link 
             href="/" 
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-2 group"
             title="Hertzsoft ERP Portal"
           >
-            <div className="relative w-11 h-11 rounded-lg overflow-hidden shadow-2xs border border-slate-200/80 bg-white p-1 flex-shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
-              <Image
-                src="/logo.png"
-                alt="Hertzsoft Logo"
-                width={36}
-                height={36}
-                className="object-contain"
-                priority
-              />
-            </div>
-            {!isCollapsed && (
-              <div className="flex flex-col overflow-hidden animate-in fade-in duration-200">
-                <span className="font-extrabold text-base tracking-tight text-slate-900 group-hover:text-blue-700 transition-colors whitespace-nowrap">
-                  HERTZSOFT
-                </span>
-                <span className="text-[10px] tracking-wider uppercase font-semibold text-sky-600 -mt-1 whitespace-nowrap">
-                  ERP Portal
+            {isCollapsed ? (
+              <div className="relative w-11 h-11 rounded-lg overflow-hidden shadow-2xs border border-slate-200/80 bg-white p-1 flex-shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Image
+                  src="/logo-icon.svg"
+                  alt="Hertzsoft Logo"
+                  width={36}
+                  height={36}
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col items-start group-hover:opacity-95 transition-opacity">
+                <Image
+                  src="/logo.svg"
+                  alt="Hertzsoft Technologies"
+                  width={165}
+                  height={44}
+                  className="h-9 w-auto object-contain"
+                  priority
+                />
+                <span className="text-[9px] tracking-widest uppercase font-extrabold text-blue-600 pl-0.5 mt-0.5">
+                  ERP & Operations
                 </span>
               </div>
             )}

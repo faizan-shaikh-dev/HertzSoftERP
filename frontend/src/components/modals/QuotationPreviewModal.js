@@ -114,10 +114,12 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
             {/* Document Header */}
             <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-4 pb-6 border-b-2 border-slate-900">
               <div>
-                <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-                  HERTZSOFT TECHNOLOGIES
-                </h1>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                <img
+                  src="/logo.svg"
+                  alt="Hertzsoft Technologies"
+                  className="h-10 w-auto object-contain mb-2"
+                />
+                <p className="text-xs text-slate-500 leading-relaxed">
                   Enterprise Software Solutions & IT Consultancy<br />
                   Email: info@hertzsoft.com | Web: https://hertzsoft.com
                 </p>
