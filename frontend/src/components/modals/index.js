@@ -11,3 +11,6 @@ export { default as CertificateModal } from './CertificateModal';
 export { default as CertificatePreviewModal } from './CertificatePreviewModal';
 export { default as QuotationModal } from './QuotationModal';
 export { default as QuotationPreviewModal } from './QuotationPreviewModal';
+export { default as PaymentReceiptModal } from './PaymentReceiptModal';
+export { default as TaxInvoiceModal } from './TaxInvoiceModal';
+export { default as ExpenseModal } from './ExpenseModal';

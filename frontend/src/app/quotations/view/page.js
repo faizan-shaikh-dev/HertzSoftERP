@@ -25,7 +25,8 @@ import {
   Mail,
   Phone,
   FileCheck,
-  Percent
+  Percent,
+  FileText
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import AppLayout from '@/components/AppLayout';
@@ -33,7 +34,8 @@ import quotationService from '@/services/quotationService';
 import { 
   QuotationModal, 
   QuotationPreviewModal, 
-  ConfirmDeleteModal 
+  ConfirmDeleteModal,
+  TaxInvoiceModal
 } from '@/components/modals';
 import { useAuth } from '@/context/AuthContext';
 
@@ -54,6 +56,7 @@ function QuotationViewContent() {
   const [isQuotationModalOpen, setIsQuotationModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('edit'); // 'edit' | 'revise'
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [isTaxInvoiceOpen, setIsTaxInvoiceOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -209,6 +212,21 @@ function QuotationViewContent() {
             {/* Header Right Action Buttons (OJT Style) */}
             {quotation && (
               <div className="flex items-center gap-2 flex-wrap">
+                {/* Tax Invoice Button */}
+                <button
+                  type="button"
+                  onClick={() => setIsTaxInvoiceOpen(true)}
+                  className={`btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded shadow-xs transition cursor-pointer ${
+                    quotation.status === 'Accepted'
+                      ? 'bg-gradient-to-r from-[#2dce89] to-[#24a46d] hover:opacity-90 text-white'
+                      : 'bg-white hover:bg-[#f6f9fc] text-[#525f7f] border border-[#dee2e6]'
+                  }`}
+                  title="View and Print Official GST Tax Invoice"
+                >
+                  <FileText className={`w-3.5 h-3.5 ${quotation.status === 'Accepted' ? 'text-white' : 'text-[#4689C8]'}`} />
+                  <span>{quotation.status === 'Accepted' ? 'Tax Invoice' : 'Tax Invoice Preview'}</span>
+                </button>
+
                 {/* Print / PDF Button */}
                 <button
                   type="button"
@@ -779,6 +797,13 @@ function QuotationViewContent() {
         quotation={quotation}
         mode={modalMode}
         onSuccess={() => fetchQuotationDetails()}
+      />
+
+      {/* Official GST Tax Invoice Modal */}
+      <TaxInvoiceModal
+        isOpen={isTaxInvoiceOpen}
+        onClose={() => setIsTaxInvoiceOpen(false)}
+        quotation={quotation}
       />
 
       {/* Official Printable Preview Modal */}

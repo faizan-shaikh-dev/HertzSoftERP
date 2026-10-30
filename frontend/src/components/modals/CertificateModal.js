@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import certificateService from '@/services/certificateService';
 import { 
   XCircle, 
+  Award,
   IndianRupee, 
   Loader2, 
   CheckCircle2,
@@ -134,23 +135,28 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header - OJT Style */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#e9ecef] bg-white">
-          <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight">
-              Issue Official Document
-            </h3>
-            <p className="text-xs text-[#8898aa] mt-0.5">
-              Generate authenticated certificates with unique verification serial IDs
-            </p>
+        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-[#e9ecef] bg-white">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#326fa8] to-[#4689C8] flex items-center justify-center text-white shadow-sm">
+              <Award className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-[#172b4d] tracking-tight">
+                Issue Official Document
+              </h3>
+              <p className="text-xs text-[#8898aa] mt-0.5">
+                Generate authenticated certificates with unique verification serial IDs
+              </p>
+            </div>
           </div>
 
           <button
             onClick={onClose}
             type="button"
-            className="text-[#172b4d] hover:text-[#525f7f] transition cursor-pointer p-0.5 rounded-full"
+            className="text-[#adb5bd] hover:text-[#525f7f] transition cursor-pointer p-0.5 rounded-full"
             aria-label="Close dialog"
           >
-            <XCircle className="w-7 h-7 stroke-[1.5]" />
+            <XCircle className="w-6 h-6 stroke-[1.5]" />
           </button>
         </div>
 
@@ -331,22 +337,29 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
             )}
           </div>
 
-          {/* Full-Width Action Button */}
-          <div className="pt-2">
+          {/* Dual-Button Modal Footer (OJT Standard) */}
+          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#e9ecef]">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2.5 rounded border border-[#dee2e6] text-[#525f7f] hover:bg-[#f6f9fc] font-semibold text-xs tracking-wide transition cursor-pointer"
+            >
+              Cancel
+            </button>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#4689C8] hover:bg-[#3876b0] text-white font-bold text-sm rounded shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+              className="px-5 py-2.5 rounded bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] hover:from-[#2a5d8c] hover:to-[#3876b0] text-white font-bold text-xs tracking-wide shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
                   <span>Issuing Document...</span>
                 </>
               ) : (
                 <>
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Generate & Issue Document</span>
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Generate &amp; Issue Document</span>
                 </>
               )}
             </button>

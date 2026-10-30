@@ -54,44 +54,47 @@ export default function CertificatePreviewModal({ isOpen, onClose, certificate =
 
       <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden my-auto h-[92vh] flex flex-col">
         {/* Top Control Bar */}
-        <div className="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between gap-3 shadow-sm">
+        <div className="px-6 py-4 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] border-b-2 border-[#5FC8D6]/40 text-white flex items-center justify-between shrink-0 shadow-md">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-purple-300">
-              <Award className="w-4 h-4" />
+            <div className="w-10 h-10 rounded-lg bg-white/15 text-white border border-white/25 flex items-center justify-center shrink-0">
+              <Award className="w-5 h-5 text-white" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm font-bold truncate">
-                {certificate.document_type} — {certificate.candidate_name}
-              </h3>
-              <div className="flex items-center gap-2 text-[11px] text-slate-300 font-mono">
-                <span>{certificate.certificate_number}</span>
-                <span>•</span>
-                <span className="text-emerald-400 font-sans font-semibold">Verified Authentic</span>
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-bold text-white truncate">
+                  {certificate.document_type} — {certificate.candidate_name}
+                </h3>
+                <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/30 text-emerald-100 border border-emerald-400/40">
+                  Verified Authentic
+                </span>
               </div>
+              <p className="text-xs text-[#e0f7fa] font-mono mt-0.5">
+                Serial: {certificate.certificate_number}
+              </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <button
               onClick={handleCopySerial}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-xs font-medium text-slate-200 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-white/15 hover:bg-white/25 rounded-md border border-white/25 transition cursor-pointer"
               title="Copy verification serial code"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Copy className="w-3.5 h-3.5" />}
               <span className="hidden sm:inline">{copied ? 'Copied' : 'Copy ID'}</span>
             </button>
 
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-gradient-to-r from-blue-600 to-sky-600 hover:from-blue-700 hover:to-sky-700 text-xs font-bold text-white shadow-sm transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#172b4d] bg-white hover:bg-slate-50 rounded-md shadow-xs transition-all cursor-pointer"
             >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Print / PDF</span>
+              <Printer className="w-3.5 h-3.5 text-[#4689C8]" />
+              <span>Print / Download PDF</span>
             </button>
 
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-white transition cursor-pointer p-0.5 rounded-full ml-1"
+              className="text-white/80 hover:text-white transition cursor-pointer p-0.5 rounded-full"
               aria-label="Close dialog"
             >
               <XCircle className="w-6 h-6 stroke-[1.5]" />

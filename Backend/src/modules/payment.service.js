@@ -40,7 +40,11 @@ export const getPayments = async ({ project_id, client_id }) => {
     SELECT 
       pm.*,
       p.title AS project_title,
+      p.total_cost AS project_total_cost,
       c.name AS client_name,
+      c.company_name AS client_company,
+      c.email AS client_email,
+      c.phone AS client_phone,
       u.full_name AS recorded_by_name
     FROM payments pm
     JOIN projects p ON pm.project_id = p.id
@@ -72,7 +76,11 @@ export const getPaymentById = async (id) => {
     `SELECT 
       pm.*,
       p.title AS project_title,
+      p.total_cost AS project_total_cost,
       c.name AS client_name,
+      c.company_name AS client_company,
+      c.email AS client_email,
+      c.phone AS client_phone,
       u.full_name AS recorded_by_name
     FROM payments pm
     JOIN projects p ON pm.project_id = p.id

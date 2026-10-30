@@ -19,7 +19,10 @@ import {
   Calendar, 
   Loader2, 
   RefreshCw, 
-  Star 
+  Star,
+  X,
+  FileText,
+  UserCheck
 } from 'lucide-react';
 import { CertificateModal, CertificatePreviewModal } from '@/components/modals';
 
@@ -43,6 +46,10 @@ export default function CertificatesPage() {
   const [selectedType, setSelectedType] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedId, setCopiedId] = useState(null);
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   // Modals state
   const [isIssueModalOpen, setIsIssueModalOpen] = useState(false);
@@ -101,18 +108,28 @@ export default function CertificatesPage() {
       }
 
       if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim();
-        const nameMatch = cert.candidate_name?.toLowerCase().includes(q);
-        const codeMatch = cert.certificate_number?.toLowerCase().includes(q);
-        const domainMatch = cert.course_or_domain?.toLowerCase().includes(q);
-        const emailMatch = cert.candidate_email?.toLowerCase().includes(q);
+        const query = searchQuery.toLowerCase().trim();
+        const nameMatch = cert.candidate_name?.toLowerCase().includes(query);
+        const certNumMatch = cert.certificate_number?.toLowerCase().includes(query);
+        const domainMatch = cert.domain?.toLowerCase().includes(query);
+        const emailMatch = cert.candidate_email?.toLowerCase().includes(query);
 
-        if (!nameMatch && !codeMatch && !domainMatch && !emailMatch) return false;
+        if (!nameMatch && !certNumMatch && !domainMatch && !emailMatch) {
+          return false;
+        }
       }
 
       return true;
     });
   }, [certificates, selectedType, searchQuery]);
+
+  // Pagination calculation
+  const totalEntries = filteredCertificates.length;
+  const totalPages = Math.ceil(totalEntries / pageSize) || 1;
+  const paginatedCertificates = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredCertificates.slice(start, start + pageSize);
+  }, [filteredCertificates, currentPage, pageSize]);
 
   const formatDate = (dateString) => {
     if (!dateString) return '—';
@@ -123,241 +140,426 @@ export default function CertificatesPage() {
     });
   };
 
+  // Metrics
+  const internshipCount = certificates.filter(c => (c.document_type || '').toLowerCase().includes('internship')).length;
+  const appointmentCount = certificates.filter(c => (c.document_type || '').toLowerCase().includes('appointment') || (c.document_type || '').toLowerCase().includes('offer')).length;
+  const experienceCount = certificates.filter(c => (c.document_type || '').toLowerCase().includes('experience')).length;
+
   return (
-    <AppLayout title="Certificates & Document Generator">
-      {/* Top Banner Card with Action */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-purple-50/80 via-white to-slate-50 p-5 rounded-lg border border-purple-100/80 shadow-sm">
-        <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">
-            Official Credentials & Document Registry
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Issue official company credentials, employee offer letters, internship certificates, and experience documents.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2.5">
-          <button
-            onClick={() => fetchCertificates(true)}
-            disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 rounded-md border border-slate-200 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>Refresh</span>
-          </button>
-
-          <button
-            onClick={() => setIsIssueModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-md shadow-sm transition-all cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Issue New Document</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Main Table Card */}
-      <div className="bg-white rounded-lg border border-slate-200/90 shadow-sm overflow-hidden flex flex-col">
-        {/* Filters Header */}
-        <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-50 via-slate-50/70 to-white border-b border-slate-200/80 space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            {/* Document Type Pills */}
-            <div className="flex items-center gap-1.5 overflow-x-auto text-xs pb-1 sm:pb-0">
-              <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] mr-1">
-                Category:
-              </span>
-              {DOC_TYPES.map((dt) => (
-                <button
-                  key={dt}
-                  onClick={() => setSelectedType(dt)}
-                  className={`px-2.5 py-1 rounded text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
-                    selectedType === dt
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  {dt}
-                </button>
-              ))}
+    <AppLayout title="Certificates & Verification Registry">
+      <div className="container-fluid px-0 sm:px-2">
+        {/* MASTER OJT CONTAINER CARD */}
+        <div className="card shadow-sm mb-4 mainCard bg-white border border-[#e9ecef] rounded-lg overflow-hidden">
+          {/* Card Header (OJT Standard) */}
+          <div className="card-header px-4 sm:px-6 py-4 bg-white border-b border-[#e9ecef] flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight m-0 flex items-center gap-2">
+                <Award className="w-6 h-6 text-[#4689C8]" />
+                <span>Certificates & Verification Registry</span>
+              </h2>
+              <p className="text-xs text-[#8898aa] mt-0.5">
+                Issue and verify official credentials, internship certificates, offer letters, and experience certifications.
+              </p>
             </div>
 
-            {/* Search Box */}
-            <div className="relative min-w-[240px]">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                <Search className="w-4 h-4" />
+            <div className="flex items-center gap-2">
+              {isAdminOrHR && (
+                <button
+                  onClick={() => setIsIssueModalOpen(true)}
+                  className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] hover:from-[#2a5d8d] hover:to-[#3876b0] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Issue New Document</span>
+                </button>
+              )}
+
+              <button
+                onClick={() => fetchCertificates(true)}
+                disabled={loading}
+                className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#525f7f] bg-white hover:bg-[#f6f9fc] border border-[#e9ecef] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
+                title="Refresh registry"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4689C8]' : ''}`} />
+                <span className="hidden sm:inline">Refresh</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Card Body */}
+          <div className="card-body p-4 sm:p-6 space-y-6">
+            {/* KPI Metric Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Total Documents */}
+              <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                      Total Issued Documents
+                    </span>
+                    <div className="text-xl sm:text-2xl font-extrabold text-[#172b4d] tracking-tight mt-1">
+                      {certificates.length}
+                    </div>
+                  </div>
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#4689C8] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
+                    <Award className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                  <span>Status:</span>
+                  <span className="font-bold text-[#4689C8]">Authenticated Records</span>
+                </div>
               </div>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search candidate name or cert ID..."
-                className="w-full pl-9 pr-3 py-1.5 bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 focus:ring-1 focus:ring-purple-500 outline-none transition"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-xs text-slate-400 hover:text-slate-600"
-                >
-                  Clear
+
+              {/* Internship Certificates */}
+              <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                      Internship Certificates
+                    </span>
+                    <div className="text-xl sm:text-2xl font-extrabold text-[#11cdef] tracking-tight mt-1">
+                      {internshipCount}
+                    </div>
+                  </div>
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#11cdef] to-[#1171ef] text-white flex items-center justify-center shadow-md shadow-[#11cdef]/25">
+                    <GraduationCap className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                  <span>Students / Interns:</span>
+                  <span className="font-bold text-[#11cdef]">Verified Completions</span>
+                </div>
+              </div>
+
+              {/* Offers & Appointments */}
+              <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                      Offer & Appointments
+                    </span>
+                    <div className="text-xl sm:text-2xl font-extrabold text-[#2dce89] tracking-tight mt-1">
+                      {appointmentCount}
+                    </div>
+                  </div>
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#2dce89] to-[#20a36b] text-white flex items-center justify-center shadow-md shadow-[#2dce89]/25">
+                    <UserCheck className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                  <span>HR Registry:</span>
+                  <span className="font-bold text-[#2dce89]">Hired Candidates</span>
+                </div>
+              </div>
+
+              {/* Experience Letters */}
+              <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                      Experience Letters
+                    </span>
+                    <div className="text-xl sm:text-2xl font-extrabold text-[#8965e0] tracking-tight mt-1">
+                      {experienceCount}
+                    </div>
+                  </div>
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#8965e0] to-[#5e72e4] text-white flex items-center justify-center shadow-md shadow-[#8965e0]/25">
+                    <Briefcase className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                  <span>Tenure Records:</span>
+                  <span className="font-bold text-[#8965e0]">Relieved Employees</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Error Notice */}
+            {error && (
+              <div className="p-4 rounded-md bg-[#fdf2f2] border border-[#f5365c]/30 flex items-center justify-between text-[#f5365c] text-xs">
+                <span>{error}</span>
+                <button onClick={() => fetchCertificates(false)} className="font-bold underline cursor-pointer">
+                  Retry
                 </button>
-              )}
+              </div>
+            )}
+
+            {/* DataTables Controls & Category Filter */}
+            <div className="space-y-3 pt-2">
+              {/* Category Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+                <span className="text-[#8898aa] font-bold uppercase tracking-wider text-[10px] mr-1 shrink-0">
+                  Category:
+                </span>
+                {DOC_TYPES.map((dt) => (
+                  <button
+                    key={dt}
+                    onClick={() => {
+                      setSelectedType(dt);
+                      setCurrentPage(1);
+                    }}
+                    className={`px-3 py-1 rounded text-xs font-semibold transition cursor-pointer shrink-0 ${
+                      selectedType === dt
+                        ? 'bg-[#4689C8] text-white shadow-2xs'
+                        : 'bg-white text-[#525f7f] border border-[#dee2e6] hover:bg-[#f6f9fc] hover:text-[#4689C8]'
+                    }`}
+                  >
+                    {dt}
+                  </button>
+                ))}
+              </div>
+
+              {/* DataTables Toolbar: Show Entries & Search */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-b border-[#dee2e6] py-3">
+                {/* Show Entries */}
+                <div className="flex items-center gap-2 text-xs text-[#525f7f] font-semibold">
+                  <span>Show</span>
+                  <select
+                    value={pageSize}
+                    onChange={(e) => {
+                      setPageSize(Number(e.target.value));
+                      setCurrentPage(1);
+                    }}
+                    className="px-2.5 py-1 bg-white border border-[#dee2e6] rounded text-xs font-bold text-[#172b4d] focus:outline-none focus:border-[#4689C8] cursor-pointer"
+                  >
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                  </select>
+                  <span>entries</span>
+                </div>
+
+                {/* Search Box */}
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-[#525f7f] font-semibold">Search:</span>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        setCurrentPage(1);
+                      }}
+                      placeholder="Search recipient or cert #..."
+                      className="w-56 sm:w-64 pl-8 pr-7 py-1.5 text-xs bg-white border border-[#dee2e6] rounded text-[#172b4d] placeholder-[#8898aa] focus:outline-none focus:border-[#4689C8] transition"
+                    />
+                    <Search className="w-3.5 h-3.5 text-[#8898aa] absolute left-2.5 top-1/2 -translate-y-1/2" />
+                    {searchQuery && (
+                      <button
+                        onClick={() => {
+                          setSearchQuery('');
+                          setCurrentPage(1);
+                        }}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#8898aa] hover:text-[#172b4d]"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* OJT Certificates Table */}
+              <div className="table-responsive border border-[#dee2e6] rounded-md overflow-hidden">
+                <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
+                  <thead className="thead-light bg-[#f6f9fc] text-[#8898aa] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#e9ecef]">
+                    <tr>
+                      <th className="py-3 px-3.5 border-r border-[#dee2e6]">Candidate / Recipient</th>
+                      <th className="py-3 px-3.5 border-r border-[#dee2e6]">Document Category</th>
+                      <th className="py-3 px-3.5 border-r border-[#dee2e6]">Specialization / Domain</th>
+                      <th className="py-3 px-3.5 border-r border-[#dee2e6]">Verification ID</th>
+                      <th className="py-3 px-3.5 border-r border-[#dee2e6]">Issue Date</th>
+                      <th className="py-3 px-3.5 text-center">Preview & Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#dee2e6]">
+                    {loading && certificates.length === 0 ? (
+                      <tr>
+                        <td colSpan="6" className="py-12 text-center text-[#8898aa]">
+                          <Loader2 className="w-6 h-6 animate-spin text-[#4689C8] mx-auto mb-2" />
+                          <span className="text-xs font-semibold">Loading verified credential records...</span>
+                        </td>
+                      </tr>
+                    ) : paginatedCertificates.length === 0 ? (
+                      <tr>
+                        <td colSpan="6" className="py-12 text-center text-[#8898aa]">
+                          <Award className="w-8 h-8 mx-auto text-[#adb5bd] mb-2" />
+                          <p className="text-xs font-semibold text-[#172b4d]">No document records found matching criteria</p>
+                          <p className="text-[11px] text-[#8898aa] mt-0.5">
+                            {searchQuery || selectedType !== 'All'
+                              ? 'Try resetting the search or category filter.'
+                              : 'Click "+ Issue New Document" to register an official credential.'}
+                          </p>
+                        </td>
+                      </tr>
+                    ) : (
+                      paginatedCertificates.map((cert, idx) => (
+                        <tr
+                          key={cert.id}
+                          className={`hover:bg-[#f6f9fc] transition-colors ${
+                            idx % 2 === 1 ? 'bg-[#fcfdfe]' : 'bg-white'
+                          }`}
+                        >
+                          {/* 1. Candidate Name */}
+                          <td className="py-3 px-3.5 border-r border-[#dee2e6]">
+                            <div className="font-bold text-[#172b4d] text-xs">
+                              {cert.candidate_name}
+                            </div>
+                            <div className="text-[11px] text-[#8898aa] mt-0.5">
+                              {cert.candidate_email || cert.candidate_phone || 'Direct Recipient'}
+                            </div>
+                          </td>
+
+                          {/* 2. Document Category */}
+                          <td className="py-3 px-3.5 border-r border-[#dee2e6]">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                              (cert.document_type || '').includes('Internship')
+                                ? 'bg-[#e0f7fa] text-[#11cdef] border border-[#11cdef]/30'
+                                : (cert.document_type || '').includes('Experience')
+                                ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                                : 'bg-[#e8f7ee] text-[#2dce89] border border-[#2dce89]/30'
+                            }`}>
+                              {cert.document_type}
+                            </span>
+                          </td>
+
+                          {/* 3. Domain */}
+                          <td className="py-3 px-3.5 border-r border-[#dee2e6]">
+                            <div className="text-xs font-semibold text-[#172b4d]">
+                              {cert.domain || 'Software Development'}
+                            </div>
+                            {cert.duration && (
+                              <div className="text-[11px] text-[#8898aa] mt-0.5">
+                                Duration: {cert.duration}
+                              </div>
+                            )}
+                          </td>
+
+                          {/* 4. Verification ID */}
+                          <td className="py-3 px-3.5 border-r border-[#dee2e6]">
+                            <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-[#172b4d]">
+                              <span>{cert.certificate_number}</span>
+                              <button
+                                type="button"
+                                onClick={() => handleCopy(cert.certificate_number)}
+                                className="p-1 text-[#8898aa] hover:text-[#4689C8] transition cursor-pointer"
+                                title="Copy verification code"
+                              >
+                                {copiedId === cert.certificate_number ? (
+                                  <Check className="w-3.5 h-3.5 text-[#2dce89]" />
+                                ) : (
+                                  <Copy className="w-3.5 h-3.5" />
+                                )}
+                              </button>
+                            </div>
+                          </td>
+
+                          {/* 5. Issue Date */}
+                          <td className="py-3 px-3.5 border-r border-[#dee2e6] text-xs text-[#525f7f]">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-3.5 h-3.5 text-[#8898aa]" />
+                              <span>{formatDate(cert.issue_date || cert.created_at)}</span>
+                            </div>
+                          </td>
+
+                          {/* 6. Preview & Actions */}
+                          <td className="py-3 px-3.5 text-center">
+                            <div className="flex items-center justify-center gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setPreviewCert(cert);
+                                  setIsPreviewModalOpen(true);
+                                }}
+                                className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-2xs transition cursor-pointer"
+                                title="Preview Official Certificate / Letter"
+                              >
+                                <Printer className="w-3.5 h-3.5" />
+                                <span>Preview</span>
+                              </button>
+
+                              <a
+                                href={`/verify/${cert.certificate_number}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-[#525f7f] bg-white hover:bg-[#f6f9fc] border border-[#dee2e6] rounded shadow-2xs transition"
+                                title="Public verification URL"
+                              >
+                                <ExternalLink className="w-3 h-3" />
+                                <span>Verify</span>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* OJT Pagination Controls */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 text-xs text-[#525f7f]">
+                <div>
+                  Showing{' '}
+                  <span className="font-bold text-[#172b4d]">
+                    {totalEntries === 0 ? 0 : (currentPage - 1) * pageSize + 1}
+                  </span>{' '}
+                  to{' '}
+                  <span className="font-bold text-[#172b4d]">
+                    {Math.min(currentPage * pageSize, totalEntries)}
+                  </span>{' '}
+                  of <span className="font-bold text-[#172b4d]">{totalEntries}</span> records
+                </div>
+
+                <div className="flex items-center border border-[#dee2e6] rounded overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1.5 bg-white hover:bg-[#f6f9fc] disabled:bg-[#fcfcfd] disabled:text-[#adb5bd] border-r border-[#dee2e6] font-semibold transition cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      type="button"
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-3 py-1.5 border-r border-[#dee2e6] font-bold transition cursor-pointer ${
+                        currentPage === page
+                          ? 'bg-[#4689C8] text-white'
+                          : 'bg-white text-[#525f7f] hover:bg-[#f6f9fc] hover:text-[#4689C8]'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1.5 bg-white hover:bg-[#f6f9fc] disabled:bg-[#fcfcfd] disabled:text-[#adb5bd] font-semibold transition cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Error Notice */}
-        {error && (
-          <div className="m-4 p-4 rounded-md bg-red-50 border border-red-200 text-xs text-red-700 flex items-center justify-between">
-            <span>{error}</span>
-            <button onClick={() => fetchCertificates(false)} className="font-bold underline">
-              Retry
-            </button>
-          </div>
-        )}
-
-        {/* Certificates Table */}
-        <div className="overflow-x-auto flex-1">
-          <table className="w-full text-left text-sm text-slate-600">
-            <thead className="bg-slate-50/90 text-[11px] font-bold uppercase text-slate-500 border-b border-slate-200/80">
-              <tr>
-                <th className="py-3 px-4">Candidate / Recipient</th>
-                <th className="py-3 px-4">Document Category</th>
-                <th className="py-3 px-4">Specialization / Domain</th>
-                <th className="py-3 px-4">Verification ID</th>
-                <th className="py-3 px-4">Issue Date</th>
-                <th className="py-3 px-4 text-right">Preview & Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {loading && certificates.length === 0 ? (
-                <tr>
-                  <td colSpan="6" className="py-16 text-center text-slate-400">
-                    <Loader2 className="w-6 h-6 animate-spin text-purple-600 mx-auto mb-2" />
-                    <span className="text-xs font-medium">Loading document records...</span>
-                  </td>
-                </tr>
-              ) : filteredCertificates.length > 0 ? (
-                filteredCertificates.map((cert) => (
-                  <tr key={cert.id} className="hover:bg-purple-50/30 transition-colors">
-                    {/* 1. Candidate Name */}
-                    <td className="py-3 px-4">
-                      <div className="font-bold text-slate-900 text-xs">
-                        {cert.candidate_name}
-                      </div>
-                      <div className="text-[11px] text-slate-400 mt-0.5">
-                        {cert.candidate_email || cert.candidate_phone || 'Direct Recipient'}
-                      </div>
-                    </td>
-
-                    {/* 2. Document Type */}
-                    <td className="py-3 px-4">
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold ${
-                        cert.document_type?.includes('Offer')
-                          ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                          : cert.document_type?.includes('Appointment')
-                          ? 'bg-indigo-50 text-indigo-700 border border-indigo-200'
-                          : cert.document_type?.includes('Internship')
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : 'bg-purple-50 text-purple-700 border border-purple-200'
-                      }`}>
-                        <Award className="w-3 h-3" />
-                        {cert.document_type}
-                      </span>
-                    </td>
-
-                    {/* 3. Specialization / Domain */}
-                    <td className="py-3 px-4">
-                      <div className="text-xs font-medium text-slate-800">
-                        {cert.course_or_domain}
-                      </div>
-                      {cert.performance_rating && (
-                        <div className="text-[10px] text-amber-600 font-semibold flex items-center gap-1 mt-0.5">
-                          <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
-                          <span>Rating: {cert.performance_rating}</span>
-                        </div>
-                      )}
-                    </td>
-
-                    {/* 4. Verification ID */}
-                    <td className="py-3 px-4">
-                      <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-slate-100 border border-slate-200 font-mono text-xs font-bold text-slate-800">
-                        <span>{cert.certificate_number}</span>
-                        <button
-                          onClick={() => handleCopy(cert.certificate_number)}
-                          className="text-slate-400 hover:text-slate-700 cursor-pointer ml-1"
-                          title="Copy serial number"
-                        >
-                          {copiedId === cert.certificate_number ? (
-                            <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          ) : (
-                            <Copy className="w-3.5 h-3.5" />
-                          )}
-                        </button>
-                      </div>
-                    </td>
-
-                    {/* 5. Issue Date */}
-                    <td className="py-3 px-4 text-xs text-slate-500">
-                      <div>{formatDate(cert.issue_date)}</div>
-                      {cert.issued_by_name && (
-                        <div className="text-[10px] text-slate-400 mt-0.5">
-                          By: {cert.issued_by_name}
-                        </div>
-                      )}
-                    </td>
-
-                    {/* 6. Actions */}
-                    <td className="py-3 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() => {
-                            setPreviewCert(cert);
-                            setIsPreviewModalOpen(true);
-                          }}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 rounded border border-purple-200 transition-colors cursor-pointer"
-                          title="View / Print Document"
-                        >
-                          <Printer className="w-3.5 h-3.5" />
-                          <span>View / Print</span>
-                        </button>
-
-                        <a
-                          href={certificateService.getPreviewUrl(cert.id)}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="p-1.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-                          title="Open in new window"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="py-16 text-center text-slate-400">
-                    <Award className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-                    <p className="text-xs font-semibold text-slate-600">No documents issued</p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">
-                      Generate your first corporate credential, offer letter, or internship certificate with unique serial tracking.
-                    </p>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
       </div>
 
-      {/* Issue Certificate Modal */}
+      {/* Issue Document Modal */}
       <CertificateModal
         isOpen={isIssueModalOpen}
         onClose={() => setIsIssueModalOpen(false)}
-        onSuccess={fetchCertificates}
+        onSuccess={() => fetchCertificates(false)}
       />
 
-      {/* View & Print Preview Modal */}
+      {/* Preview & Print Modal */}
       <CertificatePreviewModal
         isOpen={isPreviewModalOpen}
         onClose={() => {
@@ -369,4 +571,3 @@ export default function CertificatesPage() {
     </AppLayout>
   );
 }
-

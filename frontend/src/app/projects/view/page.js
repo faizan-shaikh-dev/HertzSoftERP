@@ -24,13 +24,14 @@ import {
   PlusCircle,
   CheckCircle,
   FileText,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Receipt
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import AppLayout from '@/components/AppLayout';
 import projectService from '@/services/projectService';
 import quotationService from '@/services/quotationService';
-import { PaymentModal, ProjectModal } from '@/components/modals';
+import { PaymentModal, ProjectModal, PaymentReceiptModal } from '@/components/modals';
 
 function ProjectViewContent() {
   const searchParams = useSearchParams();
@@ -48,6 +49,8 @@ function ProjectViewContent() {
   // Modals state
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
+  const [selectedReceiptPayment, setSelectedReceiptPayment] = useState(null);
 
   // Fetch project details and linked quotations
   const fetchProjectDetails = useCallback(async () => {
@@ -603,7 +606,8 @@ function ProjectViewContent() {
                               <th className="py-3 px-3.5 border-r border-[#dee2e6] text-right">Amount Paid</th>
                               <th className="py-3 px-3.5 border-r border-[#dee2e6] text-center">Payment Mode</th>
                               <th className="py-3 px-3.5 border-r border-[#dee2e6]">Recorded By</th>
-                              <th className="py-3 px-3.5 text-center">Status</th>
+                              <th className="py-3 px-3.5 border-r border-[#dee2e6] text-center">Status</th>
+                              <th className="py-3 px-3.5 text-center">Receipt</th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-[#dee2e6]">
@@ -642,11 +646,34 @@ function ProjectViewContent() {
                                 </td>
 
                                 {/* Status */}
-                                <td className="py-2.5 px-3.5 text-center">
+                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] text-center">
                                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-[#e8f7ee] text-[#2dce89] border border-[#2dce89]/30">
                                     <CheckCircle className="w-3 h-3" />
                                     <span>Success</span>
                                   </span>
+                                </td>
+
+                                {/* Receipt Action */}
+                                <td className="py-2.5 px-3.5 text-center">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setSelectedReceiptPayment({
+                                        ...pm,
+                                        client_name: project.client_name,
+                                        client_company: project.client_company,
+                                        client_email: project.client_email,
+                                        client_phone: project.client_phone,
+                                        project_title: project.title
+                                      });
+                                      setIsReceiptModalOpen(true);
+                                    }}
+                                    className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#f0f7fd] hover:bg-blue-100 border border-[#4689C8]/30 rounded shadow-2xs transition cursor-pointer"
+                                    title="Print Payment Receipt"
+                                  >
+                                    <Receipt className="w-3 h-3" />
+                                    <span>Receipt</span>
+                                  </button>
                                 </td>
                               </tr>
                             ))}
@@ -779,6 +806,16 @@ function ProjectViewContent() {
           fetchProjectDetails();
         }}
         project={project}
+      />
+
+      {/* Official Payment Receipt Modal */}
+      <PaymentReceiptModal
+        isOpen={isReceiptModalOpen}
+        onClose={() => {
+          setIsReceiptModalOpen(false);
+          setSelectedReceiptPayment(null);
+        }}
+        payment={selectedReceiptPayment}
       />
     </AppLayout>
   );
