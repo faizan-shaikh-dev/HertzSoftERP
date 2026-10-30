@@ -11,7 +11,7 @@ export default function AppLayout({ children, title, allowedRoles, requiredRoles
 
   return (
     <ProtectedRoute allowedRoles={roles}>
-      <div className="min-h-screen bg-slate-100 flex font-sans antialiased text-slate-900">
+      <div className="min-h-screen bg-[#f8f9fe] flex font-sans antialiased text-[#525f7f]">
         {/* Left Vertical Sidenav (template-hz collapsible style) */}
         <Sidebar 
           isOpen={mobileOpen} 
