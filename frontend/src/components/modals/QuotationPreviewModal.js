@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import quotationService from '@/services/quotationService';
 import {
-  X,
+  XCircle,
   Printer,
   ExternalLink,
   FileSpreadsheet,
@@ -101,9 +101,10 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/50 transition-colors cursor-pointer"
+              className="text-slate-400 hover:text-white transition cursor-pointer p-0.5 rounded-full"
+              aria-label="Close dialog"
             >
-              <X className="w-5 h-5" />
+              <XCircle className="w-6 h-6 stroke-[1.5]" />
             </button>
           </div>
         </div>

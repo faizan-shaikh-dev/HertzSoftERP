@@ -10,6 +10,7 @@ import {
   Award, 
   X,
   ChevronLeft,
+  ChevronRight,
   CreditCard,
   FileSpreadsheet
 } from 'lucide-react';
@@ -103,21 +104,8 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
             )}
           </Link>
 
-          {/* Action buttons in header */}
+          {/* Action buttons in header (mobile close button) */}
           <div className="flex items-center gap-1">
-            {/* Desktop Collapse / Expand Toggle Button */}
-            {!isCollapsed && onToggleCollapse && (
-              <button
-                onClick={onToggleCollapse}
-                type="button"
-                className="hidden lg:flex p-1.5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
-                title="Collapse Sidebar"
-                aria-label="Collapse sidebar"
-              >
-                <ChevronLeft className="w-8 h-8" />
-              </button>
-            )}
-
             {/* Close button on mobile */}
             <button
               onClick={onClose}
@@ -128,6 +116,23 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
             </button>
           </div>
         </div>
+
+        {/* Desktop Centered Sidebar Arrow Toggle Button */}
+        {onToggleCollapse && (
+          <button
+            onClick={onToggleCollapse}
+            type="button"
+            className="hidden lg:flex items-center justify-center absolute -right-3.5 top-1/2 -translate-y-1/2 z-50 w-7 h-7 rounded-full bg-white border border-[#dee2e6] text-[#525f7f] hover:text-[#4689C8] hover:border-[#4689C8] shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer group"
+            title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {isCollapsed ? (
+              <ChevronRight className="w-4 h-4 text-[#4689C8] transition-transform duration-200 group-hover:scale-110" />
+            ) : (
+              <ChevronLeft className="w-4 h-4 text-[#525f7f] group-hover:text-[#4689C8] transition-transform duration-200 group-hover:scale-110" />
+            )}
+          </button>
+        )}
 
         {/* Navigation Menu Links (Exact OJT Vertical Nav Style) */}
         <div className={`flex-1 py-4 space-y-1.5 overflow-y-auto ${
@@ -157,12 +162,12 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
                     : 'gap-3 px-3.5 py-2.5 mx-1'
                 } ${
                   isActive
-                    ? 'bg-[#0a48b3] text-white font-bold shadow-md shadow-[#0a48b3]/25'
-                    : 'text-[#525f7f] hover:text-[#0a48b3] hover:bg-[#f6f9fc] font-medium'
+                    ? 'bg-gradient-to-r from-[#4689C8] to-[#3a7ab7] text-white font-bold shadow-md shadow-[#4689C8]/25'
+                    : 'text-[#525f7f] hover:text-[#4689C8] hover:bg-[#f0f7fd] font-medium'
                 }`}
               >
                 <Icon className={`w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-105 ${
-                  isActive ? 'text-white' : 'text-[#8898aa] group-hover:text-[#0a48b3]'
+                  isActive ? 'text-white' : 'text-[#8898aa] group-hover:text-[#4689C8]'
                 }`} />
 
                 {!isCollapsed && (
@@ -173,7 +178,7 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
 
                 {/* Floating Tooltip when sidebar is collapsed */}
                 {isCollapsed && (
-                  <span className="pointer-events-none absolute left-full ml-3 hidden group-hover:flex items-center px-2.5 py-1 text-xs font-semibold text-white bg-[#172b4d] rounded-md shadow-lg whitespace-nowrap z-50">
+                  <span className="pointer-events-none absolute left-full ml-3 hidden group-hover:flex items-center px-2.5 py-1 text-xs font-semibold text-white bg-[#326fa8] rounded-md shadow-lg whitespace-nowrap z-50">
                     {item.label}
                   </span>
                 )}

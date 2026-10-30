@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { toast } from 'react-toastify';
 import certificateService from '@/services/certificateService';
 import { 
-  X, 
+  XCircle, 
   Printer, 
   Copy, 
   ExternalLink, 
@@ -91,9 +91,10 @@ export default function CertificatePreviewModal({ isOpen, onClose, certificate =
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors ml-1 cursor-pointer"
+              className="text-slate-400 hover:text-white transition cursor-pointer p-0.5 rounded-full ml-1"
+              aria-label="Close dialog"
             >
-              <X className="w-5 h-5" />
+              <XCircle className="w-6 h-6 stroke-[1.5]" />
             </button>
           </div>
         </div>

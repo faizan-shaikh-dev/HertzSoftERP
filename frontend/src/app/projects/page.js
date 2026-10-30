@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
 import { toast } from 'react-toastify';
 import AppLayout from '@/components/AppLayout';
 import projectService from '@/services/projectService';
@@ -22,7 +23,8 @@ import {
   CheckCircle2, 
   ChevronDown, 
   ChevronUp, 
-  Layers 
+  Layers,
+  Eye 
 } from 'lucide-react';
 import { ProjectModal, PaymentModal, ConfirmDeleteModal } from '@/components/modals';
 
@@ -159,7 +161,7 @@ export default function ProjectsPage() {
               setEditingProject(null);
               setIsProjectModalOpen(true);
             }}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 rounded-md shadow-sm transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded-md shadow-sm transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Create New Project</span>
@@ -183,7 +185,7 @@ export default function ProjectsPage() {
                   onClick={() => setSelectedStatus(st)}
                   className={`px-2.5 py-1 rounded text-xs font-semibold transition-colors cursor-pointer ${
                     selectedStatus === st
-                      ? 'bg-slate-900 text-white shadow-2xs'
+                      ? 'bg-[#4689C8] text-white shadow-2xs'
                       : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                   }`}
                 >
@@ -257,9 +259,13 @@ export default function ProjectsPage() {
                     <tr key={project.id} className="hover:bg-blue-50/30 transition-colors">
                       {/* 1. Project & Client */}
                       <td className="py-3 px-4">
-                        <div className="font-bold text-slate-900 text-xs">
+                        <Link
+                          href={`/projects/view?id=${project.id}`}
+                          className="font-bold text-[#172b4d] hover:text-[#4689C8] hover:underline text-xs block"
+                          title="View Project Details & Reports"
+                        >
                           {project.title}
-                        </div>
+                        </Link>
                         <div className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
                           <Building2 className="w-3 h-3 text-slate-400" />
                           <span>
@@ -334,6 +340,14 @@ export default function ProjectsPage() {
                       {/* 6. Actions */}
                       <td className="py-3 px-4 text-right">
                         <div className="flex items-center justify-end gap-1.5">
+                          <Link
+                            href={`/projects/view?id=${project.id}`}
+                            className="p-1.5 rounded text-slate-500 hover:text-[#4689C8] hover:bg-blue-50 transition-colors"
+                            title="View Project Details & Reports"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </Link>
+
                           <button
                             onClick={() => {
                               setPaymentProject(project);

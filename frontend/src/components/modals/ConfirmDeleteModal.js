@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Trash2, AlertTriangle, X, Loader2 } from 'lucide-react';
+import { Trash2, XCircle, Loader2 } from 'lucide-react';
 
 export default function ConfirmDeleteModal({
   isOpen,
@@ -23,62 +23,63 @@ export default function ConfirmDeleteModal({
 
   const modalContent = (
     <div 
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-200"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150"
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-md bg-white rounded-xl shadow-2xl border border-slate-100 overflow-hidden my-auto p-6 sm:p-8 text-center"
+        className="relative w-full max-w-md bg-white rounded-lg shadow-2xl border border-[#e9ecef] overflow-hidden my-auto p-6 sm:p-8 text-center"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
           disabled={loading}
-          className="absolute top-4 right-4 p-1.5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+          type="button"
+          className="absolute top-4 right-4 text-[#172b4d] hover:text-[#525f7f] transition cursor-pointer p-0.5 rounded-full"
           aria-label="Close dialog"
         >
-          <X className="w-5 h-5" />
+          <XCircle className="w-6 h-6 stroke-[1.5]" />
         </button>
 
-        {/* Warning Icon Badge (template-hz style) */}
-        <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shadow-xs">
-          <Trash2 className="w-8 h-8" />
+        {/* Warning Icon Badge */}
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#fdf2f2] text-[#f5365c] flex items-center justify-center shadow-xs">
+          <Trash2 className="w-7 h-7" />
         </div>
 
         {/* Title & Message */}
-        <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">
+        <h3 className="text-xl font-bold text-[#172b4d] tracking-tight">
           {title}
         </h3>
         
         {itemName && (
-          <p className="mt-1 text-sm font-semibold text-red-600 truncate max-w-xs mx-auto">
+          <p className="mt-1.5 text-sm font-semibold text-[#f5365c] truncate max-w-xs mx-auto">
             &ldquo;{itemName}&rdquo;
           </p>
         )}
 
-        <p className="mt-2 text-xs sm:text-sm text-slate-500 leading-relaxed max-w-sm mx-auto">
+        <p className="mt-2 text-xs sm:text-sm text-[#525f7f] leading-relaxed max-w-sm mx-auto">
           {message}
         </p>
 
-        {/* Action Buttons (template-hz style) */}
+        {/* Action Buttons */}
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
           <button
             type="button"
             onClick={onClose}
             disabled={loading}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-md border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+            className="w-full sm:w-auto px-5 py-2.5 rounded border border-[#dee2e6] text-xs font-semibold text-[#525f7f] hover:bg-[#f8f9fe] transition cursor-pointer"
           >
-            I Changed My Mind!
+            Cancel
           </button>
 
           <button
             type="button"
             onClick={onConfirm}
             disabled={loading}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md bg-red-600 hover:bg-red-700 text-xs font-bold text-white shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded bg-[#f5365c] hover:bg-[#d02548] text-xs font-bold text-white shadow-md shadow-[#f5365c]/25 transition disabled:opacity-50 cursor-pointer"
           >
             {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-            <span>{loading ? 'Deleting...' : 'Yes, Delete It.'}</span>
+            <span>{loading ? 'Deleting...' : 'Yes, Delete Record'}</span>
           </button>
         </div>
       </div>

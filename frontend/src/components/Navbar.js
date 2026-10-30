@@ -59,14 +59,14 @@ export default function Navbar({
   const isAdmin = user?.role?.toLowerCase().includes('admin');
 
   return (
-    <header className="sticky top-0 z-30 h-16 sm:h-20 bg-[#172b4d] border-b border-[#111f38] px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-md">
-      {/* Left: Menu Toggler (OJT Sidenav Toggler) & White Typography Title */}
+    <header className="sticky top-0 z-30 h-16 sm:h-20 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] border-b-2 border-[#5FC8D6]/40 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-md">
+      {/* Left: Mobile Drawer Toggler (Hidden on Desktop) & White Typography Title */}
       <div className="flex items-center gap-3 sm:gap-4">
         <button
           onClick={handleToggleClick}
           type="button"
-          className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/20 cursor-pointer"
-          title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+          className="lg:hidden p-2 rounded-lg text-white/90 hover:text-white hover:bg-white/15 transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 cursor-pointer"
+          title="Toggle Navigation Menu"
           aria-label="Toggle navigation"
         >
           {/* Sidenav 3-line Toggler Icon */}
@@ -81,7 +81,7 @@ export default function Navbar({
           <h1 className="text-base sm:text-xl font-bold tracking-tight text-white leading-tight">
             {title}
           </h1>
-          <p className="hidden sm:block text-[11px] text-blue-200/80 font-medium leading-none mt-0.5">
+          <p className="hidden sm:block text-[11px] text-[#e0f7fa] font-medium leading-none mt-1">
             Hertzsoft Technologies Centralized Operations
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function Navbar({
           <button
             onClick={() => setDropdownOpen((prev) => !prev)}
             type="button"
-            className="flex items-center gap-2.5 p-1 sm:px-2.5 rounded-lg hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/20 cursor-pointer text-left"
+            className="flex items-center gap-2.5 p-1 sm:px-2.5 rounded-lg hover:bg-white/15 transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 cursor-pointer text-left"
             aria-expanded={dropdownOpen}
             aria-haspopup="true"
           >
@@ -102,13 +102,13 @@ export default function Navbar({
               <span className="text-xs font-bold text-white leading-tight">
                 {displayName}
               </span>
-              <span className="text-[10px] text-blue-200/80 font-medium leading-tight">
+              <span className="text-[10px] text-white/85 font-medium leading-tight">
                 {displayEmail}
               </span>
             </div>
 
             {/* Circular Avatar from OJT avatar.png */}
-            <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border-2 border-white/30 shadow-xs flex-shrink-0 bg-white">
+            <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border-2 border-white/60 shadow-xs flex-shrink-0 bg-white">
               <Image
                 src="/avatar.png"
                 alt={displayName}
@@ -121,7 +121,7 @@ export default function Navbar({
 
             {/* Chevron Arrow */}
             <ChevronDown
-              className={`w-3.5 h-3.5 text-blue-200 transition-transform duration-200 ${
+              className={`w-3.5 h-3.5 text-white/85 transition-transform duration-200 ${
                 dropdownOpen ? 'rotate-180 text-white' : ''
               }`}
             />
@@ -148,7 +148,7 @@ export default function Navbar({
                       Administrator
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200/60">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/25">
                       <UserCheck className="w-3 h-3" />
                       {user?.role || 'Staff Member'}
                     </span>
@@ -163,9 +163,9 @@ export default function Navbar({
                     setDropdownOpen(false);
                     setProfileModalOpen(true);
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-[#0a48b3] hover:bg-blue-50/80 rounded-lg transition-colors text-left cursor-pointer"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-[#4689C8] hover:bg-blue-50/80 rounded-lg transition-colors text-left cursor-pointer"
                 >
-                  <User className="w-4 h-4 text-[#0a48b3]" />
+                  <User className="w-4 h-4 text-[#4689C8]" />
                   <span>Edit Profile & Account</span>
                 </button>
 

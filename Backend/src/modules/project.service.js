@@ -43,9 +43,13 @@ export const getClients = async ({ search }) => {
   return rows;
 };
 
-// 3. Get Single Client with their Projects
+// 3. Get Single Client with their Projects, Payments & Full Analytics
 export const getClientById = async (id) => {
-  const [clientRows] = await pool.query('SELECT * FROM clients WHERE id = ?', [id]);
+  // Try finding by Client ID first; fallback to converted_from_lead_id
+  let [clientRows] = await pool.query('SELECT * FROM clients WHERE id = ?', [id]);
+  if (clientRows.length === 0) {
+    [clientRows] = await pool.query('SELECT * FROM clients WHERE converted_from_lead_id = ?', [id]);
+  }
   if (clientRows.length === 0) {
     const error = new Error('Client not found');
     error.statusCode = 404;
@@ -54,8 +58,9 @@ export const getClientById = async (id) => {
   }
 
   const client = clientRows[0];
+  const clientId = client.id;
 
-  // Fetch client's projects
+  // 1. Fetch client's projects
   const [projects] = await pool.query(
     `SELECT p.*, 
             COALESCE(SUM(pm.amount_paid), 0) AS total_paid,
@@ -65,10 +70,69 @@ export const getClientById = async (id) => {
      WHERE p.client_id = ?
      GROUP BY p.id
      ORDER BY p.created_at DESC`,
-    [id]
+    [clientId]
   );
-
   client.projects = projects;
+
+  // 2. Fetch client's recorded payments
+  const [payments] = await pool.query(
+    `SELECT pm.*, 
+            p.title AS project_title,
+            u.full_name AS recorded_by_name
+     FROM payments pm
+     LEFT JOIN projects p ON pm.project_id = p.id
+     LEFT JOIN users u ON pm.recorded_by = u.id
+     WHERE pm.client_id = ?
+     ORDER BY pm.payment_date DESC, pm.created_at DESC`,
+    [clientId]
+  );
+  client.payments = payments;
+
+  // 3. Fetch converted Lead info & Follow-ups if available
+  if (client.converted_from_lead_id) {
+    const [leadRows] = await pool.query(
+      `SELECT l.*, u.full_name AS assigned_to_name
+       FROM leads l
+       LEFT JOIN users u ON l.assigned_to = u.id
+       WHERE l.id = ?`,
+      [client.converted_from_lead_id]
+    );
+    if (leadRows.length > 0) {
+      client.lead = leadRows[0];
+      const [followUps] = await pool.query(
+        `SELECT fu.*, u.full_name AS created_by_name
+         FROM follow_ups fu
+         LEFT JOIN users u ON fu.created_by = u.id
+         WHERE fu.lead_id = ?
+         ORDER BY fu.scheduled_at DESC, fu.created_at DESC`,
+        [client.converted_from_lead_id]
+      );
+      client.lead.follow_ups = followUps;
+    }
+  }
+
+  // 4. Compute comprehensive analytics
+  const totalContractValue = projects.reduce((sum, p) => sum + Number(p.total_cost || 0), 0);
+  const totalPaid = payments.reduce((sum, pm) => sum + Number(pm.amount_paid || 0), 0);
+  const totalDue = Math.max(0, totalContractValue - totalPaid);
+  const collectionPercentage = totalContractValue > 0 ? Math.min(100, Math.round((totalPaid / totalContractValue) * 100)) : 0;
+  
+  const totalProjects = projects.length;
+  const completedProjects = projects.filter(p => p.status === 'Completed').length;
+  const inProgressProjects = projects.filter(p => p.status === 'In Progress' || p.status === 'Planning').length;
+  const completionPercentage = totalProjects > 0 ? Math.round((completedProjects / totalProjects) * 100) : 0;
+
+  client.analytics = {
+    total_contract_value: totalContractValue,
+    total_paid: totalPaid,
+    total_due: totalDue,
+    collection_percentage: collectionPercentage,
+    total_projects: totalProjects,
+    completed_projects: completedProjects,
+    in_progress_projects: inProgressProjects,
+    completion_percentage: completionPercentage
+  };
+
   return client;
 };
 
@@ -142,15 +206,17 @@ export const getProjectById = async (id) => {
     `SELECT 
       p.*,
       c.name AS client_name,
+      c.company_name AS client_company,
       c.phone AS client_phone,
       c.email AS client_email,
+      c.billing_address AS client_address,
       COALESCE(SUM(pm.amount_paid), 0) AS total_paid,
       (p.total_cost - COALESCE(SUM(pm.amount_paid), 0)) AS due_balance
     FROM projects p
     JOIN clients c ON p.client_id = c.id
     LEFT JOIN payments pm ON p.id = pm.project_id
     WHERE p.id = ?
-    GROUP BY p.id, c.name, c.phone, c.email`,
+    GROUP BY p.id, c.name, c.company_name, c.phone, c.email, c.billing_address`,
     [id]
   );
 
@@ -163,9 +229,13 @@ export const getProjectById = async (id) => {
 
   const project = projectRows[0];
 
-  // Fetch all payment installments for this project
+  // Fetch all payment installments for this project with user info
   const [payments] = await pool.query(
-    'SELECT * FROM payments WHERE project_id = ? ORDER BY payment_date DESC, created_at DESC',
+    `SELECT pm.*, u.full_name AS recorded_by_name 
+     FROM payments pm 
+     LEFT JOIN users u ON pm.recorded_by = u.id 
+     WHERE pm.project_id = ? 
+     ORDER BY pm.payment_date DESC, pm.created_at DESC`,
     [id]
   );
 

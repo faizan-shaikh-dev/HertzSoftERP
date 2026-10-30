@@ -5,17 +5,11 @@ import { createPortal } from 'react-dom';
 import { toast } from 'react-toastify';
 import certificateService from '@/services/certificateService';
 import { 
-  X, 
-  Award, 
-  User, 
-  Mail, 
-  Phone, 
-  BookOpen, 
-  Calendar, 
-  Star, 
+  XCircle, 
   IndianRupee, 
   Loader2, 
-  FileCheck 
+  CheckCircle2,
+  AlertCircle 
 } from 'lucide-react';
 
 const DOCUMENT_TYPES = [
@@ -131,55 +125,53 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
   };
 
   const modalContent = (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-slate-900/60 backdrop-blur-xs">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs"
+      onClick={onClose}
+    >
       <div 
-        className="fixed inset-0 -z-10" 
-        onClick={onClose}
-        aria-hidden="true"
-      />
-
-      <div className="relative w-full max-w-xl bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden my-auto max-h-[90vh] flex flex-col">
-        {/* Modal Header */}
-        <div className="px-6 py-5 bg-gradient-to-r from-purple-50/90 via-slate-50 to-white border-b border-slate-200 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-purple-100 text-purple-700 border border-purple-200 flex items-center justify-center">
-              <Award className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-slate-900">
-                Issue Official Document / Certificate
-              </h3>
-              <p className="text-xs text-slate-500">
-                Generate authenticated certificates with unique verification serial IDs
-              </p>
-            </div>
+        className="relative w-full max-w-xl bg-white rounded-lg shadow-2xl border border-[#e9ecef] overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Modal Header - OJT Style */}
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#e9ecef] bg-white">
+          <div>
+            <h3 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight">
+              Issue Official Document
+            </h3>
+            <p className="text-xs text-[#8898aa] mt-0.5">
+              Generate authenticated certificates with unique verification serial IDs
+            </p>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            type="button"
+            className="text-[#172b4d] hover:text-[#525f7f] transition cursor-pointer p-0.5 rounded-full"
+            aria-label="Close dialog"
           >
-            <X className="w-5 h-5" />
+            <XCircle className="w-7 h-7 stroke-[1.5]" />
           </button>
         </div>
 
         {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1">
+        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1 bg-white">
           {error && (
-            <div className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 font-medium">
-              {error}
+            <div className="p-3 rounded-md bg-[#fdf2f2] border border-[#f5365c]/30 text-xs text-[#f5365c] flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <span>{error}</span>
             </div>
           )}
 
           {/* Document Type */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-              Document Category *
+            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              Document Category <span className="text-[#f5365c] font-bold ml-0.5">*</span>
             </label>
             <select
               value={documentType}
               onChange={(e) => setDocumentType(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none transition cursor-pointer font-semibold"
+              className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition cursor-pointer font-semibold"
             >
               {DOCUMENT_TYPES.map((dt) => (
                 <option key={dt} value={dt}>{dt}</option>
@@ -187,74 +179,60 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
             </select>
           </div>
 
-          {/* Candidate Name & Contact */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                Candidate / Employee Full Name *
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                  <User className="w-4 h-4" />
-                </div>
-                <input
-                  type="text"
-                  required
-                  value={candidateName}
-                  onChange={(e) => setCandidateName(e.target.value)}
-                  placeholder="e.g. Aman Sharma"
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none transition"
-                />
-              </div>
-            </div>
+          {/* Candidate Name */}
+          <div>
+            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              Candidate / Employee Full Name <span className="text-[#f5365c] font-bold ml-0.5">*</span>
+            </label>
+            <input
+              type="text"
+              required
+              value={candidateName}
+              onChange={(e) => setCandidateName(e.target.value)}
+              placeholder="e.g. Aman Sharma"
+              className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+            />
+          </div>
 
+          {/* Candidate Contact */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
                 Email Address
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                  <Mail className="w-4 h-4" />
-                </div>
-                <input
-                  type="email"
-                  value={candidateEmail}
-                  onChange={(e) => setCandidateEmail(e.target.value)}
-                  placeholder="aman@example.com"
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none transition"
-                />
-              </div>
+              <input
+                type="email"
+                value={candidateEmail}
+                onChange={(e) => setCandidateEmail(e.target.value)}
+                placeholder="aman@example.com"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+              />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
                 Phone Number
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                  <Phone className="w-4 h-4" />
-                </div>
-                <input
-                  type="tel"
-                  value={candidatePhone}
-                  onChange={(e) => setCandidatePhone(e.target.value)}
-                  placeholder="+91 98765 43210"
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none transition"
-                />
-              </div>
+              <input
+                type="tel"
+                value={candidatePhone}
+                onChange={(e) => setCandidatePhone(e.target.value)}
+                placeholder="+91 98765 43210"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition font-mono"
+              />
             </div>
           </div>
 
           {/* Domain / Role */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-              Role / Specialization Domain *
+            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              Role / Specialization Domain <span className="text-[#f5365c] font-bold ml-0.5">*</span>
             </label>
             <div className="space-y-2">
               <select
                 value={courseOrDomain}
                 onChange={(e) => setCourseOrDomain(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition cursor-pointer"
               >
                 {DOMAIN_OPTIONS.map((dm) => (
                   <option key={dm} value={dm}>{dm}</option>
@@ -269,48 +247,48 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
                   value={customDomain}
                   onChange={(e) => setCustomDomain(e.target.value)}
                   placeholder="Type custom role or job title..."
-                  className="w-full px-3 py-2 bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none"
+                  className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition"
                 />
               )}
             </div>
           </div>
 
-          {/* Dates & Evaluation */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+          {/* Dates */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
                 Start Date
               </label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none transition"
+                className="w-full px-3 py-2 bg-white text-[#172b4d] text-xs rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                End / Completion Date
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                End Date
               </label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none transition"
+                className="w-full px-3 py-2 bg-white text-[#172b4d] text-xs rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                Issue Date
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Issue Date <span className="text-[#f5365c] font-bold ml-0.5">*</span>
               </label>
               <input
                 type="date"
                 required
                 value={issueDate}
                 onChange={(e) => setIssueDate(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none transition"
+                className="w-full px-3 py-2 bg-white text-[#172b4d] text-xs rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition"
               />
             </div>
           </div>
@@ -318,13 +296,13 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
           {/* Rating or Stipend */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
                 Performance Evaluation
               </label>
               <select
                 value={performanceRating}
                 onChange={(e) => setPerformanceRating(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition cursor-pointer"
               >
                 {PERFORMANCE_RATINGS.map((r) => (
                   <option key={r} value={r}>{r}</option>
@@ -334,11 +312,11 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
 
             {(documentType === 'Offer Letter' || documentType === 'Appointment Letter' || documentType === 'Internship Certificate') && (
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
                   Monthly Stipend / CTC (Optional)
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8898aa]">
                     <IndianRupee className="w-4 h-4" />
                   </div>
                   <input
@@ -346,31 +324,31 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
                     value={stipend}
                     onChange={(e) => setStipend(e.target.value)}
                     placeholder="e.g. 15000"
-                    className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-purple-600 outline-none transition"
+                    className="w-full pl-9 pr-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition"
                   />
                 </div>
               </div>
             )}
           </div>
 
-          {/* Modal Footer Actions */}
-          <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={loading}
-              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
-            >
-              Cancel
-            </button>
-
+          {/* Full-Width Action Button */}
+          <div className="pt-2">
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-md shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+              className="w-full py-3 bg-[#4689C8] hover:bg-[#3876b0] text-white font-bold text-sm rounded shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-              <span>Generate & Issue Document</span>
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Issuing Document...</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Generate & Issue Document</span>
+                </>
+              )}
             </button>
           </div>
         </form>
@@ -380,4 +358,3 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
 
   return createPortal(modalContent, document.body);
 }
-

@@ -34,10 +34,23 @@ export default function AppLayout({ children, title, allowedRoles, requiredRoles
           />
 
           {/* Dynamic Page Content */}
-          <main className="flex-1 p-4 sm:p-6 lg:p-8">
-            <div className="max-w-7xl mx-auto space-y-6">
+          <main className="flex-1 p-4 sm:p-6 lg:p-8 flex flex-col justify-between">
+            <div className="max-w-7xl mx-auto w-full space-y-6">
               {children}
             </div>
+
+            {/* OJT Standard Portal Footer */}
+            <footer className="max-w-7xl mx-auto w-full mt-10 pt-4 pb-2 text-center text-xs text-[#8898aa]">
+              © 2026 | All rights reserved | Designed & Developed by{' '}
+              <a
+                href="https://www.hertzsoft.com"
+                target="_blank"
+                rel="noreferrer"
+                className="font-bold text-[#4689C8] hover:underline"
+              >
+                Hertzsoft
+              </a>
+            </footer>
           </main>
         </div>
       </div>

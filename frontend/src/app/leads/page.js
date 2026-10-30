@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
 import { toast } from 'react-toastify';
 import AppLayout from '@/components/AppLayout';
 import leadService from '@/services/leadService';
@@ -31,6 +32,8 @@ import {
   AlertTriangle,
   UserCheck,
   Sparkles,
+  Eye,
+  ExternalLink,
   ArrowUp,
   ArrowDown,
   ArrowUpDown,
@@ -444,90 +447,99 @@ export default function LeadsPage() {
 
   return (
     <AppLayout title="Client Leads & Business Inquiries">
-      {/* Top Banner Card with Action */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-blue-50/80 via-white to-slate-50 p-5 rounded-lg border border-blue-100/80 shadow-sm">
-        <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">
-            Client Inquiries & Deals Pipeline
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Manage prospective enterprise software clients, project requirements, budgets, and deal conversions.
-          </p>
-        </div>
+      {/* OJT Unified .mainCard Container */}
+      <div className="card shadow-sm mb-4 bg-white border border-[#e9ecef] rounded-lg overflow-hidden min-h-[82vh]">
+        {/* CARD HEADER (Exact OJT style: Title on left, Action buttons on right) */}
+        <div className="card-header px-6 py-4 bg-white border-b border-[#e9ecef] flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight m-0">
+              Leads Management
+            </h2>
+            <p className="text-xs text-[#8898aa] mt-0.5">
+              Client Inquiries & Enterprise Deals Pipeline
+            </p>
+          </div>
 
-        <div className="flex items-center gap-2.5">
-          <button
-            onClick={() => fetchLeads(true)}
-            disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 rounded-md border border-slate-200 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>Refresh</span>
-          </button>
-
-          <button
-            onClick={() => {
-              setEditingLead(null);
-              setIsLeadModalOpen(true);
-            }}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-sky-600 hover:from-blue-700 hover:to-sky-700 rounded-md shadow-sm transition-all cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>New Lead</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Follow-up Reminders Alert Card */}
-      {reminders.totalCount > 0 && (
-        <div className="bg-white rounded-lg border border-slate-200/90 shadow-sm overflow-hidden transition-all">
-          <div className="p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-amber-50/60 via-white to-red-50/40 border-b border-slate-100">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-lg bg-amber-100 text-amber-700">
-                <Bell className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-xs sm:text-sm font-bold text-slate-900">
-                    Client Follow-up Reminders
-                  </h3>
-                  {reminders.overdueCount > 0 && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-red-100 text-red-700 border border-red-200">
-                      <AlertTriangle className="w-3 h-3" />
-                      {reminders.overdueCount} Overdue
-                    </span>
-                  )}
-                  {reminders.todayCount > 0 && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
-                      <Clock className="w-3 h-3" />
-                      {reminders.todayCount} Due Today
-                    </span>
-                  )}
-                  {reminders.upcoming?.length > 0 && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-                      {reminders.upcoming.length} Upcoming
-                    </span>
-                  )}
-                </div>
-                <p className="text-[11px] text-slate-500 mt-0.5">
-                  Scheduled phone calls, demos, and pending touchpoints for client inquiries.
-                </p>
-              </div>
-            </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setEditingLead(null);
+                setIsLeadModalOpen(true);
+              }}
+              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-sm transition cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add Lead</span>
+            </button>
 
             <button
               type="button"
-              onClick={() => setShowRemindersList(!showRemindersList)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-2xs transition cursor-pointer self-start sm:self-center"
+              onClick={handleResetFilters}
+              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#fb6340] hover:bg-[#eb4d2b] rounded shadow-sm transition cursor-pointer"
+              title="Reset all search & filters"
             >
-              <span>{showRemindersList ? 'Hide Schedule' : `View Reminders (${reminders.totalCount})`}</span>
-              {showRemindersList ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => fetchLeads(true)}
+              disabled={loading}
+              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#525f7f] bg-white hover:bg-[#f6f9fc] border border-[#e9ecef] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
+              title="Refresh records"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4689C8]' : ''}`} />
+              <span>Refresh</span>
             </button>
           </div>
+        </div>
+
+        {/* CARD BODY */}
+        <div className="card-body p-4 sm:p-6 space-y-4">
+          {/* Follow-up Reminders Alert Banner (if any) */}
+          {reminders.totalCount > 0 && (
+            <div className="border border-amber-200 bg-amber-50/60 rounded-md p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-1.5 rounded bg-amber-100 text-[#fb6340]">
+                  <Bell className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-bold text-[#172b4d]">Client Follow-up Reminders:</span>
+                    {reminders.overdueCount > 0 && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#f5365c] text-white">
+                        {reminders.overdueCount} Overdue
+                      </span>
+                    )}
+                    {reminders.todayCount > 0 && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#fb6340] text-white">
+                        {reminders.todayCount} Due Today
+                      </span>
+                    )}
+                    {reminders.upcoming?.length > 0 && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#4689C8] text-white">
+                        {reminders.upcoming.length} Upcoming
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowRemindersList(!showRemindersList)}
+                className="text-xs font-bold text-[#4689C8] hover:underline self-start sm:self-center cursor-pointer"
+              >
+                {showRemindersList ? 'Hide Reminders ▲' : `View Reminders (${reminders.totalCount}) ▼`}
+              </button>
+            </div>
+          )}
 
           {/* Expanded Reminders List */}
           {showRemindersList && (
-            <div className="p-4 bg-slate-50/50 divide-y divide-slate-100 max-h-80 overflow-y-auto">
+            <div className="p-3 bg-white border border-[#e9ecef] rounded-md divide-y divide-slate-100 max-h-60 overflow-y-auto">
               {[...reminders.overdue, ...reminders.today, ...reminders.upcoming].map((item) => {
                 const dueTime = new Date(item.next_follow_up_at || item.follow_up_at);
                 const isOverdue = dueTime < new Date();
@@ -543,35 +555,17 @@ export default function LeadsPage() {
                 };
 
                 return (
-                  <div key={item.id} className="py-2.5 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div className="flex items-start gap-3">
-                      <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${
-                        isOverdue
-                          ? 'bg-red-100 text-red-800 border border-red-200'
-                          : 'bg-amber-100 text-amber-800 border border-amber-200'
+                  <div key={item.id} className="py-2.5 first:pt-0 last:pb-0 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase text-white ${
+                        isOverdue ? 'bg-[#f5365c]' : 'bg-[#fb6340]'
                       }`}>
                         {isOverdue ? 'Overdue' : 'Due Soon'}
                       </span>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-xs text-slate-900">
-                            {item.lead_name}
-                          </span>
-                          {item.lead_company && (
-                            <span className="text-[11px] text-slate-500">
-                              ({item.lead_company})
-                            </span>
-                          )}
-                          <span className="text-[11px] font-mono text-slate-400">
-                            • {item.lead_phone}
-                          </span>
-                        </div>
-                        <div className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-2">
-                          <span className="font-semibold text-slate-700">{item.follow_up_type}</span>
-                          {item.outcome && <span>• {item.outcome}</span>}
-                          <span>• Scheduled for: <strong className="text-slate-800">{formatDateTime(item.next_follow_up_at || item.follow_up_at)}</strong></span>
-                        </div>
-                      </div>
+                      <strong className="text-[#172b4d]">{item.lead_name}</strong>
+                      <span className="text-[#8898aa]">({item.lead_company || 'Individual'})</span>
+                      <span className="text-[#8898aa] font-mono">• {item.lead_phone}</span>
+                      <span className="text-[#525f7f]">• Scheduled: {formatDateTime(item.next_follow_up_at || item.follow_up_at)}</span>
                     </div>
 
                     <button
@@ -580,503 +574,476 @@ export default function LeadsPage() {
                         setSelectedLeadForFollowUp(matchedLead);
                         setIsFollowUpModalOpen(true);
                       }}
-                      className="inline-flex items-center gap-1 px-3 py-1 text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded transition cursor-pointer self-start sm:self-center shadow-2xs"
+                      className="px-2 py-0.5 text-xs font-bold text-[#4689C8] hover:bg-blue-50 border border-blue-200 rounded cursor-pointer"
                     >
-                      <MessageSquare className="w-3.5 h-3.5" />
-                      <span>Follow-up Action</span>
+                      Action
                     </button>
                   </div>
                 );
               })}
             </div>
           )}
-        </div>
-      )}
 
-      {/* Main Table Card */}
-      <div className="bg-white rounded-lg border border-slate-200/90 shadow-sm overflow-hidden flex flex-col">
-        {/* Search & Status Filter Header */}
-        <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-50 via-slate-50/70 to-white border-b border-slate-200/80 space-y-3">
-          {/* Row 1: Status Filter Pills + Search */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            {/* Status Filter Pills */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-              <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] mr-1">
-                Status:
-              </span>
-              {['All', ...STATUS_OPTIONS].map((st) => (
-                <button
-                  key={st}
-                  onClick={() => setSelectedStatus(st)}
-                  className={`px-2.5 py-1 rounded text-xs font-semibold transition-colors cursor-pointer ${
-                    selectedStatus === st
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  {st}
-                </button>
-              ))}
-            </div>
-
-            {/* Search Input Bar */}
-            <div className="relative min-w-[240px] sm:min-w-[300px]">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                <Search className="w-4 h-4" />
-              </div>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by client, company, service..."
-                className="w-full pl-9 pr-3 py-1.5 bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-500 outline-none transition"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-xs text-slate-400 hover:text-slate-600 cursor-pointer"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Row 2: Advanced Filters (Owner, Priority, Follow-up Due Date) & Quick Reset */}
-          <div className="pt-2 border-t border-slate-200/60 flex flex-wrap items-center justify-between gap-3 text-xs">
+          {/* OJT Top Controls Toolbar (DataTables Style) */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-[#e9ecef]">
+            {/* Left: Show Entries & Filter Controls */}
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] flex items-center gap-1">
-                <SlidersHorizontal className="w-3 h-3 text-slate-400" />
-                Filters:
-              </span>
-
-              {/* 1. Owner Filter */}
-              <select
-                value={selectedOwner}
-                onChange={(e) => setSelectedOwner(e.target.value)}
-                className="px-2.5 py-1.5 bg-white text-slate-700 border border-slate-200 rounded-md outline-none focus:border-blue-600 cursor-pointer shadow-2xs text-xs font-medium"
-              >
-                <option value="All">All Owners</option>
-                {assignees.map((emp) => (
-                  <option key={emp.id} value={emp.id}>
-                    {emp.full_name}
-                  </option>
-                ))}
-              </select>
-
-              {/* 2. Priority Filter */}
-              <select
-                value={selectedPriority}
-                onChange={(e) => setSelectedPriority(e.target.value)}
-                className="px-2.5 py-1.5 bg-white text-slate-700 border border-slate-200 rounded-md outline-none focus:border-blue-600 cursor-pointer shadow-2xs text-xs font-medium"
-              >
-                <option value="All">All Priorities</option>
-                <option value="Urgent">🔴 Urgent Priority</option>
-                <option value="High">🟠 High Priority</option>
-                <option value="Normal">🔵 Normal Priority</option>
-                <option value="Low">⚪ Low Priority</option>
-              </select>
-
-              {/* 3. Follow-up Due Date Filter */}
-              <select
-                value={selectedFollowUpDue}
-                onChange={(e) => setSelectedFollowUpDue(e.target.value)}
-                className="px-2.5 py-1.5 bg-white text-slate-700 border border-slate-200 rounded-md outline-none focus:border-blue-600 cursor-pointer shadow-2xs text-xs font-medium"
-              >
-                <option value="All">All Follow-ups</option>
-                <option value="overdue">🚨 Overdue Follow-ups</option>
-                <option value="today">⏰ Due Today</option>
-                <option value="upcoming">📅 Upcoming This Week</option>
-                <option value="none">No Follow-up Scheduled</option>
-              </select>
-
-              {/* Reset Filters */}
-              {hasActiveFilters && (
-                <button
-                  type="button"
-                  onClick={handleResetFilters}
-                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-md border border-red-200 transition cursor-pointer shadow-2xs"
-                  title="Clear all active filters"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  <span>Reset Filters</span>
-                </button>
-              )}
-            </div>
-
-            {/* Quick Results Summary */}
-            <div className="text-[11px] text-slate-400 font-medium">
-              Showing <strong>{sortedLeads.length}</strong> matching of <strong>{leads.length}</strong> total inquiries
-            </div>
-          </div>
-        </div>
-
-        {/* Error Notice */}
-        {error && (
-          <div className="m-4 p-4 rounded-md bg-red-50 border border-red-200 text-xs text-red-700 flex items-center justify-between">
-            <span>{error}</span>
-            <button onClick={() => fetchLeads(false)} className="font-bold underline cursor-pointer">
-              Retry
-            </button>
-          </div>
-        )}
-
-        {/* Leads Table */}
-        <div className="overflow-x-auto flex-1">
-          <table className="w-full text-left text-sm text-slate-600 border-collapse">
-            <thead className="bg-slate-50/90 text-[11px] font-bold uppercase text-slate-500 border-b border-slate-200/80">
-              <tr>
-                <th 
-                  onClick={() => handleSort('name')}
-                  className="py-3 px-4 cursor-pointer select-none hover:text-slate-800 transition"
-                  title="Click to sort by Client Name"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span>Client & Contact</span>
-                    {sortField === 'name' ? (
-                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-blue-600" /> : <ArrowDown className="w-3 h-3 text-blue-600" />
-                    ) : (
-                      <ArrowUpDown className="w-3 h-3 text-slate-300" />
-                    )}
-                  </div>
-                </th>
-
-                <th 
-                  onClick={() => handleSort('company_name')}
-                  className="py-3 px-4 cursor-pointer select-none hover:text-slate-800 transition"
-                  title="Click to sort by Company"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span>Company / Business</span>
-                    {sortField === 'company_name' ? (
-                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-blue-600" /> : <ArrowDown className="w-3 h-3 text-blue-600" />
-                    ) : (
-                      <ArrowUpDown className="w-3 h-3 text-slate-300" />
-                    )}
-                  </div>
-                </th>
-
-                <th className="py-3 px-4">Service & Scope</th>
-
-                <th 
-                  onClick={() => handleSort('estimated_budget')}
-                  className="py-3 px-4 cursor-pointer select-none hover:text-slate-800 transition"
-                  title="Click to sort by Estimated Budget"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span>Estimated Budget</span>
-                    {sortField === 'estimated_budget' ? (
-                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-blue-600" /> : <ArrowDown className="w-3 h-3 text-blue-600" />
-                    ) : (
-                      <ArrowUpDown className="w-3 h-3 text-slate-300" />
-                    )}
-                  </div>
-                </th>
-
-                <th 
-                  onClick={() => handleSort('status')}
-                  className="py-3 px-4 cursor-pointer select-none hover:text-slate-800 transition"
-                  title="Click to sort by Pipeline Status"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span>Pipeline Status</span>
-                    {sortField === 'status' ? (
-                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-blue-600" /> : <ArrowDown className="w-3 h-3 text-blue-600" />
-                    ) : (
-                      <ArrowUpDown className="w-3 h-3 text-slate-300" />
-                    )}
-                  </div>
-                </th>
-
-                <th className="py-3 px-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {loading ? (
-                <tr>
-                  <td colSpan="6" className="py-16 text-center text-slate-400">
-                    <Loader2 className="w-6 h-6 animate-spin text-blue-600 mx-auto mb-2" />
-                    <span className="text-xs font-medium">Loading inquiries pipeline...</span>
-                  </td>
-                </tr>
-              ) : paginatedLeads.length > 0 ? (
-                paginatedLeads.map((lead) => (
-                  <tr key={lead.id} className="hover:bg-blue-50/30 transition-colors">
-                    {/* 1. Name & Contact */}
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-1.5 font-bold text-slate-900 text-xs">
-                        {lead.lead_number && (
-                          <span className="font-mono text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">
-                            #{lead.lead_number}
-                          </span>
-                        )}
-                        <span>{lead.name}</span>
-                      </div>
-                      <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-500">
-                        <span className="flex items-center gap-1 font-mono">
-                          <Phone className="w-3 h-3 text-slate-400" />
-                          {lead.phone}
-                        </span>
-                        {lead.email && (
-                          <span className="truncate max-w-[140px] text-slate-400">
-                            • {lead.email}
-                          </span>
-                        )}
-                      </div>
-                    </td>
-
-                    {/* 2. Company & Owner */}
-                    <td className="py-3 px-4">
-                      <div className="flex flex-col items-start gap-0.5">
-                        <div className="text-xs font-semibold text-slate-800 flex items-center gap-1">
-                          <Building2 className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" />
-                          <span>{lead.company_name || 'Individual Client'}</span>
-                        </div>
-                        {lead.assigned_to_name ? (
-                          <span className="text-[10px] text-slate-500 font-medium">
-                            Owner: <span className="text-slate-700">{lead.assigned_to_name}</span>
-                          </span>
-                        ) : (
-                          <span className="text-[10px] text-slate-400">
-                            Source: {lead.source || 'Direct'}
-                          </span>
-                        )}
-                      </div>
-                    </td>
-
-                    {/* 3. Service Interest & Scope */}
-                    <td className="py-3 px-4 max-w-[280px]">
-                      <div className="text-xs font-medium text-slate-900 truncate">
-                        {lead.service_interest || 'Custom Software Solution'}
-                      </div>
-                      {lead.requirement && (
-                        <div className="text-[11px] text-slate-400 truncate max-w-[260px] mt-0.5" title={lead.requirement}>
-                          {lead.requirement}
-                        </div>
-                      )}
-                    </td>
-
-                    {/* 4. Budget / Value */}
-                    <td className="py-3 px-4 font-semibold text-xs text-slate-700">
-                      {lead.estimated_budget ? (
-                        <span className="text-emerald-700 font-bold">
-                          {formatCurrency(lead.estimated_budget)}
-                        </span>
-                      ) : (
-                        <span className="text-slate-400 font-normal">Negotiable</span>
-                      )}
-                    </td>
-
-                    {/* 5. Pipeline Status Dropdown */}
-                    <td className="py-3 px-4">
-                      <select
-                        value={lead.status}
-                        onChange={(e) => handleStatusChange(lead, e.target.value)}
-                        className={`px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider outline-none border cursor-pointer ${
-                          lead.status === 'Won'
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                            : lead.status === 'Lost'
-                            ? 'bg-red-50 text-red-700 border-red-200'
-                            : lead.status === 'Qualified'
-                            ? 'bg-teal-50 text-teal-700 border-teal-200'
-                            : lead.status === 'Quotation Sent'
-                            ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                            : lead.status === 'Negotiation'
-                            ? 'bg-violet-50 text-violet-700 border-violet-200'
-                            : lead.status === 'On Hold'
-                            ? 'bg-amber-50 text-amber-800 border-amber-300'
-                            : lead.status === 'Contacted'
-                            ? 'bg-sky-50 text-sky-700 border-sky-200'
-                            : 'bg-blue-50 text-blue-700 border-blue-200'
-                        }`}
-                      >
-                        {STATUS_OPTIONS.map((st) => (
-                          <option key={st} value={st}>{st}</option>
-                        ))}
-                      </select>
-                      {lead.status === 'Lost' && lead.lost_reason && (
-                        <p className="text-[10px] text-red-500 truncate max-w-[150px] mt-0.5" title={lead.lost_reason}>
-                          {lead.lost_reason}
-                        </p>
-                      )}
-                      {lead.status === 'On Hold' && lead.on_hold_reason && (
-                        <p className="text-[10px] text-amber-600 truncate max-w-[150px] mt-0.5" title={lead.on_hold_reason}>
-                          Hold: {lead.on_hold_reason}
-                        </p>
-                      )}
-                      {lead.status === 'Won' && !lead.converted_client_id && (
-                        <div>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setLeadToConvert(lead);
-                              setIsConvertModalOpen(true);
-                            }}
-                            className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-2xs transition cursor-pointer"
-                            title="Convert Won Inquiry to Active Client"
-                          >
-                            <Sparkles className="w-3 h-3" />
-                            <span>Convert to Client</span>
-                          </button>
-                        </div>
-                      )}
-                      {lead.converted_client_id && (
-                        <div className="mt-1 flex items-center gap-1">
-                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                            <UserCheck className="w-2.5 h-2.5 text-emerald-600" />
-                            <span>Client #{lead.converted_client_number || 'Linked'}</span>
-                          </span>
-                        </div>
-                      )}
-                      {lead.next_follow_up_at && (
-                        <div className="mt-1 flex items-center gap-1">
-                          <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-medium ${
-                            new Date(lead.next_follow_up_at) < new Date()
-                              ? 'bg-red-50 text-red-700 border border-red-200'
-                              : 'bg-blue-50 text-blue-700 border border-blue-200'
-                          }`}>
-                            <Clock className="w-2.5 h-2.5" />
-                            <span>{new Date(lead.next_follow_up_at) < new Date() ? 'Overdue: ' : 'Next: '}</span>
-                            <span>{formatDateTime(lead.next_follow_up_at)}</span>
-                          </span>
-                        </div>
-                      )}
-                    </td>
-
-                    {/* 6. Row Actions */}
-                    <td className="py-3 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() => {
-                            setSelectedLeadForFollowUp(lead);
-                            setIsFollowUpModalOpen(true);
-                          }}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-semibold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-300 transition cursor-pointer shadow-2xs mr-1"
-                          title="Log & View Follow-ups"
-                        >
-                          <MessageSquare className="w-3.5 h-3.5 text-blue-600" />
-                          <span className="hidden sm:inline">Follow-up</span>
-                          {Number(lead.follow_ups_count) > 0 && (
-                            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">
-                              {lead.follow_ups_count}
-                            </span>
-                          )}
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setEditingLead(lead);
-                            setIsLeadModalOpen(true);
-                          }}
-                          className="p-1.5 rounded text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition cursor-pointer"
-                          title="Edit Inquiry Details"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-
-                        {isAdmin && (
-                          <button
-                            onClick={() => {
-                              setLeadToDelete(lead);
-                              setIsDeleteModalOpen(true);
-                            }}
-                            className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer"
-                            title="Delete Lead"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="py-16 text-center text-slate-400">
-                    <Users className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-                    <p className="text-xs font-semibold text-slate-600">No client inquiries found</p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">
-                      Register a new business lead or adjust your filter query.
-                    </p>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Pagination & Results Count Bar */}
-        {sortedLeads.length > 0 && (
-          <div className="p-3.5 sm:p-4 bg-slate-50/80 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-600">
-            <div className="flex items-center gap-3">
-              <span>
-                Showing <strong>{Math.min((currentPage - 1) * itemsPerPage + 1, sortedLeads.length)}</strong> to{' '}
-                <strong>{Math.min(currentPage * itemsPerPage, sortedLeads.length)}</strong> of{' '}
-                <strong>{sortedLeads.length}</strong> inquiries
-              </span>
-
-              <div className="flex items-center gap-1.5 border-l border-slate-200 pl-3">
-                <span className="text-slate-400">Rows:</span>
+              {/* Show Entries Dropdown (Fixed 10 rows per page default) */}
+              <div className="flex items-center gap-1.5 text-xs text-[#8898aa]">
+                <span>Show</span>
                 <select
                   value={itemsPerPage}
                   onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                  className="px-2 py-0.5 bg-white border border-slate-200 rounded text-xs font-semibold text-slate-700 outline-none cursor-pointer"
+                  className="text-xs px-2 py-1 bg-white border border-[#e9ecef] rounded text-[#172b4d] font-bold outline-none focus:border-[#4689C8] cursor-pointer"
                 >
                   <option value={10}>10</option>
                   <option value={25}>25</option>
                   <option value={50}>50</option>
+                  <option value={100}>100</option>
                 </select>
+                <span>entries</span>
+              </div>
+
+              <div className="h-4 w-[1px] bg-[#e9ecef] hidden sm:block" />
+
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#8898aa] mr-0.5">
+                Filter:
+              </span>
+
+              {/* Status Filter */}
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="text-xs px-2.5 py-1 bg-white border border-[#e9ecef] rounded text-[#525f7f] font-medium outline-none focus:border-[#4689C8] cursor-pointer"
+              >
+                <option value="All">Status (All)</option>
+                {STATUS_OPTIONS.map((st) => (
+                  <option key={st} value={st}>{st}</option>
+                ))}
+              </select>
+
+              {/* Owner Filter */}
+              <select
+                value={selectedOwner}
+                onChange={(e) => setSelectedOwner(e.target.value)}
+                className="text-xs px-2.5 py-1 bg-white border border-[#e9ecef] rounded text-[#525f7f] font-medium outline-none focus:border-[#4689C8] cursor-pointer"
+              >
+                <option value="All">Owner (All)</option>
+                {assignees.map((emp) => (
+                  <option key={emp.id} value={emp.id}>{emp.full_name}</option>
+                ))}
+              </select>
+
+              {/* Priority Filter */}
+              <select
+                value={selectedPriority}
+                onChange={(e) => setSelectedPriority(e.target.value)}
+                className="text-xs px-2.5 py-1 bg-white border border-[#e9ecef] rounded text-[#525f7f] font-medium outline-none focus:border-[#4689C8] cursor-pointer"
+              >
+                <option value="All">Priority (All)</option>
+                <option value="Urgent">Urgent Priority</option>
+                <option value="High">High Priority</option>
+                <option value="Normal">Normal Priority</option>
+                <option value="Low">Low Priority</option>
+              </select>
+
+              {/* Follow-up Due Filter */}
+              <select
+                value={selectedFollowUpDue}
+                onChange={(e) => setSelectedFollowUpDue(e.target.value)}
+                className="text-xs px-2.5 py-1 bg-white border border-[#e9ecef] rounded text-[#525f7f] font-medium outline-none focus:border-[#4689C8] cursor-pointer"
+              >
+                <option value="All">Follow-ups (All)</option>
+                <option value="overdue">🚨 Overdue</option>
+                <option value="today">⏰ Due Today</option>
+                <option value="upcoming">📅 Upcoming</option>
+                <option value="none">No Follow-up</option>
+              </select>
+            </div>
+
+            {/* Right: Search Box */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-[#8898aa] font-medium">Search:</span>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Client, phone, company..."
+                  className="text-xs pl-3 pr-7 py-1.5 bg-white border border-[#e9ecef] rounded text-[#172b4d] placeholder-[#adb5bd] outline-none focus:border-[#4689C8] w-56 sm:w-64"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2 top-1 text-sm text-[#8898aa] hover:text-[#172b4d] cursor-pointer"
+                  >
+                    ×
+                  </button>
+                )}
               </div>
             </div>
+          </div>
 
-            {/* Page navigation */}
-            <div className="flex items-center gap-1 self-center">
-              <button
-                type="button"
-                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-                disabled={currentPage === 1}
-                className="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition cursor-pointer"
-              >
-                Previous
-              </button>
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => {
-                if (
-                  pg === 1 || 
-                  pg === totalPages || 
-                  (pg >= currentPage - 1 && pg <= currentPage + 1)
-                ) {
-                  return (
-                    <button
-                      key={pg}
-                      type="button"
-                      onClick={() => setCurrentPage(pg)}
-                      className={`px-3 py-1 rounded text-xs font-semibold transition cursor-pointer ${
-                        currentPage === pg
-                          ? 'bg-blue-600 text-white shadow-2xs'
-                          : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
-                      }`}
-                    >
-                      {pg}
-                    </button>
-                  );
-                } else if (pg === currentPage - 2 || pg === currentPage + 2) {
-                  return <span key={pg} className="px-1 text-slate-400">...</span>;
-                }
-                return null;
-              })}
-
-              <button
-                type="button"
-                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition cursor-pointer"
-              >
-                Next
+          {/* Error Notice */}
+          {error && (
+            <div className="p-3 rounded bg-red-50 border border-red-200 text-xs text-red-700 flex items-center justify-between">
+              <span>{error}</span>
+              <button onClick={() => fetchLeads(false)} className="font-bold underline cursor-pointer">
+                Retry
               </button>
             </div>
+          )}
+
+          {/* OJT TABLE: table-striped table-bordered table-hover table-sm */}
+          <div className="table-responsive overflow-x-auto border border-[#e9ecef] rounded">
+            <table className="w-full text-left text-xs text-[#525f7f] border-collapse">
+              <thead className="thead-light bg-[#f6f9fc] border-b-2 border-[#e9ecef] text-[#8898aa] text-[11px] font-bold uppercase tracking-wider">
+                <tr>
+                  <th className="py-3 px-3.5 border-r border-[#e9ecef] text-center w-16">Sr #</th>
+                  <th 
+                    onClick={() => handleSort('name')}
+                    className="py-3 px-3.5 border-r border-[#e9ecef] cursor-pointer select-none hover:text-[#172b4d]"
+                  >
+                    <div className="flex items-center justify-between gap-1">
+                      <span>Client & Contact</span>
+                      {sortField === 'name' ? (
+                        sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-[#4689C8]" /> : <ArrowDown className="w-3 h-3 text-[#4689C8]" />
+                      ) : (
+                        <ArrowUpDown className="w-3 h-3 text-[#adb5bd]" />
+                      )}
+                    </div>
+                  </th>
+                  <th 
+                    onClick={() => handleSort('company_name')}
+                    className="py-3 px-3.5 border-r border-[#e9ecef] cursor-pointer select-none hover:text-[#172b4d]"
+                  >
+                    <div className="flex items-center justify-between gap-1">
+                      <span>Company / Owner</span>
+                      {sortField === 'company_name' ? (
+                        sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-[#4689C8]" /> : <ArrowDown className="w-3 h-3 text-[#4689C8]" />
+                      ) : (
+                        <ArrowUpDown className="w-3 h-3 text-[#adb5bd]" />
+                      )}
+                    </div>
+                  </th>
+                  <th className="py-3 px-3.5 border-r border-[#e9ecef]">Service & Requirement</th>
+                  <th 
+                    onClick={() => handleSort('estimated_budget')}
+                    className="py-3 px-3.5 border-r border-[#e9ecef] cursor-pointer select-none hover:text-[#172b4d]"
+                  >
+                    <div className="flex items-center justify-between gap-1">
+                      <span>Budget</span>
+                      {sortField === 'estimated_budget' ? (
+                        sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-[#4689C8]" /> : <ArrowDown className="w-3 h-3 text-[#4689C8]" />
+                      ) : (
+                        <ArrowUpDown className="w-3 h-3 text-[#adb5bd]" />
+                      )}
+                    </div>
+                  </th>
+                  <th 
+                    onClick={() => handleSort('status')}
+                    className="py-3 px-3.5 border-r border-[#e9ecef] cursor-pointer select-none hover:text-[#172b4d]"
+                  >
+                    <div className="flex items-center justify-between gap-1">
+                      <span>Pipeline Status</span>
+                      {sortField === 'status' ? (
+                        sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-[#4689C8]" /> : <ArrowDown className="w-3 h-3 text-[#4689C8]" />
+                      ) : (
+                        <ArrowUpDown className="w-3 h-3 text-[#adb5bd]" />
+                      )}
+                    </div>
+                  </th>
+                  <th className="py-3 px-3.5 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#e9ecef]">
+                {loading ? (
+                  <tr>
+                    <td colSpan="7" className="py-16 text-center text-[#8898aa]">
+                      <Loader2 className="w-7 h-7 animate-spin text-[#4689C8] mx-auto mb-2" />
+                      <span className="text-xs font-medium">Loading inquiries from database...</span>
+                    </td>
+                  </tr>
+                ) : paginatedLeads.length > 0 ? (
+                  paginatedLeads.map((lead, idx) => (
+                    <tr 
+                      key={lead.id} 
+                      className={`hover:bg-[#f6f9fc] transition-colors ${
+                        idx % 2 === 1 ? 'bg-[#fcfdfe]' : 'bg-white'
+                      }`}
+                    >
+                      {/* 1. Sr # / Lead Number */}
+                      <td className="py-2.5 px-3 border-r border-[#e9ecef] text-center font-bold text-[#172b4d]">
+                        <span className="font-mono text-[11px] text-[#4689C8] font-bold">
+                          #{lead.lead_number || ((currentPage - 1) * itemsPerPage + idx + 1)}
+                        </span>
+                      </td>
+
+                      {/* 2. Client & Contact */}
+                      <td className="py-2.5 px-3 border-r border-[#e9ecef]">
+                        <div className="font-bold text-[#172b4d] text-xs">
+                          {lead.name}
+                        </div>
+                        <div className="flex items-center gap-1.5 mt-0.5 text-[11px] text-[#8898aa] font-mono">
+                          <Phone className="w-3 h-3 text-[#adb5bd]" />
+                          <span>{lead.phone}</span>
+                        </div>
+                        {lead.email && (
+                          <div className="text-[10px] text-[#adb5bd] truncate max-w-[150px]">
+                            {lead.email}
+                          </div>
+                        )}
+                      </td>
+
+                      {/* 3. Company & Owner */}
+                      <td className="py-2.5 px-3 border-r border-[#e9ecef]">
+                        <div className="font-semibold text-[#172b4d] text-xs flex items-center gap-1">
+                          <Building2 className="w-3.5 h-3.5 text-[#4689C8] flex-shrink-0" />
+                          <span>{lead.company_name || 'Individual Client'}</span>
+                        </div>
+                        <div className="text-[10px] text-[#8898aa] mt-0.5">
+                          Owner: <span className="text-[#525f7f] font-semibold">{lead.assigned_to_name || 'Admin'}</span>
+                        </div>
+                      </td>
+
+                      {/* 4. Service & Requirement */}
+                      <td className="py-2.5 px-3 border-r border-[#e9ecef] max-w-[260px]">
+                        <div className="text-xs font-semibold text-[#172b4d] truncate">
+                          {lead.service_interest || 'Custom Software Solution'}
+                        </div>
+                        {lead.requirement && (
+                          <div className="text-[11px] text-[#8898aa] truncate max-w-[240px] mt-0.5" title={lead.requirement}>
+                            {lead.requirement}
+                          </div>
+                        )}
+                      </td>
+
+                      {/* 5. Budget */}
+                      <td className="py-2.5 px-3 border-r border-[#e9ecef] font-semibold text-xs">
+                        {lead.estimated_budget ? (
+                          <span className="text-[#2dce89] font-extrabold">
+                            {formatCurrency(lead.estimated_budget)}
+                          </span>
+                        ) : (
+                          <span className="text-[#8898aa] font-normal">Negotiable</span>
+                        )}
+                      </td>
+
+                      {/* 6. Pipeline Status (Exact OJT Badge Dropdown) */}
+                      <td className="py-2.5 px-3 border-r border-[#e9ecef]">
+                        <div className="flex flex-col items-start gap-1">
+                          <select
+                            value={lead.status}
+                            onChange={(e) => handleStatusChange(lead, e.target.value)}
+                            className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider outline-none border cursor-pointer ${
+                              lead.status === 'Won'
+                                ? 'bg-[#2dce89] text-white border-[#2dce89]'
+                                : lead.status === 'Lost'
+                                ? 'bg-[#f5365c] text-white border-[#f5365c]'
+                                : lead.status === 'New'
+                                ? 'bg-[#fb6340] text-white border-[#fb6340]'
+                                : lead.status === 'Contacted'
+                                ? 'bg-[#11cdef] text-white border-[#11cdef]'
+                                : lead.status === 'Qualified'
+                                ? 'bg-[#4689C8] text-white border-[#4689C8]'
+                                : lead.status === 'Quotation Sent'
+                                ? 'bg-[#5603ad] text-white border-[#5603ad]'
+                                : lead.status === 'Negotiation'
+                                ? 'bg-[#8965e0] text-white border-[#8965e0]'
+                                : 'bg-[#ffbb33] text-[#212529] border-[#ffbb33]'
+                            }`}
+                          >
+                            {STATUS_OPTIONS.map((st) => (
+                              <option key={st} value={st} className="bg-white text-[#172b4d] font-normal">
+                                {st}
+                              </option>
+                            ))}
+                          </select>
+
+                          {lead.status === 'Lost' && lead.lost_reason && (
+                            <p className="text-[10px] text-[#f5365c] truncate max-w-[140px]" title={lead.lost_reason}>
+                              {lead.lost_reason}
+                            </p>
+                          )}
+                          {lead.status === 'On Hold' && lead.on_hold_reason && (
+                            <p className="text-[10px] text-[#fb6340] truncate max-w-[140px]" title={lead.on_hold_reason}>
+                              Hold: {lead.on_hold_reason}
+                            </p>
+                          )}
+                          {lead.status === 'Won' && !lead.converted_client_id && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setLeadToConvert(lead);
+                                setIsConvertModalOpen(true);
+                              }}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold text-white bg-[#2dce89] hover:bg-[#229c68] shadow-2xs transition cursor-pointer"
+                              title="Convert Won Inquiry to Active Client"
+                            >
+                              <Sparkles className="w-2.5 h-2.5" />
+                              <span>Convert</span>
+                            </button>
+                          )}
+                          {lead.converted_client_id && (
+                            <Link
+                              href={`/projects?search=${encodeURIComponent(lead.name || '')}`}
+                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#e8f7ee] text-[#2dce89] hover:bg-[#d4f2e0] border border-[#2dce89]/30 transition shadow-2xs"
+                              title="View Project Contracts for this Client"
+                            >
+                              <UserCheck className="w-2.5 h-2.5 text-[#2dce89]" />
+                              <span>Client #{lead.converted_client_number || 'Linked'}</span>
+                            </Link>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* 7. Action Buttons */}
+                      <td className="py-2.5 px-3 text-center">
+                        <div className="flex items-center justify-center gap-1">
+                          {lead.converted_client_id && (
+                            <Link
+                              href={`/projects?search=${encodeURIComponent(lead.name || '')}`}
+                              className="p-1.5 rounded text-[#2dce89] hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition cursor-pointer"
+                              title="View Projects & Contracts"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                            </Link>
+                          )}
+
+                          <button
+                            onClick={() => {
+                              setSelectedLeadForFollowUp(lead);
+                              setIsFollowUpModalOpen(true);
+                            }}
+                            className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] transition cursor-pointer shadow-2xs"
+                            title="Log & View Follow-ups"
+                          >
+                            <MessageSquare className="w-3 h-3" />
+                            <span>Follow-up</span>
+                            {Number(lead.follow_ups_count) > 0 && (
+                              <span className="ml-0.5 px-1 py-0.2 rounded-full text-[9px] font-bold bg-white text-[#4689C8]">
+                                {lead.follow_ups_count}
+                              </span>
+                            )}
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setEditingLead(lead);
+                              setIsLeadModalOpen(true);
+                            }}
+                            className="p-1.5 rounded text-[#4689C8] hover:bg-blue-50 border border-transparent hover:border-blue-200 transition cursor-pointer"
+                            title="Edit Inquiry Details"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                          </button>
+
+                          {isAdmin && (
+                            <button
+                              onClick={() => {
+                                setLeadToDelete(lead);
+                                setIsDeleteModalOpen(true);
+                              }}
+                              className="p-1.5 rounded text-[#f5365c] hover:bg-red-50 border border-transparent hover:border-red-200 transition cursor-pointer"
+                              title="Delete Lead"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="py-16 text-center text-[#8898aa]">
+                      <Users className="w-8 h-8 mx-auto text-slate-300 mb-2" />
+                      <p className="text-xs font-bold text-[#172b4d]">No client inquiries found</p>
+                      <p className="text-[11px] text-[#8898aa] mt-0.5">
+                        Register a new business lead or adjust your filter query.
+                      </p>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
-        )}
+
+          {/* OJT PAGINATION TOOLBAR (DataTables Style) */}
+          <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#525f7f]">
+            <div>
+              <span>
+                Showing <strong className="text-[#172b4d]">{sortedLeads.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</strong> to{' '}
+                <strong className="text-[#172b4d]">{Math.min(currentPage * itemsPerPage, sortedLeads.length)}</strong> of{' '}
+                <strong className="text-[#172b4d]">{sortedLeads.length}</strong> entries
+                {sortedLeads.length !== leads.length && (
+                  <span className="text-[#8898aa] ml-1">(filtered from {leads.length} total entries)</span>
+                )}
+              </span>
+            </div>
+
+            {/* Page navigation (Exact OJT Bootstrap pagination buttons) */}
+            <div className="flex items-center self-center">
+              <nav aria-label="Table pagination">
+                <ul className="inline-flex items-center -space-x-px text-xs rounded border border-[#dee2e6] overflow-hidden bg-white shadow-2xs">
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="px-3 py-1.5 border-r border-[#dee2e6] bg-white text-[#525f7f] hover:bg-[#f6f9fc] hover:text-[#4689C8] disabled:text-[#adb5bd] disabled:bg-[#fcfcfd] disabled:cursor-not-allowed font-medium transition cursor-pointer"
+                    >
+                      Previous
+                    </button>
+                  </li>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => {
+                    if (
+                      pg === 1 || 
+                      pg === totalPages || 
+                      (pg >= currentPage - 1 && pg <= currentPage + 1)
+                    ) {
+                      const isActive = currentPage === pg;
+                      return (
+                        <li key={pg}>
+                          <button
+                            type="button"
+                            onClick={() => setCurrentPage(pg)}
+                            className={`px-3.5 py-1.5 border-r border-[#dee2e6] text-xs font-bold transition cursor-pointer ${
+                              isActive
+                                ? 'bg-[#4689C8] text-white'
+                                : 'bg-white text-[#525f7f] hover:bg-[#f6f9fc] hover:text-[#4689C8]'
+                            }`}
+                          >
+                            {pg}
+                          </button>
+                        </li>
+                      );
+                    } else if (pg === currentPage - 2 || pg === currentPage + 2) {
+                      return (
+                        <li key={pg} className="px-2 py-1.5 border-r border-[#dee2e6] text-[#adb5bd] bg-[#fcfcfd]">
+                          ...
+                        </li>
+                      );
+                    }
+                    return null;
+                  })}
+
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-1.5 bg-white text-[#525f7f] hover:bg-[#f6f9fc] hover:text-[#4689C8] disabled:text-[#adb5bd] disabled:bg-[#fcfcfd] disabled:cursor-not-allowed font-medium transition cursor-pointer"
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Lead Create / Edit Modal */}

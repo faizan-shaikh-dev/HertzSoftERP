@@ -34,7 +34,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#f8f9fe] flex flex-col font-sans text-[#525f7f]">
       {/* Top Banner Header: OJT bg-gradient-primary */}
-      <div className="bg-gradient-to-r from-[#0a48b3] to-[#120ab3] pt-10 pb-28 sm:pt-14 sm:pb-32 text-center text-white px-4">
+      <div className="bg-gradient-to-r from-[#4689C8] to-[#120ab3] pt-10 pb-28 sm:pt-14 sm:pb-32 text-center text-white px-4">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-1.5">
             Welcome!
@@ -83,7 +83,7 @@ export default function LoginPage() {
                 <label className="block text-xs font-bold uppercase tracking-wider text-[#525f7f] mb-1.5">
                   Email Address
                 </label>
-                <div className="relative rounded-lg shadow-xs transition-all focus-within:shadow-md border border-slate-200 focus-within:border-[#0a48b3] focus-within:ring-2 focus-within:ring-[#0a48b3]/20 bg-white overflow-hidden">
+                <div className="relative rounded-lg shadow-xs transition-all focus-within:shadow-md border border-slate-200 focus-within:border-[#4689C8] focus-within:ring-2 focus-within:ring-[#4689C8]/20 bg-white overflow-hidden">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8898aa]">
                     <Mail className="w-4 h-4" />
                   </div>
@@ -104,11 +104,11 @@ export default function LoginPage() {
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#525f7f]">
                     Password
                   </label>
-                  <span className="text-xs text-[#8898aa] hover:text-[#0a48b3] transition-colors cursor-pointer font-medium">
+                  <span className="text-xs text-[#8898aa] hover:text-[#4689C8] transition-colors cursor-pointer font-medium">
                     Forgot password?
                   </span>
                 </div>
-                <div className="relative rounded-lg shadow-xs transition-all focus-within:shadow-md border border-slate-200 focus-within:border-[#0a48b3] focus-within:ring-2 focus-within:ring-[#0a48b3]/20 bg-white overflow-hidden">
+                <div className="relative rounded-lg shadow-xs transition-all focus-within:shadow-md border border-slate-200 focus-within:border-[#4689C8] focus-within:ring-2 focus-within:ring-[#4689C8]/20 bg-white overflow-hidden">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8898aa]">
                     <Lock className="w-4 h-4" />
                   </div>
@@ -123,11 +123,11 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Submit Button: OJT btn-primary (#0a48b3) */}
+              {/* Submit Button: OJT btn-primary (#4689C8) */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full mt-4 py-2.5 sm:py-3 px-4 rounded-lg text-white font-bold text-xs sm:text-sm uppercase tracking-wider bg-[#0a48b3] hover:bg-[#08398e] shadow-md shadow-[#0a48b3]/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                className="w-full mt-4 py-2.5 sm:py-3 px-4 rounded-lg text-white font-bold text-xs sm:text-sm uppercase tracking-wider bg-[#4689C8] hover:bg-[#3876b0] shadow-md shadow-[#4689C8]/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
               >
                 {loading ? (
                   <>
@@ -153,7 +153,7 @@ export default function LoginPage() {
               href="https://www.hertzsoft.com"
               target="_blank"
               rel="noreferrer"
-              className="text-[#0a48b3] font-semibold hover:underline"
+              className="text-[#4689C8] font-semibold hover:underline"
             >
               Hertzsoft
             </a>

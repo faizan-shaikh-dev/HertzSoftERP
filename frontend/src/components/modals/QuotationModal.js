@@ -6,16 +6,12 @@ import { toast } from 'react-toastify';
 import quotationService from '@/services/quotationService';
 import projectService from '@/services/projectService';
 import {
-  X,
+  XCircle,
   Plus,
   Trash2,
-  FileSpreadsheet,
-  IndianRupee,
-  Calendar,
   Building2,
   FolderKanban,
   Loader2,
-  Percent,
   CheckCircle2,
   AlertCircle
 } from 'lucide-react';
@@ -286,46 +282,45 @@ export default function QuotationModal({
   if (!isOpen || !mounted) return null;
 
   const modalContent = (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto bg-slate-900/60 backdrop-blur-xs">
-      <div className="fixed inset-0 -z-10" onClick={onClose} aria-hidden="true" />
-
-      <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden my-auto max-h-[92vh] flex flex-col">
-        {/* Header */}
-        <div className="px-6 py-4 bg-gradient-to-r from-blue-50/90 via-slate-50 to-white border-b border-slate-200 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 border border-blue-200 flex items-center justify-center">
-              <FileSpreadsheet className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <span>
-                  {mode === 'revise'
-                    ? `Revise Quotation #${quotation?.quotation_number} (Create v${Number(quotation?.version || 1) + 1})`
-                    : mode === 'edit'
-                    ? `Edit Quotation #${quotation?.quotation_number} (v${quotation?.version})`
-                    : 'Create New Commercial Quotation'}
-                </span>
-              </h3>
-              <p className="text-xs text-slate-500">
-                {mode === 'revise'
-                  ? 'Creates a new version. The previous version will be preserved as Superseded.'
-                  : 'Specify client deliverables, rates, tax calculations, and terms.'}
-              </p>
-            </div>
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto bg-slate-900/60 backdrop-blur-xs"
+      onClick={onClose}
+    >
+      <div 
+        className="relative w-full max-w-4xl bg-white rounded-lg shadow-2xl border border-[#e9ecef] overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header - OJT Style */}
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#e9ecef] bg-white shrink-0">
+          <div>
+            <h3 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight">
+              {mode === 'revise'
+                ? `Revise Quotation #${quotation?.quotation_number} (v${Number(quotation?.version || 1) + 1})`
+                : mode === 'edit'
+                ? `Edit Quotation #${quotation?.quotation_number}`
+                : 'Create Quotation'}
+            </h3>
+            <p className="text-xs text-[#8898aa] mt-0.5">
+              {mode === 'revise'
+                ? 'Creates a new version. The previous version will be preserved as Superseded.'
+                : 'Specify client deliverables, rates, tax calculations, and terms.'}
+            </p>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+            type="button"
+            className="text-[#172b4d] hover:text-[#525f7f] transition cursor-pointer p-0.5 rounded-full"
+            aria-label="Close dialog"
           >
-            <X className="w-5 h-5" />
+            <XCircle className="w-7 h-7 stroke-[1.5]" />
           </button>
         </div>
 
         {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-5 flex-1">
+        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1 bg-white">
           {error && (
-            <div className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 font-medium flex items-center gap-2">
+            <div className="p-3.5 rounded-md bg-[#fdf2f2] border border-[#f5365c]/30 text-xs text-[#f5365c] font-medium flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -335,13 +330,13 @@ export default function QuotationModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Client Selection */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-slate-500" />
-                <span>Client / Account *</span>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5 flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5 text-[#4689C8]" />
+                <span>Client / Account <span className="text-[#f5365c] font-bold">*</span></span>
               </label>
               {loadingRefs ? (
-                <div className="flex items-center gap-2 text-xs text-slate-400 py-2">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <div className="flex items-center gap-2 text-xs text-[#8898aa] py-2">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#4689C8]" />
                   <span>Loading clients...</span>
                 </div>
               ) : (
@@ -349,7 +344,7 @@ export default function QuotationModal({
                   required
                   value={clientId}
                   onChange={(e) => setClientId(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-500 outline-none transition cursor-pointer"
+                  className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
                 >
                   <option value="">-- Select Client --</option>
                   {clients.map((c) => (
@@ -363,14 +358,14 @@ export default function QuotationModal({
 
             {/* Linked Project (Optional) */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5 flex items-center gap-1.5">
-                <FolderKanban className="w-3.5 h-3.5 text-slate-500" />
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5 flex items-center gap-1.5">
+                <FolderKanban className="w-3.5 h-3.5 text-[#8898aa]" />
                 <span>Link to Project (Optional)</span>
               </label>
               <select
                 value={projectId}
                 onChange={(e) => setProjectId(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-500 outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
               >
                 <option value="">-- No linked project / New Prospect --</option>
                 {projects.map((p) => (
@@ -384,8 +379,8 @@ export default function QuotationModal({
 
           {/* Proposal Title */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-              Quotation Subject / Proposal Title *
+            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              Quotation Subject / Proposal Title <span className="text-[#f5365c] font-bold ml-0.5">*</span>
             </label>
             <input
               type="text"
@@ -393,40 +388,40 @@ export default function QuotationModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Enterprise CRM Software & Maintenance Retainer"
-              className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-500 outline-none transition"
+              className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
             />
           </div>
 
           {/* Dates & Rates Row */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50/70 p-3.5 rounded-lg border border-slate-200">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#f8f9fe] p-4 rounded-md border border-[#dee2e6]">
             <div>
-              <label className="block text-[11px] font-bold uppercase text-slate-600 mb-1">
-                Issue Date *
+              <label className="block text-[11px] font-semibold text-[#525f7f] mb-1">
+                Issue Date <span className="text-[#f5365c] font-bold ml-0.5">*</span>
               </label>
               <input
                 type="date"
                 required
                 value={quotationDate}
                 onChange={(e) => setQuotationDate(e.target.value)}
-                className="w-full px-2.5 py-1.5 bg-white text-slate-900 text-xs rounded border border-slate-300 focus:border-blue-600 outline-none"
+                className="w-full px-2.5 py-1.5 bg-white text-[#172b4d] text-xs rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold uppercase text-slate-600 mb-1">
-                Valid Until *
+              <label className="block text-[11px] font-semibold text-[#525f7f] mb-1">
+                Valid Until <span className="text-[#f5365c] font-bold ml-0.5">*</span>
               </label>
               <input
                 type="date"
                 required
                 value={validUntil}
                 onChange={(e) => setValidUntil(e.target.value)}
-                className="w-full px-2.5 py-1.5 bg-white text-slate-900 text-xs rounded border border-slate-300 focus:border-blue-600 outline-none"
+                className="w-full px-2.5 py-1.5 bg-white text-[#172b4d] text-xs rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold uppercase text-slate-600 mb-1">
+              <label className="block text-[11px] font-semibold text-[#525f7f] mb-1">
                 Overall Discount (%)
               </label>
               <input
@@ -436,12 +431,12 @@ export default function QuotationModal({
                 step="0.1"
                 value={discountRate}
                 onChange={(e) => setDiscountRate(e.target.value)}
-                className="w-full px-2.5 py-1.5 bg-white text-slate-900 text-xs rounded border border-slate-300 focus:border-blue-600 outline-none"
+                className="w-full px-2.5 py-1.5 bg-white text-[#172b4d] text-xs rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none font-mono"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold uppercase text-slate-600 mb-1">
+              <label className="block text-[11px] font-semibold text-[#525f7f] mb-1">
                 GST / Tax (%)
               </label>
               <input
@@ -451,7 +446,7 @@ export default function QuotationModal({
                 step="0.1"
                 value={taxRate}
                 onChange={(e) => setTaxRate(e.target.value)}
-                className="w-full px-2.5 py-1.5 bg-white text-slate-900 text-xs rounded border border-slate-300 focus:border-blue-600 outline-none"
+                className="w-full px-2.5 py-1.5 bg-white text-[#172b4d] text-xs rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none font-mono"
               />
             </div>
           </div>
@@ -459,22 +454,22 @@ export default function QuotationModal({
           {/* Line Items Table Builder */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-800">
-                Deliverables & Line Items ({items.length}) *
+              <label className="block text-xs font-semibold text-[#525f7f]">
+                Deliverables & Line Items ({items.length}) <span className="text-[#f5365c] font-bold ml-0.5">*</span>
               </label>
               <button
                 type="button"
                 onClick={handleAddItem}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 px-3 py-1 text-xs font-bold text-[#4689C8] bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Line Item</span>
               </button>
             </div>
 
-            <div className="border border-slate-200 rounded-lg overflow-x-auto shadow-2xs">
+            <div className="border border-[#dee2e6] rounded-md overflow-x-auto shadow-2xs">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-100 text-[10px] font-bold uppercase text-slate-600 border-b border-slate-200">
+                <thead className="bg-[#f8f9fe] text-[10px] font-bold uppercase text-[#8898aa] border-b border-[#dee2e6]">
                   <tr>
                     <th className="py-2.5 px-3 w-8 text-center">#</th>
                     <th className="py-2.5 px-3 min-w-[240px]">Description / Deliverable *</th>
@@ -486,13 +481,13 @@ export default function QuotationModal({
                     <th className="py-2.5 px-2 w-10 text-center"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 bg-white">
+                <tbody className="divide-y divide-[#dee2e6] bg-white">
                   {items.map((item, index) => {
                     const rowCalc = calculations.rowDetails[index]?.rowTotal || 0;
 
                     return (
-                      <tr key={index} className="hover:bg-slate-50/60 transition-colors">
-                        <td className="py-2 px-3 text-center text-slate-400 font-mono text-[11px]">
+                      <tr key={index} className="hover:bg-[#f8f9fe] transition">
+                        <td className="py-2 px-3 text-center text-[#8898aa] font-mono text-[11px]">
                           {index + 1}
                         </td>
                         <td className="py-2 px-3">
@@ -502,7 +497,7 @@ export default function QuotationModal({
                             placeholder="e.g. Next.js Frontend Architecture & API Integration"
                             value={item.description}
                             onChange={(e) => handleItemChange(index, 'description', e.target.value)}
-                            className="w-full px-2 py-1 text-xs bg-slate-50/50 focus:bg-white text-slate-900 rounded border border-slate-200 focus:border-blue-600 outline-none"
+                            className="w-full px-2.5 py-1.5 text-xs bg-white text-[#172b4d] rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none"
                           />
                         </td>
                         <td className="py-2 px-3">
@@ -513,7 +508,7 @@ export default function QuotationModal({
                             required
                             value={item.quantity}
                             onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                            className="w-full px-2 py-1 text-xs text-center bg-slate-50/50 focus:bg-white text-slate-900 rounded border border-slate-200 focus:border-blue-600 outline-none"
+                            className="w-full px-2.5 py-1.5 text-xs text-center bg-white text-[#172b4d] rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none"
                           />
                         </td>
                         <td className="py-2 px-3">
@@ -525,7 +520,7 @@ export default function QuotationModal({
                             placeholder="0"
                             value={item.rate}
                             onChange={(e) => handleItemChange(index, 'rate', e.target.value)}
-                            className="w-full px-2 py-1 text-xs text-right bg-slate-50/50 focus:bg-white text-slate-900 rounded border border-slate-200 focus:border-blue-600 outline-none font-mono"
+                            className="w-full px-2.5 py-1.5 text-xs text-right bg-white text-[#172b4d] rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none font-mono"
                           />
                         </td>
                         <td className="py-2 px-3">
@@ -536,7 +531,7 @@ export default function QuotationModal({
                             step="any"
                             value={item.discount_percent}
                             onChange={(e) => handleItemChange(index, 'discount_percent', e.target.value)}
-                            className="w-full px-1.5 py-1 text-xs text-right bg-slate-50/50 focus:bg-white text-slate-900 rounded border border-slate-200 focus:border-blue-600 outline-none font-mono"
+                            className="w-full px-2 py-1.5 text-xs text-right bg-white text-[#172b4d] rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none font-mono"
                           />
                         </td>
                         <td className="py-2 px-3">
@@ -547,10 +542,10 @@ export default function QuotationModal({
                             step="any"
                             value={item.tax_percent}
                             onChange={(e) => handleItemChange(index, 'tax_percent', e.target.value)}
-                            className="w-full px-1.5 py-1 text-xs text-right bg-slate-50/50 focus:bg-white text-slate-900 rounded border border-slate-200 focus:border-blue-600 outline-none font-mono"
+                            className="w-full px-2 py-1.5 text-xs text-right bg-white text-[#172b4d] rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none font-mono"
                           />
                         </td>
-                        <td className="py-2 px-3 text-right font-bold font-mono text-slate-800">
+                        <td className="py-2 px-3 text-right font-bold font-mono text-[#172b4d]">
                           {formatCurrency(rowCalc)}
                         </td>
                         <td className="py-2 px-2 text-center">
@@ -558,7 +553,7 @@ export default function QuotationModal({
                             type="button"
                             onClick={() => handleRemoveItem(index)}
                             disabled={items.length <= 1}
-                            className="p-1 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 disabled:opacity-30 disabled:hover:text-slate-400 cursor-pointer"
+                            className="p-1 rounded text-[#adb5bd] hover:text-[#f5365c] hover:bg-[#fdf2f2] disabled:opacity-30 disabled:hover:text-[#adb5bd] cursor-pointer"
                             title="Remove Line Item"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -574,27 +569,27 @@ export default function QuotationModal({
 
           {/* Financial Calculation Summary Block */}
           <div className="flex justify-end pt-1">
-            <div className="w-full sm:w-80 bg-slate-50/90 rounded-lg border border-slate-200 p-4 space-y-2 text-xs">
-              <div className="flex items-center justify-between text-slate-600">
+            <div className="w-full sm:w-80 bg-[#f8f9fe] rounded-md border border-[#dee2e6] p-4 space-y-2 text-xs">
+              <div className="flex items-center justify-between text-[#525f7f]">
                 <span>Subtotal:</span>
-                <span className="font-semibold text-slate-900">{formatCurrency(calculations.subtotal)}</span>
+                <span className="font-semibold text-[#172b4d]">{formatCurrency(calculations.subtotal)}</span>
               </div>
 
               {calculations.discountAmount > 0 && (
-                <div className="flex items-center justify-between text-red-600">
+                <div className="flex items-center justify-between text-[#f5365c]">
                   <span>Discount ({discountRate}%):</span>
                   <span className="font-semibold">- {formatCurrency(calculations.discountAmount)}</span>
                 </div>
               )}
 
-              <div className="flex items-center justify-between text-slate-600">
+              <div className="flex items-center justify-between text-[#525f7f]">
                 <span>GST / Tax ({taxRate}%):</span>
-                <span className="font-semibold text-slate-900">+ {formatCurrency(calculations.taxAmount)}</span>
+                <span className="font-semibold text-[#172b4d]">+ {formatCurrency(calculations.taxAmount)}</span>
               </div>
 
-              <div className="pt-2 border-t border-slate-200 flex items-center justify-between font-extrabold text-sm text-slate-900">
+              <div className="pt-2 border-t border-[#dee2e6] flex items-center justify-between font-extrabold text-sm text-[#172b4d]">
                 <span>Grand Total:</span>
-                <span className="text-blue-600 text-base">{formatCurrency(calculations.grandTotal)}</span>
+                <span className="text-[#4689C8] text-base">{formatCurrency(calculations.grandTotal)}</span>
               </div>
             </div>
           </div>
@@ -602,7 +597,7 @@ export default function QuotationModal({
           {/* Terms & Conditions & Notes */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
                 Terms & Conditions
               </label>
               <textarea
@@ -610,12 +605,12 @@ export default function QuotationModal({
                 value={terms}
                 onChange={(e) => setTerms(e.target.value)}
                 placeholder="Payment terms, validity and milestones..."
-                className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-300 focus:border-blue-600 outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition resize-y"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
                 Internal Remarks / Client Notes
               </label>
               <textarea
@@ -623,35 +618,35 @@ export default function QuotationModal({
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Special considerations, delivery schedule notes..."
-                className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-300 focus:border-blue-600 outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition resize-y"
               />
             </div>
           </div>
 
-          {/* Modal Footer */}
-          <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={loading}
-              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
-            >
-              Cancel
-            </button>
-
+          {/* Full-Width Action Button */}
+          <div className="pt-2">
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-md shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+              className="w-full py-3 bg-[#4689C8] hover:bg-[#3876b0] text-white font-bold text-sm rounded shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-              <span>
-                {mode === 'revise'
-                  ? `Create Revised Version (v${Number(quotation?.version || 1) + 1})`
-                  : mode === 'edit'
-                  ? 'Update Quotation'
-                  : 'Save & Generate Quotation'}
-              </span>
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Saving Quotation...</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>
+                    {mode === 'revise'
+                      ? `Create Revised Version (v${Number(quotation?.version || 1) + 1})`
+                      : mode === 'edit'
+                      ? 'Update Quotation'
+                      : 'Save & Generate Quotation'}
+                  </span>
+                </>
+              )}
             </button>
           </div>
         </form>
@@ -661,4 +656,3 @@ export default function QuotationModal({
 
   return createPortal(modalContent, document.body);
 }
-

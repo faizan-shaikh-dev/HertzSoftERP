@@ -7,6 +7,7 @@ import leadService from '@/services/leadService';
 import { useAuth } from '@/context/AuthContext';
 import { 
   X, 
+  XCircle,
   User, 
   Phone, 
   Mail, 
@@ -339,35 +340,18 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
         aria-modal="true"
         aria-labelledby="lead-modal-title"
       >
-        {/* Modal Header */}
-        <div className="px-6 py-4.5 border-b border-slate-200/80 flex items-center justify-between bg-gradient-to-r from-blue-50/70 via-slate-50 to-white flex-shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center border border-blue-200 shadow-2xs">
-              <Briefcase className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 id="lead-modal-title" className="text-base font-bold text-slate-900 tracking-tight">
-                  {isEdit ? 'Edit Lead Details' : 'Register New Lead'}
-                </h3>
-                {isEdit && lead?.lead_number && (
-                  <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-mono text-[11px] font-bold border border-blue-200">
-                    Lead #{lead.lead_number}
-                  </span>
-                )}
-              </div>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Required fields are marked with an asterisk (*). Lead ID and creator timestamps are automated.
-              </p>
-            </div>
-          </div>
+        {/* Modal Header (Exact OJT style: Clean white, dark title on left, circular close on right) */}
+        <div className="px-6 pt-6 pb-4 flex items-center justify-between bg-white flex-shrink-0 border-b border-[#e9ecef]">
+          <h2 id="lead-modal-title" className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight m-0">
+            {isEdit ? 'Edit Lead' : 'Create Lead'}
+          </h2>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+            className="text-[#172b4d] hover:text-slate-600 transition cursor-pointer p-0.5 rounded-full"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <XCircle className="w-7 h-7 stroke-[1.5]" />
           </button>
         </div>
 
@@ -379,535 +363,373 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
           </div>
         )}
 
-        {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto flex-1">
-          {/* SECTION 1: Contact Details */}
-          <div>
-            <div className="flex items-center gap-2 pb-2 mb-3 border-b border-slate-100">
-              <User className="w-4 h-4 text-blue-600" />
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                1. Contact Information
-              </h4>
+        {/* Form Body (Exact OJT clean input fields with red asterisk) */}
+        <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4 overflow-y-auto flex-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Name* (Full width) */}
+            <div className="md:col-span-2">
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Name<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              </label>
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter client / POC full name"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+              />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Client Name * */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Client / POC Full Name *
+            {/* Company Name (Full width) */}
+            <div className="md:col-span-2">
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Company Name / Organization
+              </label>
+              <input
+                type="text"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                placeholder="e.g. Acme Technologies Pvt Ltd"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+              />
+            </div>
+
+            {/* Service Interest* (Full width) */}
+            <div className="md:col-span-2">
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Service Interest<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              </label>
+              <select
+                required
+                value={serviceInterest}
+                onChange={(e) => setServiceInterest(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+              >
+                {SERVICE_OPTIONS.map((srv) => (
+                  <option key={srv} value={srv}>{srv}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Contact No* */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-semibold text-[#525f7f]">
+                  Contact No<span className="text-[#f5365c] font-bold ml-0.5">*</span>
                 </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <User className="w-4 h-4" />
-                  </div>
+                {checkingDuplicate && (
+                  <span className="text-[10px] text-[#4689C8] flex items-center gap-1 font-medium">
+                    <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                    Checking...
+                  </span>
+                )}
+              </div>
+              <input
+                type="tel"
+                required
+                value={phone}
+                onChange={(e) => handlePhoneChange(e.target.value)}
+                placeholder="+91 98765 43210"
+                className={`w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border outline-none transition font-mono ${
+                  duplicateMatches.length > 0 
+                    ? 'border-amber-400 bg-amber-50/20 focus:border-amber-500' 
+                    : 'border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8]'
+                }`}
+              />
+            </div>
+
+            {/* Email */}
+            <div>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="client@company.com"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+              />
+            </div>
+
+            {/* Alternate Contact No */}
+            <div>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Alternate Contact No
+              </label>
+              <input
+                type="tel"
+                value={alternatePhone}
+                onChange={(e) => setAlternatePhone(e.target.value)}
+                placeholder="Secondary phone / landline"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition font-mono"
+              />
+            </div>
+
+            {/* City / Location */}
+            <div>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                City / Location
+              </label>
+              <input
+                type="text"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="e.g. Mumbai, Maharashtra"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+              />
+            </div>
+
+            {/* Estimated Budget* */}
+            <div>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Estimated Budget (₹)<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              </label>
+              <input
+                type="number"
+                min="0"
+                step="5000"
+                value={estimatedBudget}
+                onChange={(e) => setEstimatedBudget(e.target.value)}
+                placeholder="e.g. 150000"
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+              />
+            </div>
+
+            {/* Lead Source */}
+            <div>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Lead Source
+              </label>
+              <select
+                value={source}
+                onChange={(e) => setSource(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+              >
+                {SOURCE_OPTIONS.map((src) => (
+                  <option key={src} value={src}>{src}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Assigned Employee / Owner* */}
+            <div>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Assigned Employee / Owner<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              </label>
+              <select
+                required
+                value={assignedTo}
+                onChange={(e) => setAssignedTo(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer font-semibold"
+              >
+                {assignees.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.full_name} ({a.email})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Pipeline Status* */}
+            <div>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Pipeline Status<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              </label>
+              <select
+                required
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-white text-[#4689C8] font-bold text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+              >
+                {STATUS_OPTIONS.map((st) => (
+                  <option key={st} value={st}>{st}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Priority */}
+            <div>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Priority
+              </label>
+              <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+              >
+                {PRIORITY_OPTIONS.map((pr) => (
+                  <option key={pr} value={pr}>{pr}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Expected Decision Date */}
+            <div>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Expected Decision Date
+              </label>
+              <input
+                type="date"
+                value={expectedDecisionDate}
+                onChange={(e) => setExpectedDecisionDate(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+              />
+            </div>
+
+            {/* Domain Available */}
+            <div>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Domain Available?
+              </label>
+              <select
+                value={domainAvailable}
+                onChange={(e) => setDomainAvailable(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+              >
+                {AVAILABILITY_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Hosting Available */}
+            <div>
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Hosting Available?
+              </label>
+              <select
+                value={hostingAvailable}
+                onChange={(e) => setHostingAvailable(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+              >
+                {AVAILABILITY_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Requirement / Scope (Full width) */}
+            <div className="md:col-span-2">
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Project Requirement / Scope
+              </label>
+              <textarea
+                rows={3}
+                value={requirement}
+                onChange={(e) => setRequirement(e.target.value)}
+                placeholder="Describe project deliverables, user stories, platform preferences, or client specifications..."
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition leading-relaxed"
+              />
+            </div>
+
+            {/* Conditional: Lost Reason (Required when Lost) */}
+            {status === 'Lost' && (
+              <div className="md:col-span-2 p-3.5 rounded-md bg-red-50 border border-red-200">
+                <label className="block text-xs font-bold text-[#f5365c] mb-1.5">
+                  Reason for Loss<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={lostReason}
+                  onChange={(e) => setLostReason(e.target.value)}
+                  placeholder="e.g. Budget constraint, client selected competitor, project postponed..."
+                  className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-red-300 focus:border-[#f5365c] outline-none"
+                />
+              </div>
+            )}
+
+            {/* Conditional: On Hold Reason & Revisit Date (Required when On Hold) */}
+            {status === 'On Hold' && (
+              <div className="md:col-span-2 p-3.5 rounded-md bg-amber-50 border border-amber-200 space-y-3">
+                <div>
+                  <label className="block text-xs font-bold text-[#fb6340] mb-1.5">
+                    Reason for On-Hold<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+                  </label>
                   <input
                     type="text"
                     required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Rajesh Singhania"
-                    className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-500 outline-none transition font-medium"
+                    value={onHoldReason}
+                    onChange={(e) => setOnHoldReason(e.target.value)}
+                    placeholder="e.g. Awaiting Q4 budget approval, client traveling till next month..."
+                    className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-amber-300 focus:border-[#fb6340] outline-none"
                   />
                 </div>
-              </div>
-
-              {/* Primary Phone * */}
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold text-slate-700">
-                    Primary Phone Number *
+                <div>
+                  <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                    Revisit Date
                   </label>
-                  {checkingDuplicate && (
-                    <span className="text-[10px] text-blue-600 flex items-center gap-1">
-                      <Loader2 className="w-2.5 h-2.5 animate-spin" />
-                      Checking duplicate...
-                    </span>
-                  )}
-                </div>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <Phone className="w-4 h-4" />
-                  </div>
                   <input
-                    type="tel"
-                    required
-                    value={phone}
-                    onChange={(e) => handlePhoneChange(e.target.value)}
-                    placeholder="+91 98765 43210"
-                    className={`w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border outline-none transition font-mono ${
-                      duplicateMatches.length > 0 
-                        ? 'border-amber-400 bg-amber-50/30 focus:border-amber-500' 
-                        : 'border-slate-200 focus:border-blue-600'
-                    }`}
+                    type="date"
+                    value={revisitDate}
+                    onChange={(e) => setRevisitDate(e.target.value)}
+                    className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-amber-300 focus:border-[#fb6340] outline-none"
                   />
                 </div>
               </div>
+            )}
 
-              {/* Alternate Phone */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Alternate Phone (Optional)
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <Phone className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="tel"
-                    value={alternatePhone}
-                    onChange={(e) => setAlternatePhone(e.target.value)}
-                    placeholder="e.g. Landline or Secondary mobile"
-                    className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition font-mono"
-                  />
-                </div>
-              </div>
-
-              {/* Email Address */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Email Address (Optional)
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="rajesh@apexlogistics.in"
-                    className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Duplicate Phone Warning Box (Non-blocking with Override per spec) */}
+            {/* Duplicate Phone Warning Box */}
             {duplicateMatches.length > 0 && (
-              <div className="mt-3 p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs animate-in fade-in duration-200">
+              <div className="md:col-span-2 p-3.5 rounded-md bg-amber-50 border border-amber-200 text-xs">
                 <div className="flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                  <AlertTriangle className="w-4 h-4 text-[#fb6340] mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
-                    <p className="font-bold text-amber-800">
+                    <p className="font-bold text-[#172b4d]">
                       Duplicate Phone Detected ({duplicateMatches.length} matching record found)
                     </p>
                     <div className="mt-1.5 space-y-1">
                       {duplicateMatches.map((m, idx) => (
-                        <div key={idx} className="flex items-center justify-between bg-white/80 p-2 rounded border border-amber-200/60">
+                        <div key={idx} className="flex items-center justify-between bg-white p-2 rounded border border-amber-200">
                           <div>
-                            <span className="font-semibold text-slate-800">
-                              {m.name || 'Unnamed'}
-                            </span>
-                            {m.company_name && (
-                              <span className="text-slate-500 ml-1.5">
-                                • {m.company_name}
-                              </span>
-                            )}
-                            <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">
-                              {m.type === 'lead' ? `Lead #${m.lead_number || ''}` : `Client #${m.client_number || ''}`}
-                            </span>
+                            <span className="font-semibold text-[#172b4d]">{m.name || 'Unnamed'}</span>
+                            <span className="text-[#8898aa] text-[11px] ml-2">({m.company_name || 'Individual'})</span>
                           </div>
-                          {m.status && (
-                            <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                              {m.status}
-                            </span>
-                          )}
+                          <span className="text-[10px] font-bold text-[#fb6340] bg-amber-100 px-2 py-0.5 rounded">
+                            {m.status || 'Active'}
+                          </span>
                         </div>
                       ))}
                     </div>
-                    <label className="flex items-center gap-2 mt-2.5 cursor-pointer text-[11px] font-semibold text-amber-900">
+                    <label className="mt-2.5 flex items-center gap-2 cursor-pointer font-semibold text-[#172b4d]">
                       <input
                         type="checkbox"
                         checked={duplicateOverride}
                         onChange={(e) => setDuplicateOverride(e.target.checked)}
-                        className="rounded border-amber-300 text-amber-600 focus:ring-amber-500"
+                        className="rounded border-slate-300 text-[#4689C8] focus:ring-[#4689C8]"
                       />
-                      <span>Record duplicate override (System will allow saving without merging or blocking)</span>
+                      <span>Allow duplicate phone number registration</span>
                     </label>
                   </div>
                 </div>
               </div>
             )}
-          </div>
 
-          {/* SECTION 2: Organization & Designation */}
-          <div>
-            <div className="flex items-center gap-2 pb-2 mb-3 border-b border-slate-100">
-              <Building2 className="w-4 h-4 text-blue-600" />
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                2. Business & Organization Details
-              </h4>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Company Name */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Company / Organization Name
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <Building2 className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="text"
-                    value={companyName}
-                    onChange={(e) => setCompanyName(e.target.value)}
-                    placeholder="e.g. Apex Global Logistics"
-                    className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition font-medium"
-                  />
-                </div>
-              </div>
-
-              {/* Designation */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Designation / Role
-                </label>
-                <input
-                  type="text"
-                  value={designation}
-                  onChange={(e) => setDesignation(e.target.value)}
-                  placeholder="e.g. Managing Director, Founder, CTO"
-                  className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition"
-                />
-              </div>
-
-              {/* City */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  City / Location
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <MapPin className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="text"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder="e.g. Mumbai, Bengaluru, Delhi"
-                    className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition"
-                  />
-                </div>
-              </div>
-
-              {/* Website URL */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Company Website URL
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <Globe className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="text"
-                    value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
-                    placeholder="https://apexlogistics.com"
-                    className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition"
-                  />
-                </div>
-              </div>
+            {/* Internal Strategy / Notes (Full width) */}
+            <div className="md:col-span-2">
+              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                Internal Notes / Strategy
+              </label>
+              <textarea
+                rows={2}
+                value={internalNotes}
+                onChange={(e) => setInternalNotes(e.target.value)}
+                placeholder="Private team observations, client temperament, technical bottlenecks..."
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition leading-relaxed"
+              />
             </div>
           </div>
 
-          {/* SECTION 3: Requirement & Technical Scope */}
-          <div>
-            <div className="flex items-center gap-2 pb-2 mb-3 border-b border-slate-100">
-              <FileText className="w-4 h-4 text-blue-600" />
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                3. Project Scope & Technical Requirements
-              </h4>
-            </div>
-
-            <div className="space-y-4">
-              {/* Requirement & Scope * */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Project Requirement & Scope *
-                </label>
-                <textarea
-                  required
-                  rows={3}
-                  value={requirement}
-                  onChange={(e) => setRequirement(e.target.value)}
-                  placeholder="Describe client's operational software requirements, desired workflows, and key features..."
-                  className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition leading-relaxed"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Service Interest */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Primary Service Interest
-                  </label>
-                  <select
-                    value={serviceInterest}
-                    onChange={(e) => setServiceInterest(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition cursor-pointer"
-                  >
-                    {SERVICE_OPTIONS.map((srv) => (
-                      <option key={srv} value={srv}>{srv}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Estimated Budget */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Estimated Budget (INR)
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                      <IndianRupee className="w-4 h-4" />
-                    </div>
-                    <input
-                      type="number"
-                      value={estimatedBudget}
-                      onChange={(e) => setEstimatedBudget(e.target.value)}
-                      placeholder="e.g. 350000"
-                      className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition font-semibold"
-                    />
-                  </div>
-                </div>
-
-                {/* Expected Decision Date */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Expected Decision Date (Target Close)
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                      <Calendar className="w-4 h-4" />
-                    </div>
-                    <input
-                      type="date"
-                      value={expectedDecisionDate}
-                      onChange={(e) => setExpectedDecisionDate(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition"
-                    />
-                  </div>
-                </div>
-
-                {/* Domain & Hosting Availability (Yes / No / Unknown) */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                      Domain Available?
-                    </label>
-                    <select
-                      value={domainAvailable}
-                      onChange={(e) => setDomainAvailable(e.target.value)}
-                      className="w-full px-2.5 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition cursor-pointer font-medium"
-                    >
-                      {AVAILABILITY_OPTIONS.map((opt) => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                      Hosting Available?
-                    </label>
-                    <select
-                      value={hostingAvailable}
-                      onChange={(e) => setHostingAvailable(e.target.value)}
-                      className="w-full px-2.5 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition cursor-pointer font-medium"
-                    >
-                      {AVAILABILITY_OPTIONS.map((opt) => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* SECTION 4: Pipeline, Assignment & Status */}
-          <div>
-            <div className="flex items-center gap-2 pb-2 mb-3 border-b border-slate-100">
-              <Compass className="w-4 h-4 text-blue-600" />
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                4. Pipeline Stage & Team Assignment
-              </h4>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Assigned Employee * */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Assigned Employee / Owner *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <UserCheck className="w-4 h-4" />
-                  </div>
-                  <select
-                    required
-                    value={assignedTo}
-                    onChange={(e) => setAssignedTo(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition cursor-pointer font-semibold"
-                  >
-                    {assignees.map((a) => (
-                      <option key={a.id} value={a.id}>
-                        {a.full_name} ({a.email})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Pipeline Status * */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Pipeline Status *
-                </label>
-                <select
-                  required
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition cursor-pointer font-bold text-blue-700"
-                >
-                  {STATUS_OPTIONS.map((st) => (
-                    <option key={st} value={st}>{st}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Priority */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Lead Priority
-                </label>
-                <select
-                  value={priority}
-                  onChange={(e) => setPriority(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition cursor-pointer font-semibold"
-                >
-                  {PRIORITY_OPTIONS.map((pr) => (
-                    <option key={pr} value={pr}>{pr}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Source */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Lead Generation Source
-                </label>
-                <select
-                  value={source}
-                  onChange={(e) => setSource(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition cursor-pointer"
-                >
-                  {SOURCE_OPTIONS.map((src) => (
-                    <option key={src} value={src}>{src}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Source / Reference Details */}
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Reference / Source Details
-                </label>
-                <input
-                  type="text"
-                  value={sourceDetails}
-                  onChange={(e) => setSourceDetails(e.target.value)}
-                  placeholder="e.g. Referred by Manish Gupta from Tech India Summit, or Campaign ID #204"
-                  className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition"
-                />
-              </div>
-
-              {/* Conditional: Lost Reason (Required when Lost) */}
-              {status === 'Lost' && (
-                <div className="sm:col-span-2 p-3.5 rounded-lg bg-red-50 border border-red-200">
-                  <label className="block text-xs font-bold text-red-800 mb-1">
-                    Reason for Loss * (Required)
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={lostReason}
-                    onChange={(e) => setLostReason(e.target.value)}
-                    placeholder="e.g. Budget constraint, client selected competitor, project postponed..."
-                    className="w-full px-3 py-2 bg-white text-red-900 text-xs rounded-md border border-red-300 focus:border-red-600 outline-none"
-                  />
-                </div>
-              )}
-
-              {/* Conditional: On Hold Reason & Revisit Date (Required when On Hold) */}
-              {status === 'On Hold' && (
-                <div className="sm:col-span-2 p-3.5 rounded-lg bg-amber-50 border border-amber-200 space-y-3">
-                  <div>
-                    <label className="block text-xs font-bold text-amber-900 mb-1">
-                      Reason for On-Hold * (Required)
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={onHoldReason}
-                      onChange={(e) => setOnHoldReason(e.target.value)}
-                      placeholder="e.g. Awaiting Q4 budget approval, client traveling till next month..."
-                      className="w-full px-3 py-2 bg-white text-amber-950 text-xs rounded-md border border-amber-300 focus:border-amber-600 outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-amber-900 mb-1">
-                      Optional Revisit Date
-                    </label>
-                    <input
-                      type="date"
-                      value={revisitDate}
-                      onChange={(e) => setRevisitDate(e.target.value)}
-                      className="w-full px-3 py-2 bg-white text-slate-900 text-xs rounded-md border border-amber-300 focus:border-amber-600 outline-none"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* SECTION 5: Internal Notes */}
-          <div>
-            <div className="flex items-center gap-2 pb-2 mb-3 border-b border-slate-100">
-              <FileText className="w-4 h-4 text-blue-600" />
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                5. Internal Strategy & Notes
-              </h4>
-            </div>
-
-            <textarea
-              rows={2}
-              value={internalNotes}
-              onChange={(e) => setInternalNotes(e.target.value)}
-              placeholder="Private team observations, client temperament, technical bottlenecks, or discussion agenda..."
-              className="w-full px-3 py-2 bg-slate-50/70 focus:bg-white text-slate-900 text-xs rounded-md border border-slate-200 focus:border-blue-600 outline-none transition leading-relaxed"
-            />
-          </div>
-
-          {/* Modal Footer Controls */}
-          <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3 flex-shrink-0">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={loading}
-              className="px-4 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 rounded-md border border-slate-200 transition cursor-pointer"
-            >
-              Cancel
-            </button>
+          {/* OJT Full-Width Submit Button */}
+          <div className="pt-4">
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-sm transition cursor-pointer disabled:opacity-50"
+              className="btn btn-lg btn-primary btn-block w-full py-3 bg-[#4689C8] hover:bg-[#3876b0] text-white font-bold text-sm rounded shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+              {loading && <Loader2 className="w-4 h-4 animate-spin text-white" />}
               <span>{isEdit ? 'Update Lead' : 'Save Lead'}</span>
             </button>
           </div>

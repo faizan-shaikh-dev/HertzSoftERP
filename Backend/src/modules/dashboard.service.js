@@ -36,28 +36,30 @@ export const getDashboardMetrics = async () => {
     FROM certificates
   `);
 
-  // 5. Recent 5 Leads
+  // 5. Recent 10 Leads
   const [recentLeads] = await pool.query(`
-    SELECT id, name, phone, email, lead_type, service_interest, status, created_at 
+    SELECT id, lead_number, name, company_name, phone, email, service_interest, estimated_budget, status, created_at 
     FROM leads 
     ORDER BY created_at DESC 
-    LIMIT 5
+    LIMIT 10
   `);
 
-  // 6. Recent 5 Payments
+  // 6. Recent 10 Payments
   const [recentPayments] = await pool.query(`
     SELECT 
       pm.id, 
       pm.amount_paid, 
       pm.payment_method, 
       pm.payment_date, 
+      pm.transaction_reference,
       p.title AS project_title,
-      c.name AS client_name
+      c.name AS client_name,
+      c.company_name AS client_company
     FROM payments pm
     JOIN projects p ON pm.project_id = p.id
     JOIN clients c ON pm.client_id = c.id
     ORDER BY pm.created_at DESC 
-    LIMIT 5
+    LIMIT 10
   `);
 
   const totalDealValue = Number(projectStats[0]?.total_deal_value || 0);

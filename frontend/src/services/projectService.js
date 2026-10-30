@@ -42,6 +42,12 @@ export const projectService = {
   createClient: async (clientData) => {
     const response = await api.post('/clients', clientData);
     return response.data;
+  },
+
+  // 8. Get Single Client with full Projects, Payments & Analytics
+  getClientById: async (id) => {
+    const response = await api.get(`/clients/${id}`);
+    return response.data;
   }
 };
 
