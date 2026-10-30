@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import quotationService from '@/services/quotationService';
 import projectService from '@/services/projectService';
 import {
+  X,
   XCircle,
   Plus,
   Trash2,
@@ -13,7 +14,8 @@ import {
   FolderKanban,
   Loader2,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  FileSpreadsheet
 } from 'lucide-react';
 
 const DEFAULT_TERMS = `1. 50% Advance on project initiation.\n2. 50% Upon milestone completion.\n3. Quotation is valid for 30 days from date of issue.`;
@@ -290,30 +292,35 @@ export default function QuotationModal({
         className="relative w-full max-w-4xl bg-white rounded-lg shadow-2xl border border-[#e9ecef] overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header - OJT Style */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#e9ecef] bg-white shrink-0">
-          <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight">
-              {mode === 'revise'
-                ? `Revise Quotation #${quotation?.quotation_number} (v${Number(quotation?.version || 1) + 1})`
-                : mode === 'edit'
-                ? `Edit Quotation #${quotation?.quotation_number}`
-                : 'Create Quotation'}
-            </h3>
-            <p className="text-xs text-[#8898aa] mt-0.5">
-              {mode === 'revise'
-                ? 'Creates a new version. The previous version will be preserved as Superseded.'
-                : 'Specify client deliverables, rates, tax calculations, and terms.'}
-            </p>
+        {/* Header - Hertzsoft Brand */}
+        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-[#e9ecef] bg-white shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#326fa8] to-[#4689C8] text-white flex items-center justify-center shadow-sm shadow-[#4689C8]/25 flex-shrink-0">
+              <FileSpreadsheet className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-lg sm:text-xl font-bold text-[#172b4d] tracking-tight">
+                {mode === 'revise'
+                  ? `Revise Quotation #${quotation?.quotation_number} (v${Number(quotation?.version || 1) + 1})`
+                  : mode === 'edit'
+                  ? `Edit Quotation #${quotation?.quotation_number}`
+                  : 'Create Quotation'}
+              </h3>
+              <p className="text-xs text-[#8898aa] mt-0.5">
+                {mode === 'revise'
+                  ? 'Creates a new version. The previous version will be preserved as Superseded.'
+                  : 'Specify client deliverables, rates, tax calculations, and terms.'}
+              </p>
+            </div>
           </div>
 
           <button
             onClick={onClose}
             type="button"
-            className="text-[#172b4d] hover:text-[#525f7f] transition cursor-pointer p-0.5 rounded-full"
+            className="text-[#8898aa] hover:text-[#172b4d] transition cursor-pointer p-1 rounded-full hover:bg-[#f6f9fc]"
             aria-label="Close dialog"
           >
-            <XCircle className="w-7 h-7 stroke-[1.5]" />
+            <X className="w-6 h-6" />
           </button>
         </div>
 
@@ -460,7 +467,7 @@ export default function QuotationModal({
               <button
                 type="button"
                 onClick={handleAddItem}
-                className="inline-flex items-center gap-1 px-3 py-1 text-xs font-bold text-[#4689C8] bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-2xs transition cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Line Item</span>
@@ -623,16 +630,24 @@ export default function QuotationModal({
             </div>
           </div>
 
-          {/* Full-Width Action Button */}
-          <div className="pt-2">
+          {/* Modal Footer Actions */}
+          <div className="pt-4 border-t border-[#e9ecef] flex items-center justify-end gap-3 mt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="px-5 py-2.5 bg-white hover:bg-[#f6f9fc] border border-[#dee2e6] text-[#525f7f] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
+            >
+              Cancel
+            </button>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#4689C8] hover:bg-[#3876b0] text-white font-bold text-sm rounded shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+              className="px-6 py-2.5 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] hover:from-[#2a5d8d] hover:to-[#3876b0] text-white font-bold text-xs sm:text-sm rounded shadow-sm shadow-[#4689C8]/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
                   <span>Saving Quotation...</span>
                 </>
               ) : (

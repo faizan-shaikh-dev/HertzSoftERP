@@ -58,10 +58,10 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
       <div className="fixed inset-0 -z-10" onClick={onClose} aria-hidden="true" />
 
       <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden my-auto max-h-[92vh] flex flex-col">
-        {/* Top Control Bar */}
-        <div className="px-6 py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white flex items-center justify-between shrink-0">
+        {/* Top Control Bar - Hertzsoft Brand */}
+        <div className="px-6 py-4 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] border-b-2 border-[#5FC8D6]/40 text-white flex items-center justify-between shrink-0 shadow-md">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-400/30 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-white/15 text-white border border-white/25 flex items-center justify-center">
               <FileSpreadsheet className="w-5 h-5" />
             </div>
             <div>
@@ -69,22 +69,22 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
                 <h3 className="text-base font-bold text-white font-mono">
                   {quotation.quotation_number}
                 </h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/20 text-[#e0f7fa] border border-white/30">
                   Version {quotation.version}
                 </span>
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                   quotation.status === 'Accepted'
-                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30'
+                    ? 'bg-emerald-500/30 text-emerald-200 border border-emerald-400/40'
                     : quotation.status === 'Sent'
-                    ? 'bg-blue-500/20 text-blue-300 border border-blue-400/30'
+                    ? 'bg-blue-400/30 text-[#e0f7fa] border border-white/30'
                     : quotation.status === 'Superseded'
-                    ? 'bg-purple-500/20 text-purple-300 border border-purple-400/30'
-                    : 'bg-slate-700 text-slate-300 border border-slate-600'
+                    ? 'bg-purple-500/30 text-purple-200 border border-purple-400/40'
+                    : 'bg-white/20 text-white/90 border border-white/30'
                 }`}>
                   {quotation.status}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-[#e0f7fa] mt-0.5">
                 Official Commercial Proposal Document
               </p>
             </div>
@@ -93,15 +93,15 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
           <div className="flex items-center gap-2.5">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-md shadow-sm transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#172b4d] bg-white hover:bg-slate-50 rounded-md shadow-xs transition-all cursor-pointer"
             >
-              <Printer className="w-3.5 h-3.5" />
+              <Printer className="w-3.5 h-3.5 text-[#4689C8]" />
               <span>Print / Download PDF</span>
             </button>
 
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-white transition cursor-pointer p-0.5 rounded-full"
+              className="text-white/80 hover:text-white transition cursor-pointer p-0.5 rounded-full"
               aria-label="Close dialog"
             >
               <XCircle className="w-6 h-6 stroke-[1.5]" />
@@ -127,13 +127,13 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
               </div>
 
               <div className="sm:text-right">
-                <div className="text-2xl font-extrabold text-blue-600 tracking-tight">
+                <div className="text-2xl font-extrabold text-[#4689C8] tracking-tight">
                   QUOTATION
                 </div>
                 <div className="text-sm font-bold font-mono text-slate-900 mt-0.5">
                   {quotation.quotation_number}
                 </div>
-                <div className="inline-block mt-1 px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                <div className="inline-block mt-1 px-2 py-0.5 rounded text-[11px] font-bold bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/30">
                   Version {quotation.version} {quotation.status === 'Superseded' ? '(Superseded)' : ''}
                 </div>
               </div>

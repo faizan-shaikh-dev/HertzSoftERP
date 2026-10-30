@@ -557,13 +557,13 @@ export const generatePrintableHtml = async (id) => {
         * { box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f8fafc; margin: 0; padding: 30px; color: #1e293b; }
         .page { max-width: 820px; margin: 0 auto; background: #ffffff; padding: 48px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
-        .header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 24px; border-bottom: 2px solid #0f172a; margin-bottom: 28px; }
-        .brand-title { font-size: 24px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 24px; border-bottom: 3px solid #4689C8; margin-bottom: 28px; }
+        .brand-title { font-size: 24px; font-weight: 800; color: #4689C8; letter-spacing: -0.5px; }
         .brand-sub { font-size: 12px; color: #64748b; margin-top: 4px; line-height: 1.4; }
         .quote-badge { text-align: right; }
-        .quote-title { font-size: 26px; font-weight: 800; color: #2563eb; letter-spacing: -0.5px; }
+        .quote-title { font-size: 26px; font-weight: 800; color: #4689C8; letter-spacing: -0.5px; }
         .quote-num { font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 4px; font-family: monospace; }
-        .version-pill { display: inline-block; padding: 2px 8px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; border-radius: 4px; font-size: 11px; font-weight: 700; margin-top: 4px; }
+        .version-pill { display: inline-block; padding: 2px 8px; background: #f0f7fd; color: #4689C8; border: 1px solid rgba(70, 137, 200, 0.4); border-radius: 4px; font-size: 11px; font-weight: 700; margin-top: 4px; }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
         .card-box { background: #f8fafc; padding: 16px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 12.5px; line-height: 1.5; }
@@ -571,12 +571,12 @@ export const generatePrintableHtml = async (id) => {
         .client-name { font-size: 14px; font-weight: 700; color: #0f172a; }
         
         table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-        th { background: #f1f5f9; padding: 10px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; border-top: 1px solid #cbd5e1; border-bottom: 2px solid #cbd5e1; }
+        th { background: #f6f9fc; padding: 10px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; border-top: 1px solid #cbd5e1; border-bottom: 2px solid #cbd5e1; }
         
         .totals-section { display: flex; justify-content: flex-end; margin-bottom: 30px; }
         .totals-table { width: 320px; font-size: 13px; }
         .totals-table tr td { padding: 6px 0; }
-        .totals-table tr.total-row td { padding-top: 10px; border-top: 2px solid #0f172a; font-size: 16px; font-weight: 800; color: #0f172a; }
+        .totals-table tr.total-row td { padding-top: 10px; border-top: 2px solid #4689C8; font-size: 16px; font-weight: 800; color: #4689C8; }
 
         .terms-box { background: #fafafa; border: 1px solid #e5e7eb; border-radius: 6px; padding: 16px; font-size: 12px; line-height: 1.6; margin-bottom: 36px; }
         .terms-title { font-weight: 700; color: #374151; margin-bottom: 6px; font-size: 12px; text-transform: uppercase; }
@@ -594,7 +594,7 @@ export const generatePrintableHtml = async (id) => {
     </head>
     <body>
       <div class="no-print" style="max-width: 820px; margin: 0 auto 16px; text-align: right;">
-        <button onclick="window.print()" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px;">
+        <button onclick="window.print()" style="padding: 10px 20px; background: #4689C8; color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px;">
           🖨️ Print / Save as PDF
         </button>
       </div>

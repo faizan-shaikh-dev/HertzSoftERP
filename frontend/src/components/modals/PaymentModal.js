@@ -325,16 +325,24 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
             />
           </div>
 
-          {/* Full-Width Action Button */}
-          <div className="pt-2">
+          {/* Modal Footer Actions */}
+          <div className="pt-4 border-t border-[#e9ecef] flex items-center justify-end gap-3 mt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="px-5 py-2.5 bg-white hover:bg-[#f6f9fc] border border-[#dee2e6] text-[#525f7f] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
+            >
+              Cancel
+            </button>
             <button
               type="submit"
               disabled={loading || !activeProject}
-              className="w-full py-3 bg-[#4689C8] hover:bg-[#3876b0] text-white font-bold text-sm rounded shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+              className="px-6 py-2.5 bg-gradient-to-r from-[#2dce89] via-[#28b376] to-[#20a36b] hover:from-[#25a970] hover:to-[#1a8557] text-white font-bold text-xs sm:text-sm rounded shadow-sm shadow-[#2dce89]/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
                   <span>Recording Payment...</span>
                 </>
               ) : (
