@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/context/AuthContext';
-import { Mail, Lock, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import { Mail, Lock, AlertCircle, Loader2, ArrowRight } from 'lucide-react';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -21,7 +21,7 @@ export default function LoginPage() {
     try {
       const res = await login({ email, password });
       toast.success(`Welcome back, ${res?.data?.user?.full_name || 'Admin'}!`);
-      // On success, AuthContext automatically redirects to '/'
+      // AuthContext automatically redirects to '/'
     } catch (err) {
       const msg = err.message || 'Invalid email or password. Please try again.';
       setError(msg);
@@ -32,108 +32,132 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-950 to-blue-950 p-4">
-      {/* Background Decorative Glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div className="min-h-screen bg-[#f8f9fe] flex flex-col font-sans text-[#525f7f]">
+      {/* Top Banner Header: OJT bg-gradient-primary */}
+      <div className="bg-gradient-to-r from-[#0a48b3] to-[#120ab3] pt-10 pb-28 sm:pt-14 sm:pb-32 text-center text-white px-4">
+        <div className="max-w-2xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-1.5">
+            Welcome!
+          </h1>
+          <p className="text-blue-100 text-xs sm:text-sm font-normal">
+            Please Login to Access your Account.
+          </p>
+        </div>
+      </div>
 
-      {/* Main Login Card */}
-      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
-        {/* Top Header with Brand Logo */}
-        <div className="pt-10 pb-6 px-8 text-center flex flex-col items-center">
-          <div className="relative w-64 h-16 mb-2 drop-shadow-xs">
-            <Image
-              src="/logo.svg"
-              alt="Hertzsoft Technologies"
-              fill
-              className="object-contain"
-              priority
-            />
+      {/* Main Content Card with Negative Margin Overlap (-mt-20 sm:-mt-24) */}
+      <div className="flex-1 -mt-20 sm:-mt-24 px-4 pb-12 flex flex-col items-center justify-start">
+        <div className="w-full max-w-[450px] bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden">
+          {/* Card Header with Hertzsoft Official Logo & Title */}
+          <div className="pt-7 pb-4 px-6 sm:px-8 text-center border-b border-slate-100/90 bg-white">
+            <div className="flex justify-center mb-3">
+              <Image
+                src="/logo.svg"
+                alt="Hertzsoft Technologies"
+                width={260}
+                height={68}
+                className="h-12 sm:h-13 w-auto object-contain"
+                priority
+              />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight">
+              Login
+            </h2>
+            <p className="text-[11px] font-semibold text-[#8898aa] uppercase tracking-wider mt-1">
+              Centralized ERP & Operations Portal
+            </p>
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-800">Centralized ERP Portal</h1>
 
+          {/* Card Body & Login Form */}
+          <div className="p-6 sm:p-7">
+            {error && (
+              <div className="mb-5 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                <span>{error}</span>
+              </div>
+            )}
 
-          <p className="text-xs uppercase tracking-widest font-semibold text-slate-400 mt-1">Operations & Management</p>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Email Address Field with OJT input-group-alternative style */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#525f7f] mb-1.5">
+                  Email Address
+                </label>
+                <div className="relative rounded-lg shadow-xs transition-all focus-within:shadow-md border border-slate-200 focus-within:border-[#0a48b3] focus-within:ring-2 focus-within:ring-[#0a48b3]/20 bg-white overflow-hidden">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8898aa]">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="name@hertzsoft.com"
+                    className="w-full pl-10 pr-3.5 py-2.5 sm:py-3 text-sm text-[#32325d] bg-transparent outline-none placeholder-[#adb5bd] font-medium"
+                  />
+                </div>
+              </div>
 
+              {/* Password Field */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#525f7f]">
+                    Password
+                  </label>
+                  <span className="text-xs text-[#8898aa] hover:text-[#0a48b3] transition-colors cursor-pointer font-medium">
+                    Forgot password?
+                  </span>
+                </div>
+                <div className="relative rounded-lg shadow-xs transition-all focus-within:shadow-md border border-slate-200 focus-within:border-[#0a48b3] focus-within:ring-2 focus-within:ring-[#0a48b3]/20 bg-white overflow-hidden">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8898aa]">
+                    <Lock className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    className="w-full pl-10 pr-3.5 py-2.5 sm:py-3 text-sm text-[#32325d] bg-transparent outline-none placeholder-[#adb5bd] font-medium"
+                  />
+                </div>
+              </div>
 
+              {/* Submit Button: OJT btn-primary (#0a48b3) */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full mt-4 py-2.5 sm:py-3 px-4 rounded-lg text-white font-bold text-xs sm:text-sm uppercase tracking-wider bg-[#0a48b3] hover:bg-[#08398e] shadow-md shadow-[#0a48b3]/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Signing in...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Login</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
         </div>
 
-        {/* Login Form */}
-        <div className="px-8 pb-10">
-          {error && (
-            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 flex items-start gap-3 text-red-700 text-sm animate-shake">
-              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-red-500" />
-              <p className="font-medium leading-relaxed">{error}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email Field */}
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                Email Address
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@hertzsoft.com"
-                  className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
-                />
-              </div>
-            </div>
-
-            {/* Password Field */}
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Lock className="w-5 h-5" />
-                </div>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
-                  className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
-                />
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full mt-2 py-3.5 px-6 rounded-xl text-white font-semibold text-sm shadow-lg shadow-sky-600/30 bg-gradient-to-r from-sky-500 to-blue-700 hover:from-sky-600 hover:to-blue-800 active:scale-[0.99] transition flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+        {/* Footer Copyright: Exactly as OJT footer */}
+        <div className="mt-8 text-center text-xs text-[#8898aa]">
+          <p>
+            &copy; 2026 | All rights reserved | Designed & Developed by{' '}
+            <a
+              href="https://www.hertzsoft.com"
+              target="_blank"
+              rel="noreferrer"
+              className="text-[#0a48b3] font-semibold hover:underline"
             >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Authenticating...</span>
-                </>
-              ) : (
-                <>
-                  <span>Sign In to ERP</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Footer Motto */}
-          <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
-              CODE <span className="mx-1">•</span> LEARN <span className="mx-1">•</span> IMPROVE <span className="mx-1">•</span> REPEAT
-            </p>
-  
-          </div>
+              Hertzsoft
+            </a>
+          </p>
         </div>
       </div>
     </div>
