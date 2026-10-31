@@ -688,11 +688,16 @@ export default function PaymentsPage() {
                           </td>
                         </tr>
                       ) : (
-                        paginatedPayments.map((p) => {
+                        paginatedPayments.map((p, idx) => {
                           const receiptId = p.receipt_number || `REC-${new Date(p.payment_date || p.created_at).getFullYear()}-${String(p.id).slice(0, 8).toUpperCase()}`;
 
                           return (
-                            <tr key={p.id} className="hover:bg-[#f6f9fc] transition-colors">
+                            <tr 
+                              key={p.id} 
+                              className={`transition-colors duration-150 ${
+                                idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
+                              } hover:bg-[#eaf2fc]`}
+                            >
                               {/* Receipt ID & UTR */}
                               <td className="py-3 px-3.5 border-r border-[#dee2e6]">
                                 <div className="font-mono font-bold text-[#172b4d] text-xs">
@@ -1087,8 +1092,13 @@ export default function PaymentsPage() {
                           </td>
                         </tr>
                       ) : (
-                        paginatedExpenses.map((ex) => (
-                          <tr key={ex.id} className="hover:bg-[#f6f9fc] transition-colors">
+                        paginatedExpenses.map((ex, idx) => (
+                          <tr 
+                            key={ex.id} 
+                            className={`transition-colors duration-150 ${
+                              idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
+                            } hover:bg-[#eaf2fc]`}
+                          >
                             <td className="py-3 px-3.5 border-r border-[#dee2e6] font-mono font-bold text-[#172b4d]">
                               {ex.reference_no}
                             </td>

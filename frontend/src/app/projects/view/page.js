@@ -612,7 +612,12 @@ function ProjectViewContent() {
                           </thead>
                           <tbody className="divide-y divide-[#dee2e6]">
                             {project.payment_history.map((pm, idx) => (
-                              <tr key={pm.id} className="hover:bg-[#f6f9fc] transition-colors">
+                              <tr 
+                                key={pm.id} 
+                                className={`transition-colors duration-150 ${
+                                  idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
+                                } hover:bg-[#eaf2fc]`}
+                              >
                                 {/* Row Num */}
                                 <td className="py-2.5 px-3.5 border-r border-[#dee2e6] text-center font-bold text-[#8898aa]">
                                   {idx + 1}
@@ -730,8 +735,13 @@ function ProjectViewContent() {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-[#dee2e6]">
-                            {projectQuotations.map((q) => (
-                              <tr key={q.id} className="hover:bg-[#f6f9fc] transition-colors">
+                            {projectQuotations.map((q, idx) => (
+                              <tr 
+                                key={q.id} 
+                                className={`transition-colors duration-150 ${
+                                  idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
+                                } hover:bg-[#eaf2fc]`}
+                              >
                                 <td className="py-2.5 px-3.5 border-r border-[#dee2e6] font-mono font-bold text-[#172b4d]">
                                   {q.quotation_number}
                                 </td>

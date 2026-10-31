@@ -86,7 +86,7 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
 
   // 3. Requirement & Technical
   const [requirement, setRequirement] = useState('');
-  const [serviceInterest, setServiceInterest] = useState(SERVICE_OPTIONS[0]);
+  const [serviceInterest, setServiceInterest] = useState('');
   const [estimatedBudget, setEstimatedBudget] = useState('');
   const [expectedDecisionDate, setExpectedDecisionDate] = useState('');
   const [domainAvailable, setDomainAvailable] = useState('Unknown');
@@ -158,7 +158,7 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
       setCity(lead.city || '');
       setWebsite(lead.website || '');
       setRequirement(lead.requirement || '');
-      setServiceInterest(lead.service_interest || SERVICE_OPTIONS[0]);
+      setServiceInterest(lead.service_interest || lead.requirement || '');
       setEstimatedBudget(lead.estimated_budget ? String(lead.estimated_budget) : '');
       setExpectedDecisionDate(lead.expected_decision_date ? lead.expected_decision_date.slice(0, 10) : '');
       setDomainAvailable(lead.domain_available || 'Unknown');
@@ -185,7 +185,7 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
       setCity('');
       setWebsite('');
       setRequirement('');
-      setServiceInterest(SERVICE_OPTIONS[0]);
+      setServiceInterest('');
       setEstimatedBudget('');
       setExpectedDecisionDate('');
       setDomainAvailable('Unknown');
@@ -252,8 +252,8 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
       return;
     }
 
-    if (!requirement.trim()) {
-      setError('Project requirement and scope is required.');
+    if (!serviceInterest.trim()) {
+      setError('Service & Scope is required.');
       return;
     }
 
@@ -280,18 +280,18 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
     const payload = {
       name: name.trim(),
       phone: phone.trim(),
-      alternate_phone: alternatePhone.trim() || null,
+      alternate_phone: null,
       email: email.trim() || null,
       company_name: companyName.trim() || null,
       designation: designation.trim() || null,
       city: city.trim() || null,
       website: website.trim() || null,
-      requirement: requirement.trim(),
-      service_interest: serviceInterest,
+      requirement: serviceInterest.trim() || 'General Inquiry',
+      service_interest: serviceInterest.trim() || requirement.trim() || null,
       source,
       source_details: sourceDetails.trim() || null,
-      estimated_budget: estimatedBudget ? Number(estimatedBudget) : null,
-      expected_decision_date: expectedDecisionDate || null,
+      estimated_budget: null,
+      expected_decision_date: null,
       domain_available: domainAvailable,
       hosting_available: hostingAvailable,
       status,
@@ -351,7 +351,7 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
                 {isEdit ? 'Edit Lead Record' : 'Register New Lead'}
               </h2>
               <p className="text-xs text-[#8898aa] mt-0.5">
-                Client inquiry, technical scope, budget, and team assignment.
+                Client inquiry, service & scope, and team assignment.
               </p>
             </div>
           </div>
@@ -394,7 +394,7 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
             {/* Company Name (Full width) */}
             <div className="md:col-span-2">
               <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Company Name / Organization
+                Business / Company Name
               </label>
               <input
                 type="text"
@@ -405,21 +405,19 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
               />
             </div>
 
-            {/* Service Interest* (Full width) */}
+            {/* Service & Scope* (Full width) */}
             <div className="md:col-span-2">
               <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Service Interest<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+                Service &amp; Scope<span className="text-[#f5365c] font-bold ml-0.5">*</span>
               </label>
-              <select
+              <input
+                type="text"
                 required
                 value={serviceInterest}
                 onChange={(e) => setServiceInterest(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
-              >
-                {SERVICE_OPTIONS.map((srv) => (
-                  <option key={srv} value={srv}>{srv}</option>
-                ))}
-              </select>
+                placeholder="e.g. Website Development, Mobile App, E-Commerce, ERP Portal, SEO..."
+                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+              />
             </div>
 
             {/* Contact No* */}
@@ -463,19 +461,6 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
               />
             </div>
 
-            {/* Alternate Contact No */}
-            <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Alternate Contact No
-              </label>
-              <input
-                type="tel"
-                value={alternatePhone}
-                onChange={(e) => setAlternatePhone(e.target.value)}
-                placeholder="Secondary phone / landline"
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition font-mono"
-              />
-            </div>
 
             {/* City / Location */}
             <div>
@@ -491,21 +476,6 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
               />
             </div>
 
-            {/* Estimated Budget* */}
-            <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Estimated Budget (₹)<span className="text-[#f5365c] font-bold ml-0.5">*</span>
-              </label>
-              <input
-                type="number"
-                min="0"
-                step="5000"
-                value={estimatedBudget}
-                onChange={(e) => setEstimatedBudget(e.target.value)}
-                placeholder="e.g. 150000"
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
-              />
-            </div>
 
             {/* Lead Source */}
             <div>
@@ -575,18 +545,6 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
               </select>
             </div>
 
-            {/* Expected Decision Date */}
-            <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Expected Decision Date
-              </label>
-              <input
-                type="date"
-                value={expectedDecisionDate}
-                onChange={(e) => setExpectedDecisionDate(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
-              />
-            </div>
 
             {/* Domain Available */}
             <div>
@@ -620,19 +578,6 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
               </select>
             </div>
 
-            {/* Requirement / Scope (Full width) */}
-            <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Project Requirement / Scope
-              </label>
-              <textarea
-                rows={3}
-                value={requirement}
-                onChange={(e) => setRequirement(e.target.value)}
-                placeholder="Describe project deliverables, user stories, platform preferences, or client specifications..."
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition leading-relaxed"
-              />
-            </div>
 
             {/* Conditional: Lost Reason (Required when Lost) */}
             {status === 'Lost' && (
@@ -717,16 +662,16 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
               </div>
             )}
 
-            {/* Internal Strategy / Notes (Full width) */}
+            {/* Remark (Full width) */}
             <div className="md:col-span-2">
               <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Internal Notes / Strategy
+                Remark
               </label>
               <textarea
                 rows={2}
                 value={internalNotes}
                 onChange={(e) => setInternalNotes(e.target.value)}
-                placeholder="Private team observations, client temperament, technical bottlenecks..."
+                placeholder="Enter remarks or notes about this lead..."
                 className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition leading-relaxed"
               />
             </div>

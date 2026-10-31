@@ -397,9 +397,9 @@ export default function CertificatesPage() {
                       paginatedCertificates.map((cert, idx) => (
                         <tr
                           key={cert.id}
-                          className={`hover:bg-[#f6f9fc] transition-colors ${
-                            idx % 2 === 1 ? 'bg-[#fcfdfe]' : 'bg-white'
-                          }`}
+                          className={`transition-colors duration-150 ${
+                            idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
+                          } hover:bg-[#eaf2fc]`}
                         >
                           {/* 1. Candidate Name */}
                           <td className="py-3 px-3.5 border-r border-[#dee2e6]">

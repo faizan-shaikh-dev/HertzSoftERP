@@ -201,7 +201,7 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {(quotation.items || []).map((item, index) => (
-                    <tr key={index}>
+                    <tr key={index} className={index % 2 === 1 ? 'bg-[#f8f9fa]' : 'bg-white'}>
                       <td className="py-2.5 px-3 text-center text-slate-400 font-mono text-[11px]">
                         {index + 1}
                       </td>

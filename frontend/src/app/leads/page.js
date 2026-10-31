@@ -60,6 +60,19 @@ const STATUS_OPTIONS = [
   'On Hold'
 ];
 
+function WhatsAppIcon({ className = "w-3.5 h-3.5" }) {
+  return (
+    <svg 
+      className={className} 
+      viewBox="0 0 24 24" 
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  );
+}
+
 export default function LeadsPage() {
   const { user } = useAuth();
   const isAdmin = user?.role?.toLowerCase().includes('admin');
@@ -713,33 +726,7 @@ export default function LeadsPage() {
                       )}
                     </div>
                   </th>
-                  <th 
-                    onClick={() => handleSort('company_name')}
-                    className="py-3 px-3.5 border-r border-[#e9ecef] cursor-pointer select-none hover:text-[#172b4d]"
-                  >
-                    <div className="flex items-center justify-between gap-1">
-                      <span>Company / Owner</span>
-                      {sortField === 'company_name' ? (
-                        sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-[#4689C8]" /> : <ArrowDown className="w-3 h-3 text-[#4689C8]" />
-                      ) : (
-                        <ArrowUpDown className="w-3 h-3 text-[#adb5bd]" />
-                      )}
-                    </div>
-                  </th>
-                  <th className="py-3 px-3.5 border-r border-[#e9ecef]">Service & Requirement</th>
-                  <th 
-                    onClick={() => handleSort('estimated_budget')}
-                    className="py-3 px-3.5 border-r border-[#e9ecef] cursor-pointer select-none hover:text-[#172b4d]"
-                  >
-                    <div className="flex items-center justify-between gap-1">
-                      <span>Budget</span>
-                      {sortField === 'estimated_budget' ? (
-                        sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-[#4689C8]" /> : <ArrowDown className="w-3 h-3 text-[#4689C8]" />
-                      ) : (
-                        <ArrowUpDown className="w-3 h-3 text-[#adb5bd]" />
-                      )}
-                    </div>
-                  </th>
+                  <th className="py-3 px-3.5 border-r border-[#e9ecef]">Service &amp; Scope</th>
                   <th 
                     onClick={() => handleSort('status')}
                     className="py-3 px-3.5 border-r border-[#e9ecef] cursor-pointer select-none hover:text-[#172b4d]"
@@ -759,7 +746,7 @@ export default function LeadsPage() {
               <tbody className="divide-y divide-[#e9ecef]">
                 {loading ? (
                   <tr>
-                    <td colSpan="7" className="py-16 text-center text-[#8898aa]">
+                    <td colSpan="5" className="py-16 text-center text-[#8898aa]">
                       <Loader2 className="w-7 h-7 animate-spin text-[#4689C8] mx-auto mb-2" />
                       <span className="text-xs font-medium">Loading inquiries from database...</span>
                     </td>
@@ -768,26 +755,54 @@ export default function LeadsPage() {
                   paginatedLeads.map((lead, idx) => (
                     <tr 
                       key={lead.id} 
-                      className={`hover:bg-[#f6f9fc] transition-colors ${
-                        idx % 2 === 1 ? 'bg-[#fcfdfe]' : 'bg-white'
-                      }`}
+                      className={`transition-colors duration-150 ${
+                        idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
+                      } hover:bg-[#eaf2fc]`}
                     >
                       {/* 1. Sr # / Lead Number */}
                       <td className="py-2.5 px-3 border-r border-[#e9ecef] text-center font-bold text-[#172b4d]">
-                        <span className="font-mono text-[11px] text-[#4689C8] font-bold">
+                        <Link 
+                          href={`/leads/view?id=${lead.id}`}
+                          className="font-mono text-[11px] text-[#4689C8] hover:underline font-bold"
+                          title="View Lead Pipeline & Activity History"
+                        >
                           #{lead.lead_number || ((currentPage - 1) * itemsPerPage + idx + 1)}
-                        </span>
+                        </Link>
                       </td>
 
                       {/* 2. Client & Contact */}
                       <td className="py-2.5 px-3 border-r border-[#e9ecef]">
                         <div className="font-bold text-[#172b4d] text-xs">
-                          {lead.name}
+                          <Link 
+                            href={`/leads/view?id=${lead.id}`}
+                            className="hover:text-[#4689C8] hover:underline transition"
+                            title="View Lead Pipeline & Activity History"
+                          >
+                            {lead.name}
+                          </Link>
                         </div>
-                        <div className="flex items-center gap-1.5 mt-0.5 text-[11px] text-[#8898aa] font-mono">
-                          <Phone className="w-3 h-3 text-[#adb5bd]" />
-                          <span>{lead.phone}</span>
-                        </div>
+                        {lead.company_name && (
+                          <div className="text-[11px] text-[#525f7f] font-medium flex items-center gap-1 mt-0.5">
+                            <Building2 className="w-3 h-3 text-[#4689C8] flex-shrink-0" />
+                            <span>{lead.company_name}</span>
+                          </div>
+                        )}
+                        {lead.phone && (() => {
+                          const cleanDigits = String(lead.phone).replace(/\D/g, '');
+                          const waPhone = cleanDigits.length === 10 ? `91${cleanDigits}` : cleanDigits;
+                          return (
+                            <a
+                              href={`https://wa.me/${waPhone}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 mt-0.5 text-[11px] font-mono text-[#25D366] hover:text-[#1ebe57] font-semibold hover:underline transition"
+                              title="Click to chat on WhatsApp"
+                            >
+                              <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366] shrink-0" />
+                              <span>{lead.phone}</span>
+                            </a>
+                          );
+                        })()}
                         {lead.email && (
                           <div className="text-[10px] text-[#adb5bd] truncate max-w-[150px]">
                             {lead.email}
@@ -795,16 +810,6 @@ export default function LeadsPage() {
                         )}
                       </td>
 
-                      {/* 3. Company & Owner */}
-                      <td className="py-2.5 px-3 border-r border-[#e9ecef]">
-                        <div className="font-semibold text-[#172b4d] text-xs flex items-center gap-1">
-                          <Building2 className="w-3.5 h-3.5 text-[#4689C8] flex-shrink-0" />
-                          <span>{lead.company_name || 'Individual Client'}</span>
-                        </div>
-                        <div className="text-[10px] text-[#8898aa] mt-0.5">
-                          Owner: <span className="text-[#525f7f] font-semibold">{lead.assigned_to_name || 'Admin'}</span>
-                        </div>
-                      </td>
 
                       {/* 4. Service & Requirement */}
                       <td className="py-2.5 px-3 border-r border-[#e9ecef] max-w-[260px]">
@@ -818,16 +823,6 @@ export default function LeadsPage() {
                         )}
                       </td>
 
-                      {/* 5. Budget */}
-                      <td className="py-2.5 px-3 border-r border-[#e9ecef] font-semibold text-xs">
-                        {lead.estimated_budget ? (
-                          <span className="text-[#2dce89] font-extrabold">
-                            {formatCurrency(lead.estimated_budget)}
-                          </span>
-                        ) : (
-                          <span className="text-[#8898aa] font-normal">Negotiable</span>
-                        )}
-                      </td>
 
                       {/* 6. Pipeline Status (Exact OJT Badge Dropdown) */}
                       <td className="py-2.5 px-3 border-r border-[#e9ecef]">
@@ -900,32 +895,15 @@ export default function LeadsPage() {
                       {/* 7. Action Buttons */}
                       <td className="py-2.5 px-3 text-center">
                         <div className="flex items-center justify-center gap-1">
-                          {lead.converted_client_id && (
-                            <Link
-                              href={`/projects?search=${encodeURIComponent(lead.name || '')}`}
-                              className="p-1.5 rounded text-[#2dce89] hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition cursor-pointer"
-                              title="View Projects & Contracts"
-                            >
-                              <Eye className="w-3.5 h-3.5" />
-                            </Link>
-                          )}
-
-                          <button
-                            onClick={() => {
-                              setSelectedLeadForFollowUp(lead);
-                              setIsFollowUpModalOpen(true);
-                            }}
-                            className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] transition cursor-pointer shadow-2xs"
-                            title="Log & View Follow-ups"
+                          {/* View Lead Pipeline & Activity History */}
+                          <Link
+                            href={`/leads/view?id=${lead.id}`}
+                            className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold text-[#4689C8] bg-[#f0f7fd] hover:bg-[#e0effa] border border-[#4689C8]/30 transition shadow-2xs"
+                            title="View Lead Pipeline & Activity History"
                           >
-                            <MessageSquare className="w-3 h-3" />
-                            <span>Follow-up</span>
-                            {Number(lead.follow_ups_count) > 0 && (
-                              <span className="ml-0.5 px-1 py-0.2 rounded-full text-[9px] font-bold bg-white text-[#4689C8]">
-                                {lead.follow_ups_count}
-                              </span>
-                            )}
-                          </button>
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>View</span>
+                          </Link>
 
                           <button
                             onClick={() => {
@@ -956,7 +934,7 @@ export default function LeadsPage() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="py-16 text-center text-[#8898aa]">
+                    <td colSpan="5" className="py-16 text-center text-[#8898aa]">
                       <Users className="w-8 h-8 mx-auto text-slate-300 mb-2" />
                       <p className="text-xs font-bold text-[#172b4d]">No client inquiries found</p>
                       <p className="text-[11px] text-[#8898aa] mt-0.5">

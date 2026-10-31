@@ -493,7 +493,12 @@ export default function QuotationModal({
                     const rowCalc = calculations.rowDetails[index]?.rowTotal || 0;
 
                     return (
-                      <tr key={index} className="hover:bg-[#f8f9fe] transition">
+                      <tr 
+                        key={index} 
+                        className={`transition-colors duration-150 ${
+                          index % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
+                        } hover:bg-[#eaf2fc]`}
+                      >
                         <td className="py-2 px-3 text-center text-[#8898aa] font-mono text-[11px]">
                           {index + 1}
                         </td>

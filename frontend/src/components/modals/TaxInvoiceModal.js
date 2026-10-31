@@ -244,7 +244,12 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation, project = 
                     const rowTotal = it.total ? Number(it.total) : (rowQty * rowRate * (1 - rowDisc / 100));
 
                     return (
-                      <tr key={idx} className="hover:bg-slate-50/60">
+                      <tr 
+                        key={idx} 
+                        className={`transition-colors duration-150 ${
+                          idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
+                        } hover:bg-[#eaf2fc]`}
+                      >
                         <td className="py-3 px-3 text-center text-slate-400 font-mono text-[11px]">
                           {idx + 1}
                         </td>

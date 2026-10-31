@@ -17,3 +17,21 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Global Clean Table Alternating Zebra Rows (Gray & White) */
+.table-striped > tbody > tr:nth-of-type(odd),
+tbody.table-striped-rows > tr:nth-of-type(odd) {
+  background-color: #f4f6f8;
+}
+
+.table-striped > tbody > tr:nth-of-type(even),
+tbody.table-striped-rows > tr:nth-of-type(even) {
+  background-color: #ffffff;
+}
+
+.table-hover > tbody > tr:hover,
+tbody.table-striped-rows > tr:hover {
+  background-color: #eaf2fc !important;
+  transition: background-color 0.15s ease-in-out;
+}
+

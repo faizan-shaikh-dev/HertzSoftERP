@@ -609,7 +609,12 @@ function QuotationViewContent() {
                           </tr>
                         ) : (
                           quotation.items.map((item, idx) => (
-                            <tr key={item.id || idx} className="hover:bg-[#f6f9fc]">
+                            <tr 
+                              key={item.id || idx} 
+                              className={`transition-colors duration-150 ${
+                                idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
+                              } hover:bg-[#eaf2fc]`}
+                            >
                               <td className="py-2.5 px-3 text-center text-[#8898aa] font-mono border-r border-[#dee2e6]">
                                 {idx + 1}
                               </td>
@@ -725,12 +730,14 @@ function QuotationViewContent() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-[#dee2e6] bg-white">
-                          {quotation.versions.map((ver) => {
+                          {quotation.versions.map((ver, idx) => {
                             const isCurrent = ver.id === quotation.id;
                             return (
                               <tr 
                                 key={ver.id}
-                                className={`transition-colors ${isCurrent ? 'bg-[#f0f7fd]/60 font-semibold' : 'hover:bg-[#f6f9fc]'}`}
+                                className={`transition-colors duration-150 ${
+                                  isCurrent ? 'bg-[#f0f7fd] font-semibold' : (idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white')
+                                } hover:bg-[#eaf2fc]`}
                               >
                                 <td className="py-2.5 px-3 border-r border-[#dee2e6]">
                                   <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/30">
