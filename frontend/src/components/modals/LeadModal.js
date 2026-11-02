@@ -253,7 +253,7 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
     }
 
     if (!serviceInterest.trim()) {
-      setError('Service & Scope is required.');
+      setError('Lead Inquiry is required.');
       return;
     }
 
@@ -405,10 +405,10 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
               />
             </div>
 
-            {/* Service & Scope* (Full width) */}
+            {/* Lead Inquiry* (Full width) */}
             <div className="md:col-span-2">
               <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Service &amp; Scope<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+                Lead Inquiry<span className="text-[#f5365c] font-bold ml-0.5">*</span>
               </label>
               <input
                 type="text"

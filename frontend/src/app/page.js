@@ -408,7 +408,7 @@ export default function DashboardPage() {
                       <th className="py-3 px-3.5 border-r border-[#dee2e6] text-center w-12">#</th>
                       <th className="py-3 px-4 border-r border-[#dee2e6]">Client & Contact</th>
                       <th className="py-3 px-4 border-r border-[#dee2e6]">Company / Business</th>
-                      <th className="py-3 px-4 border-r border-[#dee2e6]">Service & Scope</th>
+                      <th className="py-3 px-4 border-r border-[#dee2e6]">Lead Inquiry</th>
                                             <th className="py-3 px-4 border-r border-[#dee2e6] text-center">Pipeline Status</th>
                       <th className="py-3 px-4 border-r border-[#dee2e6] text-center">Created On</th>
                       <th className="py-3 px-4 text-center w-28">Actions</th>

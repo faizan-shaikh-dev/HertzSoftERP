@@ -440,10 +440,10 @@ function LeadViewContent() {
                         </div>
                       </div>
 
-                      {/* Service & Scope */}
+                      {/* Lead Inquiry */}
                       <div className="border border-[#dee2e6] p-2.5 rounded bg-white hover:border-[#4689C8]/40 transition md:col-span-2">
                         <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
-                          Service &amp; Scope
+                          Lead Inquiry
                         </div>
                         <div className="text-sm font-bold text-[#172b4d] mt-0.5">
                           {lead.service_interest || lead.requirement || 'General Inquiry'}
@@ -587,15 +587,15 @@ function LeadViewContent() {
                   </div>
                 </div>
 
-                {/* 3. ACTIVITY & FOLLOW-UP HISTORY LEDGER + LOG INTERACTION SECTION */}
+                {/* 3. ACTIVITY HISTORY SECTION */}
                 <div className="card shadow-sm border-0 rounded-lg overflow-hidden bg-white">
                   <div className="bg-gradient-to-r from-[#172b4d] to-[#213a63] text-white px-5 py-3.5 flex items-center justify-between">
                     <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
                       <MessageSquare className="w-4 h-4 text-white" />
-                      <span>Activity &amp; Follow-up History ({followUps.length})</span>
+                      <span>Activity History ({followUps.length})</span>
                     </h5>
                     <span className="text-xs text-slate-300">
-                      Real-time conversation logs &amp; touchpoint trail
+                      Real-time timeline &amp; activity trail
                     </span>
                   </div>
 
@@ -605,8 +605,7 @@ function LeadViewContent() {
                       <table className="w-full text-xs text-left border-collapse">
                         <thead className="bg-[#e9ecef] text-[#334155] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#cbd5e1]">
                           <tr>
-                            <th className="py-3 px-3.5 border-r border-[#cbd5e1] w-40">Channel / Type</th>
-                            <th className="py-3 px-3.5 border-r border-[#cbd5e1] w-44">Logged On</th>
+                            <th className="py-3 px-3.5 border-r border-[#cbd5e1] w-48">Logged On</th>
                             <th className="py-3 px-3.5 border-r border-[#cbd5e1]">Notes &amp; Discussion</th>
                             <th className="py-3 px-3.5 border-r border-[#cbd5e1] w-48">Outcome</th>
                             <th className="py-3 px-3.5 text-center w-20">Action</th>
@@ -615,7 +614,7 @@ function LeadViewContent() {
                         <tbody className="divide-y divide-[#e2e8f0]">
                           {followUps.length === 0 ? (
                             <tr>
-                              <td colSpan="5" className="py-10 text-center text-[#64748b] bg-white">
+                              <td colSpan="4" className="py-10 text-center text-[#64748b] bg-white">
                                 <MessageSquare className="w-9 h-9 mx-auto text-[#94a3b8] mb-2.5 opacity-70" />
                                 <p className="font-semibold text-xs text-[#334155]">No interaction activities recorded yet</p>
                                 <p className="text-[11px] text-[#64748b] mt-0.5">
@@ -633,32 +632,10 @@ function LeadViewContent() {
                                     isEven ? 'bg-white' : 'bg-[#f4f6f8]'
                                   } hover:bg-[#eaf2fc]`}
                                 >
-                                  {/* Channel / Type */}
-                                  <td className="py-3 px-3.5 border-r border-[#e2e8f0] font-semibold text-[#1e293b]">
-                                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold border ${
-                                      item.follow_up_type === 'Call'
-                                        ? 'bg-blue-50 text-[#326fa8] border-[#4689C8]/30'
-                                        : item.follow_up_type === 'Meeting'
-                                        ? 'bg-purple-50 text-purple-700 border-purple-200'
-                                        : item.follow_up_type === 'Email'
-                                        ? 'bg-amber-50 text-amber-700 border-amber-200'
-                                        : item.follow_up_type === 'Message'
-                                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                        : 'bg-slate-100 text-slate-700 border-slate-300'
-                                    }`}>
-                                      {item.follow_up_type === 'Call' && <Phone className="w-3.5 h-3.5 text-[#4689C8]" />}
-                                      {item.follow_up_type === 'Meeting' && <Calendar className="w-3.5 h-3.5 text-purple-600" />}
-                                      {item.follow_up_type === 'Email' && <Mail className="w-3.5 h-3.5 text-amber-600" />}
-                                      {item.follow_up_type === 'Message' && <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />}
-                                      {item.follow_up_type === 'Other' && <FileText className="w-3.5 h-3.5 text-slate-600" />}
-                                      <span>{item.follow_up_type || 'Touchpoint'}</span>
-                                    </span>
-                                  </td>
-
                                   {/* Logged On */}
                                   <td className="py-3 px-3.5 border-r border-[#e2e8f0] font-mono text-[11px] text-[#475569]">
                                     <div className="flex items-center gap-1.5">
-                                      <Clock className="w-3 h-3 text-[#94a3b8] flex-shrink-0" />
+                                      <Clock className="w-3.5 h-3.5 text-[#94a3b8] flex-shrink-0" />
                                       <span>{formatDateTime(item.scheduled_at || item.created_at)}</span>
                                     </div>
                                   </td>

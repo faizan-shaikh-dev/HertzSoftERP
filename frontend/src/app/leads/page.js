@@ -25,7 +25,6 @@ import {
   TrendingUp,
   Layers,
   MessageSquare,
-  Bell,
   ChevronDown,
   ChevronUp,
   Calendar,
@@ -45,7 +44,6 @@ import {
   ConfirmDeleteModal, 
   LostReasonModal, 
   OnHoldModal, 
-  FollowUpModal,
   ConvertToClientModal
 } from '@/components/modals';
 
@@ -86,7 +84,6 @@ export default function LeadsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOwner, setSelectedOwner] = useState('All');
   const [selectedPriority, setSelectedPriority] = useState('All');
-  const [selectedFollowUpDue, setSelectedFollowUpDue] = useState('All');
 
   // Sorting
   const [sortField, setSortField] = useState('created_at');
@@ -116,40 +113,8 @@ export default function LeadsPage() {
   const [isConvertModalOpen, setIsConvertModalOpen] = useState(false);
   const [leadToConvert, setLeadToConvert] = useState(null);
 
-  // Follow-up & Reminders State
-  const [isFollowUpModalOpen, setIsFollowUpModalOpen] = useState(false);
-  const [selectedLeadForFollowUp, setSelectedLeadForFollowUp] = useState(null);
+  // Assignees List
   const [assignees, setAssignees] = useState([]);
-  const [reminders, setReminders] = useState({
-    overdue: [],
-    today: [],
-    upcoming: [],
-    totalCount: 0,
-    overdueCount: 0,
-    todayCount: 0
-  });
-  const [showRemindersList, setShowRemindersList] = useState(false);
-  const [loadingReminders, setLoadingReminders] = useState(false);
-
-  // Fetch reminders
-  const fetchReminders = async () => {
-    try {
-      setLoadingReminders(true);
-      const res = await leadService.getReminders();
-      setReminders(res.data || {
-        overdue: [],
-        today: [],
-        upcoming: [],
-        totalCount: 0,
-        overdueCount: 0,
-        todayCount: 0
-      });
-    } catch (err) {
-      console.error('Failed to load follow-up reminders:', err);
-    } finally {
-      setLoadingReminders(false);
-    }
-  };
 
   // Fetch assignees
   const fetchAssignees = async () => {
@@ -168,7 +133,6 @@ export default function LeadsPage() {
       setError('');
       const res = await leadService.getLeads();
       setLeads(res.data || []);
-      fetchReminders();
       if (isManual) {
         toast.success('Leads list refreshed with latest inquiries!');
       }
@@ -319,28 +283,7 @@ export default function LeadsPage() {
         if (p !== selectedPriority) return false;
       }
 
-      // 4. Follow-up Due Date Filter
-      if (selectedFollowUpDue !== 'All') {
-        if (selectedFollowUpDue === 'overdue') {
-          if (!lead.next_follow_up_at || new Date(lead.next_follow_up_at) >= new Date()) return false;
-        } else if (selectedFollowUpDue === 'today') {
-          if (!lead.next_follow_up_at) return false;
-          const d = new Date(lead.next_follow_up_at);
-          const now = new Date();
-          const isToday = d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-          if (!isToday) return false;
-        } else if (selectedFollowUpDue === 'upcoming') {
-          if (!lead.next_follow_up_at) return false;
-          const d = new Date(lead.next_follow_up_at);
-          const now = new Date();
-          const sevenDays = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-          if (d <= now || d > sevenDays) return false;
-        } else if (selectedFollowUpDue === 'none') {
-          if (lead.next_follow_up_at) return false;
-        }
-      }
-
-      // 5. Search query
+      // 4. Search query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         const nameMatch = lead.name?.toLowerCase().includes(q);
@@ -357,7 +300,7 @@ export default function LeadsPage() {
 
       return true;
     });
-  }, [leads, selectedStatus, selectedOwner, selectedPriority, selectedFollowUpDue, searchQuery]);
+  }, [leads, selectedStatus, selectedOwner, selectedPriority, searchQuery]);
 
   // Sorted Leads
   const sortedLeads = useMemo(() => {
@@ -403,7 +346,7 @@ export default function LeadsPage() {
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedStatus, selectedOwner, selectedPriority, selectedFollowUpDue, searchQuery, itemsPerPage]);
+  }, [selectedStatus, selectedOwner, selectedPriority, searchQuery, itemsPerPage]);
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -418,14 +361,12 @@ export default function LeadsPage() {
     selectedStatus !== 'All' || 
     selectedOwner !== 'All' || 
     selectedPriority !== 'All' || 
-    selectedFollowUpDue !== 'All' || 
     searchQuery.trim() !== '';
 
   const handleResetFilters = () => {
     setSelectedStatus('All');
     setSelectedOwner('All');
     setSelectedPriority('All');
-    setSelectedFollowUpDue('All');
     setSearchQuery('');
   };
 
@@ -511,92 +452,6 @@ export default function LeadsPage() {
 
         {/* CARD BODY */}
         <div className="card-body p-4 sm:p-6 space-y-4">
-          {/* Follow-up Reminders Alert Banner (if any) */}
-          {reminders.totalCount > 0 && (
-            <div className="border border-amber-200 bg-amber-50/60 rounded-md p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5">
-                <div className="p-1.5 rounded bg-amber-100 text-[#fb6340]">
-                  <Bell className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs font-bold text-[#172b4d]">Client Follow-up Reminders:</span>
-                    {reminders.overdueCount > 0 && (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#f5365c] text-white">
-                        {reminders.overdueCount} Overdue
-                      </span>
-                    )}
-                    {reminders.todayCount > 0 && (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#fb6340] text-white">
-                        {reminders.todayCount} Due Today
-                      </span>
-                    )}
-                    {reminders.upcoming?.length > 0 && (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#4689C8] text-white">
-                        {reminders.upcoming.length} Upcoming
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setShowRemindersList(!showRemindersList)}
-                className="text-xs font-bold text-[#4689C8] hover:underline self-start sm:self-center cursor-pointer"
-              >
-                {showRemindersList ? 'Hide Reminders ▲' : `View Reminders (${reminders.totalCount}) ▼`}
-              </button>
-            </div>
-          )}
-
-          {/* Expanded Reminders List */}
-          {showRemindersList && (
-            <div className="p-3 bg-white border border-[#e9ecef] rounded-md divide-y divide-slate-100 max-h-60 overflow-y-auto">
-              {[...reminders.overdue, ...reminders.today, ...reminders.upcoming].map((item) => {
-                const dueTime = new Date(item.next_follow_up_at || item.follow_up_at);
-                const isOverdue = dueTime < new Date();
-                const matchedLead = leads.find((l) => l.id === item.lead_id) || {
-                  id: item.lead_id,
-                  lead_number: item.lead_number,
-                  name: item.lead_name,
-                  phone: item.lead_phone,
-                  company_name: item.lead_company,
-                  status: item.lead_status,
-                  assigned_to: item.owner_id,
-                  assigned_to_name: item.owner_name
-                };
-
-                return (
-                  <div key={item.id} className="py-2.5 first:pt-0 last:pb-0 flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase text-white ${
-                        isOverdue ? 'bg-[#f5365c]' : 'bg-[#fb6340]'
-                      }`}>
-                        {isOverdue ? 'Overdue' : 'Due Soon'}
-                      </span>
-                      <strong className="text-[#172b4d]">{item.lead_name}</strong>
-                      <span className="text-[#8898aa]">({item.lead_company || 'Individual'})</span>
-                      <span className="text-[#8898aa] font-mono">• {item.lead_phone}</span>
-                      <span className="text-[#525f7f]">• Scheduled: {formatDateTime(item.next_follow_up_at || item.follow_up_at)}</span>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedLeadForFollowUp(matchedLead);
-                        setIsFollowUpModalOpen(true);
-                      }}
-                      className="px-2 py-0.5 text-xs font-bold text-[#4689C8] hover:bg-blue-50 border border-blue-200 rounded cursor-pointer"
-                    >
-                      Action
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
           {/* OJT Top Controls Toolbar (DataTables Style) */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-[#e9ecef]">
             {/* Left: Show Entries & Filter Controls */}
@@ -659,19 +514,6 @@ export default function LeadsPage() {
                 <option value="Normal">Normal Priority</option>
                 <option value="Low">Low Priority</option>
               </select>
-
-              {/* Follow-up Due Filter */}
-              <select
-                value={selectedFollowUpDue}
-                onChange={(e) => setSelectedFollowUpDue(e.target.value)}
-                className="text-xs px-2.5 py-1 bg-white border border-[#e9ecef] rounded text-[#525f7f] font-medium outline-none focus:border-[#4689C8] cursor-pointer"
-              >
-                <option value="All">Follow-ups (All)</option>
-                <option value="overdue">🚨 Overdue</option>
-                <option value="today">⏰ Due Today</option>
-                <option value="upcoming">📅 Upcoming</option>
-                <option value="none">No Follow-up</option>
-              </select>
             </div>
 
             {/* Right: Search Box */}
@@ -726,7 +568,7 @@ export default function LeadsPage() {
                       )}
                     </div>
                   </th>
-                  <th className="py-3 px-3.5 border-r border-[#e9ecef]">Service &amp; Scope</th>
+                  <th className="py-3 px-3.5 border-r border-[#e9ecef]">Lead Inquiry</th>
                   <th 
                     onClick={() => handleSort('status')}
                     className="py-3 px-3.5 border-r border-[#e9ecef] cursor-pointer select-none hover:text-[#172b4d]"
@@ -1073,20 +915,6 @@ export default function LeadsPage() {
       />
 
       {/* Follow-up Logging & History Modal */}
-      <FollowUpModal
-        isOpen={isFollowUpModalOpen}
-        onClose={() => {
-          setIsFollowUpModalOpen(false);
-          setSelectedLeadForFollowUp(null);
-        }}
-        lead={selectedLeadForFollowUp}
-        assignees={assignees}
-        onSuccess={() => {
-          fetchLeads(false);
-          fetchReminders();
-        }}
-      />
-
       {/* Convert Won Lead to Client Modal */}
       <ConvertToClientModal
         isOpen={isConvertModalOpen}
