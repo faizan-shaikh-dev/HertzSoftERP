@@ -336,8 +336,8 @@ function QuotationViewContent() {
               <>
                 {/* 1. OJT REPORT CARD: Quotation & Client Information */}
                 <div className="card report-card border-none rounded-xl shadow-sm overflow-hidden mb-4">
-                  {/* Purple/Indigo OJT Gradient Header */}
-                  <div className="report-card-header bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white py-3.5 px-5 flex items-center justify-between">
+                  {/* Hertzsoft Brand Gradient Header */}
+                  <div className="report-card-header bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] text-white py-3.5 px-5 flex items-center justify-between">
                     <h5 className="mb-0 text-sm font-bold flex items-center gap-2 text-white">
                       <FileSpreadsheet className="w-4 h-4 text-white" />
                       <span>Quotation & Commercial Scope Information</span>

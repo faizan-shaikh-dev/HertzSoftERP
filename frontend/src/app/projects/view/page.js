@@ -250,8 +250,8 @@ function ProjectViewContent() {
               <>
                 {/* 1. OJT PROJECT & CLIENT BASIC INFORMATION CARD */}
                 <div className="card shadow-sm border-0 rounded-lg overflow-hidden bg-white">
-                  {/* Purple Gradient Banner (Exact OJT report-card-header) */}
-                  <div className="bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-5 py-3.5 flex items-center justify-between">
+                  {/* Hertzsoft Brand Gradient Banner */}
+                  <div className="bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] text-white px-5 py-3.5 flex items-center justify-between">
                     <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
                       <FolderKanban className="w-4 h-4 text-white" />
                       <span>Project Contract & Client Information</span>

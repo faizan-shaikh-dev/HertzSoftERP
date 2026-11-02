@@ -28,7 +28,14 @@ import {
   TrendingUp,
   Tag,
   ShieldCheck,
-  Compass
+  Compass,
+  Target,
+  Search,
+  Handshake,
+  Moon,
+  Archive,
+  Plus,
+  Send
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import AppLayout from '@/components/AppLayout';
@@ -53,12 +60,195 @@ function WhatsAppIcon({ className = "w-3.5 h-3.5" }) {
   );
 }
 
+// 14 Comprehensive Lead Lifecycle Statuses
+export const LEAD_STATUSES = [
+  {
+    number: 1,
+    id: 'New Lead',
+    label: 'New Lead',
+    icon: Sparkles,
+    color: 'bg-blue-600',
+    textColor: 'text-blue-600',
+    borderColor: 'border-l-blue-600',
+    lightBg: 'bg-blue-50'
+  },
+  {
+    number: 2,
+    id: 'Contacted',
+    label: 'Contacted',
+    icon: Phone,
+    color: 'bg-sky-500',
+    textColor: 'text-sky-600',
+    borderColor: 'border-l-sky-500',
+    lightBg: 'bg-sky-50'
+  },
+  {
+    number: 3,
+    id: 'Responded',
+    label: 'Responded',
+    icon: MessageSquare,
+    color: 'bg-teal-500',
+    textColor: 'text-teal-600',
+    borderColor: 'border-l-teal-500',
+    lightBg: 'bg-teal-50'
+  },
+  {
+    number: 4,
+    id: 'Qualified',
+    label: 'Qualified',
+    icon: Target,
+    color: 'bg-indigo-600',
+    textColor: 'text-indigo-600',
+    borderColor: 'border-l-indigo-600',
+    lightBg: 'bg-indigo-50'
+  },
+  {
+    number: 5,
+    id: 'Meeting Scheduled',
+    label: 'Meeting Scheduled',
+    icon: Calendar,
+    color: 'bg-purple-600',
+    textColor: 'text-purple-600',
+    borderColor: 'border-l-purple-600',
+    lightBg: 'bg-purple-50'
+  },
+  {
+    number: 6,
+    id: 'Requirement Analysis',
+    label: 'Requirement Analysis',
+    icon: Search,
+    color: 'bg-cyan-600',
+    textColor: 'text-cyan-600',
+    borderColor: 'border-l-cyan-600',
+    lightBg: 'bg-cyan-50'
+  },
+  {
+    number: 7,
+    id: 'Proposal Sent',
+    label: 'Proposal Sent',
+    icon: FileText,
+    color: 'bg-amber-500',
+    textColor: 'text-amber-600',
+    borderColor: 'border-l-amber-500',
+    lightBg: 'bg-amber-50'
+  },
+  {
+    number: 8,
+    id: 'Negotiation',
+    label: 'Negotiation',
+    icon: Handshake,
+    color: 'bg-orange-500',
+    textColor: 'text-orange-600',
+    borderColor: 'border-l-orange-500',
+    lightBg: 'bg-orange-50'
+  },
+  {
+    number: 9,
+    id: 'Follow-up',
+    label: 'Follow-up',
+    icon: Clock,
+    color: 'bg-yellow-500',
+    textColor: 'text-yellow-600',
+    borderColor: 'border-l-yellow-500',
+    lightBg: 'bg-yellow-50'
+  },
+  {
+    number: 10,
+    id: 'Won',
+    label: 'Won',
+    icon: CheckCircle2,
+    color: 'bg-emerald-600',
+    textColor: 'text-emerald-600',
+    borderColor: 'border-l-emerald-600',
+    lightBg: 'bg-emerald-50'
+  },
+  {
+    number: 11,
+    id: 'Lost',
+    label: 'Lost',
+    icon: XCircle,
+    color: 'bg-rose-600',
+    textColor: 'text-rose-600',
+    borderColor: 'border-l-rose-600',
+    lightBg: 'bg-rose-50'
+  },
+  {
+    number: 12,
+    id: 'On Hold',
+    label: 'On Hold',
+    icon: Moon,
+    color: 'bg-slate-500',
+    textColor: 'text-slate-600',
+    borderColor: 'border-l-slate-500',
+    lightBg: 'bg-slate-50'
+  },
+  {
+    number: 13,
+    id: 'Re-engage Later',
+    label: 'Re-engage Later',
+    icon: RefreshCw,
+    color: 'bg-violet-600',
+    textColor: 'text-violet-600',
+    borderColor: 'border-l-violet-600',
+    lightBg: 'bg-violet-50'
+  },
+  {
+    number: 14,
+    id: 'Archived',
+    label: 'Archived',
+    icon: Archive,
+    color: 'bg-zinc-600',
+    textColor: 'text-zinc-600',
+    borderColor: 'border-l-zinc-600',
+    lightBg: 'bg-zinc-50'
+  }
+];
+
+// Helper to resolve status/outcome styling and icon
+const getStatusMeta = (statusOrOutcome) => {
+  if (!statusOrOutcome) {
+    return LEAD_STATUSES[0];
+  }
+  const clean = String(statusOrOutcome).trim().toLowerCase();
+
+  // Try direct match by id
+  const exact = LEAD_STATUSES.find(s => s.id.toLowerCase() === clean);
+  if (exact) return exact;
+
+  // Semantic keyword matches
+  if (clean.includes('new lead') || clean === 'new') return LEAD_STATUSES[0];
+  if (clean.includes('contacted') || clean.includes('phone') || clean.includes('call')) return LEAD_STATUSES[1];
+  if (clean.includes('responded') || clean.includes('response')) return LEAD_STATUSES[2];
+  if (clean.includes('qualified')) return LEAD_STATUSES[3];
+  if (clean.includes('meeting') || clean.includes('demo') || clean.includes('schedule')) return LEAD_STATUSES[4];
+  if (clean.includes('requirement') || clean.includes('analysis') || clean.includes('scope')) return LEAD_STATUSES[5];
+  if (clean.includes('proposal') || clean.includes('quotation') || clean.includes('quote')) return LEAD_STATUSES[6];
+  if (clean.includes('negotiat') || clean.includes('price') || clean.includes('pricing')) return LEAD_STATUSES[7];
+  if (clean.includes('follow-up') || clean.includes('follow up') || clean.includes('reminder')) return LEAD_STATUSES[8];
+  if (clean.includes('won') || clean.includes('converted') || clean.includes('deal closed')) return LEAD_STATUSES[9];
+  if (clean.includes('lost') || clean.includes('dropped') || clean.includes('rejected')) return LEAD_STATUSES[10];
+  if (clean.includes('hold') || clean.includes('paused') || clean.includes('waiting')) return LEAD_STATUSES[11];
+  if (clean.includes('re-engage') || clean.includes('reengage') || clean.includes('later')) return LEAD_STATUSES[12];
+  if (clean.includes('archiv')) return LEAD_STATUSES[13];
+
+  return {
+    number: '•',
+    id: statusOrOutcome,
+    label: statusOrOutcome,
+    icon: MessageSquare,
+    color: 'bg-[#4689C8]',
+    textColor: 'text-[#4689C8]',
+    borderColor: 'border-l-[#4689C8]',
+    lightBg: 'bg-blue-50'
+  };
+};
+
 // Sales Pipeline Stages in chronological order
 const PIPELINE_STAGES = [
-  'New',
+  'New Lead',
   'Contacted',
   'Qualified',
-  'Quotation Sent',
+  'Proposal Sent',
   'Negotiation',
   'Won'
 ];
@@ -82,6 +272,13 @@ function LeadViewContent() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
+
+  // Activity Logging form state
+  const [isAddingActivity, setIsAddingActivity] = useState(false);
+  const [newActivityStatus, setNewActivityStatus] = useState('Contacted');
+  const [newActivityRemark, setNewActivityRemark] = useState('');
+  const [submittingActivity, setSubmittingActivity] = useState(false);
+  const [syncLeadStatus, setSyncLeadStatus] = useState(true);
 
   // Fetch Lead details and Follow-up activities
   const fetchLeadDetails = useCallback(async () => {
@@ -203,6 +400,63 @@ function LeadViewContent() {
     }
   };
 
+  // Timeline datetime format matching Image 1: MM-DD-YYYY h:mm a (e.g. 11-16-2023 4:27 pm)
+  const formatTimelineDateTime = (dateStr) => {
+    if (!dateStr) return '—';
+    try {
+      const d = new Date(dateStr);
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const yyyy = d.getFullYear();
+      let hours = d.getHours();
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      return `${mm}-${dd}-${yyyy} ${hours}:${minutes} ${ampm}`;
+    } catch {
+      return dateStr;
+    }
+  };
+
+  // Create Activity & Remark Handler
+  const handleCreateActivity = async (e) => {
+    if (e) e.preventDefault();
+    if (!newActivityRemark.trim()) {
+      toast.error('Please enter a remark note for this activity.');
+      return;
+    }
+
+    try {
+      setSubmittingActivity(true);
+      await leadService.createFollowUp(lead.id, {
+        outcome: newActivityStatus,
+        notes: newActivityRemark.trim(),
+        follow_up_type: 'Other',
+        follow_up_at: new Date().toISOString(),
+        status: 'Completed'
+      });
+
+      if (syncLeadStatus && lead.status !== newActivityStatus) {
+        try {
+          await leadService.updateLeadStatus(lead.id, { status: newActivityStatus });
+        } catch (statusErr) {
+          console.warn('Could not auto-update lead status:', statusErr);
+        }
+      }
+
+      toast.success('Activity and remark recorded successfully!');
+      setNewActivityRemark('');
+      setIsAddingActivity(false);
+      await fetchLeadDetails();
+    } catch (err) {
+      console.error('Failed to log activity:', err);
+      toast.error(err.message || 'Could not record activity.');
+    } finally {
+      setSubmittingActivity(false);
+    }
+  };
+
   const cleanPhone = lead?.phone ? String(lead.phone).replace(/\D/g, '') : '';
   const waPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
 
@@ -298,14 +552,11 @@ function LeadViewContent() {
                     onChange={(e) => handleStatusChange(e.target.value)}
                     className="px-2.5 py-1.5 text-xs font-bold rounded border border-[#dee2e6] bg-white text-[#172b4d] focus:border-[#4689C8] outline-none cursor-pointer"
                   >
-                    <option value="New">Stage: New</option>
-                    <option value="Contacted">Stage: Contacted</option>
-                    <option value="Qualified">Stage: Qualified</option>
-                    <option value="Quotation Sent">Stage: Quotation Sent</option>
-                    <option value="Negotiation">Stage: Negotiation</option>
-                    <option value="Won">Stage: Won</option>
-                    <option value="Lost">Stage: Lost</option>
-                    <option value="On Hold">Stage: On Hold</option>
+                    {LEAD_STATUSES.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        Stage #{s.number}: {s.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -364,9 +615,9 @@ function LeadViewContent() {
 
             {!loading && lead && (
               <>
-                {/* 1. OJT LEAD & CLIENT INFORMATION CARD (Exact students-view.php report-card style) */}
+                {/* 1. OJT LEAD & CLIENT INFORMATION CARD (Hertzsoft Standard Brand Styling) */}
                 <div className="card shadow-sm border-0 rounded-lg overflow-hidden bg-white">
-                  <div className="bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-5 py-3.5 flex items-center justify-between">
+                  <div className="bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] text-white px-5 py-3.5 flex items-center justify-between">
                     <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
                       <User className="w-4 h-4 text-white" />
                       <span>Lead Profile &amp; Contact Information</span>
@@ -587,93 +838,205 @@ function LeadViewContent() {
                   </div>
                 </div>
 
-                {/* 3. ACTIVITY HISTORY SECTION */}
+                {/* 3. ACTIVITY HISTORY SECTION (Vertical Timeline) */}
                 <div className="card shadow-sm border-0 rounded-lg overflow-hidden bg-white">
                   <div className="bg-gradient-to-r from-[#172b4d] to-[#213a63] text-white px-5 py-3.5 flex items-center justify-between">
-                    <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
-                      <MessageSquare className="w-4 h-4 text-white" />
-                      <span>Activity History ({followUps.length})</span>
-                    </h5>
-                    <span className="text-xs text-slate-300">
-                      Real-time timeline &amp; activity trail
-                    </span>
+                    <div>
+                      <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
+                        <MessageSquare className="w-4 h-4 text-white" />
+                        <span>Activity History ({followUps.length})</span>
+                      </h5>
+                      <p className="text-xs text-slate-300 mt-0.5 m-0">
+                        Real-time interaction logs &amp; activity timeline
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsAddingActivity(!isAddingActivity)}
+                      className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-xs transition cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>{isAddingActivity ? 'Close Form' : 'Log Activity'}</span>
+                    </button>
                   </div>
 
                   <div className="p-4 sm:p-6">
-                    {/* FOLLOW-UP TIMELINE TABLE */}
-                    <div className="table-responsive border border-[#cbd5e1] rounded-lg overflow-hidden shadow-xs">
-                      <table className="w-full text-xs text-left border-collapse">
-                        <thead className="bg-[#e9ecef] text-[#334155] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#cbd5e1]">
-                          <tr>
-                            <th className="py-3 px-3.5 border-r border-[#cbd5e1] w-48">Logged On</th>
-                            <th className="py-3 px-3.5 border-r border-[#cbd5e1]">Notes &amp; Discussion</th>
-                            <th className="py-3 px-3.5 border-r border-[#cbd5e1] w-48">Outcome</th>
-                            <th className="py-3 px-3.5 text-center w-20">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#e2e8f0]">
-                          {followUps.length === 0 ? (
-                            <tr>
-                              <td colSpan="4" className="py-10 text-center text-[#64748b] bg-white">
-                                <MessageSquare className="w-9 h-9 mx-auto text-[#94a3b8] mb-2.5 opacity-70" />
-                                <p className="font-semibold text-xs text-[#334155]">No interaction activities recorded yet</p>
-                                <p className="text-[11px] text-[#64748b] mt-0.5">
-                                  Activity history and pipeline stage transitions will appear here automatically.
-                                </p>
-                              </td>
-                            </tr>
-                          ) : (
-                            followUps.map((item, idx) => {
-                              const isEven = idx % 2 === 0;
-                              return (
-                                <tr 
-                                  key={item.id} 
-                                  className={`transition-colors duration-150 ${
-                                    isEven ? 'bg-white' : 'bg-[#f4f6f8]'
-                                  } hover:bg-[#eaf2fc]`}
-                                >
-                                  {/* Logged On */}
-                                  <td className="py-3 px-3.5 border-r border-[#e2e8f0] font-mono text-[11px] text-[#475569]">
-                                    <div className="flex items-center gap-1.5">
-                                      <Clock className="w-3.5 h-3.5 text-[#94a3b8] flex-shrink-0" />
-                                      <span>{formatDateTime(item.scheduled_at || item.created_at)}</span>
-                                    </div>
-                                  </td>
+                    {/* Collapsible New Activity Form */}
+                    {isAddingActivity && (
+                      <div className="mb-6 p-4 sm:p-5 bg-[#f8f9fe] border border-[#e2e8f0] rounded-xl shadow-2xs">
+                        <div className="flex items-center justify-between mb-3 border-b border-[#e2e8f0] pb-2">
+                          <h6 className="text-xs font-bold text-[#172b4d] uppercase tracking-wider flex items-center gap-1.5 m-0">
+                            <Plus className="w-3.5 h-3.5 text-[#4689C8]" />
+                            <span>Record New Activity / Remark</span>
+                          </h6>
+                          <button
+                            type="button"
+                            onClick={() => setIsAddingActivity(false)}
+                            className="text-xs text-[#8898aa] hover:text-[#172b4d] font-semibold cursor-pointer"
+                          >
+                            Cancel
+                          </button>
+                        </div>
 
-                                  {/* Notes & Discussion */}
-                                  <td className="py-3 px-3.5 border-r border-[#e2e8f0]">
-                                    <div className="text-xs text-[#0f172a] font-semibold leading-relaxed">
-                                      {item.notes}
-                                    </div>
-                                  </td>
+                        <form onSubmit={handleCreateActivity} className="space-y-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-[11px] font-bold text-[#525f7f] uppercase mb-1">
+                                Lifecycle Status *
+                              </label>
+                              <select
+                                value={newActivityStatus}
+                                onChange={(e) => setNewActivityStatus(e.target.value)}
+                                className="w-full px-3 py-2 text-xs font-semibold rounded-lg border border-[#dee2e6] bg-white text-[#172b4d] focus:border-[#4689C8] outline-none cursor-pointer"
+                              >
+                                {LEAD_STATUSES.map((s) => (
+                                  <option key={s.id} value={s.id}>
+                                    Stage #{s.number}: {s.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
 
-                                  {/* Outcome */}
-                                  <td className="py-3 px-3.5 border-r border-[#e2e8f0]">
-                                    <span className="inline-block px-2.5 py-1 rounded-md text-[11px] font-bold bg-white text-[#334155] border border-[#cbd5e1] shadow-2xs">
-                                      {item.outcome || 'Logged'}
+                            <div className="flex items-end">
+                              <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#525f7f] pb-2 select-none">
+                                <input
+                                  type="checkbox"
+                                  checked={syncLeadStatus}
+                                  onChange={(e) => setSyncLeadStatus(e.target.checked)}
+                                  className="rounded text-[#4689C8] focus:ring-[#4689C8]"
+                                />
+                                <span>Also sync current lead status to &quot;{newActivityStatus}&quot;</span>
+                              </label>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-[11px] font-bold text-[#525f7f] uppercase mb-1">
+                              Remark / Notes *
+                            </label>
+                            <textarea
+                              rows="3"
+                              value={newActivityRemark}
+                              onChange={(e) => setNewActivityRemark(e.target.value)}
+                              placeholder="Enter conversation notes or interaction remarks here..."
+                              className="w-full px-3 py-2 text-xs rounded-lg border border-[#dee2e6] bg-white text-[#172b4d] focus:border-[#4689C8] outline-none leading-relaxed resize-none"
+                              required
+                            />
+                          </div>
+
+                          <div className="flex items-center justify-end gap-2 pt-1">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsAddingActivity(false);
+                                setNewActivityRemark('');
+                              }}
+                              className="btn btn-sm px-3.5 py-1.5 text-xs font-semibold text-[#525f7f] bg-white border border-[#dee2e6] hover:bg-[#f6f9fc] rounded cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="submit"
+                              disabled={submittingActivity}
+                              className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-xs disabled:opacity-50 cursor-pointer"
+                            >
+                              <Send className="w-3.5 h-3.5" />
+                              <span>{submittingActivity ? 'Saving...' : 'Save Activity Record'}</span>
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    )}
+
+                    {/* VERTICAL TIMELINE CONTAINER */}
+                    {followUps.length === 0 ? (
+                      <div className="py-12 text-center text-[#64748b] bg-[#f8f9fe]/50 border border-dashed border-[#cbd5e1] rounded-xl">
+                        <MessageSquare className="w-10 h-10 mx-auto text-[#94a3b8] mb-2.5 opacity-60" />
+                        <h4 className="font-bold text-sm text-[#334155]">No interaction activities recorded yet</h4>
+                        <p className="text-xs text-[#64748b] mt-1 max-w-sm mx-auto">
+                          Click &quot;Log Activity&quot; above or update the pipeline stage to start capturing conversation remarks.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="relative pt-2 pb-4 px-1 sm:px-4">
+                        {/* Continuous vertical timeline stem line */}
+                        <div className="hidden sm:block absolute left-[169px] top-6 bottom-6 w-0.5 bg-slate-200" />
+                        <div className="sm:hidden absolute left-5 top-6 bottom-6 w-0.5 bg-slate-200" />
+
+                        <div className="space-y-7">
+                          {followUps.map((item, idx) => {
+                            const meta = getStatusMeta(item.outcome || item.status);
+                            const StatusIcon = meta.icon;
+                            const formattedDate = formatTimelineDateTime(item.follow_up_at || item.scheduled_at || item.created_at);
+
+                            return (
+                              <div
+                                key={item.id || idx}
+                                className="relative flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-6 group"
+                              >
+                                {/* 1. Date & Time (Left column on desktop, above on mobile) */}
+                                <div className="pl-12 sm:pl-0 sm:w-[130px] sm:text-right flex-shrink-0 pt-1">
+                                  <span className="text-[11px] font-mono font-medium text-slate-500 tracking-tight">
+                                    {formattedDate}
+                                  </span>
+                                </div>
+
+                                {/* 2. Timeline Circle Node (Centered on the line) */}
+                                <div className="absolute left-1 sm:relative sm:left-auto flex-shrink-0 z-10">
+                                  <div className={`w-8 h-8 rounded-full ${meta.color} flex items-center justify-center text-white ring-4 ring-white shadow-xs transition-transform group-hover:scale-110`}>
+                                    <StatusIcon className="w-4 h-4" />
+                                  </div>
+                                </div>
+
+                                {/* 3. Status Title & Remark Card (Right column) */}
+                                <div className="pl-12 sm:pl-0 flex-1 min-w-0">
+                                  {/* Status Name Header */}
+                                  <div className="flex items-center gap-2 mb-2 pt-0.5">
+                                    <h4 className="text-sm font-bold text-[#1e293b] tracking-tight m-0">
+                                      {meta.label}
+                                    </h4>
+                                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${meta.lightBg} ${meta.textColor} border border-current/20`}>
+                                      Stage #{meta.number}
                                     </span>
-                                  </td>
+                                  </div>
 
-                                  {/* Action */}
-                                  <td className="py-3 px-3.5 text-center">
-                                    {isAdmin && (
-                                      <button
-                                        type="button"
-                                        onClick={() => handleDeleteFollowUp(item.id)}
-                                        className="p-1.5 text-[#ef4444] hover:bg-red-50 hover:text-red-700 rounded-md transition cursor-pointer"
-                                        title="Delete Activity"
-                                      >
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                      </button>
-                                    )}
-                                  </td>
-                                </tr>
-                              );
-                            })
-                          )}
-                        </tbody>
-                      </table>
-                    </div>
+                                  {/* Sub-branch Connector & Single Remark Card */}
+                                  <div className="flex items-start gap-2.5">
+                                    {/* Branch connector line with circle */}
+                                    <div className="flex items-center h-6 text-slate-300 select-none pt-1">
+                                      <span className="w-3.5 h-0.5 bg-slate-300 inline-block" />
+                                      <span className="w-2 h-2 rounded-full border border-slate-300 bg-white inline-block -ml-0.5" />
+                                    </div>
+
+                                    {/* Remark Card */}
+                                    <div className={`flex-1 bg-[#f8f9fa] border border-[#e2e8f0] border-l-4 ${meta.borderColor} rounded-r-lg p-3.5 shadow-2xs relative hover:bg-white hover:border-slate-300 transition duration-150`}>
+                                      <div className="text-xs sm:text-sm text-[#334155] leading-relaxed pr-8 whitespace-pre-wrap">
+                                        {item.notes || 'Activity recorded without additional remarks.'}
+                                      </div>
+
+                                      {/* Hover Delete Action Button */}
+                                      {isAdmin && (
+                                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                                          <button
+                                            type="button"
+                                            onClick={() => handleDeleteFollowUp(item.id)}
+                                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded border border-transparent hover:border-red-200 transition cursor-pointer"
+                                            title="Delete Activity Record"
+                                          >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </>
