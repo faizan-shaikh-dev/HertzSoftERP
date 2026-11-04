@@ -24,8 +24,10 @@ const PAYMENT_METHODS = [
   'Razorpay / Gateway'
 ];
 
-export default function PaymentModal({ isOpen, onClose, project = null, onSuccess }) {
+export default function PaymentModal({ isOpen, onClose, project = null, prefilledProject = null, payment = null, onSuccess }) {
   const [mounted, setMounted] = useState(false);
+  const isEdit = !!payment;
+  const projectData = project || prefilledProject;
 
   // Projects list for dropdown when project is not pre-selected
   const [projectsList, setProjectsList] = useState([]);
@@ -47,7 +49,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
 
   // Fetch available projects if no specific project is provided
   useEffect(() => {
-    if (isOpen && !project) {
+    if (isOpen && !projectData && !payment) {
       setLoadingProjects(true);
       projectService.getProjects()
         .then((res) => {
@@ -61,31 +63,42 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
           setLoadingProjects(false);
         });
     }
-  }, [isOpen, project]);
+  }, [isOpen, projectData, payment]);
 
-  // Reset or initialize form values when modal opens or project prop changes
+  // Reset or initialize form values when modal opens or props change
   useEffect(() => {
     if (isOpen) {
       setError('');
-      setPaymentDate(new Date().toISOString().slice(0, 10));
-      setPaymentMethod(PAYMENT_METHODS[0]);
-      setTransactionRef('');
-      setNotes('');
 
-      if (project) {
-        setSelectedProjectId(String(project.id));
-        setAmount(project.due_balance > 0 ? String(project.due_balance) : '');
+      if (payment) {
+        setSelectedProjectId(String(payment.project_id || projectData?.id || ''));
+        setAmount(payment.amount_paid ? String(payment.amount_paid) : '');
+        setPaymentDate(payment.payment_date ? payment.payment_date.slice(0, 10) : new Date().toISOString().slice(0, 10));
+        setPaymentMethod(payment.payment_method || PAYMENT_METHODS[0]);
+        setTransactionRef(payment.transaction_reference || '');
+        setNotes(payment.notes || '');
+      } else if (projectData) {
+        setSelectedProjectId(String(projectData.id));
+        setAmount(projectData.due_balance > 0 ? String(projectData.due_balance) : '');
+        setPaymentDate(new Date().toISOString().slice(0, 10));
+        setPaymentMethod(PAYMENT_METHODS[0]);
+        setTransactionRef('');
+        setNotes('');
       } else {
         setSelectedProjectId('');
         setAmount('');
+        setPaymentDate(new Date().toISOString().slice(0, 10));
+        setPaymentMethod(PAYMENT_METHODS[0]);
+        setTransactionRef('');
+        setNotes('');
       }
     }
-  }, [project, isOpen]);
+  }, [projectData, payment, isOpen]);
 
   if (!isOpen || !mounted) return null;
 
   // Active target project (either from prop or from projectsList selection)
-  const activeProject = project || projectsList.find((p) => String(p.id) === String(selectedProjectId)) || null;
+  const activeProject = projectData || projectsList.find((p) => String(p.id) === String(selectedProjectId)) || null;
 
   const formatCurrency = (amt) => {
     return new Intl.NumberFormat('en-IN', {
@@ -112,7 +125,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
     e.preventDefault();
     setError('');
 
-    if (!activeProject) {
+    if (!activeProject && !selectedProjectId) {
       setError('Please select a project to credit payment against.');
       return;
     }
@@ -127,7 +140,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
 
     try {
       const payload = {
-        project_id: activeProject.id,
+        project_id: activeProject?.id || selectedProjectId,
         amount_paid: numericAmount,
         payment_date: paymentDate,
         payment_method: paymentMethod,
@@ -135,14 +148,19 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
         notes: notes.trim() || null
       };
 
-      await paymentService.recordPayment(payload);
-      toast.success(`Payment of ${formatCurrency(numericAmount)} recorded successfully!`);
+      if (isEdit) {
+        await paymentService.updatePayment(payment.id, payload);
+        toast.success(`Payment installment of ${formatCurrency(numericAmount)} updated successfully!`);
+      } else {
+        await paymentService.recordPayment(payload);
+        toast.success(`Payment of ${formatCurrency(numericAmount)} recorded successfully!`);
+      }
 
       if (onSuccess) onSuccess();
       onClose();
     } catch (err) {
       console.error('Error recording payment:', err);
-      const msg = err.message || 'Failed to record installment payment.';
+      const msg = err?.response?.data?.error?.message || err?.message || 'Failed to save installment payment.';
       setError(msg);
       toast.error(msg);
     } finally {
@@ -159,14 +177,16 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
         className="relative w-full max-w-lg bg-white rounded-lg shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Header - OJT Style */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#DFEAF2] bg-white">
+        {/* Modal Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#DFEAF2] bg-[#F4F8FC]">
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight">
-              Record Payment
+            <h3 className="text-base font-bold text-[#19324D] m-0">
+              {isEdit ? 'Edit Payment Installment' : 'Record Payment'}
             </h3>
             <p className="text-xs text-[#71869B] mt-0.5">
-              {activeProject ? `Credit payment against project #${activeProject.id}` : 'Record received funds against client contract'}
+              {isEdit
+                ? `Update payment installment details for #${payment.id?.slice(0, 8)}`
+                : `Credit payment against project #${activeProject?.id ? String(activeProject.id).slice(0, 8) : 'account'}`}
             </p>
           </div>
 
@@ -180,8 +200,8 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
           </button>
         </div>
 
-        {/* Project Selector (If opened without pre-selected project) */}
-        {!project && (
+        {/* Project Selector (If opened without pre-selected project and not editing) */}
+        {!projectData && !isEdit && (
           <div className="px-6 py-3.5 bg-[#F4F8FC] border-b border-[#DFEAF2]">
             <label className="block text-xs font-semibold text-[#71869B] mb-1.5 flex items-center gap-1.5">
               <FolderKanban className="w-3.5 h-3.5 text-[#4689C8]" />
@@ -218,18 +238,16 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
                 {activeProject.title}
               </div>
               <div className="text-[11px] text-[#71869B] flex items-center gap-1 mt-0.5">
-                <Building2 className="w-3 h-3 text-[#adb5bd]" />
-                <span>
-                  {activeProject.client_company ? `${activeProject.client_company} (${activeProject.client_name})` : activeProject.client_name}
-                </span>
+                <Building2 className="w-3 h-3 text-[#71869B]" />
+                <span>{activeProject.client_company || activeProject.client_name}</span>
               </div>
             </div>
 
             <div className="text-right">
-              <span className="text-[10px] uppercase font-bold text-[#71869B]">
+              <div className="text-[10px] text-[#71869B] font-bold uppercase tracking-wider">
                 Outstanding Due
-              </span>
-              <div className="text-sm font-bold text-[#FB6340]">
+              </div>
+              <div className="text-sm font-extrabold text-[#F5365C] font-mono">
                 {formatCurrency(activeProject.due_balance)}
               </div>
             </div>
@@ -245,59 +263,63 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
             </div>
           )}
 
-          {/* Amount to Credit */}
+          {/* Amount Paid */}
           <div>
             <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
-              Payment Amount (INR) <span className="text-[#F5365C] font-bold ml-0.5">*</span>
+              Amount Paid (INR) <span className="text-[#F5365C] font-bold">*</span>
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#71869B]">
-                <IndianRupee className="w-4 h-4" />
-              </div>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#71869B] font-bold">
+                ₹
+              </span>
               <input
                 type="number"
+                step="0.01"
+                min="0.01"
                 required
-                min="1"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="e.g. 50000"
-                className="w-full pl-9 pr-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
+                className="w-full pl-8 pr-3.5 py-2.5 bg-white text-[#19324D] text-base font-bold rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition font-mono"
               />
             </div>
           </div>
 
-          {/* Date & Payment Method */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Payment Date */}
             <div>
               <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
-                Payment Date <span className="text-[#F5365C] font-bold ml-0.5">*</span>
+                Payment Date <span className="text-[#F5365C] font-bold">*</span>
               </label>
               <input
                 type="date"
                 required
                 value={paymentDate}
                 onChange={(e) => setPaymentDate(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
 
+            {/* Payment Mode */}
             <div>
               <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
-                Payment Mode <span className="text-[#F5365C] font-bold ml-0.5">*</span>
+                Payment Mode <span className="text-[#F5365C] font-bold">*</span>
               </label>
               <select
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer"
               >
-                {PAYMENT_METHODS.map((m) => (
-                  <option key={m} value={m}>{m}</option>
+                {PAYMENT_METHODS.map((method) => (
+                  <option key={method} value={method}>
+                    {method}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
 
-          {/* Transaction UTR / Ref */}
+          {/* Reference / UTR Number */}
           <div>
             <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
               UTR / Cheque / Transaction Reference
@@ -306,27 +328,27 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
               type="text"
               value={transactionRef}
               onChange={(e) => setTransactionRef(e.target.value)}
-              placeholder="e.g. UPI/20261028/789234 or HDFC000123"
-              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] outline-none transition"
+              placeholder="e.g. HDFC0001234567 or UPI/4231980"
+              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition font-mono uppercase"
             />
           </div>
 
-          {/* Remarks */}
+          {/* Remarks & Notes */}
           <div>
             <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
               Payment Remarks & Receipt Notes
             </label>
             <textarea
-              rows={2}
+              rows="2"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="e.g. Milestone installment received via bank transfer..."
-              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] outline-none transition resize-y"
+              placeholder="e.g. Milestone 1 advance clearance or 50% kick-off installment..."
+              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition resize-none"
             />
           </div>
 
-          {/* Modal Footer Actions */}
-          <div className="pt-4 border-t border-[#DFEAF2] flex items-center justify-end gap-3 mt-4">
+          {/* Action Buttons */}
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#DFEAF2]">
             <button
               type="button"
               onClick={onClose}
@@ -337,18 +359,18 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
             </button>
             <button
               type="submit"
-              disabled={loading || !activeProject}
+              disabled={loading || (!activeProject && !selectedProjectId)}
               className="px-6 py-2.5 bg-gradient-to-r from-[#20A36B] via-[#28b376] to-[#20a36b] hover:from-[#25a970] hover:to-[#1a8557] text-white font-bold text-xs sm:text-sm rounded shadow-sm shadow-[#20A36B]/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin text-white" />
-                  <span>Recording Payment...</span>
+                  <span>{isEdit ? 'Updating Payment...' : 'Recording Payment...'}</span>
                 </>
               ) : (
                 <>
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>Confirm & Record Payment</span>
+                  <span>{isEdit ? 'Save Changes' : 'Confirm & Record Payment'}</span>
                 </>
               )}
             </button>

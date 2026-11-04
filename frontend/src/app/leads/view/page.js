@@ -35,7 +35,9 @@ import {
   Moon,
   Archive,
   Plus,
-  Send
+  Send,
+  FolderKanban,
+  ExternalLink
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import AppLayout from '@/components/AppLayout';
@@ -615,6 +617,56 @@ function LeadViewContent() {
 
             {!loading && lead && (
               <>
+                {/* 0. CONVERTED CLIENT & PROJECT TRACEABILITY BANNER */}
+                {lead.converted_client_id && (
+                  <div className="bg-white border border-[#DFEAF2] rounded-xl p-3 sm:p-4 shadow-2xs">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                      <div className="flex items-center gap-2 flex-wrap text-xs font-semibold">
+                        <span className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider mr-1">
+                          Lifecycle Traceability:
+                        </span>
+
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-[#EAF3FB] text-[#4689C8] border border-[#78A9D7]/40">
+                          <Tag className="w-3.5 h-3.5" />
+                          <span>Origin Lead #{lead.lead_number} (Won)</span>
+                        </span>
+
+                        <ChevronRight className="w-3.5 h-3.5 text-[#71869B]" />
+
+                        <Link
+                          href="/clients"
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-[#EAF8F1] text-[#20A36B] hover:bg-[#20A36B] hover:text-white border border-[#20A36B]/40 transition group"
+                          title="View Client in Clients Directory"
+                        >
+                          <UserCheck className="w-3.5 h-3.5" />
+                          <span>Converted to Client #{lead.converted_client_number || 'Linked'}</span>
+                          <ExternalLink className="w-3 h-3 opacity-70 group-hover:opacity-100" />
+                        </Link>
+
+                        <ChevronRight className="w-3.5 h-3.5 text-[#71869B]" />
+
+                        <Link
+                          href={`/projects?search=${encodeURIComponent(lead.name || '')}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-[#19324D] text-white hover:bg-[#3475B2] transition group shadow-2xs"
+                          title="View Linked Client Projects"
+                        >
+                          <FolderKanban className="w-3.5 h-3.5 text-[#5FC8D6]" />
+                          <span>View Client Projects</span>
+                          <ExternalLink className="w-3 h-3 text-[#5FC8D6]" />
+                        </Link>
+                      </div>
+
+                      <Link
+                        href={`/projects?search=${encodeURIComponent(lead.name || '')}`}
+                        className="text-xs font-bold text-[#20A36B] hover:underline inline-flex items-center gap-1"
+                      >
+                        <span>Open Projects Ledger</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                )}
+
                 {/* 1. LEAD & CLIENT INFORMATION CARD */}
                 <div className="card shadow-sm border border-[#DFEAF2] rounded-xl overflow-hidden bg-white">
                   <div className="bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] text-white px-5 py-3.5 flex items-center justify-between">

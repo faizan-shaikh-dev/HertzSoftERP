@@ -23,7 +23,9 @@ import {
   Trash2,
   Eye,
   X,
-  Wallet
+  Wallet,
+  UserCheck,
+  Tag
 } from 'lucide-react';
 import { 
   ProjectModal, 
@@ -33,10 +35,11 @@ import {
 
 const STATUS_OPTIONS = [
   'All',
+  'Planning',
   'In Progress',
+  'Testing & Review',
   'Completed',
   'On Hold',
-  'Not Started',
   'Cancelled'
 ];
 
@@ -112,8 +115,12 @@ export default function ProjectsPage() {
   // Filtered Projects
   const filteredProjects = useMemo(() => {
     return projects.filter((project) => {
-      if (selectedStatus !== 'All' && project.status !== selectedStatus) {
-        return false;
+      if (selectedStatus !== 'All') {
+        if (selectedStatus === 'Planning') {
+          if (project.status !== 'Planning' && project.status !== 'Not Started') return false;
+        } else if (project.status !== selectedStatus) {
+          return false;
+        }
       }
 
       if (searchQuery.trim()) {
@@ -121,8 +128,11 @@ export default function ProjectsPage() {
         const titleMatch = project.title?.toLowerCase().includes(query);
         const clientMatch = project.client_name?.toLowerCase().includes(query);
         const companyMatch = project.client_company?.toLowerCase().includes(query);
+        const leadMatch = project.lead_name?.toLowerCase().includes(query);
+        const leadNumMatch = String(project.lead_number || '').includes(query);
+        const clientNumMatch = String(project.client_number || '').includes(query);
 
-        if (!titleMatch && !clientMatch && !companyMatch) {
+        if (!titleMatch && !clientMatch && !companyMatch && !leadMatch && !leadNumMatch && !clientNumMatch) {
           return false;
         }
       }
@@ -426,7 +436,7 @@ export default function ProjectsPage() {
                               idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white'
                             } hover:bg-[#EAF3FB]`}
                           >
-                            {/* 1. Project & Client */}
+                            {/* 1. Project & Client (with Origin Lead & Client badges) */}
                             <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
                               <Link
                                 href={`/projects/view?id=${project.id}`}
@@ -435,9 +445,32 @@ export default function ProjectsPage() {
                               >
                                 {project.title}
                               </Link>
-                              <div className="text-[11px] text-[#71869B] flex items-center gap-1 mt-0.5">
-                                <Building2 className="w-3.5 h-3.5 text-[#71869B]" />
-                                <span>
+
+                              <div className="flex items-center gap-1.5 flex-wrap mt-1">
+                                <Link
+                                  href="/clients"
+                                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#EAF8F1] text-[#20A36B] hover:bg-[#d5f2df] border border-[#20A36B]/30 transition"
+                                  title="View Client Directory"
+                                >
+                                  <UserCheck className="w-2.5 h-2.5" />
+                                  <span>Client #{project.client_number || 'Linked'}</span>
+                                </Link>
+
+                                {project.converted_from_lead_id && (
+                                  <Link
+                                    href={`/leads/view?id=${project.converted_from_lead_id}`}
+                                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#EAF3FB] text-[#4689C8] hover:bg-[#4689C8] hover:text-white border border-[#78A9D7]/40 transition"
+                                    title="View Original Lead Pipeline"
+                                  >
+                                    <Tag className="w-2.5 h-2.5" />
+                                    <span>Lead #{project.lead_number}</span>
+                                  </Link>
+                                )}
+                              </div>
+
+                              <div className="text-[11px] text-[#71869B] flex items-center gap-1 mt-1">
+                                <Building2 className="w-3.5 h-3.5 text-[#71869B] shrink-0" />
+                                <span className="truncate">
                                   {project.client_company ? `${project.client_company} (${project.client_name})` : project.client_name}
                                 </span>
                               </div>

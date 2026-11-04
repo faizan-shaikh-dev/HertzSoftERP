@@ -8,7 +8,7 @@ export const projectService = {
     return response.data;
   },
 
-  // 2. Get single project details + payments list
+  // 2. Get single project details + payments list + activities
   getProjectById: async (id) => {
     const response = await api.get(`/projects/${id}`);
     return response.data;
@@ -47,6 +47,24 @@ export const projectService = {
   // 8. Get Single Client with full Projects, Payments & Analytics
   getClientById: async (id) => {
     const response = await api.get(`/clients/${id}`);
+    return response.data;
+  },
+
+  // 9. Get Project Activity Timeline
+  getProjectActivities: async (projectId) => {
+    const response = await api.get(`/projects/${projectId}/activities`);
+    return response.data;
+  },
+
+  // 10. Record Project Activity / Remark
+  createProjectActivity: async (projectId, activityData) => {
+    const response = await api.post(`/projects/${projectId}/activities`, activityData);
+    return response.data;
+  },
+
+  // 11. Delete Project Activity (Admin only)
+  deleteProjectActivity: async (activityId) => {
+    const response = await api.delete(`/projects/activities/${activityId}`);
     return response.data;
   }
 };

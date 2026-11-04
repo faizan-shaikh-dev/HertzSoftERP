@@ -100,7 +100,27 @@ export const getPaymentById = async (id) => {
   return rows[0];
 };
 
-// 4. Delete Payment Record
+// 4. Update Payment Record
+export const updatePayment = async (id, updateData) => {
+  const fields = [];
+  const values = [];
+
+  for (const [key, val] of Object.entries(updateData)) {
+    if (key !== 'id' && key !== 'created_at' && key !== 'client_id' && key !== 'project_id') {
+      fields.push(`${key} = ?`);
+      values.push(val);
+    }
+  }
+
+  if (fields.length > 0) {
+    values.push(id);
+    await pool.query(`UPDATE payments SET ${fields.join(', ')} WHERE id = ?`, values);
+  }
+
+  return await getPaymentById(id);
+};
+
+// 5. Delete Payment Record
 export const deletePayment = async (id) => {
   const [result] = await pool.query('DELETE FROM payments WHERE id = ?', [id]);
   if (result.affectedRows === 0) {

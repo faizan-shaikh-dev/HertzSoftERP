@@ -3,6 +3,7 @@ import {
   recordPayment,
   getPayments,
   getPaymentById,
+  updatePayment,
   deletePayment,
   getFinancialSummary
 } from './payment.controller.js';
@@ -20,6 +21,8 @@ router.get('/summary', authorizeRoles('Administrator', 'Finance'), getFinancialS
 router.post('/', recordPayment);                                       // Record a new payment (installment)
 router.get('/', getPayments);                                          // Get payments list (?project_id=... or ?client_id=...)
 router.get('/:id', getPaymentById);                                    // Get single payment receipt
+router.put('/:id', updatePayment);                                     // Update a payment installment
+router.patch('/:id', updatePayment);                                   // Update a payment installment (PATCH)
 router.delete('/:id', authorizeRoles('Administrator'), deletePayment); // Delete a payment record (Admin only)
 
 export default router;

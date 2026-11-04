@@ -64,7 +64,21 @@ export const getPaymentById = async (req, res, next) => {
   }
 };
 
-// 4. Delete Payment Record
+// 4. Update Payment Record
+export const updatePayment = async (req, res, next) => {
+  try {
+    const updated = await paymentService.updatePayment(req.params.id, req.body);
+
+    res.status(200).json({
+      success: true,
+      data: updated
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 5. Delete Payment Record
 export const deletePayment = async (req, res, next) => {
   try {
     const result = await paymentService.deletePayment(req.params.id);
@@ -78,7 +92,7 @@ export const deletePayment = async (req, res, next) => {
   }
 };
 
-// 5. Get Financial Summary (Total Deals, Total Collected, Total Due)
+// 6. Get Financial Summary (Total Deals, Total Collected, Total Due)
 export const getFinancialSummary = async (req, res, next) => {
   try {
     const summary = await paymentService.getFinancialSummary();

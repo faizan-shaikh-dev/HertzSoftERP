@@ -151,34 +151,56 @@ export const createProject = async (projectData, userId) => {
     deadline = null
   } = projectData;
 
+  const cleanStartDate = start_date && String(start_date).trim() !== '' ? start_date : null;
+  const cleanDeadline = deadline && String(deadline).trim() !== '' ? deadline : null;
+
   await pool.query(
     `INSERT INTO projects 
       (client_id, title, description, total_cost, status, start_date, deadline, created_by)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [client_id, title, description, total_cost, status, start_date, deadline, userId]
+    [client_id, title, description, total_cost, status, cleanStartDate, cleanDeadline, userId]
   );
 
   const [row] = await pool.query('SELECT * FROM projects ORDER BY created_at DESC LIMIT 1');
-  return row[0];
+  const createdProject = row[0];
+
+  // Auto-record the initial project creation milestone in project_activities
+  try {
+    await pool.query(
+      `INSERT INTO project_activities 
+        (id, project_id, activity_type, status, notes, created_by)
+       VALUES (UUID(), ?, 'Creation', ?, 'Project contract established and deliverable timeline initiated.', ?)`,
+      [createdProject.id, status, userId]
+    );
+  } catch (actErr) {
+    console.error('Failed to auto-log initial project activity:', actErr);
+  }
+
+  return createdProject;
 };
 
-// 5. Get All Projects (with Auto-Calculated Payments & Balance)
+// 5. Get All Projects (with Auto-Calculated Payments & Balance + Origin Lead Info)
 export const getProjects = async ({ status, client_id, search }) => {
   let query = `
     SELECT 
       p.*,
       c.name AS client_name,
       c.company_name AS client_company,
+      c.client_number,
+      c.converted_from_lead_id,
+      l.lead_number,
+      l.name AS lead_name,
       COALESCE(SUM(pm.amount_paid), 0) AS total_paid,
       (p.total_cost - COALESCE(SUM(pm.amount_paid), 0)) AS due_balance
     FROM projects p
     JOIN clients c ON p.client_id = c.id
+    LEFT JOIN leads l ON c.converted_from_lead_id = l.id
     LEFT JOIN payments pm ON p.id = pm.project_id
     WHERE 1=1
   `;
   const params = [];
 
-  if (status) {
+  if (status && status !== 'All') {
     query += ' AND p.status = ?';
     params.push(status);
   }
@@ -189,18 +211,18 @@ export const getProjects = async ({ status, client_id, search }) => {
   }
 
   if (search) {
-    query += ' AND (p.title LIKE ? OR c.name LIKE ? OR c.company_name LIKE ?)';
+    query += ' AND (p.title LIKE ? OR c.name LIKE ? OR c.company_name LIKE ? OR l.name LIKE ?)';
     const searchVal = `%${search}%`;
-    params.push(searchVal, searchVal, searchVal);
+    params.push(searchVal, searchVal, searchVal, searchVal);
   }
 
-  query += ' GROUP BY p.id, c.name, c.company_name ORDER BY p.created_at DESC';
+  query += ' GROUP BY p.id, c.name, c.company_name, c.client_number, c.converted_from_lead_id, l.lead_number, l.name ORDER BY p.created_at DESC';
 
   const [rows] = await pool.query(query, params);
   return rows;
 };
 
-// 6. Get Single Project with Payment History
+// 6. Get Single Project with Origin Lead, Client Details, Activities & Payment History
 export const getProjectById = async (id) => {
   const [projectRows] = await pool.query(
     `SELECT 
@@ -210,13 +232,25 @@ export const getProjectById = async (id) => {
       c.phone AS client_phone,
       c.email AS client_email,
       c.billing_address AS client_address,
+      c.client_number,
+      c.converted_from_lead_id,
+      l.id AS origin_lead_id,
+      l.lead_number AS origin_lead_number,
+      l.name AS origin_lead_name,
+      l.service_interest AS origin_lead_inquiry,
+      l.status AS origin_lead_status,
+      l.created_at AS origin_lead_created_at,
       COALESCE(SUM(pm.amount_paid), 0) AS total_paid,
       (p.total_cost - COALESCE(SUM(pm.amount_paid), 0)) AS due_balance
     FROM projects p
     JOIN clients c ON p.client_id = c.id
+    LEFT JOIN leads l ON c.converted_from_lead_id = l.id
     LEFT JOIN payments pm ON p.id = pm.project_id
     WHERE p.id = ?
-    GROUP BY p.id, c.name, c.company_name, c.phone, c.email, c.billing_address`,
+    GROUP BY 
+      p.id, c.name, c.company_name, c.phone, c.email, c.billing_address, 
+      c.client_number, c.converted_from_lead_id,
+      l.id, l.lead_number, l.name, l.service_interest, l.status, l.created_at`,
     [id]
   );
 
@@ -240,24 +274,51 @@ export const getProjectById = async (id) => {
   );
 
   project.payment_history = payments;
+
+  // Fetch activity timeline for this project
+  const [activities] = await pool.query(
+    `SELECT pa.*, u.full_name AS created_by_name
+     FROM project_activities pa
+     LEFT JOIN users u ON pa.created_by = u.id
+     WHERE pa.project_id = ?
+     ORDER BY pa.activity_date DESC, pa.created_at DESC`,
+    [id]
+  );
+
+  project.activities = activities;
   return project;
 };
 
 // 7. Update Project
-export const updateProject = async (id, updateData) => {
+export const updateProject = async (id, updateData, userId = null) => {
   const fields = [];
   const values = [];
 
   for (const [key, val] of Object.entries(updateData)) {
-    if (key !== 'id' && key !== 'created_at' && key !== 'client_id') {
+    if (key !== 'id' && key !== 'created_at' && key !== 'client_id' && key !== 'payment_history' && key !== 'activities' && key !== 'status_note') {
+      const cleanVal = (key === 'start_date' || key === 'deadline') && val === '' ? null : val;
       fields.push(`${key} = ?`);
-      values.push(val);
+      values.push(cleanVal);
     }
   }
 
   if (fields.length > 0) {
     values.push(id);
     await pool.query(`UPDATE projects SET ${fields.join(', ')} WHERE id = ?`, values);
+  }
+
+  // If status is updated, log an activity automatically if notes provided or status changed
+  if (updateData.status) {
+    try {
+      await pool.query(
+        `INSERT INTO project_activities 
+          (id, project_id, activity_type, status, notes, created_by)
+         VALUES (UUID(), ?, 'Status Update', ?, ?, ?)`,
+        [id, updateData.status, updateData.status_note || `Project status progressed to ${updateData.status}.`, userId]
+      );
+    } catch (actErr) {
+      console.error('Failed to log status update activity:', actErr);
+    }
   }
 
   return await getProjectById(id);
@@ -273,4 +334,76 @@ export const deleteProject = async (id) => {
     throw error;
   }
   return { message: 'Project deleted successfully' };
+};
+
+// ==================== PROJECT ACTIVITIES / TIMELINE SERVICES ====================
+
+// 9. Create Project Activity / Remark
+export const createProjectActivity = async (projectId, activityData, userId) => {
+  const {
+    status,
+    notes,
+    activity_type = 'Update',
+    activity_date = null,
+    update_project_status = true
+  } = activityData;
+
+  const [projectCheck] = await pool.query('SELECT id, status FROM projects WHERE id = ?', [projectId]);
+  if (projectCheck.length === 0) {
+    const error = new Error('Project not found');
+    error.statusCode = 404;
+    error.code = 'NOT_FOUND';
+    throw error;
+  }
+
+  const actDate = activity_date ? new Date(activity_date) : new Date();
+  const effectiveStatus = status || projectCheck[0].status;
+
+  await pool.query(
+    `INSERT INTO project_activities
+      (id, project_id, activity_type, status, notes, activity_date, created_by)
+     VALUES (UUID(), ?, ?, ?, ?, ?, ?)`,
+    [projectId, activity_type, effectiveStatus, notes || null, actDate, userId]
+  );
+
+  // Sync project status if requested and changed
+  if (update_project_status && status && status !== projectCheck[0].status) {
+    await pool.query('UPDATE projects SET status = ? WHERE id = ?', [status, projectId]);
+  }
+
+  const [latestRows] = await pool.query(
+    `SELECT pa.*, u.full_name AS created_by_name
+     FROM project_activities pa
+     LEFT JOIN users u ON pa.created_by = u.id
+     WHERE pa.project_id = ?
+     ORDER BY pa.created_at DESC LIMIT 1`,
+    [projectId]
+  );
+
+  return latestRows[0];
+};
+
+// 10. Get Project Activities
+export const getProjectActivities = async (projectId) => {
+  const [rows] = await pool.query(
+    `SELECT pa.*, u.full_name AS created_by_name
+     FROM project_activities pa
+     LEFT JOIN users u ON pa.created_by = u.id
+     WHERE pa.project_id = ?
+     ORDER BY pa.activity_date DESC, pa.created_at DESC`,
+    [projectId]
+  );
+  return rows;
+};
+
+// 11. Delete Project Activity
+export const deleteProjectActivity = async (activityId) => {
+  const [res] = await pool.query('DELETE FROM project_activities WHERE id = ?', [activityId]);
+  if (res.affectedRows === 0) {
+    const error = new Error('Project activity record not found');
+    error.statusCode = 404;
+    error.code = 'NOT_FOUND';
+    throw error;
+  }
+  return { message: 'Project activity deleted successfully' };
 };

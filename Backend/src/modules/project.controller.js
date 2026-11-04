@@ -91,7 +91,7 @@ export const getProjectById = async (req, res, next) => {
 // 7. Update Project
 export const updateProject = async (req, res, next) => {
   try {
-    const updatedProject = await projectService.updateProject(req.params.id, req.body);
+    const updatedProject = await projectService.updateProject(req.params.id, req.body, req.user?.id);
     res.status(200).json({ success: true, data: updatedProject });
   } catch (error) {
     next(error);
@@ -102,6 +102,48 @@ export const updateProject = async (req, res, next) => {
 export const deleteProject = async (req, res, next) => {
   try {
     const result = await projectService.deleteProject(req.params.id);
+    res.status(200).json({ success: true, message: result.message });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ==================== PROJECT ACTIVITY CONTROLLERS ====================
+
+// 9. Create Project Activity / Milestone Note
+export const createProjectActivity = async (req, res, next) => {
+  try {
+    const { status, notes } = req.body;
+    if (!notes && !status) {
+      return res.status(400).json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Status or notes is required for an activity record'
+        }
+      });
+    }
+
+    const activity = await projectService.createProjectActivity(req.params.id, req.body, req.user?.id);
+    res.status(201).json({ success: true, data: activity });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 10. Get Project Activities
+export const getProjectActivities = async (req, res, next) => {
+  try {
+    const activities = await projectService.getProjectActivities(req.params.id);
+    res.status(200).json({ success: true, count: activities.length, data: activities });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 11. Delete Project Activity
+export const deleteProjectActivity = async (req, res, next) => {
+  try {
+    const result = await projectService.deleteProjectActivity(req.params.activityId);
     res.status(200).json({ success: true, message: result.message });
   } catch (error) {
     next(error);

@@ -143,6 +143,7 @@ export default function PaymentsPage() {
 
   // Collections Modals
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [editingPayment, setEditingPayment] = useState(null);
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
   const [activeReceiptPayment, setActiveReceiptPayment] = useState(null);
 
@@ -403,7 +404,10 @@ export default function PaymentsPage() {
             <div className="flex items-center gap-2">
               {activeTab === 'collections' ? (
                 <button
-                  onClick={() => setIsPaymentModalOpen(true)}
+                  onClick={() => {
+                    setEditingPayment(null);
+                    setIsPaymentModalOpen(true);
+                  }}
                   className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] hover:from-[#2a5d8d] hover:to-[#3475B2] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -780,6 +784,20 @@ export default function PaymentsPage() {
                               {/* Actions */}
                               <td className="py-3 px-3.5 text-center">
                                 <div className="inline-flex items-center gap-1.5 justify-center">
+                                  {/* Edit Payment */}
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setEditingPayment(p);
+                                      setIsPaymentModalOpen(true);
+                                    }}
+                                    className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#19324D] bg-[#F4F8FC] hover:bg-[#EAF3FB] hover:text-[#4689C8] border border-[#DFEAF2] rounded transition cursor-pointer"
+                                    title="Edit Payment Installment"
+                                  >
+                                    <Edit3 className="w-3.5 h-3.5 text-[#4689C8]" />
+                                    <span>Edit</span>
+                                  </button>
+
                                   {/* Print Official Receipt Button */}
                                   <button
                                     type="button"
@@ -1221,11 +1239,19 @@ export default function PaymentsPage() {
         </div>
       </div>
 
-      {/* Record Payment Modal */}
+      {/* Record / Edit Payment Modal */}
       <PaymentModal
         isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        onSuccess={() => fetchData(false)}
+        payment={editingPayment}
+        onClose={() => {
+          setIsPaymentModalOpen(false);
+          setEditingPayment(null);
+        }}
+        onSuccess={() => {
+          setIsPaymentModalOpen(false);
+          setEditingPayment(null);
+          fetchData(false);
+        }}
       />
 
       {/* Official Payment Receipt Modal */}

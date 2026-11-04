@@ -20,13 +20,19 @@ export const paymentService = {
     return response.data;
   },
 
-  // 4. Delete payment installment record (Admin only)
+  // 4. Update payment installment record
+  updatePayment: async (id, paymentData) => {
+    const response = await api.put(`/payments/${id}`, paymentData);
+    return response.data;
+  },
+
+  // 5. Delete payment installment record (Admin only)
   deletePayment: async (id) => {
     const response = await api.delete(`/payments/${id}`);
     return response.data;
   },
 
-  // 5. Get overall financial summary
+  // 6. Get overall financial summary
   getFinancialSummary: async () => {
     const response = await api.get('/payments/summary');
     return response.data;

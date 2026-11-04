@@ -14,10 +14,11 @@ import {
 } from 'lucide-react';
 
 const STATUS_OPTIONS = [
-  'Not Started',
+  'Planning',
   'In Progress',
-  'On Hold',
+  'Testing & Review',
   'Completed',
+  'On Hold',
   'Cancelled'
 ];
 
@@ -114,7 +115,7 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
     setLoading(true);
 
     try {
-      let finalClientId = clientId;
+      let finalClientId = clientId || (clients.length > 0 ? String(clients[0].id) : '');
 
       // If user is adding a new client on the fly
       if (isCreatingNewClient) {
@@ -129,7 +130,7 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
           phone: newClientPhone.trim() || null,
           email: newClientEmail.trim() || null
         });
-        finalClientId = createdClient.data.id;
+        finalClientId = String(createdClient.data.id);
       }
 
       if (!finalClientId) {
@@ -139,7 +140,7 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
       }
 
       const payload = {
-        client_id: Number(finalClientId),
+        client_id: String(finalClientId),
         title: title.trim(),
         description: description.trim() || null,
         total_cost: Number(totalCost),
@@ -160,7 +161,7 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
       onClose();
     } catch (err) {
       console.error('Error saving project:', err);
-      const msg = err.message || 'Failed to save project. Please check inputs.';
+      const msg = err?.response?.data?.error?.message || err?.message || 'Failed to save project. Please check inputs.';
       setError(msg);
       toast.error(msg);
     } finally {
