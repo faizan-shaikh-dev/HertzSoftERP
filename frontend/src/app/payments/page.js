@@ -376,11 +376,11 @@ export default function PaymentsPage() {
     <AppLayout title="Payments & Commercial Finance">
       <div className="container-fluid px-0 sm:px-2">
         {/* MASTER OJT CONTAINER CARD */}
-        <div className="card shadow-sm mb-4 mainCard bg-white border border-[#e9ecef] rounded-lg overflow-hidden">
+        <div className="card shadow-sm mb-4 mainCard bg-white border border-[#DFEAF2] rounded-xl overflow-hidden">
           {/* Card Header (OJT Standard) */}
-          <div className="card-header px-4 sm:px-6 py-4 bg-white border-b border-[#e9ecef] flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="card-header px-4 sm:px-6 py-4 bg-white border-b border-[#DFEAF2] flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight m-0 flex items-center gap-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight m-0 flex items-center gap-2">
                 {activeTab === 'collections' ? (
                   <>
                     <CreditCard className="w-6 h-6 text-[#4689C8]" />
@@ -393,7 +393,7 @@ export default function PaymentsPage() {
                   </>
                 )}
               </h2>
-              <p className="text-xs text-[#8898aa] mt-0.5">
+              <p className="text-xs text-[#71869B] mt-0.5">
                 {activeTab === 'collections'
                   ? 'Real-time tracking of received client installments, bank UTR references, and official payment receipts.'
                   : 'Company operating overheads, cloud hosting, software subscriptions, and internal reporting.'}
@@ -404,7 +404,7 @@ export default function PaymentsPage() {
               {activeTab === 'collections' ? (
                 <button
                   onClick={() => setIsPaymentModalOpen(true)}
-                  className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] hover:from-[#2a5d8d] hover:to-[#3876b0] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
+                  className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] hover:from-[#2a5d8d] hover:to-[#3475B2] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Record Payment</span>
@@ -415,7 +415,7 @@ export default function PaymentsPage() {
                     setActiveExpenseToEdit(null);
                     setIsExpenseModalOpen(true);
                   }}
-                  className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] hover:from-[#2a5d8d] hover:to-[#3876b0] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
+                  className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] hover:from-[#2a5d8d] hover:to-[#3475B2] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Record Expense</span>
@@ -425,7 +425,7 @@ export default function PaymentsPage() {
               <button
                 onClick={() => fetchData(true)}
                 disabled={loading}
-                className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#525f7f] bg-white hover:bg-[#f6f9fc] border border-[#e9ecef] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
+                className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#71869B] bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
                 title="Refresh financial ledger"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4689C8]' : ''}`} />
@@ -435,14 +435,14 @@ export default function PaymentsPage() {
           </div>
 
           {/* Section Sub-Navigation Tabs */}
-          <div className="flex items-center gap-1 border-b border-[#e9ecef] px-4 sm:px-6 bg-[#f8f9fe]">
+          <div className="flex items-center gap-1 border-b border-[#DFEAF2] px-4 sm:px-6 bg-[#F4F8FC]">
             <button
               type="button"
               onClick={() => setActiveTab('collections')}
               className={`pt-3 pb-2.5 px-3 sm:px-4 text-xs font-bold flex items-center gap-2 border-b-2 transition cursor-pointer ${
                 activeTab === 'collections'
                   ? 'border-[#4689C8] text-[#4689C8] bg-white rounded-t-md shadow-2xs'
-                  : 'border-transparent text-[#8898aa] hover:text-[#525f7f]'
+                  : 'border-transparent text-[#71869B] hover:text-[#71869B]'
               }`}
             >
               <CreditCard className="w-3.5 h-3.5" />
@@ -455,7 +455,7 @@ export default function PaymentsPage() {
               className={`pt-3 pb-2.5 px-3 sm:px-4 text-xs font-bold flex items-center gap-2 border-b-2 transition cursor-pointer ${
                 activeTab === 'expenses'
                   ? 'border-[#4689C8] text-[#4689C8] bg-white rounded-t-md shadow-2xs'
-                  : 'border-transparent text-[#8898aa] hover:text-[#525f7f]'
+                  : 'border-transparent text-[#71869B] hover:text-[#71869B]'
               }`}
             >
               <Wallet className="w-3.5 h-3.5" />
@@ -471,34 +471,34 @@ export default function PaymentsPage() {
                 {/* Financial Metrics Cards (OJT Metric Cards) */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {/* 1. Total Collections */}
-                  <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                           Total Collections
                         </span>
-                        <div className="text-xl sm:text-2xl font-extrabold text-[#2dce89] tracking-tight mt-1">
+                        <div className="text-xl sm:text-2xl font-extrabold text-[#20A36B] tracking-tight mt-1">
                           {formatCurrency(financialSummary.total_collected)}
                         </div>
                       </div>
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#2dce89] to-[#20a36b] text-white flex items-center justify-center shadow-md shadow-[#2dce89]/25">
+                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
                         <Wallet className="w-5 h-5" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Status:</span>
-                      <span className="font-bold text-[#2dce89]">Realized Funds</span>
+                      <span className="font-bold text-[#20A36B]">Realized Funds</span>
                     </div>
                   </div>
 
                   {/* 2. Total Contract Value */}
-                  <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                           Total Project Value
                         </span>
-                        <div className="text-xl sm:text-2xl font-extrabold text-[#172b4d] tracking-tight mt-1">
+                        <div className="text-xl sm:text-2xl font-extrabold text-[#19324D] tracking-tight mt-1">
                           {formatCurrency(financialSummary.total_project_value)}
                         </div>
                       </div>
@@ -506,38 +506,38 @@ export default function PaymentsPage() {
                         <TrendingUp className="w-5 h-5" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Agreed Scope:</span>
-                      <span className="font-bold text-[#172b4d]">Active Contracts</span>
+                      <span className="font-bold text-[#19324D]">Active Contracts</span>
                     </div>
                   </div>
 
                   {/* 3. Pending Due Balance */}
-                  <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                           Pending Receivables
                         </span>
-                        <div className="text-xl sm:text-2xl font-extrabold text-[#f5365c] tracking-tight mt-1">
+                        <div className="text-xl sm:text-2xl font-extrabold text-[#F5365C] tracking-tight mt-1">
                           {formatCurrency(financialSummary.total_pending_due)}
                         </div>
                       </div>
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#f5365c] to-[#e01a47] text-white flex items-center justify-center shadow-md shadow-[#f5365c]/25">
+                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#F5365C] to-[#e01a47] text-white flex items-center justify-center shadow-md shadow-[#F5365C]/25">
                         <IndianRupee className="w-5 h-5" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Outstanding:</span>
-                      <span className="font-bold text-[#f5365c]">To Be Invoiced</span>
+                      <span className="font-bold text-[#F5365C]">To Be Invoiced</span>
                     </div>
                   </div>
 
                   {/* 4. Collection Rate */}
-                  <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                           Collection Rate
                         </span>
                         <div className="text-xl sm:text-2xl font-extrabold text-[#11cdef] tracking-tight mt-1">
@@ -548,8 +548,8 @@ export default function PaymentsPage() {
                         <FileCheck className="w-5 h-5" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#f8f9fe]">
-                      <div className="w-full bg-[#e9ecef] rounded-full h-1.5 overflow-hidden">
+                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC]">
+                      <div className="w-full bg-[#DFEAF2] rounded-full h-1.5 overflow-hidden">
                         <div
                           className="bg-[#11cdef] h-1.5 rounded-full transition-all duration-500"
                           style={{ width: `${collectionRate}%` }}
@@ -561,14 +561,14 @@ export default function PaymentsPage() {
 
                 {/* Error Banner */}
                 {error && (
-                  <div className="p-3.5 rounded-lg bg-[#fdf2f2] border border-[#f5365c]/30 text-xs text-[#f5365c] flex items-center justify-between">
+                  <div className="p-3.5 rounded-lg bg-[#FDF2F2] border border-[#F5365C]/30 text-xs text-[#F5365C] flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <AlertCircle className="w-4 h-4 shrink-0" />
                       <span>{error}</span>
                     </div>
                     <button
                       onClick={() => fetchData(true)}
-                      className="px-2.5 py-1 rounded bg-[#f5365c] text-white font-bold hover:bg-[#d6284a] transition cursor-pointer"
+                      className="px-2.5 py-1 rounded bg-[#F5365C] text-white font-bold hover:bg-[#d6284a] transition cursor-pointer"
                     >
                       Retry
                     </button>
@@ -577,7 +577,7 @@ export default function PaymentsPage() {
 
                 {/* Payment Method Quick Filter Tabs */}
                 <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-                  <span className="text-[#8898aa] font-bold uppercase text-[10px] mr-1 shrink-0 flex items-center gap-1">
+                  <span className="text-[#71869B] font-bold uppercase text-[10px] mr-1 shrink-0 flex items-center gap-1">
                     <Filter className="w-3 h-3" /> Method:
                   </span>
                   {METHOD_OPTIONS.map((m) => {
@@ -593,7 +593,7 @@ export default function PaymentsPage() {
                         className={`px-3 py-1 rounded-full font-semibold transition cursor-pointer whitespace-nowrap text-xs ${
                           isSelected
                             ? 'bg-[#4689C8] text-white shadow-xs'
-                            : 'bg-[#f6f9fc] text-[#525f7f] hover:bg-[#e9ecef]'
+                            : 'bg-[#EAF3FB] text-[#71869B] hover:bg-[#DFEAF2]'
                         }`}
                       >
                         {m}
@@ -605,7 +605,7 @@ export default function PaymentsPage() {
                 {/* DataTables Controls Toolbar */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
                   {/* Page Size Selector */}
-                  <div className="flex items-center gap-2 text-xs text-[#525f7f]">
+                  <div className="flex items-center gap-2 text-xs text-[#71869B]">
                     <span>Show</span>
                     <select
                       value={pageSize}
@@ -613,7 +613,7 @@ export default function PaymentsPage() {
                         setPageSize(Number(e.target.value));
                         setCurrentPage(1);
                       }}
-                      className="px-2.5 py-1 bg-white border border-[#dee2e6] rounded text-xs font-bold text-[#172b4d] focus:outline-none focus:border-[#4689C8] cursor-pointer"
+                      className="px-2.5 py-1 bg-white border border-[#DFEAF2] rounded text-xs font-bold text-[#19324D] focus:outline-none focus:border-[#4689C8] cursor-pointer"
                     >
                       <option value={10}>10</option>
                       <option value={25}>25</option>
@@ -625,7 +625,7 @@ export default function PaymentsPage() {
 
                   {/* Search Box */}
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-[#525f7f] font-semibold">Search:</span>
+                    <span className="text-xs text-[#71869B] font-semibold">Search:</span>
                     <div className="relative">
                       <input
                         type="text"
@@ -635,16 +635,16 @@ export default function PaymentsPage() {
                           setCurrentPage(1);
                         }}
                         placeholder="Search client, project, UTR..."
-                        className="w-56 sm:w-64 pl-8 pr-7 py-1.5 text-xs bg-white border border-[#dee2e6] rounded text-[#172b4d] placeholder-[#8898aa] focus:outline-none focus:border-[#4689C8] transition"
+                        className="w-56 sm:w-64 pl-8 pr-7 py-1.5 text-xs bg-white border border-[#DFEAF2] rounded text-[#19324D] placeholder-[#71869B] focus:outline-none focus:border-[#4689C8] transition"
                       />
-                      <Search className="w-3.5 h-3.5 text-[#8898aa] absolute left-2.5 top-1/2 -translate-y-1/2" />
+                      <Search className="w-3.5 h-3.5 text-[#71869B] absolute left-2.5 top-1/2 -translate-y-1/2" />
                       {searchQuery && (
                         <button
                           onClick={() => {
                             setSearchQuery('');
                             setCurrentPage(1);
                           }}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#8898aa] hover:text-[#172b4d]"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#71869B] hover:text-[#19324D]"
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -654,33 +654,33 @@ export default function PaymentsPage() {
                 </div>
 
                 {/* OJT Payments Table */}
-                <div className="table-responsive border border-[#dee2e6] rounded-md overflow-hidden">
+                <div className="table-responsive border border-[#DFEAF2] rounded-md overflow-hidden">
                   <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
-                    <thead className="thead-light bg-[#f6f9fc] text-[#8898aa] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#e9ecef]">
+                    <thead className="thead-light bg-[#EAF3FB] text-[#71869B] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#DFEAF2]">
                       <tr>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6]">Receipt / Ref ID</th>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6]">Client &amp; Project</th>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6] text-right">Amount Credited</th>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6]">Payment Date</th>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6] text-center">Payment Mode</th>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6]">Recorded By / Remarks</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Receipt / Ref ID</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Client &amp; Project</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-right">Amount Credited</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Payment Date</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">Payment Mode</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Recorded By / Remarks</th>
                         <th className="py-3 px-3.5 text-center">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#dee2e6]">
+                    <tbody className="divide-y divide-[#DFEAF2]">
                       {loading && payments.length === 0 ? (
                         <tr>
-                          <td colSpan="7" className="py-12 text-center text-[#8898aa]">
+                          <td colSpan="7" className="py-12 text-center text-[#71869B]">
                             <Loader2 className="w-6 h-6 animate-spin text-[#4689C8] mx-auto mb-2" />
                             <span className="text-xs font-semibold">Loading financial payments ledger...</span>
                           </td>
                         </tr>
                       ) : paginatedPayments.length === 0 ? (
                         <tr>
-                          <td colSpan="7" className="py-12 text-center text-[#8898aa]">
+                          <td colSpan="7" className="py-12 text-center text-[#71869B]">
                             <CreditCard className="w-8 h-8 mx-auto text-[#adb5bd] mb-2" />
-                            <p className="font-semibold text-sm text-[#525f7f]">No payment transactions found</p>
-                            <p className="text-xs text-[#8898aa] mt-0.5">
+                            <p className="font-semibold text-sm text-[#71869B]">No payment transactions found</p>
+                            <p className="text-xs text-[#71869B] mt-0.5">
                               {searchQuery || selectedMethod !== 'All'
                                 ? 'No results matching your filters. Try resetting search filters.'
                                 : 'Record installments received against active client contracts.'}
@@ -695,32 +695,32 @@ export default function PaymentsPage() {
                             <tr 
                               key={p.id} 
                               className={`transition-colors duration-150 ${
-                                idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
-                              } hover:bg-[#eaf2fc]`}
+                                idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white'
+                              } hover:bg-[#EAF3FB]`}
                             >
                               {/* Receipt ID & UTR */}
-                              <td className="py-3 px-3.5 border-r border-[#dee2e6]">
-                                <div className="font-mono font-bold text-[#172b4d] text-xs">
+                              <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
+                                <div className="font-mono font-bold text-[#19324D] text-xs">
                                   {receiptId}
                                 </div>
-                                <div className="text-[11px] text-[#8898aa] font-mono mt-0.5">
-                                  UTR: <span className="text-[#525f7f]">{p.transaction_reference || 'N/A'}</span>
+                                <div className="text-[11px] text-[#71869B] font-mono mt-0.5">
+                                  UTR: <span className="text-[#71869B]">{p.transaction_reference || 'N/A'}</span>
                                 </div>
                               </td>
 
                               {/* Client & Project */}
-                              <td className="py-3 px-3.5 border-r border-[#dee2e6]">
-                                <div className="font-bold text-[#172b4d] flex items-center gap-1.5">
+                              <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
+                                <div className="font-bold text-[#19324D] flex items-center gap-1.5">
                                   <Building2 className="w-3.5 h-3.5 text-[#4689C8] shrink-0" />
                                   <span>{p.client_name || 'Client Contact'}</span>
                                 </div>
                                 {p.client_company && (
-                                  <div className="text-[11px] text-[#8898aa] ml-5">
+                                  <div className="text-[11px] text-[#71869B] ml-5">
                                     {p.client_company}
                                   </div>
                                 )}
                                 {p.project_title && (
-                                  <div className="text-[11px] text-[#525f7f] font-medium flex items-center gap-1.5 mt-0.5">
+                                  <div className="text-[11px] text-[#71869B] font-medium flex items-center gap-1.5 mt-0.5">
                                     <FolderKanban className="w-3 h-3 text-[#5FC8D6] shrink-0" />
                                     {p.project_id ? (
                                       <Link
@@ -737,39 +737,39 @@ export default function PaymentsPage() {
                               </td>
 
                               {/* Amount Credited */}
-                              <td className="py-3 px-3.5 border-r border-[#dee2e6] text-right font-mono font-bold">
-                                <span className="px-2 py-0.5 rounded text-xs bg-[#e8f7ee] text-[#2dce89] border border-[#2dce89]/30">
+                              <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-right font-mono font-bold">
+                                <span className="px-2 py-0.5 rounded text-xs bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30">
                                   + {formatCurrency(p.amount_paid)}
                                 </span>
                               </td>
 
                               {/* Payment Date */}
-                              <td className="py-3 px-3.5 border-r border-[#dee2e6]">
-                                <div className="font-semibold text-[#172b4d] flex items-center gap-1">
-                                  <Calendar className="w-3 h-3 text-[#8898aa]" />
+                              <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
+                                <div className="font-semibold text-[#19324D] flex items-center gap-1">
+                                  <Calendar className="w-3 h-3 text-[#71869B]" />
                                   <span>{formatDate(p.payment_date)}</span>
                                 </div>
                                 {p.created_at && (
-                                  <div className="text-[10px] text-[#8898aa] mt-0.5">
+                                  <div className="text-[10px] text-[#71869B] mt-0.5">
                                     Logged: {formatDateTime(p.created_at)}
                                   </div>
                                 )}
                               </td>
 
                               {/* Payment Mode */}
-                              <td className="py-3 px-3.5 border-r border-[#dee2e6] text-center">
-                                <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/25">
+                              <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">
+                                <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#EAF3FB] text-[#4689C8] border border-[#4689C8]/25">
                                   {p.payment_method || 'Online'}
                                 </span>
                               </td>
 
                               {/* Recorded By / Remarks */}
-                              <td className="py-3 px-3.5 border-r border-[#dee2e6] max-w-xs">
-                                <div className="text-[#172b4d] font-semibold text-xs">
+                              <td className="py-3 px-3.5 border-r border-[#DFEAF2] max-w-xs">
+                                <div className="text-[#19324D] font-semibold text-xs">
                                   {p.recorded_by_name || 'Admin'}
                                 </div>
                                 {p.notes ? (
-                                  <div className="text-[11px] text-[#8898aa] truncate mt-0.5" title={p.notes}>
+                                  <div className="text-[11px] text-[#71869B] truncate mt-0.5" title={p.notes}>
                                     {p.notes}
                                   </div>
                                 ) : (
@@ -787,7 +787,7 @@ export default function PaymentsPage() {
                                       setActiveReceiptPayment(p);
                                       setIsReceiptModalOpen(true);
                                     }}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#f0f7fd] hover:bg-[#e0effa] border border-[#4689C8]/30 rounded transition cursor-pointer"
+                                    className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#EAF3FB] hover:bg-[#e0effa] border border-[#4689C8]/30 rounded transition cursor-pointer"
                                     title="View & Print Official Receipt"
                                   >
                                     <Receipt className="w-3.5 h-3.5" />
@@ -802,7 +802,7 @@ export default function PaymentsPage() {
                                         setPaymentToDelete(p);
                                         setIsDeleteModalOpen(true);
                                       }}
-                                      className="p-1 text-[#f5365c] hover:bg-[#fdf2f2] rounded transition cursor-pointer"
+                                      className="p-1 text-[#F5365C] hover:bg-[#FDF2F2] rounded transition cursor-pointer"
                                       title="Delete Payment Entry"
                                     >
                                       <Trash2 className="w-3.5 h-3.5" />
@@ -819,22 +819,22 @@ export default function PaymentsPage() {
                 </div>
 
                 {/* DataTables Pagination & Footer Info */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs text-[#525f7f]">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs text-[#71869B]">
                   <div>
                     {totalEntries === 0 ? (
                       'Showing 0 to 0 of 0 entries'
                     ) : (
                       <>
                         Showing{' '}
-                        <span className="font-bold text-[#172b4d]">
+                        <span className="font-bold text-[#19324D]">
                           {(currentPage - 1) * pageSize + 1}
                         </span>{' '}
                         to{' '}
-                        <span className="font-bold text-[#172b4d]">
+                        <span className="font-bold text-[#19324D]">
                           {Math.min(currentPage * pageSize, totalEntries)}
                         </span>{' '}
                         of{' '}
-                        <span className="font-bold text-[#172b4d]">{totalEntries}</span> entries
+                        <span className="font-bold text-[#19324D]">{totalEntries}</span> entries
                         {selectedMethod !== 'All' && ` (filtered from ${payments.length} total entries)`}
                       </>
                     )}
@@ -844,7 +844,7 @@ export default function PaymentsPage() {
                     <button
                       onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                       disabled={currentPage === 1}
-                      className="px-2.5 py-1 rounded border border-[#dee2e6] bg-white text-[#525f7f] hover:bg-[#f6f9fc] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                      className="px-2.5 py-1 rounded border border-[#DFEAF2] bg-white text-[#71869B] hover:bg-[#EAF3FB] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
                     >
                       <ChevronLeft className="w-3.5 h-3.5" />
                     </button>
@@ -856,14 +856,14 @@ export default function PaymentsPage() {
                         return (
                           <div key={p} className="inline-flex items-center">
                             {prev && p - prev > 1 && (
-                              <span className="px-1 text-[#8898aa]">...</span>
+                              <span className="px-1 text-[#71869B]">...</span>
                             )}
                             <button
                               onClick={() => setCurrentPage(p)}
                               className={`px-3 py-1 rounded text-xs font-bold transition cursor-pointer ${
                                 currentPage === p
                                   ? 'bg-[#4689C8] text-white shadow-xs'
-                                  : 'bg-white border border-[#dee2e6] text-[#525f7f] hover:bg-[#f6f9fc]'
+                                  : 'bg-white border border-[#DFEAF2] text-[#71869B] hover:bg-[#EAF3FB]'
                               }`}
                             >
                               {p}
@@ -875,7 +875,7 @@ export default function PaymentsPage() {
                     <button
                       onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                       disabled={currentPage === totalPages || totalPages === 0}
-                      className="px-2.5 py-1 rounded border border-[#dee2e6] bg-white text-[#525f7f] hover:bg-[#f6f9fc] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                      className="px-2.5 py-1 rounded border border-[#DFEAF2] bg-white text-[#71869B] hover:bg-[#EAF3FB] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
                     >
                       <ChevronRight className="w-3.5 h-3.5" />
                     </button>
@@ -890,31 +890,31 @@ export default function PaymentsPage() {
                 {/* Operational Expense Metric Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {/* 1. Total Operating Expenses */}
-                  <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                           Total Operating Expenses
                         </span>
-                        <div className="text-xl sm:text-2xl font-extrabold text-[#f5365c] tracking-tight mt-1">
+                        <div className="text-xl sm:text-2xl font-extrabold text-[#F5365C] tracking-tight mt-1">
                           {formatCurrency(totalExpenseAmount)}
                         </div>
                       </div>
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#f5365c] to-[#e01a47] text-white flex items-center justify-center shadow-md shadow-[#f5365c]/25">
+                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#F5365C] to-[#e01a47] text-white flex items-center justify-center shadow-md shadow-[#F5365C]/25">
                         <Wallet className="w-5 h-5" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Overhead Cost:</span>
-                      <span className="font-bold text-[#f5365c]">{expenses.length} Records</span>
+                      <span className="font-bold text-[#F5365C]">{expenses.length} Records</span>
                     </div>
                   </div>
 
                   {/* 2. Cloud & Infra Spend */}
-                  <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                           Cloud &amp; Servers
                         </span>
                         <div className="text-xl sm:text-2xl font-extrabold text-[#11cdef] tracking-tight mt-1">
@@ -925,17 +925,17 @@ export default function PaymentsPage() {
                         <Server className="w-5 h-5" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Hosting &amp; DNS:</span>
                       <span className="font-bold text-[#11cdef]">Core Tech Ops</span>
                     </div>
                   </div>
 
                   {/* 3. Software & SaaS */}
-                  <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                           Software &amp; SaaS Tools
                         </span>
                         <div className="text-xl sm:text-2xl font-extrabold text-[#8965e0] tracking-tight mt-1">
@@ -946,34 +946,34 @@ export default function PaymentsPage() {
                         <Layers className="w-5 h-5" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Licensing:</span>
                       <span className="font-bold text-[#8965e0]">Dev &amp; Design Tools</span>
                     </div>
                   </div>
 
                   {/* 4. Net Cashflow Margin */}
-                  <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                           Net Operating Cashflow
                         </span>
-                        <div className={`text-xl sm:text-2xl font-extrabold tracking-tight mt-1 ${netCashflow >= 0 ? 'text-[#2dce89]' : 'text-[#f5365c]'}`}>
+                        <div className={`text-xl sm:text-2xl font-extrabold tracking-tight mt-1 ${netCashflow >= 0 ? 'text-[#20A36B]' : 'text-[#F5365C]'}`}>
                           {formatCurrency(netCashflow)}
                         </div>
                       </div>
                       <div className={`w-11 h-11 rounded-full text-white flex items-center justify-center shadow-md ${
                         netCashflow >= 0 
-                          ? 'bg-gradient-to-tr from-[#2dce89] to-[#20a36b] shadow-[#2dce89]/25'
-                          : 'bg-gradient-to-tr from-[#f5365c] to-[#e01a47] shadow-[#f5365c]/25'
+                          ? 'bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] shadow-[#20A36B]/25'
+                          : 'bg-gradient-to-tr from-[#F5365C] to-[#e01a47] shadow-[#F5365C]/25'
                       }`}>
                         {netCashflow >= 0 ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Realized Margin:</span>
-                      <span className={`font-bold ${netCashflow >= 0 ? 'text-[#2dce89]' : 'text-[#f5365c]'}`}>
+                      <span className={`font-bold ${netCashflow >= 0 ? 'text-[#20A36B]' : 'text-[#F5365C]'}`}>
                         {marginPercent}% of Collections
                       </span>
                     </div>
@@ -981,8 +981,8 @@ export default function PaymentsPage() {
                 </div>
 
                 {/* Statutory Disclaimer Note */}
-                <div className="p-3 bg-[#f8f9fe] rounded-md border border-[#dee2e6] text-xs text-[#525f7f] leading-relaxed flex items-center gap-2">
-                  <span className="font-bold text-[#4689C8] uppercase text-[10px] px-2 py-0.5 rounded bg-white border border-[#dee2e6]">
+                <div className="p-3 bg-[#F4F8FC] rounded-md border border-[#DFEAF2] text-xs text-[#71869B] leading-relaxed flex items-center gap-2">
+                  <span className="font-bold text-[#4689C8] uppercase text-[10px] px-2 py-0.5 rounded bg-white border border-[#DFEAF2]">
                     Internal Note
                   </span>
                   <span>
@@ -992,7 +992,7 @@ export default function PaymentsPage() {
 
                 {/* Expense Category Quick Filter Tabs */}
                 <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-                  <span className="text-[#8898aa] font-bold uppercase text-[10px] mr-1 shrink-0 flex items-center gap-1">
+                  <span className="text-[#71869B] font-bold uppercase text-[10px] mr-1 shrink-0 flex items-center gap-1">
                     <Filter className="w-3 h-3" /> Category:
                   </span>
                   {EXPENSE_CATEGORIES.map((c) => {
@@ -1008,7 +1008,7 @@ export default function PaymentsPage() {
                         className={`px-3 py-1 rounded-full font-semibold transition cursor-pointer whitespace-nowrap text-xs ${
                           isSelected
                             ? 'bg-[#4689C8] text-white shadow-xs'
-                            : 'bg-[#f6f9fc] text-[#525f7f] hover:bg-[#e9ecef]'
+                            : 'bg-[#EAF3FB] text-[#71869B] hover:bg-[#DFEAF2]'
                         }`}
                       >
                         {c}
@@ -1019,7 +1019,7 @@ export default function PaymentsPage() {
 
                 {/* Expense DataTables Controls Toolbar */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
-                  <div className="flex items-center gap-2 text-xs text-[#525f7f]">
+                  <div className="flex items-center gap-2 text-xs text-[#71869B]">
                     <span>Show</span>
                     <select
                       value={expensePageSize}
@@ -1027,7 +1027,7 @@ export default function PaymentsPage() {
                         setExpensePageSize(Number(e.target.value));
                         setExpenseCurrentPage(1);
                       }}
-                      className="px-2.5 py-1 bg-white border border-[#dee2e6] rounded text-xs font-bold text-[#172b4d] focus:outline-none focus:border-[#4689C8] cursor-pointer"
+                      className="px-2.5 py-1 bg-white border border-[#DFEAF2] rounded text-xs font-bold text-[#19324D] focus:outline-none focus:border-[#4689C8] cursor-pointer"
                     >
                       <option value={10}>10</option>
                       <option value={25}>25</option>
@@ -1037,7 +1037,7 @@ export default function PaymentsPage() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-[#525f7f] font-semibold">Search:</span>
+                    <span className="text-xs text-[#71869B] font-semibold">Search:</span>
                     <div className="relative">
                       <input
                         type="text"
@@ -1047,16 +1047,16 @@ export default function PaymentsPage() {
                           setExpenseCurrentPage(1);
                         }}
                         placeholder="Search expense, vendor, ref #..."
-                        className="w-56 sm:w-64 pl-8 pr-7 py-1.5 text-xs bg-white border border-[#dee2e6] rounded text-[#172b4d] placeholder-[#8898aa] focus:outline-none focus:border-[#4689C8] transition"
+                        className="w-56 sm:w-64 pl-8 pr-7 py-1.5 text-xs bg-white border border-[#DFEAF2] rounded text-[#19324D] placeholder-[#71869B] focus:outline-none focus:border-[#4689C8] transition"
                       />
-                      <Search className="w-3.5 h-3.5 text-[#8898aa] absolute left-2.5 top-1/2 -translate-y-1/2" />
+                      <Search className="w-3.5 h-3.5 text-[#71869B] absolute left-2.5 top-1/2 -translate-y-1/2" />
                       {expenseSearchQuery && (
                         <button
                           onClick={() => {
                             setExpenseSearchQuery('');
                             setExpenseCurrentPage(1);
                           }}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#8898aa] hover:text-[#172b4d]"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#71869B] hover:text-[#19324D]"
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -1066,27 +1066,27 @@ export default function PaymentsPage() {
                 </div>
 
                 {/* OJT Expenses Table */}
-                <div className="table-responsive border border-[#dee2e6] rounded-md overflow-hidden">
+                <div className="table-responsive border border-[#DFEAF2] rounded-md overflow-hidden">
                   <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
-                    <thead className="thead-light bg-[#f6f9fc] text-[#8898aa] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#e9ecef]">
+                    <thead className="thead-light bg-[#EAF3FB] text-[#71869B] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#DFEAF2]">
                       <tr>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6] w-36">Voucher / Ref #</th>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6]">Expense Title / Description</th>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6]">Category</th>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6]">Vendor / Payee</th>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6]">Date</th>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6] text-right">Amount (₹)</th>
-                        <th className="py-3 px-3.5 border-r border-[#dee2e6]">Payment Mode</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] w-36">Voucher / Ref #</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Expense Title / Description</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Category</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Vendor / Payee</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Date</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-right">Amount (₹)</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Payment Mode</th>
                         <th className="py-3 px-3.5 text-center w-24">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#dee2e6]">
+                    <tbody className="divide-y divide-[#DFEAF2]">
                       {paginatedExpenses.length === 0 ? (
                         <tr>
-                          <td colSpan="8" className="py-12 text-center text-[#8898aa]">
+                          <td colSpan="8" className="py-12 text-center text-[#71869B]">
                             <Wallet className="w-8 h-8 mx-auto text-[#adb5bd] mb-2" />
-                            <p className="font-semibold text-sm text-[#525f7f]">No expense records found</p>
-                            <p className="text-xs text-[#8898aa] mt-0.5">
+                            <p className="font-semibold text-sm text-[#71869B]">No expense records found</p>
+                            <p className="text-xs text-[#71869B] mt-0.5">
                               Record company operating expenses using the "Record Expense" button above.
                             </p>
                           </td>
@@ -1096,37 +1096,37 @@ export default function PaymentsPage() {
                           <tr 
                             key={ex.id} 
                             className={`transition-colors duration-150 ${
-                              idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
-                            } hover:bg-[#eaf2fc]`}
+                              idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white'
+                            } hover:bg-[#EAF3FB]`}
                           >
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6] font-mono font-bold text-[#172b4d]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] font-mono font-bold text-[#19324D]">
                               {ex.reference_no}
                             </td>
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6]">
-                              <div className="font-bold text-[#172b4d]">{ex.title}</div>
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
+                              <div className="font-bold text-[#19324D]">{ex.title}</div>
                               {ex.notes && (
-                                <div className="text-[11px] text-[#8898aa] mt-0.5 truncate max-w-xs" title={ex.notes}>
+                                <div className="text-[11px] text-[#71869B] mt-0.5 truncate max-w-xs" title={ex.notes}>
                                   {ex.notes}
                                 </div>
                               )}
                             </td>
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6]">
-                              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/20">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
+                              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-[#EAF3FB] text-[#4689C8] border border-[#4689C8]/20">
                                 {ex.category}
                               </span>
                             </td>
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6] font-semibold text-[#525f7f]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] font-semibold text-[#71869B]">
                               {ex.vendor}
                             </td>
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6] text-[#525f7f]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-[#71869B]">
                               {formatDate(ex.expense_date)}
                             </td>
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6] text-right font-mono font-bold">
-                              <span className="px-2 py-0.5 rounded text-xs bg-[#fdf2f2] text-[#f5365c] border border-[#f5365c]/30">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-right font-mono font-bold">
+                              <span className="px-2 py-0.5 rounded text-xs bg-[#FDF2F2] text-[#F5365C] border border-[#F5365C]/30">
                                 - {formatCurrency(ex.amount)}
                               </span>
                             </td>
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6] text-[#525f7f] text-[11px]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-[#71869B] text-[11px]">
                               {ex.payment_method}
                             </td>
                             <td className="py-3 px-3.5 text-center">
@@ -1137,7 +1137,7 @@ export default function PaymentsPage() {
                                     setActiveExpenseToEdit(ex);
                                     setIsExpenseModalOpen(true);
                                   }}
-                                  className="p-1 text-[#4689C8] hover:bg-[#f0f7fd] rounded transition cursor-pointer"
+                                  className="p-1 text-[#4689C8] hover:bg-[#EAF3FB] rounded transition cursor-pointer"
                                   title="Edit Expense Record"
                                 >
                                   <Edit3 className="w-3.5 h-3.5" />
@@ -1148,7 +1148,7 @@ export default function PaymentsPage() {
                                     setExpenseToDelete(ex);
                                     setIsDeleteExpenseModalOpen(true);
                                   }}
-                                  className="p-1 text-[#f5365c] hover:bg-[#fdf2f2] rounded transition cursor-pointer"
+                                  className="p-1 text-[#F5365C] hover:bg-[#FDF2F2] rounded transition cursor-pointer"
                                   title="Delete Expense Record"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
@@ -1163,22 +1163,22 @@ export default function PaymentsPage() {
                 </div>
 
                 {/* Expense Pagination */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs text-[#525f7f]">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs text-[#71869B]">
                   <div>
                     {totalExpenseEntries === 0 ? (
                       'Showing 0 to 0 of 0 entries'
                     ) : (
                       <>
                         Showing{' '}
-                        <span className="font-bold text-[#172b4d]">
+                        <span className="font-bold text-[#19324D]">
                           {(expenseCurrentPage - 1) * expensePageSize + 1}
                         </span>{' '}
                         to{' '}
-                        <span className="font-bold text-[#172b4d]">
+                        <span className="font-bold text-[#19324D]">
                           {Math.min(expenseCurrentPage * expensePageSize, totalExpenseEntries)}
                         </span>{' '}
                         of{' '}
-                        <span className="font-bold text-[#172b4d]">{totalExpenseEntries}</span> entries
+                        <span className="font-bold text-[#19324D]">{totalExpenseEntries}</span> entries
                       </>
                     )}
                   </div>
@@ -1187,7 +1187,7 @@ export default function PaymentsPage() {
                     <button
                       onClick={() => setExpenseCurrentPage((prev) => Math.max(prev - 1, 1))}
                       disabled={expenseCurrentPage === 1}
-                      className="px-2.5 py-1 rounded border border-[#dee2e6] bg-white text-[#525f7f] hover:bg-[#f6f9fc] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                      className="px-2.5 py-1 rounded border border-[#DFEAF2] bg-white text-[#71869B] hover:bg-[#EAF3FB] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
                     >
                       <ChevronLeft className="w-3.5 h-3.5" />
                     </button>
@@ -1199,7 +1199,7 @@ export default function PaymentsPage() {
                         className={`px-3 py-1 rounded text-xs font-bold transition cursor-pointer ${
                           expenseCurrentPage === p
                             ? 'bg-[#4689C8] text-white shadow-xs'
-                            : 'bg-white border border-[#dee2e6] text-[#525f7f] hover:bg-[#f6f9fc]'
+                            : 'bg-white border border-[#DFEAF2] text-[#71869B] hover:bg-[#EAF3FB]'
                         }`}
                       >
                         {p}
@@ -1209,7 +1209,7 @@ export default function PaymentsPage() {
                     <button
                       onClick={() => setExpenseCurrentPage((prev) => Math.min(prev + 1, totalExpensePages))}
                       disabled={expenseCurrentPage === totalExpensePages || totalExpensePages === 0}
-                      className="px-2.5 py-1 rounded border border-[#dee2e6] bg-white text-[#525f7f] hover:bg-[#f6f9fc] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                      className="px-2.5 py-1 rounded border border-[#DFEAF2] bg-white text-[#71869B] hover:bg-[#EAF3FB] disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
                     >
                       <ChevronRight className="w-3.5 h-3.5" />
                     </button>

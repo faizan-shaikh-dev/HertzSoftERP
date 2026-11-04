@@ -109,16 +109,16 @@ export default function EditProfileModal({ isOpen, onClose }) {
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-lg bg-white rounded-lg shadow-2xl border border-[#e9ecef] overflow-hidden my-auto animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-lg bg-white rounded-lg shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header - OJT Style */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#e9ecef] bg-white">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#DFEAF2] bg-white">
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight">
               Edit Profile
             </h3>
-            <p className="text-xs text-[#8898aa] mt-0.5">
+            <p className="text-xs text-[#71869B] mt-0.5">
               Update your display name, contact email, and credentials
             </p>
           </div>
@@ -126,7 +126,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
           <button
             onClick={onClose}
             type="button"
-            className="text-[#172b4d] hover:text-[#525f7f] transition cursor-pointer p-0.5 rounded-full"
+            className="text-[#19324D] hover:text-[#71869B] transition cursor-pointer p-0.5 rounded-full"
             aria-label="Close modal"
           >
             <XCircle className="w-7 h-7 stroke-[1.5]" />
@@ -137,7 +137,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
         <form onSubmit={handleSubmit} className="p-6 space-y-4 bg-white">
           {/* Success Banner */}
           {success && (
-            <div className="p-3.5 rounded-md bg-[#eafaf1] border border-[#2dce89]/30 flex items-center gap-2.5 text-[#2dce89] text-xs font-semibold">
+            <div className="p-3.5 rounded-md bg-[#eafaf1] border border-[#20A36B]/30 flex items-center gap-2.5 text-[#20A36B] text-xs font-semibold">
               <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
               <span>{success}</span>
             </div>
@@ -145,7 +145,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
 
           {/* Error Banner */}
           {error && (
-            <div className="p-3.5 rounded-md bg-[#fdf2f2] border border-[#f5365c]/30 flex items-center gap-2.5 text-[#f5365c] text-xs font-semibold">
+            <div className="p-3.5 rounded-md bg-[#FDF2F2] border border-[#F5365C]/30 flex items-center gap-2.5 text-[#F5365C] text-xs font-semibold">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{error}</span>
             </div>
@@ -153,8 +153,8 @@ export default function EditProfileModal({ isOpen, onClose }) {
 
           {/* Full Name Field */}
           <div>
-            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-              Full Name <span className="text-[#f5365c] font-bold ml-0.5">*</span>
+            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+              Full Name <span className="text-[#F5365C] font-bold ml-0.5">*</span>
             </label>
             <input
               type="text"
@@ -162,14 +162,14 @@ export default function EditProfileModal({ isOpen, onClose }) {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Your full name"
-              className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
             />
           </div>
 
           {/* Email Address Field */}
           <div>
-            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-              Email Address <span className="text-[#f5365c] font-bold ml-0.5">*</span>
+            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+              Email Address <span className="text-[#F5365C] font-bold ml-0.5">*</span>
             </label>
             <input
               type="email"
@@ -177,19 +177,19 @@ export default function EditProfileModal({ isOpen, onClose }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@hertzsoft.com"
-              className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
             />
           </div>
 
           {/* Role Display (Read-Only) */}
           <div>
-            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
               System Role
             </label>
-            <div className="flex items-center gap-2 px-3.5 py-2.5 bg-[#f8f9fe] rounded-md border border-[#dee2e6] text-[#525f7f] text-xs font-semibold">
+            <div className="flex items-center gap-2 px-3.5 py-2.5 bg-[#F4F8FC] rounded-md border border-[#DFEAF2] text-[#71869B] text-xs font-semibold">
               <ShieldCheck className="w-4 h-4 text-[#4689C8]" />
-              <span className="text-[#172b4d]">{user?.role || 'Administrator'}</span>
-              <span className="text-[10px] text-[#8898aa] font-normal ml-auto">(Assigned by System)</span>
+              <span className="text-[#19324D]">{user?.role || 'Administrator'}</span>
+              <span className="text-[10px] text-[#71869B] font-normal ml-auto">(Assigned by System)</span>
             </div>
           </div>
 
@@ -205,9 +205,9 @@ export default function EditProfileModal({ isOpen, onClose }) {
                 <span>Want to change your password?</span>
               </button>
             ) : (
-              <div className="p-4 rounded-md bg-[#f8f9fe] border border-[#dee2e6] space-y-3">
+              <div className="p-4 rounded-md bg-[#F4F8FC] border border-[#DFEAF2] space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-[#172b4d] flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-[#19324D] flex items-center gap-1.5">
                     <Lock className="w-3.5 h-3.5 text-[#4689C8]" />
                     Change Password
                   </span>
@@ -218,14 +218,14 @@ export default function EditProfileModal({ isOpen, onClose }) {
                       setCurrentPassword('');
                       setNewPassword('');
                     }}
-                    className="text-[11px] font-semibold text-[#f5365c] hover:underline cursor-pointer"
+                    className="text-[11px] font-semibold text-[#F5365C] hover:underline cursor-pointer"
                   >
                     Cancel
                   </button>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#525f7f] mb-1">
+                  <label className="block text-xs font-semibold text-[#71869B] mb-1">
                     Current Password
                   </label>
                   <input
@@ -233,12 +233,12 @@ export default function EditProfileModal({ isOpen, onClose }) {
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     placeholder="Enter current password"
-                    className="w-full px-3 py-2 bg-white text-[#172b4d] text-xs rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none"
+                    className="w-full px-3 py-2 bg-white text-[#19324D] text-xs rounded-md border border-[#DFEAF2] focus:border-[#4689C8] outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#525f7f] mb-1">
+                  <label className="block text-xs font-semibold text-[#71869B] mb-1">
                     New Password
                   </label>
                   <input
@@ -246,7 +246,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Enter at least 6 characters"
-                    className="w-full px-3 py-2 bg-white text-[#172b4d] text-xs rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none"
+                    className="w-full px-3 py-2 bg-white text-[#19324D] text-xs rounded-md border border-[#DFEAF2] focus:border-[#4689C8] outline-none"
                   />
                 </div>
               </div>
@@ -258,7 +258,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#4689C8] hover:bg-[#3876b0] text-white font-bold text-sm rounded shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full py-3 bg-[#4689C8] hover:bg-[#3475B2] text-white font-bold text-sm rounded shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>

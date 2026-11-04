@@ -88,7 +88,7 @@ export const createLead = async (leadData, userId) => {
 };
 
 // 2. Get all Leads (with search & filter)
-export const getLeads = async ({ status, search, lead_type, assigned_to, priority, follow_up_filter, sort_by = 'created_at', sort_order = 'DESC' }) => {
+export const getLeads = async ({ status, search, lead_type, assigned_to, priority, follow_up_filter, is_converted, sort_by = 'created_at', sort_order = 'DESC' }) => {
   let query = `
     SELECT l.*, 
            u.full_name as assigned_to_name, 
@@ -106,6 +106,13 @@ export const getLeads = async ({ status, search, lead_type, assigned_to, priorit
     WHERE 1=1
   `;
   const params = [];
+
+  // Filter for converted to client
+  if (is_converted === 'true' || is_converted === true) {
+    query += ' AND l.converted_client_id IS NOT NULL';
+  } else if (is_converted === 'false' || is_converted === false) {
+    query += ' AND l.converted_client_id IS NULL';
+  }
 
   if (lead_type) {
     query += ' AND l.lead_type = ?';
@@ -147,6 +154,7 @@ export const getLeads = async ({ status, search, lead_type, assigned_to, priorit
   // Sorting
   const allowedSortCols = {
     created_at: 'l.created_at',
+    converted_at: 'l.converted_at',
     name: 'l.name',
     company_name: 'l.company_name',
     estimated_budget: 'l.estimated_budget',

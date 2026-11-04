@@ -401,27 +401,36 @@ export default function LeadsPage() {
 
   return (
     <AppLayout title="Client Leads & Business Inquiries">
-      {/* OJT Unified .mainCard Container */}
-      <div className="card shadow-sm mb-4 bg-white border border-[#e9ecef] rounded-lg overflow-hidden min-h-[82vh]">
-        {/* CARD HEADER (Exact OJT style: Title on left, Action buttons on right) */}
-        <div className="card-header px-6 py-4 bg-white border-b border-[#e9ecef] flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Unified .mainCard Container */}
+      <div className="card shadow-sm mb-4 bg-white border border-[#DFEAF2] rounded-xl overflow-hidden min-h-[82vh]">
+        {/* CARD HEADER */}
+        <div className="card-header px-6 py-4 bg-white border-b border-[#DFEAF2] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight m-0">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight m-0">
               Leads Management
             </h2>
-            <p className="text-xs text-[#8898aa] mt-0.5">
+            <p className="text-xs text-[#71869B] mt-0.5">
               Client Inquiries & Enterprise Deals Pipeline
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Link
+              href="/clients"
+              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-[#39AFC0] bg-[#E8F8FA] hover:bg-[#5FC8D6]/20 border border-[#91DCE5] rounded-lg shadow-2xs transition"
+              title="View Clients Directory"
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>Clients</span>
+            </Link>
+
             <button
               type="button"
               onClick={() => {
                 setEditingLead(null);
                 setIsLeadModalOpen(true);
               }}
-              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-sm transition cursor-pointer"
+              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3475B2] rounded-lg shadow-sm transition cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Lead</span>
@@ -430,7 +439,7 @@ export default function LeadsPage() {
             <button
               type="button"
               onClick={handleResetFilters}
-              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#fb6340] hover:bg-[#eb4d2b] rounded shadow-sm transition cursor-pointer"
+              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#19324D] bg-white hover:bg-[#EAF3FB] hover:text-[#4689C8] border border-[#DFEAF2] rounded-lg shadow-sm transition cursor-pointer"
               title="Reset all search & filters"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -441,7 +450,7 @@ export default function LeadsPage() {
               type="button"
               onClick={() => fetchLeads(true)}
               disabled={loading}
-              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#525f7f] bg-white hover:bg-[#f6f9fc] border border-[#e9ecef] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
+              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#19324D] bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] rounded-lg shadow-xs transition cursor-pointer disabled:opacity-50"
               title="Refresh records"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4689C8]' : ''}`} />
@@ -452,17 +461,17 @@ export default function LeadsPage() {
 
         {/* CARD BODY */}
         <div className="card-body p-4 sm:p-6 space-y-4">
-          {/* OJT Top Controls Toolbar (DataTables Style) */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-[#e9ecef]">
+          {/* Top Controls Toolbar */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-[#DFEAF2]">
             {/* Left: Show Entries & Filter Controls */}
             <div className="flex flex-wrap items-center gap-2.5">
-              {/* Show Entries Dropdown (Fixed 10 rows per page default) */}
-              <div className="flex items-center gap-1.5 text-xs text-[#8898aa]">
+              {/* Show Entries Dropdown */}
+              <div className="flex items-center gap-1.5 text-xs text-[#71869B]">
                 <span>Show</span>
                 <select
                   value={itemsPerPage}
                   onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                  className="text-xs px-2 py-1 bg-white border border-[#e9ecef] rounded text-[#172b4d] font-bold outline-none focus:border-[#4689C8] cursor-pointer"
+                  className="text-xs px-2.5 py-1 bg-white border border-[#DFEAF2] rounded-md text-[#19324D] font-bold outline-none focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 cursor-pointer"
                 >
                   <option value={10}>10</option>
                   <option value={25}>25</option>
@@ -472,9 +481,9 @@ export default function LeadsPage() {
                 <span>entries</span>
               </div>
 
-              <div className="h-4 w-[1px] bg-[#e9ecef] hidden sm:block" />
+              <div className="h-4 w-[1px] bg-[#DFEAF2] hidden sm:block" />
 
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[#8898aa] mr-0.5">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#71869B] mr-0.5">
                 Filter:
               </span>
 
@@ -482,7 +491,7 @@ export default function LeadsPage() {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="text-xs px-2.5 py-1 bg-white border border-[#e9ecef] rounded text-[#525f7f] font-medium outline-none focus:border-[#4689C8] cursor-pointer"
+                className="text-xs px-2.5 py-1 bg-white border border-[#DFEAF2] rounded-md text-[#19324D] font-medium outline-none focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 cursor-pointer"
               >
                 <option value="All">Status (All)</option>
                 {STATUS_OPTIONS.map((st) => (
@@ -494,7 +503,7 @@ export default function LeadsPage() {
               <select
                 value={selectedOwner}
                 onChange={(e) => setSelectedOwner(e.target.value)}
-                className="text-xs px-2.5 py-1 bg-white border border-[#e9ecef] rounded text-[#525f7f] font-medium outline-none focus:border-[#4689C8] cursor-pointer"
+                className="text-xs px-2.5 py-1 bg-white border border-[#DFEAF2] rounded-md text-[#19324D] font-medium outline-none focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 cursor-pointer"
               >
                 <option value="All">Owner (All)</option>
                 {assignees.map((emp) => (
@@ -506,7 +515,7 @@ export default function LeadsPage() {
               <select
                 value={selectedPriority}
                 onChange={(e) => setSelectedPriority(e.target.value)}
-                className="text-xs px-2.5 py-1 bg-white border border-[#e9ecef] rounded text-[#525f7f] font-medium outline-none focus:border-[#4689C8] cursor-pointer"
+                className="text-xs px-2.5 py-1 bg-white border border-[#DFEAF2] rounded-md text-[#19324D] font-medium outline-none focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 cursor-pointer"
               >
                 <option value="All">Priority (All)</option>
                 <option value="Urgent">Urgent Priority</option>
@@ -518,19 +527,19 @@ export default function LeadsPage() {
 
             {/* Right: Search Box */}
             <div className="flex items-center gap-2">
-              <span className="text-xs text-[#8898aa] font-medium">Search:</span>
+              <span className="text-xs text-[#71869B] font-medium">Search:</span>
               <div className="relative">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Client, phone, company..."
-                  className="text-xs pl-3 pr-7 py-1.5 bg-white border border-[#e9ecef] rounded text-[#172b4d] placeholder-[#adb5bd] outline-none focus:border-[#4689C8] w-56 sm:w-64"
+                  className="text-xs pl-3 pr-7 py-1.5 bg-white border border-[#DFEAF2] rounded-lg text-[#19324D] placeholder-[#71869B] outline-none focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 w-56 sm:w-64"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-2 top-1 text-sm text-[#8898aa] hover:text-[#172b4d] cursor-pointer"
+                    className="absolute right-2 top-1 text-sm text-[#71869B] hover:text-[#19324D] cursor-pointer"
                   >
                     ×
                   </button>
@@ -541,7 +550,7 @@ export default function LeadsPage() {
 
           {/* Error Notice */}
           {error && (
-            <div className="p-3 rounded bg-red-50 border border-red-200 text-xs text-red-700 flex items-center justify-between">
+            <div className="p-3 rounded-lg bg-[#FDF2F2] border border-[#F5365C]/30 text-xs text-[#F5365C] flex items-center justify-between">
               <span>{error}</span>
               <button onClick={() => fetchLeads(false)} className="font-bold underline cursor-pointer">
                 Retry
@@ -549,46 +558,46 @@ export default function LeadsPage() {
             </div>
           )}
 
-          {/* OJT TABLE: table-striped table-bordered table-hover table-sm */}
-          <div className="table-responsive overflow-x-auto border border-[#e9ecef] rounded">
-            <table className="w-full text-left text-xs text-[#525f7f] border-collapse">
-              <thead className="thead-light bg-[#f6f9fc] border-b-2 border-[#e9ecef] text-[#8898aa] text-[11px] font-bold uppercase tracking-wider">
+          {/* TABLE */}
+          <div className="table-responsive overflow-x-auto border border-[#DFEAF2] rounded-lg">
+            <table className="w-full text-left text-xs text-[#19324D] border-collapse">
+              <thead className="thead-light bg-[#EAF3FB] border-b border-[#DFEAF2] text-[#19324D] text-[11px] font-bold uppercase tracking-wider">
                 <tr>
-                  <th className="py-3 px-3.5 border-r border-[#e9ecef] text-center w-16">Sr #</th>
+                  <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center w-16">Sr #</th>
                   <th 
                     onClick={() => handleSort('name')}
-                    className="py-3 px-3.5 border-r border-[#e9ecef] cursor-pointer select-none hover:text-[#172b4d]"
+                    className="py-3 px-3.5 border-r border-[#DFEAF2] cursor-pointer select-none hover:text-[#4689C8]"
                   >
                     <div className="flex items-center justify-between gap-1">
                       <span>Client & Contact</span>
                       {sortField === 'name' ? (
                         sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-[#4689C8]" /> : <ArrowDown className="w-3 h-3 text-[#4689C8]" />
                       ) : (
-                        <ArrowUpDown className="w-3 h-3 text-[#adb5bd]" />
+                        <ArrowUpDown className="w-3 h-3 text-[#71869B]" />
                       )}
                     </div>
                   </th>
-                  <th className="py-3 px-3.5 border-r border-[#e9ecef]">Lead Inquiry</th>
+                  <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Lead Inquiry</th>
                   <th 
                     onClick={() => handleSort('status')}
-                    className="py-3 px-3.5 border-r border-[#e9ecef] cursor-pointer select-none hover:text-[#172b4d]"
+                    className="py-3 px-3.5 border-r border-[#DFEAF2] cursor-pointer select-none hover:text-[#4689C8]"
                   >
                     <div className="flex items-center justify-between gap-1">
                       <span>Pipeline Status</span>
                       {sortField === 'status' ? (
                         sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-[#4689C8]" /> : <ArrowDown className="w-3 h-3 text-[#4689C8]" />
                       ) : (
-                        <ArrowUpDown className="w-3 h-3 text-[#adb5bd]" />
+                        <ArrowUpDown className="w-3 h-3 text-[#71869B]" />
                       )}
                     </div>
                   </th>
                   <th className="py-3 px-3.5 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e9ecef]">
+              <tbody className="divide-y divide-[#DFEAF2]">
                 {loading ? (
                   <tr>
-                    <td colSpan="5" className="py-16 text-center text-[#8898aa]">
+                    <td colSpan="5" className="py-16 text-center text-[#71869B]">
                       <Loader2 className="w-7 h-7 animate-spin text-[#4689C8] mx-auto mb-2" />
                       <span className="text-xs font-medium">Loading inquiries from database...</span>
                     </td>
@@ -598,11 +607,11 @@ export default function LeadsPage() {
                     <tr 
                       key={lead.id} 
                       className={`transition-colors duration-150 ${
-                        idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
-                      } hover:bg-[#eaf2fc]`}
+                        idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white'
+                      } hover:bg-[#EAF3FB]`}
                     >
                       {/* 1. Sr # / Lead Number */}
-                      <td className="py-2.5 px-3 border-r border-[#e9ecef] text-center font-bold text-[#172b4d]">
+                      <td className="py-2.5 px-3 border-r border-[#DFEAF2] text-center font-bold text-[#19324D]">
                         <Link 
                           href={`/leads/view?id=${lead.id}`}
                           className="font-mono text-[11px] text-[#4689C8] hover:underline font-bold"
@@ -613,8 +622,8 @@ export default function LeadsPage() {
                       </td>
 
                       {/* 2. Client & Contact */}
-                      <td className="py-2.5 px-3 border-r border-[#e9ecef]">
-                        <div className="font-bold text-[#172b4d] text-xs">
+                      <td className="py-2.5 px-3 border-r border-[#DFEAF2]">
+                        <div className="font-bold text-[#19324D] text-xs">
                           <Link 
                             href={`/leads/view?id=${lead.id}`}
                             className="hover:text-[#4689C8] hover:underline transition"
@@ -624,7 +633,7 @@ export default function LeadsPage() {
                           </Link>
                         </div>
                         {lead.company_name && (
-                          <div className="text-[11px] text-[#525f7f] font-medium flex items-center gap-1 mt-0.5">
+                          <div className="text-[11px] text-[#71869B] font-medium flex items-center gap-1 mt-0.5">
                             <Building2 className="w-3 h-3 text-[#4689C8] flex-shrink-0" />
                             <span>{lead.company_name}</span>
                           </div>
@@ -637,73 +646,71 @@ export default function LeadsPage() {
                               href={`https://wa.me/${waPhone}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 mt-0.5 text-[11px] font-mono text-[#25D366] hover:text-[#1ebe57] font-semibold hover:underline transition"
+                              className="inline-flex items-center gap-1.5 mt-0.5 text-[11px] font-mono text-[#20A36B] hover:text-[#178553] font-semibold hover:underline transition"
                               title="Click to chat on WhatsApp"
                             >
-                              <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366] shrink-0" />
+                              <WhatsAppIcon className="w-3.5 h-3.5 text-[#20A36B] shrink-0" />
                               <span>{lead.phone}</span>
                             </a>
                           );
                         })()}
                         {lead.email && (
-                          <div className="text-[10px] text-[#adb5bd] truncate max-w-[150px]">
+                          <div className="text-[10px] text-[#71869B] truncate max-w-[150px]">
                             {lead.email}
                           </div>
                         )}
                       </td>
 
-
-                      {/* 4. Service & Requirement */}
-                      <td className="py-2.5 px-3 border-r border-[#e9ecef] max-w-[260px]">
-                        <div className="text-xs font-semibold text-[#172b4d] truncate">
+                      {/* 3. Service & Requirement */}
+                      <td className="py-2.5 px-3 border-r border-[#DFEAF2] max-w-[260px]">
+                        <div className="text-xs font-semibold text-[#19324D] truncate">
                           {lead.service_interest || 'Custom Software Solution'}
                         </div>
                         {lead.requirement && (
-                          <div className="text-[11px] text-[#8898aa] truncate max-w-[240px] mt-0.5" title={lead.requirement}>
+                          <div className="text-[11px] text-[#71869B] truncate max-w-[240px] mt-0.5" title={lead.requirement}>
                             {lead.requirement}
                           </div>
                         )}
                       </td>
 
-
-                      {/* 6. Pipeline Status (Exact OJT Badge Dropdown) */}
-                      <td className="py-2.5 px-3 border-r border-[#e9ecef]">
+                      {/* 4. Pipeline Status */}
+                      <td className="py-2.5 px-3 border-r border-[#DFEAF2]">
                         <div className="flex flex-col items-start gap-1">
                           <select
                             value={lead.status}
                             onChange={(e) => handleStatusChange(lead, e.target.value)}
                             className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider outline-none border cursor-pointer ${
                               lead.status === 'Won'
-                                ? 'bg-[#2dce89] text-white border-[#2dce89]'
+                                ? 'bg-[#20A36B] text-white border-[#20A36B]'
                                 : lead.status === 'Lost'
-                                ? 'bg-[#f5365c] text-white border-[#f5365c]'
+                                ? 'bg-[#F5365C] text-white border-[#F5365C]'
                                 : lead.status === 'New'
-                                ? 'bg-[#fb6340] text-white border-[#fb6340]'
+                                ? 'bg-[#E8F8FA] text-[#39AFC0] border-[#91DCE5]'
                                 : lead.status === 'Contacted'
-                                ? 'bg-[#11cdef] text-white border-[#11cdef]'
+                                ? 'bg-[#5FC8D6] text-white border-[#5FC8D6]'
                                 : lead.status === 'Qualified'
-                                ? 'bg-[#4689C8] text-white border-[#4689C8]'
+                                ? 'bg-[#78A9D7] text-white border-[#78A9D7]'
                                 : lead.status === 'Quotation Sent'
-                                ? 'bg-[#5603ad] text-white border-[#5603ad]'
+                                ? 'bg-[#4689C8] text-white border-[#4689C8]'
                                 : lead.status === 'Negotiation'
-                                ? 'bg-[#8965e0] text-white border-[#8965e0]'
-                                : 'bg-[#ffbb33] text-[#212529] border-[#ffbb33]'
+                                ? 'bg-[#8965E0] text-white border-[#8965E0]'
+                                : 'bg-[#71869B] text-white border-[#71869B]'
                             }`}
                           >
                             {STATUS_OPTIONS.map((st) => (
-                              <option key={st} value={st} className="bg-white text-[#172b4d] font-normal">
+                              <option key={st} value={st} className="bg-white text-[#19324D] font-normal">
                                 {st}
                               </option>
                             ))}
                           </select>
 
                           {lead.status === 'Lost' && lead.lost_reason && (
-                            <p className="text-[10px] text-[#f5365c] truncate max-w-[140px]" title={lead.lost_reason}>
+                            <p className="text-[10px] text-[#F5365C] truncate max-w-[140px]" title={lead.lost_reason}>
                               {lead.lost_reason}
                             </p>
                           )}
                           {lead.status === 'On Hold' && lead.on_hold_reason && (
-                            <p className="text-[10px] text-[#fb6340] truncate max-w-[140px]" title={lead.on_hold_reason}>
+                            <p className="text-[10px] text-[#71869B] truncate max-w-[140px]" title={lead.on_hold_reason}>
                               Hold: {lead.on_hold_reason}
                             </p>
                           )}
@@ -714,7 +721,7 @@ export default function LeadsPage() {
                                 setLeadToConvert(lead);
                                 setIsConvertModalOpen(true);
                               }}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold text-white bg-[#2dce89] hover:bg-[#229c68] shadow-2xs transition cursor-pointer"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold text-white bg-[#20A36B] hover:bg-[#178553] shadow-2xs transition cursor-pointer"
                               title="Convert Won Inquiry to Active Client"
                             >
                               <Sparkles className="w-2.5 h-2.5" />
@@ -724,23 +731,23 @@ export default function LeadsPage() {
                           {lead.converted_client_id && (
                             <Link
                               href={`/projects?search=${encodeURIComponent(lead.name || '')}`}
-                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#e8f7ee] text-[#2dce89] hover:bg-[#d4f2e0] border border-[#2dce89]/30 transition shadow-2xs"
+                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#EAF8F1] text-[#20A36B] hover:bg-[#d4f2df] border border-[#20A36B]/30 transition shadow-2xs"
                               title="View Project Contracts for this Client"
                             >
-                              <UserCheck className="w-2.5 h-2.5 text-[#2dce89]" />
+                              <UserCheck className="w-2.5 h-2.5 text-[#20A36B]" />
                               <span>Client #{lead.converted_client_number || 'Linked'}</span>
                             </Link>
                           )}
                         </div>
                       </td>
 
-                      {/* 7. Action Buttons */}
+                      {/* 5. Action Buttons */}
                       <td className="py-2.5 px-3 text-center">
                         <div className="flex items-center justify-center gap-1">
                           {/* View Lead Pipeline & Activity History */}
                           <Link
                             href={`/leads/view?id=${lead.id}`}
-                            className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold text-[#4689C8] bg-[#f0f7fd] hover:bg-[#e0effa] border border-[#4689C8]/30 transition shadow-2xs"
+                            className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold text-[#4689C8] bg-[#EAF3FB] hover:bg-[#4689C8] hover:text-white border border-[#78A9D7]/40 transition shadow-2xs"
                             title="View Lead Pipeline & Activity History"
                           >
                             <Eye className="w-3.5 h-3.5" />
@@ -752,7 +759,7 @@ export default function LeadsPage() {
                               setEditingLead(lead);
                               setIsLeadModalOpen(true);
                             }}
-                            className="p-1.5 rounded text-[#4689C8] hover:bg-blue-50 border border-transparent hover:border-blue-200 transition cursor-pointer"
+                            className="p-1.5 rounded-md text-[#4689C8] hover:bg-[#EAF3FB] border border-transparent hover:border-[#78A9D7]/30 transition cursor-pointer"
                             title="Edit Inquiry Details"
                           >
                             <Edit className="w-3.5 h-3.5" />
@@ -764,7 +771,7 @@ export default function LeadsPage() {
                                 setLeadToDelete(lead);
                                 setIsDeleteModalOpen(true);
                               }}
-                              className="p-1.5 rounded text-[#f5365c] hover:bg-red-50 border border-transparent hover:border-red-200 transition cursor-pointer"
+                              className="p-1.5 rounded-md text-[#F5365C] hover:bg-[#FDF2F2] border border-transparent hover:border-[#F5365C]/30 transition cursor-pointer"
                               title="Delete Lead"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -776,10 +783,10 @@ export default function LeadsPage() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="py-16 text-center text-[#8898aa]">
-                      <Users className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-                      <p className="text-xs font-bold text-[#172b4d]">No client inquiries found</p>
-                      <p className="text-[11px] text-[#8898aa] mt-0.5">
+                    <td colSpan="5" className="py-16 text-center text-[#71869B]">
+                      <Users className="w-8 h-8 mx-auto text-[#71869B]/40 mb-2" />
+                      <p className="text-xs font-bold text-[#19324D]">No client inquiries found</p>
+                      <p className="text-[11px] text-[#71869B] mt-0.5">
                         Register a new business lead or adjust your filter query.
                       </p>
                     </td>
@@ -789,29 +796,29 @@ export default function LeadsPage() {
             </table>
           </div>
 
-          {/* OJT PAGINATION TOOLBAR (DataTables Style) */}
-          <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#525f7f]">
+          {/* PAGINATION TOOLBAR */}
+          <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#71869B]">
             <div>
               <span>
-                Showing <strong className="text-[#172b4d]">{sortedLeads.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</strong> to{' '}
-                <strong className="text-[#172b4d]">{Math.min(currentPage * itemsPerPage, sortedLeads.length)}</strong> of{' '}
-                <strong className="text-[#172b4d]">{sortedLeads.length}</strong> entries
+                Showing <strong className="text-[#19324D]">{sortedLeads.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</strong> to{' '}
+                <strong className="text-[#19324D]">{Math.min(currentPage * itemsPerPage, sortedLeads.length)}</strong> of{' '}
+                <strong className="text-[#19324D]">{sortedLeads.length}</strong> entries
                 {sortedLeads.length !== leads.length && (
-                  <span className="text-[#8898aa] ml-1">(filtered from {leads.length} total entries)</span>
+                  <span className="text-[#71869B] ml-1">(filtered from {leads.length} total entries)</span>
                 )}
               </span>
             </div>
 
-            {/* Page navigation (Exact OJT Bootstrap pagination buttons) */}
+            {/* Page navigation */}
             <div className="flex items-center self-center">
               <nav aria-label="Table pagination">
-                <ul className="inline-flex items-center -space-x-px text-xs rounded border border-[#dee2e6] overflow-hidden bg-white shadow-2xs">
+                <ul className="inline-flex items-center -space-x-px text-xs rounded-lg border border-[#DFEAF2] overflow-hidden bg-white shadow-2xs">
                   <li>
                     <button
                       type="button"
                       onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                       disabled={currentPage === 1}
-                      className="px-3 py-1.5 border-r border-[#dee2e6] bg-white text-[#525f7f] hover:bg-[#f6f9fc] hover:text-[#4689C8] disabled:text-[#adb5bd] disabled:bg-[#fcfcfd] disabled:cursor-not-allowed font-medium transition cursor-pointer"
+                      className="px-3 py-1.5 border-r border-[#DFEAF2] bg-white text-[#19324D] hover:bg-[#EAF3FB] hover:text-[#4689C8] disabled:text-[#71869B]/40 disabled:bg-[#F4F8FC] disabled:cursor-not-allowed font-medium transition cursor-pointer"
                     >
                       Previous
                     </button>
@@ -829,10 +836,10 @@ export default function LeadsPage() {
                           <button
                             type="button"
                             onClick={() => setCurrentPage(pg)}
-                            className={`px-3.5 py-1.5 border-r border-[#dee2e6] text-xs font-bold transition cursor-pointer ${
+                            className={`px-3.5 py-1.5 border-r border-[#DFEAF2] text-xs font-bold transition cursor-pointer ${
                               isActive
                                 ? 'bg-[#4689C8] text-white'
-                                : 'bg-white text-[#525f7f] hover:bg-[#f6f9fc] hover:text-[#4689C8]'
+                                : 'bg-white text-[#19324D] hover:bg-[#EAF3FB] hover:text-[#4689C8]'
                             }`}
                           >
                             {pg}
@@ -841,7 +848,7 @@ export default function LeadsPage() {
                       );
                     } else if (pg === currentPage - 2 || pg === currentPage + 2) {
                       return (
-                        <li key={pg} className="px-2 py-1.5 border-r border-[#dee2e6] text-[#adb5bd] bg-[#fcfcfd]">
+                        <li key={pg} className="px-2 py-1.5 border-r border-[#DFEAF2] text-[#71869B] bg-[#F4F8FC]">
                           ...
                         </li>
                       );
@@ -854,7 +861,7 @@ export default function LeadsPage() {
                       type="button"
                       onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                       disabled={currentPage === totalPages}
-                      className="px-3 py-1.5 bg-white text-[#525f7f] hover:bg-[#f6f9fc] hover:text-[#4689C8] disabled:text-[#adb5bd] disabled:bg-[#fcfcfd] disabled:cursor-not-allowed font-medium transition cursor-pointer"
+                      className="px-3 py-1.5 bg-white text-[#19324D] hover:bg-[#EAF3FB] hover:text-[#4689C8] disabled:text-[#71869B]/40 disabled:bg-[#F4F8FC] disabled:cursor-not-allowed font-medium transition cursor-pointer"
                     >
                       Next
                     </button>

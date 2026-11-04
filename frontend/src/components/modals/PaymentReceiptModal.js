@@ -76,7 +76,7 @@ export default function PaymentReceiptModal({ isOpen, onClose, payment }) {
 
       <div className="relative w-full max-w-3xl bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden my-auto max-h-[92vh] flex flex-col">
         {/* Top Control Bar - Hertzsoft Brand */}
-        <div className="px-6 py-4 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] border-b-2 border-[#5FC8D6]/40 text-white flex items-center justify-between shrink-0 shadow-md">
+        <div className="px-6 py-4 bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] border-b-2 border-[#5FC8D6]/40 text-white flex items-center justify-between shrink-0 shadow-md">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-white/15 text-white border border-white/25 flex items-center justify-center">
               <Receipt className="w-5 h-5 text-white" />
@@ -99,7 +99,7 @@ export default function PaymentReceiptModal({ isOpen, onClose, payment }) {
           <div className="flex items-center gap-2.5">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#172b4d] bg-white hover:bg-slate-50 rounded-md shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#19324D] bg-white hover:bg-slate-50 rounded-md shadow-xs transition-all cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5 text-[#4689C8]" />
               <span>Print / Download PDF</span>
@@ -181,18 +181,18 @@ export default function PaymentReceiptModal({ isOpen, onClose, payment }) {
             </div>
 
             {/* Amount Credited Highlight Banner */}
-            <div className="p-5 rounded-lg bg-gradient-to-r from-[#e8f7ee] to-[#f0fbf5] border border-[#2dce89]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="p-5 rounded-lg bg-gradient-to-r from-[#EAF8F1] to-[#f0fbf5] border border-[#20A36B]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div>
-                <span className="text-[10px] font-extrabold text-[#2dce89] uppercase tracking-wider">
+                <span className="text-[10px] font-extrabold text-[#20A36B] uppercase tracking-wider">
                   Amount Received (INR)
                 </span>
-                <div className="text-2xl sm:text-3xl font-black text-[#172b4d] font-mono mt-0.5">
+                <div className="text-2xl sm:text-3xl font-black text-[#19324D] font-mono mt-0.5">
                   {formatCurrency(payment.amount_paid)}
                 </div>
               </div>
 
               <div className="text-xs text-slate-600 sm:text-right">
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold bg-white text-[#2dce89] border border-[#2dce89]/30 shadow-2xs">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold bg-white text-[#20A36B] border border-[#20A36B]/30 shadow-2xs">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>Payment Credited</span>
                 </span>

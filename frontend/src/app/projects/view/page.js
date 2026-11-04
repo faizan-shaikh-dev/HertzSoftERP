@@ -24,13 +24,11 @@ import {
   PlusCircle,
   CheckCircle,
   FileText,
-  FileSpreadsheet,
   Receipt
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import AppLayout from '@/components/AppLayout';
 import projectService from '@/services/projectService';
-import quotationService from '@/services/quotationService';
 import { PaymentModal, ProjectModal, PaymentReceiptModal } from '@/components/modals';
 
 function ProjectViewContent() {
@@ -42,7 +40,6 @@ function ProjectViewContent() {
   const projectId = searchParams.get('id') || searchParams.get('project_id') || searchParams.get('projects_id');
 
   const [project, setProject] = useState(null);
-  const [projectQuotations, setProjectQuotations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -52,7 +49,7 @@ function ProjectViewContent() {
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
   const [selectedReceiptPayment, setSelectedReceiptPayment] = useState(null);
 
-  // Fetch project details and linked quotations
+  // Fetch project details
   const fetchProjectDetails = useCallback(async () => {
     if (!projectId) {
       setLoading(false);
@@ -63,19 +60,12 @@ function ProjectViewContent() {
     try {
       setLoading(true);
       setError(null);
-      const [res, quotesRes] = await Promise.all([
-        projectService.getProjectById(projectId),
-        quotationService.getQuotations({ project_id: projectId }).catch(() => ({ data: [] }))
-      ]);
+      const res = await projectService.getProjectById(projectId);
 
       if (res.success && res.data) {
         setProject(res.data);
       } else {
         setError('Project record not found or failed to load.');
-      }
-
-      if (quotesRes?.data) {
-        setProjectQuotations(quotesRes.data);
       }
     } catch (err) {
       console.error('Error fetching project details:', err);
@@ -144,15 +134,15 @@ function ProjectViewContent() {
   return (
     <AppLayout title="Project Details & Reports">
       <div className="container-fluid px-0 sm:px-2">
-        {/* MAIN MASTER OJT CARD */}
-        <div className="card shadow-sm mb-4 mainCard bg-white border border-[#e9ecef] rounded-lg overflow-hidden">
-          {/* OJT Card Header with Back Button and Actions */}
-          <div className="card-header bg-white border-b border-[#e9ecef] py-4 px-4 sm:px-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        {/* MAIN MASTER CARD */}
+        <div className="card shadow-sm mb-4 mainCard bg-white border border-[#DFEAF2] rounded-xl overflow-hidden">
+          {/* Card Header with Back Button and Actions */}
+          <div className="card-header bg-white border-b border-[#DFEAF2] py-4 px-4 sm:px-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => router.push('/projects')}
-                className="btn btn-sm inline-flex items-center justify-center w-9 h-9 rounded bg-[#4689C8] hover:bg-[#3876b0] text-white shadow-xs transition cursor-pointer flex-shrink-0"
+                className="btn btn-sm inline-flex items-center justify-center w-9 h-9 rounded-lg bg-[#EAF3FB] hover:bg-[#4689C8] hover:text-white text-[#4689C8] border border-[#78A9D7]/40 shadow-xs transition cursor-pointer flex-shrink-0"
                 title="Back to Projects"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -160,35 +150,35 @@ function ProjectViewContent() {
 
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight m-0">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight m-0">
                     Project Details & Reports
                   </h2>
                   {project?.status && (
                     <span className={`px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider ${
                       project.status === 'Completed'
-                        ? 'bg-[#e8f7ee] text-[#2dce89] border border-[#2dce89]/30'
+                        ? 'bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30'
                         : project.status === 'In Progress'
-                        ? 'bg-[#e0f7fa] text-[#11cdef] border border-[#11cdef]/30'
+                        ? 'bg-[#E8F8FA] text-[#39AFC0] border border-[#91DCE5]'
                         : project.status === 'On Hold'
-                        ? 'bg-[#fef4e6] text-[#fb6340] border border-[#fb6340]/30'
-                        : 'bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/30'
+                        ? 'bg-amber-50 text-amber-700 border border-amber-300'
+                        : 'bg-[#EAF3FB] text-[#4689C8] border border-[#78A9D7]/30'
                     }`}>
                       {project.status}
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-[#8898aa] mt-0.5">
+                <p className="text-xs text-[#71869B] mt-0.5">
                   Contract scope, milestones, client details, and installment payments ledger
                 </p>
               </div>
             </div>
 
-            {/* Header Right Action Buttons (OJT Style) */}
+            {/* Header Right Action Buttons */}
             <div className="flex items-center gap-2 flex-wrap">
               <button
                 type="button"
                 onClick={() => setIsPaymentModalOpen(true)}
-                className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#2dce89] hover:bg-[#229c68] rounded shadow-xs transition cursor-pointer"
+                className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#20A36B] hover:bg-[#178553] rounded-lg shadow-xs transition cursor-pointer"
                 title="Record payment installment for this project"
               >
                 <PlusCircle className="w-3.5 h-3.5" />
@@ -198,7 +188,7 @@ function ProjectViewContent() {
               <button
                 type="button"
                 onClick={() => setIsProjectModalOpen(true)}
-                className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-xs transition cursor-pointer"
+                className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3475B2] rounded-lg shadow-xs transition cursor-pointer"
                 title="Edit Project Details"
               >
                 <Edit3 className="w-3.5 h-3.5" />
@@ -209,20 +199,20 @@ function ProjectViewContent() {
                 type="button"
                 onClick={fetchProjectDetails}
                 disabled={loading}
-                className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#525f7f] bg-white hover:bg-[#f6f9fc] border border-[#e9ecef] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
+                className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#19324D] bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] rounded-lg shadow-xs transition cursor-pointer disabled:opacity-50"
                 title="Refresh details"
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4689C8]' : ''}`} />
                 <span className="hidden sm:inline">Refresh</span>
               </button>
             </div>
           </div>
 
           {/* Card Body */}
-          <div className="card-body p-4 sm:p-6 bg-[#f8f9fe]/40 space-y-6">
+          <div className="card-body p-4 sm:p-6 bg-[#F4F8FC]/50 space-y-6">
             {/* Loading Spinner */}
             {loading && !project && (
-              <div className="py-20 text-center text-[#8898aa]">
+              <div className="py-20 text-center text-[#71869B]">
                 <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#4689C8] mb-3" />
                 <p className="text-sm font-semibold">Loading project contract details and payment ledger...</p>
               </div>
@@ -230,14 +220,14 @@ function ProjectViewContent() {
 
             {/* Error Message */}
             {!loading && error && (
-              <div className="p-6 text-center bg-white border border-red-200 rounded-lg shadow-xs my-6">
+              <div className="p-6 text-center bg-white border border-red-200 rounded-xl shadow-xs my-6">
                 <AlertCircle className="w-10 h-10 text-red-500 mx-auto mb-2" />
-                <h3 className="text-base font-bold text-[#172b4d]">Unable to Load Project</h3>
+                <h3 className="text-base font-bold text-[#19324D]">Unable to Load Project</h3>
                 <p className="text-xs text-red-600 mt-1 max-w-md mx-auto">{error}</p>
                 <div className="mt-4 flex items-center justify-center gap-3">
                   <Link
                     href="/projects"
-                    className="btn btn-sm px-4 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded"
+                    className="btn btn-sm px-4 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3475B2] rounded-lg"
                   >
                     Return to Projects
                   </Link>
@@ -248,10 +238,10 @@ function ProjectViewContent() {
             {/* Project Content */}
             {!loading && project && (
               <>
-                {/* 1. OJT PROJECT & CLIENT BASIC INFORMATION CARD */}
-                <div className="card shadow-sm border-0 rounded-lg overflow-hidden bg-white">
-                  {/* Hertzsoft Brand Gradient Banner */}
-                  <div className="bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] text-white px-5 py-3.5 flex items-center justify-between">
+                {/* 1. PROJECT & CLIENT BASIC INFORMATION CARD */}
+                <div className="card shadow-sm border border-[#DFEAF2] rounded-xl overflow-hidden bg-white">
+                  {/* Brand Gradient Banner */}
+                  <div className="bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] text-white px-5 py-3.5 flex items-center justify-between">
                     <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
                       <FolderKanban className="w-4 h-4 text-white" />
                       <span>Project Contract & Client Information</span>
@@ -261,47 +251,47 @@ function ProjectViewContent() {
                     </span>
                   </div>
 
-                  {/* 2-Column Grid of Bordered Field Boxes (Exact OJT .profile-item) */}
+                  {/* 2-Column Grid of Bordered Field Boxes */}
                   <div className="p-4 sm:p-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                       {/* Project Title */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white profile-item hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white profile-item hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Project Title / Deliverable
                         </div>
-                        <div className="text-sm font-bold text-[#172b4d] mt-0.5">
+                        <div className="text-sm font-bold text-[#19324D] mt-0.5">
                           {project.title}
                         </div>
                       </div>
 
                       {/* Client Name */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white profile-item hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white profile-item hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Client / Contact Person
                         </div>
-                        <div className="text-sm font-bold text-[#172b4d] mt-0.5 flex items-center gap-1.5">
+                        <div className="text-sm font-bold text-[#19324D] mt-0.5 flex items-center gap-1.5">
                           <User className="w-3.5 h-3.5 text-[#4689C8]" />
                           <span>{project.client_name || '-'}</span>
                         </div>
                       </div>
 
                       {/* Company Name */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white profile-item hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white profile-item hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Company / Business Entity
                         </div>
-                        <div className="text-sm font-bold text-[#172b4d] mt-0.5 flex items-center gap-1.5">
-                          <Building2 className="w-3.5 h-3.5 text-[#8898aa]" />
+                        <div className="text-sm font-bold text-[#19324D] mt-0.5 flex items-center gap-1.5">
+                          <Building2 className="w-3.5 h-3.5 text-[#71869B]" />
                           <span>{project.client_company || 'Individual Client'}</span>
                         </div>
                       </div>
 
                       {/* Client Email */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white profile-item hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white profile-item hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Client Email Address
                         </div>
-                        <div className="text-sm font-semibold text-[#172b4d] mt-0.5">
+                        <div className="text-sm font-semibold text-[#19324D] mt-0.5">
                           {project.client_email ? (
                             <a 
                               href={`mailto:${project.client_email}`} 
@@ -311,17 +301,17 @@ function ProjectViewContent() {
                               <span>{project.client_email}</span>
                             </a>
                           ) : (
-                            <span className="text-slate-400 font-normal italic">N/A</span>
+                            <span className="text-[#71869B] font-normal italic">N/A</span>
                           )}
                         </div>
                       </div>
 
                       {/* Client Phone */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white profile-item hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white profile-item hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Contact Number
                         </div>
-                        <div className="text-sm font-semibold text-[#172b4d] mt-0.5">
+                        <div className="text-sm font-semibold text-[#19324D] mt-0.5">
                           {project.client_phone ? (
                             <a 
                               href={`tel:${project.client_phone}`} 
@@ -331,80 +321,80 @@ function ProjectViewContent() {
                               <span>{project.client_phone}</span>
                             </a>
                           ) : (
-                            <span className="text-slate-400 font-normal italic">N/A</span>
+                            <span className="text-[#71869B] font-normal italic">N/A</span>
                           )}
                         </div>
                       </div>
 
                       {/* Billing Address */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white profile-item hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white profile-item hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Billing Address
                         </div>
-                        <div className="text-xs font-semibold text-[#172b4d] mt-0.5 flex items-start gap-1.5">
-                          <MapPin className="w-3.5 h-3.5 text-[#8898aa] mt-0.5 flex-shrink-0" />
+                        <div className="text-xs font-semibold text-[#19324D] mt-0.5 flex items-start gap-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-[#71869B] mt-0.5 flex-shrink-0" />
                           <span>{project.client_address || 'No address specified'}</span>
                         </div>
                       </div>
 
                       {/* Start Date */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white profile-item hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white profile-item hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Contract Start Date
                         </div>
-                        <div className="text-xs font-semibold text-[#172b4d] mt-0.5 flex items-center gap-1.5">
+                        <div className="text-xs font-semibold text-[#19324D] mt-0.5 flex items-center gap-1.5">
                           <Calendar className="w-3.5 h-3.5 text-[#4689C8]" />
                           <span>{formatDate(project.start_date || project.created_at)}</span>
                         </div>
                       </div>
 
                       {/* Expected Completion Date */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white profile-item hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white profile-item hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Expected Completion / Target Date
                         </div>
-                        <div className="text-xs font-semibold text-[#172b4d] mt-0.5 flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-[#fb6340]" />
+                        <div className="text-xs font-semibold text-[#19324D] mt-0.5 flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-[#39AFC0]" />
                           <span>{formatDate(project.target_date || project.deadline)}</span>
                         </div>
                       </div>
 
                       {/* Contract Value & Paid */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white profile-item hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white profile-item hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Contract Value & Clearance
                         </div>
-                        <div className="text-xs font-bold text-[#172b4d] mt-0.5 flex items-center gap-2">
-                          <span className="text-sm font-extrabold text-[#172b4d]">
+                        <div className="text-xs font-bold text-[#19324D] mt-0.5 flex items-center gap-2">
+                          <span className="text-sm font-extrabold text-[#19324D]">
                             {formatCurrency(totalCost)}
                           </span>
-                          <span className="text-[#8898aa]">•</span>
-                          <span className="text-xs font-bold text-[#2dce89]">
+                          <span className="text-[#71869B]">•</span>
+                          <span className="text-xs font-bold text-[#20A36B]">
                             {formatCurrency(totalPaid)} Paid
                           </span>
-                          <span className="text-[#8898aa]">•</span>
-                          <span className="text-xs font-bold text-[#f5365c]">
+                          <span className="text-[#71869B]">•</span>
+                          <span className="text-xs font-bold text-[#F5365C]">
                             {formatCurrency(dueBalance)} Due
                           </span>
                         </div>
                       </div>
 
                       {/* Created On */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white profile-item hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white profile-item hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Record Created On
                         </div>
-                        <div className="text-xs font-semibold text-[#525f7f] mt-0.5">
+                        <div className="text-xs font-semibold text-[#71869B] mt-0.5">
                           {formatDateTime(project.created_at)}
                         </div>
                       </div>
 
                       {/* Technical Scope / Description */}
-                      <div className="md:col-span-2 border border-[#dee2e6] p-2.5 rounded bg-white profile-item hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="md:col-span-2 border border-[#DFEAF2] p-2.5 rounded-lg bg-white profile-item hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Project Description & Technical Scope
                         </div>
-                        <div className="text-xs text-[#525f7f] mt-1 whitespace-pre-line leading-relaxed">
+                        <div className="text-xs text-[#19324D] mt-1 whitespace-pre-line leading-relaxed">
                           {project.description || 'No detailed technical scope recorded for this contract.'}
                         </div>
                       </div>
@@ -412,11 +402,11 @@ function ProjectViewContent() {
                   </div>
                 </div>
 
-                {/* 2. OJT STATISTICS / ANALYTICS SECTION (Exact match to students-view.php .stats-card) */}
+                {/* 2. STATISTICS / ANALYTICS SECTION */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Left Card: Financials & Collections Overview (Pink-Red Gradient) */}
+                  {/* Left Card: Financials & Collections Overview */}
                   <div className="rounded-xl p-5 text-white shadow-md relative overflow-hidden"
-                    style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}
+                    style={{ background: 'linear-gradient(135deg, #4689C8 0%, #5FC8D6 100%)' }}
                   >
                     <div className="flex items-center justify-between">
                       <div className="space-y-3">
@@ -453,7 +443,7 @@ function ProjectViewContent() {
                         </div>
                       </div>
 
-                      {/* Circular Progress Ring (Exact OJT progress-ring) */}
+                      {/* Circular Progress Ring */}
                       <div className="flex-shrink-0 flex items-center justify-center relative w-20 h-20 sm:w-24 sm:h-24">
                         <svg className="w-full h-full -rotate-90">
                           <circle
@@ -488,9 +478,9 @@ function ProjectViewContent() {
                     </div>
                   </div>
 
-                  {/* Right Card: Project Milestones & Lifecycle (Purple-Indigo Gradient) */}
+                  {/* Right Card: Project Milestones & Lifecycle */}
                   <div className="rounded-xl p-5 text-white shadow-md relative overflow-hidden"
-                    style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
+                    style={{ background: 'linear-gradient(135deg, #3475B2 0%, #4689C8 100%)' }}
                   >
                     <div className="flex items-center justify-between">
                       <div className="space-y-3">
@@ -563,9 +553,9 @@ function ProjectViewContent() {
                   </div>
                 </div>
 
-                {/* 3. OJT DETAILED PAYMENT TRANSACTIONS REPORT */}
-                <div className="card shadow-sm border-0 rounded-lg overflow-hidden bg-white">
-                  <div className="bg-gradient-to-r from-[#2dce89] to-[#20a36b] text-white px-5 py-3.5 flex items-center justify-between">
+                {/* 3. DETAILED PAYMENT TRANSACTIONS REPORT */}
+                <div className="card shadow-sm border border-[#DFEAF2] rounded-xl overflow-hidden bg-white">
+                  <div className="bg-gradient-to-r from-[#20A36B] to-[#39AFC0] text-white px-5 py-3.5 flex items-center justify-between">
                     <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
                       <CreditCard className="w-4 h-4 text-white" />
                       <span>Project Installments & Payment Ledger ({project.payment_history?.length || 0})</span>
@@ -574,7 +564,7 @@ function ProjectViewContent() {
                     <button
                       type="button"
                       onClick={() => setIsPaymentModalOpen(true)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold bg-white/20 hover:bg-white/30 text-white transition cursor-pointer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold bg-white/20 hover:bg-white/30 text-white transition cursor-pointer"
                     >
                       <Plus className="w-3 h-3" />
                       <span>Record Installment</span>
@@ -583,76 +573,76 @@ function ProjectViewContent() {
 
                   <div className="p-4 sm:p-5">
                     {(!project.payment_history || project.payment_history.length === 0) ? (
-                      <div className="py-8 text-center text-[#8898aa]">
-                        <CreditCard className="w-8 h-8 mx-auto text-[#adb5bd] mb-1.5" />
-                        <p className="text-xs font-semibold text-[#172b4d]">No payment installments recorded for this project yet</p>
-                        <p className="text-[11px] text-[#8898aa] mt-0.5">Click &quot;Record Installment&quot; above to log the first credited amount.</p>
+                      <div className="py-8 text-center text-[#71869B]">
+                        <CreditCard className="w-8 h-8 mx-auto text-[#71869B]/40 mb-1.5" />
+                        <p className="text-xs font-semibold text-[#19324D]">No payment installments recorded for this project yet</p>
+                        <p className="text-[11px] text-[#71869B] mt-0.5">Click &quot;Record Installment&quot; above to log the first credited amount.</p>
                         <button
                           type="button"
                           onClick={() => setIsPaymentModalOpen(true)}
-                          className="mt-3 btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#2dce89] hover:bg-[#229c68] rounded shadow-xs"
+                          className="mt-3 btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#20A36B] hover:bg-[#178553] rounded-lg shadow-xs cursor-pointer"
                         >
                           <Plus className="w-3.5 h-3.5" />
                           <span>Record First Payment</span>
                         </button>
                       </div>
                     ) : (
-                      <div className="table-responsive border border-[#dee2e6] rounded-md overflow-hidden">
+                      <div className="table-responsive border border-[#DFEAF2] rounded-lg overflow-hidden">
                         <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
-                          <thead className="thead-light bg-[#f6f9fc] text-[#8898aa] text-[11px] font-bold uppercase tracking-wider border-b border-[#dee2e6]">
+                          <thead className="thead-light bg-[#EAF3FB] text-[#19324D] text-[11px] font-bold uppercase tracking-wider border-b border-[#DFEAF2]">
                             <tr>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6] w-12 text-center">#</th>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6]">Payment Date</th>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6] text-right">Amount Paid</th>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6] text-center">Payment Mode</th>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6]">Recorded By</th>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6] text-center">Status</th>
+                              <th className="py-3 px-3.5 border-r border-[#DFEAF2] w-12 text-center">#</th>
+                              <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Payment Date</th>
+                              <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-right">Amount Paid</th>
+                              <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">Payment Mode</th>
+                              <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Recorded By</th>
+                              <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">Status</th>
                               <th className="py-3 px-3.5 text-center">Receipt</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-[#dee2e6]">
+                          <tbody className="divide-y divide-[#DFEAF2]">
                             {project.payment_history.map((pm, idx) => (
                               <tr 
                                 key={pm.id} 
                                 className={`transition-colors duration-150 ${
-                                  idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
-                                } hover:bg-[#eaf2fc]`}
+                                  idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white'
+                               } hover:bg-[#EAF3FB]`}
                               >
                                 {/* Row Num */}
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] text-center font-bold text-[#8898aa]">
+                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-center font-bold text-[#71869B]">
                                   {idx + 1}
                                 </td>
 
                                 {/* Date */}
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] text-[#525f7f]">
-                                  <div className="font-bold text-[#172b4d]">
+                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-[#19324D]">
+                                  <div className="font-bold text-[#19324D]">
                                     {formatDate(pm.payment_date || pm.created_at)}
                                   </div>
-                                  <div className="text-[10px] text-[#8898aa]">
+                                  <div className="text-[10px] text-[#71869B]">
                                     {formatDateTime(pm.created_at)}
                                   </div>
                                 </td>
 
                                 {/* Amount */}
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] text-right font-extrabold text-[#2dce89]">
+                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-right font-extrabold text-[#20A36B]">
                                   {formatCurrency(pm.amount_paid)}
                                 </td>
 
                                 {/* Mode */}
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] text-center">
-                                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200">
+                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-center">
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#F4F8FC] text-[#19324D] border border-[#DFEAF2]">
                                     {pm.payment_mode || 'Bank Transfer'}
                                   </span>
                                 </td>
 
                                 {/* Recorded By */}
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] text-[#525f7f]">
+                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-[#19324D]">
                                   {pm.recorded_by_name || 'Admin'}
                                 </td>
 
                                 {/* Status */}
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] text-center">
-                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-[#e8f7ee] text-[#2dce89] border border-[#2dce89]/30">
+                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-center">
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30">
                                     <CheckCircle className="w-3 h-3" />
                                     <span>Success</span>
                                   </span>
@@ -673,112 +663,12 @@ function ProjectViewContent() {
                                       });
                                       setIsReceiptModalOpen(true);
                                     }}
-                                    className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#f0f7fd] hover:bg-blue-100 border border-[#4689C8]/30 rounded shadow-2xs transition cursor-pointer"
+                                    className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#EAF3FB] hover:bg-[#4689C8] hover:text-white border border-[#78A9D7]/40 rounded-md shadow-2xs transition cursor-pointer"
                                     title="Print Payment Receipt"
                                   >
                                     <Receipt className="w-3 h-3" />
                                     <span>Receipt</span>
                                   </button>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* 4. LINKED COMMERCIAL PROPOSALS & QUOTATIONS */}
-                <div className="card shadow-sm border-0 rounded-lg overflow-hidden bg-white">
-                  <div className="bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] text-white px-5 py-3.5 flex items-center justify-between">
-                    <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
-                      <FileSpreadsheet className="w-4 h-4 text-[#5FC8D6]" />
-                      <span>Linked Commercial Proposals & Quotations ({projectQuotations.length})</span>
-                    </h5>
-
-                    <Link
-                      href="/quotations"
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold bg-white/20 hover:bg-white/30 text-white transition cursor-pointer"
-                    >
-                      <Plus className="w-3 h-3" />
-                      <span>Manage Quotations</span>
-                    </Link>
-                  </div>
-
-                  <div className="p-4 sm:p-5">
-                    {projectQuotations.length === 0 ? (
-                      <div className="py-8 text-center text-[#8898aa]">
-                        <FileSpreadsheet className="w-8 h-8 mx-auto text-[#adb5bd] mb-1.5" />
-                        <p className="text-xs font-semibold text-[#172b4d]">No quotations linked to this project yet</p>
-                        <p className="text-[11px] text-[#8898aa] mt-0.5">Commercial estimates and proposals for this client account can be drafted in Quotations.</p>
-                        <Link
-                          href="/quotations"
-                          className="mt-3 btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-xs"
-                        >
-                          <Plus className="w-3.5 h-3.5" />
-                          <span>Draft Commercial Proposal</span>
-                        </Link>
-                      </div>
-                    ) : (
-                      <div className="table-responsive border border-[#dee2e6] rounded-md overflow-hidden">
-                        <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
-                          <thead className="thead-light bg-[#f6f9fc] text-[#8898aa] text-[11px] font-bold uppercase tracking-wider border-b border-[#dee2e6]">
-                            <tr>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6]">Quote #</th>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6]">Version</th>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6]">Subject / Scope</th>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6]">Issue Date</th>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6] text-right">Total Amount</th>
-                              <th className="py-3 px-3.5 border-r border-[#dee2e6] text-center">Status</th>
-                              <th className="py-3 px-3.5 text-center">Action</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-[#dee2e6]">
-                            {projectQuotations.map((q, idx) => (
-                              <tr 
-                                key={q.id} 
-                                className={`transition-colors duration-150 ${
-                                  idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
-                                } hover:bg-[#eaf2fc]`}
-                              >
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] font-mono font-bold text-[#172b4d]">
-                                  {q.quotation_number}
-                                </td>
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6]">
-                                  <span className="font-mono font-bold text-xs px-1.5 py-0.5 rounded bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/30">
-                                    v{q.version}
-                                  </span>
-                                </td>
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] font-semibold text-[#172b4d]">
-                                  {q.title}
-                                </td>
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] text-[#525f7f]">
-                                  {formatDate(q.quotation_date)}
-                                </td>
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] text-right font-mono font-bold text-[#172b4d]">
-                                  {formatCurrency(q.total_amount)}
-                                </td>
-                                <td className="py-2.5 px-3.5 border-r border-[#dee2e6] text-center">
-                                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                                    q.status === 'Accepted'
-                                      ? 'bg-[#e8f7ee] text-[#2dce89]'
-                                      : q.status === 'Sent'
-                                      ? 'bg-[#f0f7fd] text-[#4689C8]'
-                                      : q.status === 'Superseded'
-                                      ? 'bg-purple-50 text-purple-700'
-                                      : 'bg-slate-100 text-slate-700'
-                                  }`}>
-                                    {q.status}
-                                  </span>
-                                </td>
-                                <td className="py-2.5 px-3.5 text-center">
-                                  <Link
-                                    href={`/quotations/view?id=${q.id}`}
-                                    className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded transition"
-                                  >
-                                    View Scope
-                                  </Link>
                                 </td>
                               </tr>
                             ))}
@@ -835,7 +725,7 @@ export default function ProjectViewPage() {
   return (
     <Suspense fallback={
       <AppLayout title="Loading Project Reports...">
-        <div className="py-20 text-center text-[#8898aa]">
+        <div className="py-20 text-center text-[#71869B]">
           <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#4689C8] mb-3" />
           <p className="text-sm font-semibold">Loading Project Reports...</p>
         </div>

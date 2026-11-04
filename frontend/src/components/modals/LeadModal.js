@@ -335,22 +335,22 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
       />
 
       <div 
-        className="relative w-full max-w-3xl bg-white rounded-xl shadow-2xl border border-slate-200/90 overflow-hidden my-4 sm:my-8 animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] flex flex-col"
+        className="relative w-full max-w-3xl bg-white rounded-xl shadow-2xl border border-[#DFEAF2] overflow-hidden my-4 sm:my-8 animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-labelledby="lead-modal-title"
       >
         {/* Modal Header (Hertzsoft Branded) */}
-        <div className="px-6 pt-5 pb-4 flex items-center justify-between bg-white flex-shrink-0 border-b border-[#e9ecef]">
+        <div className="px-6 pt-5 pb-4 flex items-center justify-between bg-white flex-shrink-0 border-b border-[#DFEAF2]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#326fa8] to-[#4689C8] text-white flex items-center justify-center shadow-sm shadow-[#4689C8]/25 flex-shrink-0">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#4689C8] to-[#5FC8D6] text-white flex items-center justify-center shadow-sm shadow-[#4689C8]/25 flex-shrink-0">
               <Briefcase className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 id="lead-modal-title" className="text-lg sm:text-xl font-bold text-[#172b4d] tracking-tight m-0">
+              <h2 id="lead-modal-title" className="text-lg sm:text-xl font-bold text-[#19324D] tracking-tight m-0">
                 {isEdit ? 'Edit Lead Record' : 'Register New Lead'}
               </h2>
-              <p className="text-xs text-[#8898aa] mt-0.5">
+              <p className="text-xs text-[#71869B] mt-0.5">
                 Client inquiry, service & scope, and team assignment.
               </p>
             </div>
@@ -358,7 +358,7 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
 
           <button
             onClick={onClose}
-            className="text-[#8898aa] hover:text-[#172b4d] transition cursor-pointer p-1 rounded-full hover:bg-[#f6f9fc]"
+            className="text-[#71869B] hover:text-[#19324D] transition cursor-pointer p-1 rounded-full hover:bg-[#EAF3FB]"
             aria-label="Close modal"
           >
             <X className="w-6 h-6" />
@@ -378,8 +378,8 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Name* (Full width) */}
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Name<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+                Name<span className="text-[#F5365C] font-bold ml-0.5">*</span>
               </label>
               <input
                 type="text"
@@ -387,13 +387,13 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter client / POC full name"
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
 
             {/* Company Name (Full width) */}
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Business / Company Name
               </label>
               <input
@@ -401,14 +401,14 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 placeholder="e.g. Acme Technologies Pvt Ltd"
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
 
             {/* Lead Inquiry* (Full width) */}
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Lead Inquiry<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+                Lead Inquiry<span className="text-[#F5365C] font-bold ml-0.5">*</span>
               </label>
               <input
                 type="text"
@@ -416,15 +416,15 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
                 value={serviceInterest}
                 onChange={(e) => setServiceInterest(e.target.value)}
                 placeholder="e.g. Website Development, Mobile App, E-Commerce, ERP Portal, SEO..."
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
 
             {/* Contact No* */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-semibold text-[#525f7f]">
-                  Contact No<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+                <label className="block text-xs font-semibold text-[#71869B]">
+                  Contact No<span className="text-[#F5365C] font-bold ml-0.5">*</span>
                 </label>
                 {checkingDuplicate && (
                   <span className="text-[10px] text-[#4689C8] flex items-center gap-1 font-medium">
@@ -439,17 +439,17 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
                 value={phone}
                 onChange={(e) => handlePhoneChange(e.target.value)}
                 placeholder="+91 98765 43210"
-                className={`w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border outline-none transition font-mono ${
+                className={`w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border outline-none transition font-mono ${
                   duplicateMatches.length > 0 
                     ? 'border-amber-400 bg-amber-50/20 focus:border-amber-500' 
-                    : 'border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8]'
+                    : 'border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20'
                 }`}
               />
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Email
               </label>
               <input
@@ -457,14 +457,14 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="client@company.com"
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
 
 
             {/* City / Location */}
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 City / Location
               </label>
               <input
@@ -472,20 +472,20 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 placeholder="e.g. Mumbai, Maharashtra"
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
 
 
             {/* Lead Source */}
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Lead Source
               </label>
               <select
                 value={source}
                 onChange={(e) => setSource(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer"
               >
                 {SOURCE_OPTIONS.map((src) => (
                   <option key={src} value={src}>{src}</option>
@@ -495,14 +495,14 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
 
             {/* Assigned Employee / Owner* */}
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Assigned Employee / Owner<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+                Assigned Employee / Owner<span className="text-[#F5365C] font-bold ml-0.5">*</span>
               </label>
               <select
                 required
                 value={assignedTo}
                 onChange={(e) => setAssignedTo(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer font-semibold"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer font-semibold"
               >
                 {assignees.map((a) => (
                   <option key={a.id} value={a.id}>
@@ -514,14 +514,14 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
 
             {/* Pipeline Status* */}
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Pipeline Status<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+                Pipeline Status<span className="text-[#F5365C] font-bold ml-0.5">*</span>
               </label>
               <select
                 required
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#4689C8] font-bold text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#4689C8] font-bold text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer"
               >
                 {STATUS_OPTIONS.map((st) => (
                   <option key={st} value={st}>{st}</option>
@@ -531,13 +531,13 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
 
             {/* Priority */}
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Priority
               </label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer"
               >
                 {PRIORITY_OPTIONS.map((pr) => (
                   <option key={pr} value={pr}>{pr}</option>
@@ -548,13 +548,13 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
 
             {/* Domain Available */}
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Domain Available?
               </label>
               <select
                 value={domainAvailable}
                 onChange={(e) => setDomainAvailable(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer"
               >
                 {AVAILABILITY_OPTIONS.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -564,13 +564,13 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
 
             {/* Hosting Available */}
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Hosting Available?
               </label>
               <select
                 value={hostingAvailable}
                 onChange={(e) => setHostingAvailable(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer"
               >
                 {AVAILABILITY_OPTIONS.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -582,8 +582,8 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
             {/* Conditional: Lost Reason (Required when Lost) */}
             {status === 'Lost' && (
               <div className="md:col-span-2 p-3.5 rounded-md bg-red-50 border border-red-200">
-                <label className="block text-xs font-bold text-[#f5365c] mb-1.5">
-                  Reason for Loss<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+                <label className="block text-xs font-bold text-[#F5365C] mb-1.5">
+                  Reason for Loss<span className="text-[#F5365C] font-bold ml-0.5">*</span>
                 </label>
                 <input
                   type="text"
@@ -591,7 +591,7 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
                   value={lostReason}
                   onChange={(e) => setLostReason(e.target.value)}
                   placeholder="e.g. Budget constraint, client selected competitor, project postponed..."
-                  className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-red-300 focus:border-[#f5365c] outline-none"
+                  className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-red-300 focus:border-[#F5365C] outline-none"
                 />
               </div>
             )}
@@ -600,8 +600,8 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
             {status === 'On Hold' && (
               <div className="md:col-span-2 p-3.5 rounded-md bg-amber-50 border border-amber-200 space-y-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#fb6340] mb-1.5">
-                    Reason for On-Hold<span className="text-[#f5365c] font-bold ml-0.5">*</span>
+                  <label className="block text-xs font-bold text-[#FB6340] mb-1.5">
+                    Reason for On-Hold<span className="text-[#F5365C] font-bold ml-0.5">*</span>
                   </label>
                   <input
                     type="text"
@@ -609,18 +609,18 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
                     value={onHoldReason}
                     onChange={(e) => setOnHoldReason(e.target.value)}
                     placeholder="e.g. Awaiting Q4 budget approval, client traveling till next month..."
-                    className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-amber-300 focus:border-[#fb6340] outline-none"
+                    className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-amber-300 focus:border-[#FB6340] outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+                  <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                     Revisit Date
                   </label>
                   <input
                     type="date"
                     value={revisitDate}
                     onChange={(e) => setRevisitDate(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-amber-300 focus:border-[#fb6340] outline-none"
+                    className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-amber-300 focus:border-[#FB6340] outline-none"
                   />
                 </div>
               </div>
@@ -630,25 +630,25 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
             {duplicateMatches.length > 0 && (
               <div className="md:col-span-2 p-3.5 rounded-md bg-amber-50 border border-amber-200 text-xs">
                 <div className="flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 text-[#fb6340] mt-0.5 flex-shrink-0" />
+                  <AlertTriangle className="w-4 h-4 text-[#FB6340] mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
-                    <p className="font-bold text-[#172b4d]">
+                    <p className="font-bold text-[#19324D]">
                       Duplicate Phone Detected ({duplicateMatches.length} matching record found)
                     </p>
                     <div className="mt-1.5 space-y-1">
                       {duplicateMatches.map((m, idx) => (
                         <div key={idx} className="flex items-center justify-between bg-white p-2 rounded border border-amber-200">
                           <div>
-                            <span className="font-semibold text-[#172b4d]">{m.name || 'Unnamed'}</span>
-                            <span className="text-[#8898aa] text-[11px] ml-2">({m.company_name || 'Individual'})</span>
+                            <span className="font-semibold text-[#19324D]">{m.name || 'Unnamed'}</span>
+                            <span className="text-[#71869B] text-[11px] ml-2">({m.company_name || 'Individual'})</span>
                           </div>
-                          <span className="text-[10px] font-bold text-[#fb6340] bg-amber-100 px-2 py-0.5 rounded">
+                          <span className="text-[10px] font-bold text-[#FB6340] bg-amber-100 px-2 py-0.5 rounded">
                             {m.status || 'Active'}
                           </span>
                         </div>
                       ))}
                     </div>
-                    <label className="mt-2.5 flex items-center gap-2 cursor-pointer font-semibold text-[#172b4d]">
+                    <label className="mt-2.5 flex items-center gap-2 cursor-pointer font-semibold text-[#19324D]">
                       <input
                         type="checkbox"
                         checked={duplicateOverride}
@@ -664,7 +664,7 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
 
             {/* Remark (Full width) */}
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Remark
               </label>
               <textarea
@@ -672,25 +672,25 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
                 value={internalNotes}
                 onChange={(e) => setInternalNotes(e.target.value)}
                 placeholder="Enter remarks or notes about this lead..."
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition leading-relaxed"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition leading-relaxed"
               />
             </div>
           </div>
 
           {/* Modal Footer Actions */}
-          <div className="pt-4 border-t border-[#e9ecef] flex items-center justify-end gap-3 mt-4">
+          <div className="pt-4 border-t border-[#DFEAF2] flex items-center justify-end gap-3 mt-4">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-5 py-2.5 bg-white hover:bg-[#f6f9fc] border border-[#dee2e6] text-[#525f7f] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
+              className="px-5 py-2.5 bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] text-[#71869B] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] hover:from-[#2a5d8d] hover:to-[#3876b0] text-white font-bold text-xs sm:text-sm rounded shadow-sm shadow-[#4689C8]/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+              className="px-6 py-2.5 bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] hover:from-[#2a5d8d] hover:to-[#3475B2] text-white font-bold text-xs sm:text-sm rounded shadow-sm shadow-[#4689C8]/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin text-white" />}
               <span>{isEdit ? 'Update Lead' : 'Save Lead'}</span>

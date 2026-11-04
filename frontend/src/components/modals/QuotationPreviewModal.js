@@ -59,7 +59,7 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
 
       <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden my-auto max-h-[92vh] flex flex-col">
         {/* Top Control Bar - Hertzsoft Brand */}
-        <div className="px-6 py-4 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] border-b-2 border-[#5FC8D6]/40 text-white flex items-center justify-between shrink-0 shadow-md">
+        <div className="px-6 py-4 bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] border-b-2 border-[#5FC8D6]/40 text-white flex items-center justify-between shrink-0 shadow-md">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-white/15 text-white border border-white/25 flex items-center justify-center">
               <FileSpreadsheet className="w-5 h-5" />
@@ -93,7 +93,7 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
           <div className="flex items-center gap-2.5">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#172b4d] bg-white hover:bg-slate-50 rounded-md shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#19324D] bg-white hover:bg-slate-50 rounded-md shadow-xs transition-all cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5 text-[#4689C8]" />
               <span>Print / Download PDF</span>
@@ -133,7 +133,7 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
                 <div className="text-sm font-bold font-mono text-slate-900 mt-0.5">
                   {quotation.quotation_number}
                 </div>
-                <div className="inline-block mt-1 px-2 py-0.5 rounded text-[11px] font-bold bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/30">
+                <div className="inline-block mt-1 px-2 py-0.5 rounded text-[11px] font-bold bg-[#EAF3FB] text-[#4689C8] border border-[#4689C8]/30">
                   Version {quotation.version} {quotation.status === 'Superseded' ? '(Superseded)' : ''}
                 </div>
               </div>

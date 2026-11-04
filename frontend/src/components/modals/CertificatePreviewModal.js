@@ -54,7 +54,7 @@ export default function CertificatePreviewModal({ isOpen, onClose, certificate =
 
       <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden my-auto h-[92vh] flex flex-col">
         {/* Top Control Bar */}
-        <div className="px-6 py-4 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] border-b-2 border-[#5FC8D6]/40 text-white flex items-center justify-between shrink-0 shadow-md">
+        <div className="px-6 py-4 bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] border-b-2 border-[#5FC8D6]/40 text-white flex items-center justify-between shrink-0 shadow-md">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 rounded-lg bg-white/15 text-white border border-white/25 flex items-center justify-center shrink-0">
               <Award className="w-5 h-5 text-white" />
@@ -86,7 +86,7 @@ export default function CertificatePreviewModal({ isOpen, onClose, certificate =
 
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#172b4d] bg-white hover:bg-slate-50 rounded-md shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#19324D] bg-white hover:bg-slate-50 rounded-md shadow-xs transition-all cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5 text-[#4689C8]" />
               <span>Print / Download PDF</span>

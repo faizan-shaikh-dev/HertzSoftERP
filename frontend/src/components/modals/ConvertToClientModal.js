@@ -117,23 +117,23 @@ export default function ConvertToClientModal({
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-xl bg-white rounded-lg shadow-2xl border border-[#e9ecef] overflow-hidden flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-xl bg-white rounded-lg shadow-2xl border border-[#DFEAF2] overflow-hidden flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header - OJT Style */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#e9ecef] bg-white">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#DFEAF2] bg-white">
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight">
               Convert Won Lead to Client
             </h3>
-            <p className="text-xs text-[#8898aa] mt-0.5">
+            <p className="text-xs text-[#71869B] mt-0.5">
               Create an active Client account while preserving this lead record in your historical pipeline.
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-[#172b4d] hover:text-[#525f7f] transition cursor-pointer p-0.5 rounded-full"
+            className="text-[#19324D] hover:text-[#71869B] transition cursor-pointer p-0.5 rounded-full"
             aria-label="Close dialog"
           >
             <XCircle className="w-7 h-7 stroke-[1.5]" />
@@ -142,19 +142,19 @@ export default function ConvertToClientModal({
 
         {/* Lead Summary Snapshot Card */}
         <div className="px-6 pt-4 pb-0 bg-white">
-          <div className="p-3.5 bg-[#f8f9fe] rounded-md border border-[#dee2e6] flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="p-3.5 bg-[#F4F8FC] rounded-md border border-[#DFEAF2] flex flex-wrap items-center justify-between gap-2 text-xs">
             <div className="flex items-center gap-2">
-              <span className="font-mono font-bold text-[#2dce89] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded text-[11px]">
+              <span className="font-mono font-bold text-[#20A36B] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded text-[11px]">
                 Lead #{lead.lead_number}
               </span>
-              <span className="font-bold text-[#172b4d]">{lead.name}</span>
+              <span className="font-bold text-[#19324D]">{lead.name}</span>
               {lead.company_name && (
-                <span className="text-[#525f7f] font-medium">({lead.company_name})</span>
+                <span className="text-[#71869B] font-medium">({lead.company_name})</span>
               )}
             </div>
 
             {lead.estimated_budget && (
-              <span className="font-bold text-[#2dce89]">
+              <span className="font-bold text-[#20A36B]">
                 Deal Value: ₹{Number(lead.estimated_budget).toLocaleString('en-IN')}
               </span>
             )}
@@ -164,7 +164,7 @@ export default function ConvertToClientModal({
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1 text-xs bg-white">
           {error && (
-            <div className="p-3 rounded-md bg-[#fdf2f2] border border-[#f5365c]/30 text-xs text-[#f5365c] flex items-center gap-2">
+            <div className="p-3 rounded-md bg-[#FDF2F2] border border-[#F5365C]/30 text-xs text-[#F5365C] flex items-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{error}</span>
             </div>
@@ -173,20 +173,20 @@ export default function ConvertToClientModal({
           {/* 1. Name & Company */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Client Contact Person <span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+                Client Contact Person <span className="text-[#F5365C] font-bold ml-0.5">*</span>
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Company / Organization Name
               </label>
               <input
@@ -194,7 +194,7 @@ export default function ConvertToClientModal({
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 placeholder="Enterprise or Business Name"
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
           </div>
@@ -202,20 +202,20 @@ export default function ConvertToClientModal({
           {/* 2. Phone & Email */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Primary Phone Number <span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+                Primary Phone Number <span className="text-[#F5365C] font-bold ml-0.5">*</span>
               </label>
               <input
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 required
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition font-mono"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition font-mono"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Billing / Corporate Email
               </label>
               <input
@@ -223,7 +223,7 @@ export default function ConvertToClientModal({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="billing@company.com"
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
           </div>
@@ -231,7 +231,7 @@ export default function ConvertToClientModal({
           {/* 3. Website & City/Billing Address */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Website URL
               </label>
               <input
@@ -239,12 +239,12 @@ export default function ConvertToClientModal({
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
                 placeholder="https://company.com"
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Billing / Office Address
               </label>
               <input
@@ -252,20 +252,20 @@ export default function ConvertToClientModal({
                 value={billingAddress}
                 onChange={(e) => setBillingAddress(e.target.value)}
                 placeholder="City, State, Country"
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
           </div>
 
           {/* 4. Onboarding Status */}
           <div>
-            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
               Client Onboarding Status
             </label>
             <select
               value={onboardingStatus}
               onChange={(e) => setOnboardingStatus(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer font-medium"
+              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer font-medium"
             >
               <option value="Pending">Pending (Awaiting Kickoff / Paperwork)</option>
               <option value="In Progress">In Progress (Active Project Setup)</option>
@@ -276,7 +276,7 @@ export default function ConvertToClientModal({
 
           {/* 5. Combined Notes */}
           <div>
-            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
               Client Account Notes & Requirements
             </label>
             <textarea
@@ -284,17 +284,17 @@ export default function ConvertToClientModal({
               onChange={(e) => setInternalNotes(e.target.value)}
               rows={3}
               placeholder="Internal scope notes, agreement terms, billing details..."
-              className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition resize-y"
+              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition resize-y"
             />
           </div>
 
           {/* Preserved Record Guarantee Alert */}
-          <div className="p-3.5 bg-[#f8f9fe] rounded-md border border-[#dee2e6] text-[#525f7f] space-y-1">
-            <div className="flex items-center gap-1.5 font-bold text-[#172b4d]">
-              <CheckCircle2 className="w-4 h-4 text-[#2dce89]" />
+          <div className="p-3.5 bg-[#F4F8FC] rounded-md border border-[#DFEAF2] text-[#71869B] space-y-1">
+            <div className="flex items-center gap-1.5 font-bold text-[#19324D]">
+              <CheckCircle2 className="w-4 h-4 text-[#20A36B]" />
               <span>Preserves Lead Record & Link</span>
             </div>
-            <p className="text-[11px] text-[#8898aa] leading-relaxed">
+            <p className="text-[11px] text-[#71869B] leading-relaxed">
               Converting will NOT delete this lead. It will mark the lead as officially Won and permanently link it with the resulting Client profile for audit and project invoicing.
             </p>
           </div>
@@ -304,7 +304,7 @@ export default function ConvertToClientModal({
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#4689C8] hover:bg-[#3876b0] text-white font-bold text-sm rounded shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full py-3 bg-[#4689C8] hover:bg-[#3475B2] text-white font-bold text-sm rounded shadow-md shadow-[#4689C8]/25 transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>

@@ -102,7 +102,7 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation, project = 
 
       <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden my-auto max-h-[92vh] flex flex-col">
         {/* Top Control Bar - Hertzsoft Brand */}
-        <div className="px-6 py-4 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] border-b-2 border-[#5FC8D6]/40 text-white flex items-center justify-between shrink-0 shadow-md">
+        <div className="px-6 py-4 bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] border-b-2 border-[#5FC8D6]/40 text-white flex items-center justify-between shrink-0 shadow-md">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-white/15 text-white border border-white/25 flex items-center justify-center">
               <FileText className="w-5 h-5 text-white" />
@@ -128,7 +128,7 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation, project = 
           <div className="flex items-center gap-2.5">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#172b4d] bg-white hover:bg-slate-50 rounded-md shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-[#19324D] bg-white hover:bg-slate-50 rounded-md shadow-xs transition-all cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5 text-[#4689C8]" />
               <span>Print / Download PDF</span>
@@ -225,7 +225,7 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation, project = 
             {/* Deliverables & Tax Table */}
             <div className="border border-slate-200 rounded-md overflow-hidden text-xs">
               <table className="w-full text-left border-collapse">
-                <thead className="bg-[#f6f9fc] text-[10px] font-bold uppercase text-slate-500 border-b border-slate-200">
+                <thead className="bg-[#EAF3FB] text-[10px] font-bold uppercase text-slate-500 border-b border-slate-200">
                   <tr>
                     <th className="py-2.5 px-3 w-10 text-center">#</th>
                     <th className="py-2.5 px-3">Description of Services</th>
@@ -247,8 +247,8 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation, project = 
                       <tr 
                         key={idx} 
                         className={`transition-colors duration-150 ${
-                          idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
-                        } hover:bg-[#eaf2fc]`}
+                          idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white'
+                        } hover:bg-[#EAF3FB]`}
                       >
                         <td className="py-3 px-3 text-center text-slate-400 font-mono text-[11px]">
                           {idx + 1}
@@ -308,7 +308,7 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation, project = 
                 </div>
 
                 {discountAmount > 0 && (
-                  <div className="flex justify-between py-1 border-b border-slate-100 text-[#f5365c]">
+                  <div className="flex justify-between py-1 border-b border-slate-100 text-[#F5365C]">
                     <span>Commercial Discount:</span>
                     <span className="font-mono font-semibold">- {formatCurrency(discountAmount)}</span>
                   </div>
@@ -334,7 +334,7 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation, project = 
 
                 <div className="flex justify-between py-2 border-t-2 border-[#4689C8] text-sm font-black text-slate-900">
                   <span className="text-[#4689C8]">Invoice Grand Total:</span>
-                  <span className="font-mono text-base text-[#172b4d]">{formatCurrency(grandTotal)}</span>
+                  <span className="font-mono text-base text-[#19324D]">{formatCurrency(grandTotal)}</span>
                 </div>
               </div>
             </div>

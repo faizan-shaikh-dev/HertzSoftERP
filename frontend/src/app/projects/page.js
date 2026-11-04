@@ -165,16 +165,16 @@ export default function ProjectsPage() {
   return (
     <AppLayout title="Projects & Client Contracts">
       <div className="container-fluid px-0 sm:px-2">
-        {/* MASTER OJT CONTAINER CARD */}
-        <div className="card shadow-sm mb-4 mainCard bg-white border border-[#e9ecef] rounded-lg overflow-hidden">
-          {/* Card Header (OJT Standard) */}
-          <div className="card-header px-4 sm:px-6 py-4 bg-white border-b border-[#e9ecef] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        {/* MASTER CONTAINER CARD */}
+        <div className="card shadow-sm mb-4 mainCard bg-white border border-[#DFEAF2] rounded-xl overflow-hidden">
+          {/* Card Header */}
+          <div className="card-header px-4 sm:px-6 py-4 bg-white border-b border-[#DFEAF2] flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight m-0 flex items-center gap-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight m-0 flex items-center gap-2">
                 <FolderKanban className="w-6 h-6 text-[#4689C8]" />
                 <span>Projects & Client Contracts</span>
               </h2>
-              <p className="text-xs text-[#8898aa] mt-0.5">
+              <p className="text-xs text-[#71869B] mt-0.5">
                 Manage client project deliverables, milestone contracts, payment schedules, and technical completion.
               </p>
             </div>
@@ -185,7 +185,7 @@ export default function ProjectsPage() {
                   setEditingProject(null);
                   setIsProjectModalOpen(true);
                 }}
-                className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] hover:from-[#2a5d8d] hover:to-[#3876b0] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
+                className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#4689C8] to-[#5FC8D6] hover:opacity-90 rounded-lg shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Create New Project</span>
@@ -194,7 +194,7 @@ export default function ProjectsPage() {
               <button
                 onClick={() => fetchProjects(true)}
                 disabled={loading}
-                className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#525f7f] bg-white hover:bg-[#f6f9fc] border border-[#e9ecef] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
+                className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#19324D] bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] rounded-lg shadow-xs transition cursor-pointer disabled:opacity-50"
                 title="Refresh projects"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4689C8]' : ''}`} />
@@ -208,86 +208,86 @@ export default function ProjectsPage() {
             {/* KPI Metric Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* 1. Active In Progress */}
-              <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+              <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                       Active Projects
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#11cdef] tracking-tight mt-1">
+                    <div className="text-xl sm:text-2xl font-extrabold text-[#39AFC0] tracking-tight mt-1">
                       {activeCount}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#11cdef] to-[#1171ef] text-white flex items-center justify-center shadow-md shadow-[#11cdef]/25">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#4689C8] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
                     <Clock className="w-5 h-5" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Status:</span>
-                  <span className="font-bold text-[#11cdef]">In Progress</span>
+                  <span className="font-bold text-[#39AFC0]">In Progress</span>
                 </div>
               </div>
 
               {/* 2. Completed Contracts */}
-              <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+              <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                       Completed Deals
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#2dce89] tracking-tight mt-1">
+                    <div className="text-xl sm:text-2xl font-extrabold text-[#20A36B] tracking-tight mt-1">
                       {completedCount}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#2dce89] to-[#20a36b] text-white flex items-center justify-center shadow-md shadow-[#2dce89]/25">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
                     <CheckCircle2 className="w-5 h-5" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Lifecycle:</span>
-                  <span className="font-bold text-[#2dce89]">Delivered & Closed</span>
+                  <span className="font-bold text-[#20A36B]">Delivered & Closed</span>
                 </div>
               </div>
 
               {/* 3. Total Contract Value */}
-              <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+              <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                       Total Contract Value
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#172b4d] tracking-tight mt-1">
+                    <div className="text-xl sm:text-2xl font-extrabold text-[#19324D] tracking-tight mt-1">
                       {formatCurrency(totalContractVal)}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#4689C8] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#3475B2] to-[#4689C8] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
                     <TrendingUp className="w-5 h-5" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Scope:</span>
-                  <span className="font-bold text-[#172b4d]">{projects.length} Total Contracts</span>
+                  <span className="font-bold text-[#19324D]">{projects.length} Total Contracts</span>
                 </div>
               </div>
 
               {/* 4. Realized Collections */}
-              <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+              <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                       Total Collections
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#2dce89] tracking-tight mt-1">
+                    <div className="text-xl sm:text-2xl font-extrabold text-[#20A36B] tracking-tight mt-1">
                       {formatCurrency(totalCollectedVal)}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#2dce89] to-[#20a36b] text-white flex items-center justify-center shadow-md shadow-[#2dce89]/25">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#39AFC0] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
                     <Wallet className="w-5 h-5" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Collected:</span>
-                  <span className="font-bold text-[#2dce89]">
+                  <span className="font-bold text-[#20A36B]">
                     {totalContractVal > 0 ? Math.round((totalCollectedVal / totalContractVal) * 100) : 0}% Realized
                   </span>
                 </div>
@@ -296,7 +296,7 @@ export default function ProjectsPage() {
 
             {/* Error Notice */}
             {error && (
-              <div className="p-4 rounded-md bg-[#fdf2f2] border border-[#f5365c]/30 flex items-center justify-between text-[#f5365c] text-xs">
+              <div className="p-4 rounded-lg bg-[#FDF2F2] border border-[#F5365C]/30 flex items-center justify-between text-[#F5365C] text-xs">
                 <span>{error}</span>
                 <button onClick={() => fetchProjects(false)} className="font-bold underline cursor-pointer">
                   Retry
@@ -308,7 +308,7 @@ export default function ProjectsPage() {
             <div className="space-y-3 pt-2">
               {/* Status Filter Pills */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-                <span className="text-[#8898aa] font-bold uppercase tracking-wider text-[10px] mr-1 shrink-0">
+                <span className="text-[#71869B] font-bold uppercase tracking-wider text-[10px] mr-1 shrink-0">
                   Status:
                 </span>
                 {STATUS_OPTIONS.map((st) => (
@@ -318,10 +318,10 @@ export default function ProjectsPage() {
                       setSelectedStatus(st);
                       setCurrentPage(1);
                     }}
-                    className={`px-3 py-1 rounded text-xs font-semibold transition cursor-pointer shrink-0 ${
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer shrink-0 ${
                       selectedStatus === st
                         ? 'bg-[#4689C8] text-white shadow-2xs'
-                        : 'bg-white text-[#525f7f] border border-[#dee2e6] hover:bg-[#f6f9fc] hover:text-[#4689C8]'
+                        : 'bg-white text-[#71869B] border border-[#DFEAF2] hover:bg-[#EAF3FB] hover:text-[#19324D]'
                     }`}
                   >
                     {st}
@@ -330,9 +330,9 @@ export default function ProjectsPage() {
               </div>
 
               {/* DataTables Toolbar: Show Entries & Search */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-b border-[#dee2e6] py-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-b border-[#DFEAF2] py-3">
                 {/* Show Entries */}
-                <div className="flex items-center gap-2 text-xs text-[#525f7f] font-semibold">
+                <div className="flex items-center gap-2 text-xs text-[#19324D] font-semibold">
                   <span>Show</span>
                   <select
                     value={pageSize}
@@ -340,7 +340,7 @@ export default function ProjectsPage() {
                       setPageSize(Number(e.target.value));
                       setCurrentPage(1);
                     }}
-                    className="px-2.5 py-1 bg-white border border-[#dee2e6] rounded text-xs font-bold text-[#172b4d] focus:outline-none focus:border-[#4689C8] cursor-pointer"
+                    className="px-2.5 py-1 bg-white border border-[#DFEAF2] rounded-md text-xs font-bold text-[#19324D] focus:outline-none focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 cursor-pointer"
                   >
                     <option value={10}>10</option>
                     <option value={25}>25</option>
@@ -352,7 +352,7 @@ export default function ProjectsPage() {
 
                 {/* Search Box */}
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-[#525f7f] font-semibold">Search:</span>
+                  <span className="text-xs text-[#71869B] font-semibold">Search:</span>
                   <div className="relative">
                     <input
                       type="text"
@@ -362,16 +362,16 @@ export default function ProjectsPage() {
                         setCurrentPage(1);
                       }}
                       placeholder="Search project or client..."
-                      className="w-56 sm:w-64 pl-8 pr-7 py-1.5 text-xs bg-white border border-[#dee2e6] rounded text-[#172b4d] placeholder-[#8898aa] focus:outline-none focus:border-[#4689C8] transition"
+                      className="w-56 sm:w-64 pl-8 pr-7 py-1.5 text-xs bg-white border border-[#DFEAF2] rounded-lg text-[#19324D] placeholder-[#71869B] focus:outline-none focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 transition"
                     />
-                    <Search className="w-3.5 h-3.5 text-[#8898aa] absolute left-2.5 top-1/2 -translate-y-1/2" />
+                    <Search className="w-3.5 h-3.5 text-[#71869B] absolute left-2.5 top-1/2 -translate-y-1/2" />
                     {searchQuery && (
                       <button
                         onClick={() => {
                           setSearchQuery('');
                           setCurrentPage(1);
                         }}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#8898aa] hover:text-[#172b4d]"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#71869B] hover:text-[#19324D]"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -380,33 +380,33 @@ export default function ProjectsPage() {
                 </div>
               </div>
 
-              {/* OJT Projects Table */}
-              <div className="table-responsive border border-[#dee2e6] rounded-md overflow-hidden">
+              {/* Projects Table */}
+              <div className="table-responsive border border-[#DFEAF2] rounded-lg overflow-hidden">
                 <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
-                  <thead className="thead-light bg-[#f6f9fc] text-[#8898aa] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#e9ecef]">
+                  <thead className="thead-light bg-[#EAF3FB] text-[#19324D] text-[11px] font-bold uppercase tracking-wider border-b border-[#DFEAF2]">
                     <tr>
-                      <th className="py-3 px-3.5 border-r border-[#dee2e6]">Project & Client</th>
-                      <th className="py-3 px-3.5 border-r border-[#dee2e6] text-center">Lifecycle Status</th>
-                      <th className="py-3 px-3.5 border-r border-[#dee2e6] text-right">Contract Value</th>
-                      <th className="py-3 px-3.5 border-r border-[#dee2e6]">Collection Progress</th>
-                      <th className="py-3 px-3.5 border-r border-[#dee2e6]">Timeline</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Project & Client</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">Lifecycle Status</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-right">Contract Value</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Collection Progress</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Timeline</th>
                       <th className="py-3 px-3.5 text-center">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#dee2e6]">
+                  <tbody className="divide-y divide-[#DFEAF2]">
                     {loading && projects.length === 0 ? (
                       <tr>
-                        <td colSpan="6" className="py-12 text-center text-[#8898aa]">
+                        <td colSpan="6" className="py-12 text-center text-[#71869B]">
                           <Loader2 className="w-6 h-6 animate-spin text-[#4689C8] mx-auto mb-2" />
                           <span className="text-xs font-semibold">Loading projects ledger...</span>
                         </td>
                       </tr>
                     ) : paginatedProjects.length === 0 ? (
                       <tr>
-                        <td colSpan="6" className="py-12 text-center text-[#8898aa]">
-                          <FolderKanban className="w-8 h-8 mx-auto text-[#adb5bd] mb-2" />
-                          <p className="text-xs font-semibold text-[#172b4d]">No projects found matching criteria</p>
-                          <p className="text-[11px] text-[#8898aa] mt-0.5">
+                        <td colSpan="6" className="py-12 text-center text-[#71869B]">
+                          <FolderKanban className="w-8 h-8 mx-auto text-[#71869B]/40 mb-2" />
+                          <p className="text-xs font-semibold text-[#19324D]">No projects found matching criteria</p>
+                          <p className="text-[11px] text-[#71869B] mt-0.5">
                             {searchQuery || selectedStatus !== 'All'
                               ? 'Try resetting the search or status filter.'
                               : 'Click "+ Create New Project" to initiate a client contract.'}
@@ -423,20 +423,20 @@ export default function ProjectsPage() {
                           <tr
                             key={project.id}
                             className={`transition-colors duration-150 ${
-                              idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
-                            } hover:bg-[#eaf2fc]`}
+                              idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white'
+                            } hover:bg-[#EAF3FB]`}
                           >
                             {/* 1. Project & Client */}
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
                               <Link
                                 href={`/projects/view?id=${project.id}`}
-                                className="font-bold text-[#172b4d] hover:text-[#4689C8] hover:underline text-xs block"
+                                className="font-bold text-[#19324D] hover:text-[#4689C8] hover:underline text-xs block"
                                 title="View Project Details & Reports"
                               >
                                 {project.title}
                               </Link>
-                              <div className="text-[11px] text-[#525f7f] flex items-center gap-1 mt-0.5">
-                                <Building2 className="w-3.5 h-3.5 text-[#8898aa]" />
+                              <div className="text-[11px] text-[#71869B] flex items-center gap-1 mt-0.5">
+                                <Building2 className="w-3.5 h-3.5 text-[#71869B]" />
                                 <span>
                                   {project.client_company ? `${project.client_company} (${project.client_name})` : project.client_name}
                                 </span>
@@ -444,63 +444,63 @@ export default function ProjectsPage() {
                             </td>
 
                             {/* 2. Status Badge */}
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6] text-center">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">
                               <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                                 project.status === 'Completed'
-                                  ? 'bg-[#e8f7ee] text-[#2dce89] border border-[#2dce89]/30'
+                                  ? 'bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30'
                                   : project.status === 'In Progress'
-                                  ? 'bg-[#e0f7fa] text-[#11cdef] border border-[#11cdef]/30'
+                                  ? 'bg-[#E8F8FA] text-[#39AFC0] border border-[#91DCE5]'
                                   : project.status === 'On Hold'
-                                  ? 'bg-[#fef4e6] text-[#fb6340] border border-[#fb6340]/30'
+                                  ? 'bg-amber-50 text-amber-700 border border-amber-300'
                                   : project.status === 'Cancelled'
-                                  ? 'bg-[#fdf2f2] text-[#f5365c] border border-[#f5365c]/30'
-                                  : 'bg-slate-100 text-slate-700 border border-slate-200'
+                                  ? 'bg-[#FDF2F2] text-[#F5365C] border border-[#F5365C]/30'
+                                  : 'bg-[#F4F8FC] text-[#71869B] border border-[#DFEAF2]'
                               }`}>
                                 {project.status}
                               </span>
                             </td>
 
                             {/* 3. Contract Value */}
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6] text-right font-mono font-bold text-xs text-[#172b4d]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-right font-mono font-bold text-xs text-[#19324D]">
                               {formatCurrency(project.total_cost)}
                             </td>
 
                             {/* 4. Payment Progress Bar */}
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
                               <div className="flex items-center justify-between text-[11px] mb-1">
-                                <span className="font-bold text-[#2dce89]">
+                                <span className="font-bold text-[#20A36B]">
                                   {formatCurrency(project.total_paid)}
                                 </span>
-                                <span className="font-semibold text-[#fb6340]">
+                                <span className="font-semibold text-[#FB6340]">
                                   Due: {formatCurrency(project.due_balance)}
                                 </span>
                               </div>
 
-                              <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden border border-[#dee2e6]">
+                              <div className="w-full bg-[#DFEAF2] rounded-full h-1.5 overflow-hidden">
                                 <div 
                                   className={`h-full transition-all duration-500 rounded-full ${
                                     percentPaid >= 100 
-                                      ? 'bg-[#2dce89]' 
+                                      ? 'bg-[#20A36B]' 
                                       : percentPaid > 50 
                                       ? 'bg-[#4689C8]' 
-                                      : 'bg-[#fb6340]'
+                                      : 'bg-[#FB6340]'
                                   }`}
                                   style={{ width: `${percentPaid}%` }}
                                 />
                               </div>
-                              <div className="text-[10px] text-[#8898aa] mt-0.5 font-medium">
+                              <div className="text-[10px] text-[#71869B] mt-0.5 font-medium">
                                 {percentPaid}% cleared
                               </div>
                             </td>
 
                             {/* 5. Timeline */}
-                            <td className="py-3 px-3.5 border-r border-[#dee2e6] text-xs text-[#525f7f]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-xs text-[#71869B]">
                               <div className="flex items-center gap-1">
-                                <Calendar className="w-3.5 h-3.5 text-[#8898aa]" />
+                                <Calendar className="w-3.5 h-3.5 text-[#71869B]" />
                                 <span>{formatDate(project.start_date)}</span>
                               </div>
                               {project.deadline && (
-                                <div className="text-[10px] text-[#8898aa] mt-0.5">
+                                <div className="text-[10px] text-[#71869B] mt-0.5">
                                   Target: {formatDate(project.deadline)}
                                 </div>
                               )}
@@ -511,7 +511,7 @@ export default function ProjectsPage() {
                               <div className="flex items-center justify-center gap-1.5">
                                 <Link
                                   href={`/projects/view?id=${project.id}`}
-                                  className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#f0f7fd] hover:bg-blue-100 border border-[#4689C8]/30 rounded shadow-2xs transition"
+                                  className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#EAF3FB] hover:bg-[#4689C8] hover:text-white border border-[#78A9D7]/40 rounded-md shadow-2xs transition"
                                   title="View Project Details & Scope Reports"
                                 >
                                   <Eye className="w-3.5 h-3.5" />
@@ -524,7 +524,7 @@ export default function ProjectsPage() {
                                     setPaymentProject(project);
                                     setIsPaymentModalOpen(true);
                                   }}
-                                  className="btn btn-sm inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-[#2dce89] bg-[#e8f7ee] hover:bg-[#d4f2df] border border-[#2dce89]/30 rounded shadow-2xs transition cursor-pointer"
+                                  className="btn btn-sm inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-[#20A36B] bg-[#EAF8F1] hover:bg-[#20A36B] hover:text-white border border-[#20A36B]/30 rounded-md shadow-2xs transition cursor-pointer"
                                   title="Record Payment Installment"
                                 >
                                   <CreditCard className="w-3 h-3" />
@@ -537,7 +537,7 @@ export default function ProjectsPage() {
                                     setEditingProject(project);
                                     setIsProjectModalOpen(true);
                                   }}
-                                  className="p-1 rounded text-[#525f7f] hover:text-[#4689C8] hover:bg-blue-50 border border-transparent hover:border-blue-200 transition cursor-pointer"
+                                  className="p-1.5 rounded-md text-[#71869B] hover:text-[#4689C8] hover:bg-[#EAF3FB] border border-transparent hover:border-[#78A9D7]/30 transition cursor-pointer"
                                   title="Edit Project Contract"
                                 >
                                   <Edit className="w-3.5 h-3.5" />
@@ -550,7 +550,7 @@ export default function ProjectsPage() {
                                       setProjectToDelete(project);
                                       setIsDeleteModalOpen(true);
                                     }}
-                                    className="p-1 rounded text-[#525f7f] hover:text-[#f5365c] hover:bg-red-50 border border-transparent hover:border-red-200 transition cursor-pointer"
+                                    className="p-1.5 rounded-md text-[#71869B] hover:text-[#F5365C] hover:bg-[#FDF2F2] border border-transparent hover:border-[#F5365C]/30 transition cursor-pointer"
                                     title="Delete Project"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
@@ -566,26 +566,26 @@ export default function ProjectsPage() {
                 </table>
               </div>
 
-              {/* OJT Pagination Controls */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 text-xs text-[#525f7f]">
+              {/* Pagination Controls */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 text-xs text-[#71869B]">
                 <div>
                   Showing{' '}
-                  <span className="font-bold text-[#172b4d]">
+                  <span className="font-bold text-[#19324D]">
                     {totalEntries === 0 ? 0 : (currentPage - 1) * pageSize + 1}
                   </span>{' '}
                   to{' '}
-                  <span className="font-bold text-[#172b4d]">
+                  <span className="font-bold text-[#19324D]">
                     {Math.min(currentPage * pageSize, totalEntries)}
                   </span>{' '}
-                  of <span className="font-bold text-[#172b4d]">{totalEntries}</span> projects
+                  of <span className="font-bold text-[#19324D]">{totalEntries}</span> projects
                 </div>
 
-                <div className="flex items-center border border-[#dee2e6] rounded overflow-hidden">
+                <div className="flex items-center border border-[#DFEAF2] rounded-lg overflow-hidden bg-white shadow-2xs">
                   <button
                     type="button"
                     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
-                    className="px-3 py-1.5 bg-white hover:bg-[#f6f9fc] disabled:bg-[#fcfcfd] disabled:text-[#adb5bd] border-r border-[#dee2e6] font-semibold transition cursor-pointer disabled:cursor-not-allowed"
+                    className="px-3 py-1.5 bg-white hover:bg-[#EAF3FB] hover:text-[#4689C8] disabled:bg-[#F4F8FC] disabled:text-[#71869B]/40 border-r border-[#DFEAF2] font-semibold transition cursor-pointer disabled:cursor-not-allowed"
                   >
                     Previous
                   </button>
@@ -595,10 +595,10 @@ export default function ProjectsPage() {
                       key={page}
                       type="button"
                       onClick={() => setCurrentPage(page)}
-                      className={`px-3 py-1.5 border-r border-[#dee2e6] font-bold transition cursor-pointer ${
+                      className={`px-3 py-1.5 border-r border-[#DFEAF2] font-bold transition cursor-pointer ${
                         currentPage === page
                           ? 'bg-[#4689C8] text-white'
-                          : 'bg-white text-[#525f7f] hover:bg-[#f6f9fc] hover:text-[#4689C8]'
+                          : 'bg-white text-[#71869B] hover:bg-[#EAF3FB] hover:text-[#19324D]'
                       }`}
                     >
                       {page}
@@ -609,7 +609,7 @@ export default function ProjectsPage() {
                     type="button"
                     onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="px-3 py-1.5 bg-white hover:bg-[#f6f9fc] disabled:bg-[#fcfcfd] disabled:text-[#adb5bd] font-semibold transition cursor-pointer disabled:cursor-not-allowed"
+                    className="px-3 py-1.5 bg-white hover:bg-[#EAF3FB] hover:text-[#4689C8] disabled:bg-[#F4F8FC] disabled:text-[#71869B]/40 font-semibold transition cursor-pointer disabled:cursor-not-allowed"
                   >
                     Next
                   </button>

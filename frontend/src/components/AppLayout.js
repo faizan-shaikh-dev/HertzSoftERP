@@ -11,7 +11,7 @@ export default function AppLayout({ children, title, allowedRoles, requiredRoles
 
   return (
     <ProtectedRoute allowedRoles={roles}>
-      <div className="min-h-screen bg-[#f8f9fe] flex font-sans antialiased text-[#525f7f]">
+      <div className="min-h-screen bg-[#F4F8FC] flex font-sans antialiased text-[#19324D]">
         {/* Left Vertical Sidenav (template-hz collapsible style) */}
         <Sidebar 
           isOpen={mobileOpen} 
@@ -40,13 +40,13 @@ export default function AppLayout({ children, title, allowedRoles, requiredRoles
             </div>
 
             {/* OJT Standard Portal Footer */}
-            <footer className="max-w-7xl mx-auto w-full mt-10 pt-4 pb-2 text-center text-xs text-[#8898aa]">
+            <footer className="max-w-7xl mx-auto w-full mt-10 pt-4 pb-2 text-center text-xs text-[#71869B]">
               © 2026 | All rights reserved | Designed & Developed by{' '}
               <a
                 href="https://www.hertzsoft.com"
                 target="_blank"
                 rel="noreferrer"
-                className="font-bold text-[#4689C8] hover:underline"
+                className="font-bold text-[#4689C8] hover:text-[#3475B2] hover:underline"
               >
                 Hertzsoft
               </a>

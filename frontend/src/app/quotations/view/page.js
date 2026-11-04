@@ -159,14 +159,14 @@ function QuotationViewContent() {
     <AppLayout title="Quotation Details & Scope Report">
       <div className="container-fluid px-0 sm:px-2">
         {/* MAIN MASTER OJT CARD */}
-        <div className="card shadow-sm mb-4 mainCard bg-white border border-[#e9ecef] rounded-lg overflow-hidden">
+        <div className="card shadow-sm mb-4 mainCard bg-white border border-[#DFEAF2] rounded-xl overflow-hidden">
           {/* OJT Card Header with Back Button and Actions */}
-          <div className="card-header bg-white border-b border-[#e9ecef] py-4 px-4 sm:px-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="card-header bg-white border-b border-[#DFEAF2] py-4 px-4 sm:px-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => router.push('/quotations')}
-                className="btn btn-sm inline-flex items-center justify-center w-9 h-9 rounded bg-[#4689C8] hover:bg-[#3876b0] text-white shadow-xs transition cursor-pointer flex-shrink-0"
+                className="btn btn-sm inline-flex items-center justify-center w-9 h-9 rounded bg-[#4689C8] hover:bg-[#3475B2] text-white shadow-xs transition cursor-pointer flex-shrink-0"
                 title="Back to Quotations Ledger"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -174,28 +174,28 @@ function QuotationViewContent() {
 
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight m-0">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight m-0">
                     Quotation Details & Scope Report
                   </h2>
                   {quotation && (
                     <div className="flex items-center gap-1.5">
-                      <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-slate-100 text-[#172b4d] border border-slate-300">
+                      <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-slate-100 text-[#19324D] border border-slate-300">
                         {quotation.quotation_number}
                       </span>
-                      <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/30">
+                      <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-[#EAF3FB] text-[#4689C8] border border-[#4689C8]/30">
                         v{quotation.version}
                       </span>
                       <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                         quotation.status === 'Accepted'
-                          ? 'bg-[#e8f7ee] text-[#2dce89] border border-[#2dce89]/30'
+                          ? 'bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30'
                           : quotation.status === 'Sent'
-                          ? 'bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/30'
+                          ? 'bg-[#EAF3FB] text-[#4689C8] border border-[#4689C8]/30'
                           : quotation.status === 'Draft'
                           ? 'bg-slate-100 text-slate-700 border-slate-300'
                           : quotation.status === 'Rejected'
-                          ? 'bg-[#fdf2f2] text-[#f5365c] border border-[#f5365c]/30'
+                          ? 'bg-[#FDF2F2] text-[#F5365C] border border-[#F5365C]/30'
                           : quotation.status === 'Expired'
-                          ? 'bg-[#fef4e6] text-[#fb6340] border border-[#fb6340]/30'
+                          ? 'bg-[#FEF4E6] text-[#FB6340] border border-[#FB6340]/30'
                           : 'bg-purple-50 text-purple-700 border border-purple-200'
                       }`}>
                         {quotation.status}
@@ -203,7 +203,7 @@ function QuotationViewContent() {
                     </div>
                   )}
                 </div>
-                <p className="text-xs text-[#8898aa] mt-0.5">
+                <p className="text-xs text-[#71869B] mt-0.5">
                   Official commercial proposal breakdown, deliverables scope, and version audit ledger.
                 </p>
               </div>
@@ -218,8 +218,8 @@ function QuotationViewContent() {
                   onClick={() => setIsTaxInvoiceOpen(true)}
                   className={`btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded shadow-xs transition cursor-pointer ${
                     quotation.status === 'Accepted'
-                      ? 'bg-gradient-to-r from-[#2dce89] to-[#24a46d] hover:opacity-90 text-white'
-                      : 'bg-white hover:bg-[#f6f9fc] text-[#525f7f] border border-[#dee2e6]'
+                      ? 'bg-gradient-to-r from-[#20A36B] to-[#5FC8D6] hover:opacity-90 text-white'
+                      : 'bg-white hover:bg-[#EAF3FB] text-[#71869B] border border-[#DFEAF2]'
                   }`}
                   title="View and Print Official GST Tax Invoice"
                 >
@@ -231,7 +231,7 @@ function QuotationViewContent() {
                 <button
                   type="button"
                   onClick={() => setIsPreviewModalOpen(true)}
-                  className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-xs transition cursor-pointer"
+                  className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3475B2] rounded shadow-xs transition cursor-pointer"
                   title="Generate or Print Official PDF"
                 >
                   <Printer className="w-3.5 h-3.5" />
@@ -262,7 +262,7 @@ function QuotationViewContent() {
                       setModalMode('edit');
                       setIsQuotationModalOpen(true);
                     }}
-                    className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#525f7f] bg-white hover:bg-[#f6f9fc] border border-[#dee2e6] rounded shadow-xs transition cursor-pointer"
+                    className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#71869B] bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] rounded shadow-xs transition cursor-pointer"
                     title="Edit Draft Details"
                   >
                     <Edit3 className="w-3.5 h-3.5 text-[#4689C8]" />
@@ -276,7 +276,7 @@ function QuotationViewContent() {
                     value={quotation.status}
                     disabled={quotation.status === 'Superseded'}
                     onChange={(e) => handleStatusChange(e.target.value)}
-                    className="px-2.5 py-1.5 text-xs font-bold rounded border border-[#dee2e6] bg-white text-[#172b4d] focus:border-[#4689C8] outline-none cursor-pointer"
+                    className="px-2.5 py-1.5 text-xs font-bold rounded border border-[#DFEAF2] bg-white text-[#19324D] focus:border-[#4689C8] outline-none cursor-pointer"
                   >
                     <option value="Draft">Draft</option>
                     <option value="Sent">Sent</option>
@@ -292,7 +292,7 @@ function QuotationViewContent() {
                   <button
                     type="button"
                     onClick={() => setIsDeleteModalOpen(true)}
-                    className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#f5365c] bg-[#fdf2f2] hover:bg-[#fad2d2] border border-[#f5365c]/30 rounded shadow-xs transition cursor-pointer"
+                    className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#F5365C] bg-[#FDF2F2] hover:bg-[#fad2d2] border border-[#F5365C]/30 rounded shadow-xs transition cursor-pointer"
                     title="Delete Quotation"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -304,7 +304,7 @@ function QuotationViewContent() {
                   type="button"
                   onClick={fetchQuotationDetails}
                   disabled={loading}
-                  className="btn btn-sm inline-flex items-center justify-center w-8 h-8 rounded bg-white hover:bg-[#f6f9fc] text-[#525f7f] border border-[#dee2e6] shadow-xs transition cursor-pointer disabled:opacity-50"
+                  className="btn btn-sm inline-flex items-center justify-center w-8 h-8 rounded bg-white hover:bg-[#EAF3FB] text-[#71869B] border border-[#DFEAF2] shadow-xs transition cursor-pointer disabled:opacity-50"
                   title="Reload details"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4689C8]' : ''}`} />
@@ -318,13 +318,13 @@ function QuotationViewContent() {
             {loading ? (
               <div className="py-20 text-center">
                 <RefreshCw className="w-8 h-8 animate-spin text-[#4689C8] mx-auto mb-3" />
-                <p className="text-sm font-semibold text-[#525f7f]">Loading quotation details & scope reports...</p>
+                <p className="text-sm font-semibold text-[#71869B]">Loading quotation details & scope reports...</p>
               </div>
             ) : error ? (
-              <div className="p-4 rounded-md bg-[#fdf2f2] border border-[#f5365c]/30 flex flex-col items-center justify-center py-12 text-center">
-                <AlertCircle className="w-10 h-10 text-[#f5365c] mb-2" />
-                <h4 className="text-base font-bold text-[#f5365c] mb-1">Failed to Load Quotation</h4>
-                <p className="text-xs text-[#525f7f] max-w-md mb-4">{error}</p>
+              <div className="p-4 rounded-md bg-[#FDF2F2] border border-[#F5365C]/30 flex flex-col items-center justify-center py-12 text-center">
+                <AlertCircle className="w-10 h-10 text-[#F5365C] mb-2" />
+                <h4 className="text-base font-bold text-[#F5365C] mb-1">Failed to Load Quotation</h4>
+                <p className="text-xs text-[#71869B] max-w-md mb-4">{error}</p>
                 <button
                   onClick={() => router.push('/quotations')}
                   className="btn btn-sm px-4 py-2 bg-[#4689C8] text-white rounded text-xs font-semibold cursor-pointer"
@@ -337,7 +337,7 @@ function QuotationViewContent() {
                 {/* 1. OJT REPORT CARD: Quotation & Client Information */}
                 <div className="card report-card border-none rounded-xl shadow-sm overflow-hidden mb-4">
                   {/* Hertzsoft Brand Gradient Header */}
-                  <div className="report-card-header bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] text-white py-3.5 px-5 flex items-center justify-between">
+                  <div className="report-card-header bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] text-white py-3.5 px-5 flex items-center justify-between">
                     <h5 className="mb-0 text-sm font-bold flex items-center gap-2 text-white">
                       <FileSpreadsheet className="w-4 h-4 text-white" />
                       <span>Quotation & Commercial Scope Information</span>
@@ -348,46 +348,46 @@ function QuotationViewContent() {
                   </div>
 
                   {/* Body with 2-Column Bordered .profile-item Boxes (Exact OJT students-view.php pattern) */}
-                  <div className="card-body p-4 sm:p-6 bg-white border border-t-0 border-[#dee2e6] rounded-b-xl">
+                  <div className="card-body p-4 sm:p-6 bg-white border border-t-0 border-[#DFEAF2] rounded-b-xl">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                       {/* Quotation Subject */}
-                      <div className="col-span-1 md:col-span-2 border border-[#dee2e6] rounded-md p-3 profile-item bg-[#fcfdfe]">
-                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#8898aa]">
+                      <div className="col-span-1 md:col-span-2 border border-[#DFEAF2] rounded-md p-3 profile-item bg-[#F4F8FC]">
+                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#71869B]">
                           Proposal Subject / Title
                         </div>
-                        <div className="profile-item-value text-sm font-bold text-[#172b4d] mt-1">
+                        <div className="profile-item-value text-sm font-bold text-[#19324D] mt-1">
                           {quotation.title}
                         </div>
                       </div>
 
                       {/* Client Account */}
-                      <div className="border border-[#dee2e6] rounded-md p-3 profile-item bg-[#fcfdfe]">
-                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#8898aa] flex items-center gap-1.5">
+                      <div className="border border-[#DFEAF2] rounded-md p-3 profile-item bg-[#F4F8FC]">
+                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#71869B] flex items-center gap-1.5">
                           <Building2 className="w-3.5 h-3.5 text-[#4689C8]" />
                           <span>Client / Organization</span>
                         </div>
-                        <div className="profile-item-value text-sm font-bold text-[#172b4d] mt-1">
+                        <div className="profile-item-value text-sm font-bold text-[#19324D] mt-1">
                           {quotation.client_name}
                         </div>
                         {quotation.client_company && (
-                          <div className="text-xs text-[#525f7f] mt-0.5">
+                          <div className="text-xs text-[#71869B] mt-0.5">
                             Company: <span className="font-semibold">{quotation.client_company}</span>
                           </div>
                         )}
                         {quotation.client_billing_address && (
-                          <div className="text-[11px] text-[#8898aa] mt-0.5">
+                          <div className="text-[11px] text-[#71869B] mt-0.5">
                             {quotation.client_billing_address}
                           </div>
                         )}
                       </div>
 
                       {/* Linked Project */}
-                      <div className="border border-[#dee2e6] rounded-md p-3 profile-item bg-[#fcfdfe]">
-                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#8898aa] flex items-center gap-1.5">
+                      <div className="border border-[#DFEAF2] rounded-md p-3 profile-item bg-[#F4F8FC]">
+                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#71869B] flex items-center gap-1.5">
                           <FolderKanban className="w-3.5 h-3.5 text-[#4689C8]" />
                           <span>Linked Project</span>
                         </div>
-                        <div className="profile-item-value text-sm font-bold text-[#172b4d] mt-1">
+                        <div className="profile-item-value text-sm font-bold text-[#19324D] mt-1">
                           {quotation.project_title ? (
                             <Link
                               href={`/projects/view?id=${quotation.project_id}`}
@@ -397,57 +397,57 @@ function QuotationViewContent() {
                               <ExternalLink className="w-3 h-3" />
                             </Link>
                           ) : (
-                            <span className="text-xs text-[#8898aa] font-normal italic">
+                            <span className="text-xs text-[#71869B] font-normal italic">
                               Standalone Proposal (No linked project)
                             </span>
                           )}
                         </div>
                         {quotation.project_id && (
-                          <div className="text-[11px] text-[#8898aa] mt-0.5">
+                          <div className="text-[11px] text-[#71869B] mt-0.5">
                             Project ID: {quotation.project_id}
                           </div>
                         )}
                       </div>
 
                       {/* Client Contact Info */}
-                      <div className="border border-[#dee2e6] rounded-md p-3 profile-item bg-[#fcfdfe]">
-                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#8898aa] flex items-center gap-1.5">
-                          <User className="w-3.5 h-3.5 text-[#8898aa]" />
+                      <div className="border border-[#DFEAF2] rounded-md p-3 profile-item bg-[#F4F8FC]">
+                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#71869B] flex items-center gap-1.5">
+                          <User className="w-3.5 h-3.5 text-[#71869B]" />
                           <span>Client Contact Info</span>
                         </div>
-                        <div className="profile-item-value text-xs text-[#525f7f] mt-1 space-y-0.5">
+                        <div className="profile-item-value text-xs text-[#71869B] mt-1 space-y-0.5">
                           {quotation.client_email && (
                             <div className="flex items-center gap-1.5">
-                              <Mail className="w-3 h-3 text-[#8898aa]" />
+                              <Mail className="w-3 h-3 text-[#71869B]" />
                               <span>{quotation.client_email}</span>
                             </div>
                           )}
                           {quotation.client_phone && (
                             <div className="flex items-center gap-1.5">
-                              <Phone className="w-3 h-3 text-[#8898aa]" />
+                              <Phone className="w-3 h-3 text-[#71869B]" />
                               <span>{quotation.client_phone}</span>
                             </div>
                           )}
                           {!quotation.client_email && !quotation.client_phone && (
-                            <span className="text-[#8898aa] italic">No direct contact info provided</span>
+                            <span className="text-[#71869B] italic">No direct contact info provided</span>
                           )}
                         </div>
                       </div>
 
                       {/* Issue Date & Validity */}
-                      <div className="border border-[#dee2e6] rounded-md p-3 profile-item bg-[#fcfdfe]">
-                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#8898aa] flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-[#8898aa]" />
+                      <div className="border border-[#DFEAF2] rounded-md p-3 profile-item bg-[#F4F8FC]">
+                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#71869B] flex items-center gap-1.5">
+                          <Calendar className="w-3.5 h-3.5 text-[#71869B]" />
                           <span>Proposal Dates</span>
                         </div>
-                        <div className="profile-item-value text-xs text-[#172b4d] mt-1 space-y-1">
+                        <div className="profile-item-value text-xs text-[#19324D] mt-1 space-y-1">
                           <div className="flex items-center justify-between">
-                            <span className="text-[#8898aa]">Issue Date:</span>
+                            <span className="text-[#71869B]">Issue Date:</span>
                             <span className="font-semibold">{formatDate(quotation.quotation_date)}</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-[#8898aa]">Valid Until:</span>
-                            <span className={`font-semibold ${isExpired ? 'text-[#f5365c]' : ''}`}>
+                            <span className="text-[#71869B]">Valid Until:</span>
+                            <span className={`font-semibold ${isExpired ? 'text-[#F5365C]' : ''}`}>
                               {formatDate(quotation.valid_until)}
                             </span>
                           </div>
@@ -455,29 +455,29 @@ function QuotationViewContent() {
                       </div>
 
                       {/* Version & Status */}
-                      <div className="border border-[#dee2e6] rounded-md p-3 profile-item bg-[#fcfdfe]">
-                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#8898aa]">
+                      <div className="border border-[#DFEAF2] rounded-md p-3 profile-item bg-[#F4F8FC]">
+                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#71869B]">
                           Version & Status
                         </div>
-                        <div className="profile-item-value text-xs text-[#172b4d] mt-1 flex items-center gap-2">
-                          <span className="font-mono font-bold px-2 py-0.5 rounded bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/30">
+                        <div className="profile-item-value text-xs text-[#19324D] mt-1 flex items-center gap-2">
+                          <span className="font-mono font-bold px-2 py-0.5 rounded bg-[#EAF3FB] text-[#4689C8] border border-[#4689C8]/30">
                             Version {quotation.version}
                           </span>
-                          <span className="font-semibold text-[#525f7f]">
+                          <span className="font-semibold text-[#71869B]">
                             Status: <span className="font-bold">{quotation.status}</span>
                           </span>
                         </div>
                       </div>
 
                       {/* Prepared By */}
-                      <div className="border border-[#dee2e6] rounded-md p-3 profile-item bg-[#fcfdfe]">
-                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#8898aa]">
+                      <div className="border border-[#DFEAF2] rounded-md p-3 profile-item bg-[#F4F8FC]">
+                        <div className="profile-item-label text-[11px] font-bold uppercase tracking-wider text-[#71869B]">
                           Prepared By
                         </div>
-                        <div className="profile-item-value text-xs text-[#172b4d] mt-1">
+                        <div className="profile-item-value text-xs text-[#19324D] mt-1">
                           <span className="font-semibold">{quotation.created_by_name || 'Hertzsoft Operations'}</span>
                           {quotation.created_at && (
-                            <span className="text-[11px] text-[#8898aa] ml-2">
+                            <span className="text-[11px] text-[#71869B] ml-2">
                               ({formatDate(quotation.created_at)})
                             </span>
                           )}
@@ -490,7 +490,7 @@ function QuotationViewContent() {
                 {/* 2. OJT STATS CARDS: Financial & Scope Overview */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Card A: Financial Valuation (Pink/Red Gradient) */}
-                  <div className="card stats-card bg-gradient-to-r from-[#f093fb] to-[#f5576c] text-white rounded-xl p-5 shadow-sm">
+                  <div className="card stats-card bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] text-white rounded-xl p-5 shadow-sm">
                     <div className="flex items-center justify-between pb-3 border-b border-white/20">
                       <h5 className="text-sm font-bold m-0 flex items-center gap-2 text-white">
                         <Receipt className="w-4 h-4 text-white" />
@@ -534,7 +534,7 @@ function QuotationViewContent() {
                   </div>
 
                   {/* Card B: Proposal Validity & Action Readiness (Purple/Indigo Gradient) */}
-                  <div className="card stats-card bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-xl p-5 shadow-sm">
+                  <div className="card stats-card bg-gradient-to-r from-[#19324D] via-[#3475B2] to-[#4689C8] text-white rounded-xl p-5 shadow-sm">
                     <div className="flex items-center justify-between pb-3 border-b border-white/20">
                       <h5 className="text-sm font-bold m-0 flex items-center gap-2 text-white">
                         <Clock className="w-4 h-4 text-white" />
@@ -577,11 +577,11 @@ function QuotationViewContent() {
                 </div>
 
                 {/* 3. LINE ITEMS & DELIVERABLES SCOPE TABLE (OJT DataTable) */}
-                <div className="card border border-[#dee2e6] rounded-xl overflow-hidden shadow-2xs">
-                  <div className="card-header bg-[#f6f9fc] border-b border-[#dee2e6] py-3.5 px-5 flex items-center justify-between">
+                <div className="card border border-[#DFEAF2] rounded-xl overflow-hidden shadow-2xs">
+                  <div className="card-header bg-[#EAF3FB] border-b border-[#DFEAF2] py-3.5 px-5 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <FileCheck className="w-4 h-4 text-[#4689C8]" />
-                      <h4 className="text-sm font-bold text-[#172b4d] m-0">
+                      <h4 className="text-sm font-bold text-[#19324D] m-0">
                         Deliverables Scope & Line Items ({(quotation.items || []).length})
                       </h4>
                     </div>
@@ -589,21 +589,21 @@ function QuotationViewContent() {
 
                   <div className="table-responsive">
                     <table className="table table-hover table-striped table-bordered w-full text-xs text-left mb-0">
-                      <thead className="thead-light bg-[#f6f9fc] text-[#8898aa] text-[10px] font-bold uppercase tracking-wider border-b-2 border-[#e9ecef]">
+                      <thead className="thead-light bg-[#EAF3FB] text-[#71869B] text-[10px] font-bold uppercase tracking-wider border-b-2 border-[#DFEAF2]">
                         <tr>
-                          <th className="py-2.5 px-3 w-10 text-center border-r border-[#dee2e6]">#</th>
-                          <th className="py-2.5 px-3 min-w-[250px] border-r border-[#dee2e6]">Scope / Deliverable Description</th>
-                          <th className="py-2.5 px-3 w-16 text-center border-r border-[#dee2e6]">Qty</th>
-                          <th className="py-2.5 px-3 w-28 text-right border-r border-[#dee2e6]">Unit Rate</th>
-                          <th className="py-2.5 px-3 w-20 text-right border-r border-[#dee2e6]">Disc %</th>
-                          <th className="py-2.5 px-3 w-20 text-right border-r border-[#dee2e6]">Tax %</th>
+                          <th className="py-2.5 px-3 w-10 text-center border-r border-[#DFEAF2]">#</th>
+                          <th className="py-2.5 px-3 min-w-[250px] border-r border-[#DFEAF2]">Scope / Deliverable Description</th>
+                          <th className="py-2.5 px-3 w-16 text-center border-r border-[#DFEAF2]">Qty</th>
+                          <th className="py-2.5 px-3 w-28 text-right border-r border-[#DFEAF2]">Unit Rate</th>
+                          <th className="py-2.5 px-3 w-20 text-right border-r border-[#DFEAF2]">Disc %</th>
+                          <th className="py-2.5 px-3 w-20 text-right border-r border-[#DFEAF2]">Tax %</th>
                           <th className="py-2.5 px-3 w-32 text-right">Line Total</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#dee2e6] bg-white">
+                      <tbody className="divide-y divide-[#DFEAF2] bg-white">
                         {(quotation.items || []).length === 0 ? (
                           <tr>
-                            <td colSpan="7" className="py-8 text-center text-[#8898aa] italic">
+                            <td colSpan="7" className="py-8 text-center text-[#71869B] italic">
                               No line items recorded for this quotation.
                             </td>
                           </tr>
@@ -612,28 +612,28 @@ function QuotationViewContent() {
                             <tr 
                               key={item.id || idx} 
                               className={`transition-colors duration-150 ${
-                                idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white'
-                              } hover:bg-[#eaf2fc]`}
+                                idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white'
+                              } hover:bg-[#EAF3FB]`}
                             >
-                              <td className="py-2.5 px-3 text-center text-[#8898aa] font-mono border-r border-[#dee2e6]">
+                              <td className="py-2.5 px-3 text-center text-[#71869B] font-mono border-r border-[#DFEAF2]">
                                 {idx + 1}
                               </td>
-                              <td className="py-2.5 px-3 font-semibold text-[#172b4d] border-r border-[#dee2e6]">
+                              <td className="py-2.5 px-3 font-semibold text-[#19324D] border-r border-[#DFEAF2]">
                                 {item.description}
                               </td>
-                              <td className="py-2.5 px-3 text-center text-[#525f7f] border-r border-[#dee2e6]">
+                              <td className="py-2.5 px-3 text-center text-[#71869B] border-r border-[#DFEAF2]">
                                 {item.quantity}
                               </td>
-                              <td className="py-2.5 px-3 text-right font-mono text-[#525f7f] border-r border-[#dee2e6]">
+                              <td className="py-2.5 px-3 text-right font-mono text-[#71869B] border-r border-[#DFEAF2]">
                                 {formatCurrency(item.rate)}
                               </td>
-                              <td className="py-2.5 px-3 text-right font-mono text-[#8898aa] border-r border-[#dee2e6]">
+                              <td className="py-2.5 px-3 text-right font-mono text-[#71869B] border-r border-[#DFEAF2]">
                                 {Number(item.discount_percent) > 0 ? `${item.discount_percent}%` : '—'}
                               </td>
-                              <td className="py-2.5 px-3 text-right font-mono text-[#8898aa] border-r border-[#dee2e6]">
+                              <td className="py-2.5 px-3 text-right font-mono text-[#71869B] border-r border-[#DFEAF2]">
                                 {Number(item.tax_percent) > 0 ? `${item.tax_percent}%` : '—'}
                               </td>
-                              <td className="py-2.5 px-3 text-right font-mono font-bold text-[#172b4d]">
+                              <td className="py-2.5 px-3 text-right font-mono font-bold text-[#19324D]">
                                 {formatCurrency(item.amount)}
                               </td>
                             </tr>
@@ -644,17 +644,17 @@ function QuotationViewContent() {
                   </div>
 
                   {/* Financial Totals Breakdown in Table Footer */}
-                  <div className="bg-[#f8f9fe] border-t border-[#dee2e6] p-4 flex justify-end">
+                  <div className="bg-[#F8FAFD] border-t border-[#DFEAF2] p-4 flex justify-end">
                     <div className="w-full sm:w-80 space-y-1.5 text-xs">
-                      <div className="flex items-center justify-between text-[#525f7f]">
+                      <div className="flex items-center justify-between text-[#71869B]">
                         <span>Subtotal:</span>
-                        <span className="font-semibold font-mono text-[#172b4d]">
+                        <span className="font-semibold font-mono text-[#19324D]">
                           {formatCurrency(quotation.subtotal)}
                         </span>
                       </div>
 
                       {Number(quotation.discount_amount) > 0 && (
-                        <div className="flex items-center justify-between text-[#f5365c]">
+                        <div className="flex items-center justify-between text-[#F5365C]">
                           <span>Discount ({quotation.discount_rate}%):</span>
                           <span className="font-semibold font-mono">
                             - {formatCurrency(quotation.discount_amount)}
@@ -662,14 +662,14 @@ function QuotationViewContent() {
                         </div>
                       )}
 
-                      <div className="flex items-center justify-between text-[#525f7f]">
+                      <div className="flex items-center justify-between text-[#71869B]">
                         <span>GST / Tax ({quotation.tax_rate}%):</span>
-                        <span className="font-semibold font-mono text-[#172b4d]">
+                        <span className="font-semibold font-mono text-[#19324D]">
                           + {formatCurrency(quotation.tax_amount)}
                         </span>
                       </div>
 
-                      <div className="pt-2 border-t border-[#dee2e6] flex items-center justify-between font-extrabold text-sm text-[#172b4d]">
+                      <div className="pt-2 border-t border-[#DFEAF2] flex items-center justify-between font-extrabold text-sm text-[#19324D]">
                         <span>Grand Total:</span>
                         <span className="text-[#4689C8] text-base font-mono">
                           {formatCurrency(quotation.total_amount)}
@@ -682,21 +682,21 @@ function QuotationViewContent() {
                 {/* 4. TERMS & CONDITIONS AND INTERNAL REMARKS */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Terms & Conditions */}
-                  <div className="card border border-[#dee2e6] rounded-xl p-4 bg-white shadow-2xs">
-                    <h5 className="text-xs font-bold uppercase tracking-wider text-[#525f7f] mb-2 flex items-center gap-1.5">
+                  <div className="card border border-[#DFEAF2] rounded-xl p-4 bg-white shadow-2xs">
+                    <h5 className="text-xs font-bold uppercase tracking-wider text-[#71869B] mb-2 flex items-center gap-1.5">
                       <span>Terms & Conditions</span>
                     </h5>
-                    <div className="text-xs text-[#525f7f] leading-relaxed whitespace-pre-wrap bg-[#f8f9fe] p-3 rounded border border-[#dee2e6]">
+                    <div className="text-xs text-[#71869B] leading-relaxed whitespace-pre-wrap bg-[#F8FAFD] p-3 rounded border border-[#DFEAF2]">
                       {quotation.terms_and_conditions || 'Standard company payment and validity terms apply.'}
                     </div>
                   </div>
 
                   {/* Internal Remarks / Deliverable Notes */}
-                  <div className="card border border-[#dee2e6] rounded-xl p-4 bg-white shadow-2xs">
-                    <h5 className="text-xs font-bold uppercase tracking-wider text-[#525f7f] mb-2 flex items-center gap-1.5">
+                  <div className="card border border-[#DFEAF2] rounded-xl p-4 bg-white shadow-2xs">
+                    <h5 className="text-xs font-bold uppercase tracking-wider text-[#71869B] mb-2 flex items-center gap-1.5">
                       <span>Proposal Notes & Remarks</span>
                     </h5>
-                    <div className="text-xs text-[#525f7f] leading-relaxed whitespace-pre-wrap bg-[#f8f9fe] p-3 rounded border border-[#dee2e6]">
+                    <div className="text-xs text-[#71869B] leading-relaxed whitespace-pre-wrap bg-[#F8FAFD] p-3 rounded border border-[#DFEAF2]">
                       {quotation.notes || 'No special internal remarks recorded for this proposal.'}
                     </div>
                   </div>
@@ -704,63 +704,63 @@ function QuotationViewContent() {
 
                 {/* 5. VERSION AUDIT TRAIL (Preserves all historical versions) */}
                 {quotation.versions && quotation.versions.length > 0 && (
-                  <div className="card border border-[#dee2e6] rounded-xl overflow-hidden shadow-2xs">
-                    <div className="card-header bg-[#f6f9fc] border-b border-[#dee2e6] py-3.5 px-5 flex items-center justify-between">
+                  <div className="card border border-[#DFEAF2] rounded-xl overflow-hidden shadow-2xs">
+                    <div className="card-header bg-[#EAF3FB] border-b border-[#DFEAF2] py-3.5 px-5 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <GitBranch className="w-4 h-4 text-[#8965e0]" />
-                        <h4 className="text-sm font-bold text-[#172b4d] m-0">
+                        <h4 className="text-sm font-bold text-[#19324D] m-0">
                           Version History & Revision Trail ({quotation.versions.length} versions)
                         </h4>
                       </div>
-                      <span className="text-xs text-[#8898aa]">
+                      <span className="text-xs text-[#71869B]">
                         Historical versions are preserved as Superseded records.
                       </span>
                     </div>
 
                     <div className="table-responsive">
                       <table className="table table-hover table-striped table-bordered w-full text-xs text-left mb-0">
-                        <thead className="thead-light bg-[#f6f9fc] text-[#8898aa] text-[10px] font-bold uppercase tracking-wider border-b-2 border-[#e9ecef]">
+                        <thead className="thead-light bg-[#EAF3FB] text-[#71869B] text-[10px] font-bold uppercase tracking-wider border-b-2 border-[#DFEAF2]">
                           <tr>
-                            <th className="py-2.5 px-3 border-r border-[#dee2e6]">Version</th>
-                            <th className="py-2.5 px-3 border-r border-[#dee2e6]">Quotation Number</th>
-                            <th className="py-2.5 px-3 border-r border-[#dee2e6]">Issue Date</th>
-                            <th className="py-2.5 px-3 border-r border-[#dee2e6]">Status</th>
-                            <th className="py-2.5 px-3 border-r border-[#dee2e6] text-right">Total Amount</th>
+                            <th className="py-2.5 px-3 border-r border-[#DFEAF2]">Version</th>
+                            <th className="py-2.5 px-3 border-r border-[#DFEAF2]">Quotation Number</th>
+                            <th className="py-2.5 px-3 border-r border-[#DFEAF2]">Issue Date</th>
+                            <th className="py-2.5 px-3 border-r border-[#DFEAF2]">Status</th>
+                            <th className="py-2.5 px-3 border-r border-[#DFEAF2] text-right">Total Amount</th>
                             <th className="py-2.5 px-3 text-center">Action</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-[#dee2e6] bg-white">
+                        <tbody className="divide-y divide-[#DFEAF2] bg-white">
                           {quotation.versions.map((ver, idx) => {
                             const isCurrent = ver.id === quotation.id;
                             return (
                               <tr 
                                 key={ver.id}
                                 className={`transition-colors duration-150 ${
-                                  isCurrent ? 'bg-[#f0f7fd] font-semibold' : (idx % 2 === 1 ? 'bg-[#f4f6f8]' : 'bg-white')
-                                } hover:bg-[#eaf2fc]`}
+                                  isCurrent ? 'bg-[#EAF3FB] font-semibold' : (idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white')
+                                } hover:bg-[#EAF3FB]`}
                               >
-                                <td className="py-2.5 px-3 border-r border-[#dee2e6]">
-                                  <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/30">
+                                <td className="py-2.5 px-3 border-r border-[#DFEAF2]">
+                                  <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-[#EAF3FB] text-[#4689C8] border border-[#4689C8]/30">
                                     v{ver.version}
                                   </span>
                                   {isCurrent && (
-                                    <span className="ml-2 text-[10px] font-bold text-[#2dce89]">
+                                    <span className="ml-2 text-[10px] font-bold text-[#20A36B]">
                                       (Viewing)
                                     </span>
                                   )}
                                 </td>
-                                <td className="py-2.5 px-3 font-mono border-r border-[#dee2e6]">
+                                <td className="py-2.5 px-3 font-mono border-r border-[#DFEAF2]">
                                   {ver.quotation_number}
                                 </td>
-                                <td className="py-2.5 px-3 border-r border-[#dee2e6]">
+                                <td className="py-2.5 px-3 border-r border-[#DFEAF2]">
                                   {formatDate(ver.quotation_date)}
                                 </td>
-                                <td className="py-2.5 px-3 border-r border-[#dee2e6]">
+                                <td className="py-2.5 px-3 border-r border-[#DFEAF2]">
                                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                                     ver.status === 'Accepted'
-                                      ? 'bg-[#e8f7ee] text-[#2dce89]'
+                                      ? 'bg-[#EAF8F1] text-[#20A36B]'
                                       : ver.status === 'Sent'
-                                      ? 'bg-[#f0f7fd] text-[#4689C8]'
+                                      ? 'bg-[#EAF3FB] text-[#4689C8]'
                                       : ver.status === 'Superseded'
                                       ? 'bg-purple-50 text-purple-700'
                                       : 'bg-slate-100 text-slate-700'
@@ -768,12 +768,12 @@ function QuotationViewContent() {
                                     {ver.status}
                                   </span>
                                 </td>
-                                <td className="py-2.5 px-3 text-right font-mono border-r border-[#dee2e6]">
+                                <td className="py-2.5 px-3 text-right font-mono border-r border-[#DFEAF2]">
                                   {formatCurrency(ver.total_amount)}
                                 </td>
                                 <td className="py-2.5 px-3 text-center">
                                   {isCurrent ? (
-                                    <span className="text-[#8898aa] text-[11px] italic">Active</span>
+                                    <span className="text-[#71869B] text-[11px] italic">Active</span>
                                   ) : (
                                     <Link
                                       href={`/quotations/view?id=${ver.id}`}
@@ -840,7 +840,7 @@ export default function QuotationViewPage() {
         <AppLayout title="Quotation Details & Scope Report">
           <div className="py-20 text-center">
             <RefreshCw className="w-8 h-8 animate-spin text-[#4689C8] mx-auto mb-3" />
-            <p className="text-sm font-semibold text-[#525f7f]">Loading quotation view...</p>
+            <p className="text-sm font-semibold text-[#71869B]">Loading quotation view...</p>
           </div>
         </AppLayout>
       }

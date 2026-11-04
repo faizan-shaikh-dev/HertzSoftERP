@@ -67,49 +67,49 @@ export const LEAD_STATUSES = [
     id: 'New Lead',
     label: 'New Lead',
     icon: Sparkles,
-    color: 'bg-blue-600',
-    textColor: 'text-blue-600',
-    borderColor: 'border-l-blue-600',
-    lightBg: 'bg-blue-50'
+    color: 'bg-[#4689C8]',
+    textColor: 'text-[#4689C8]',
+    borderColor: 'border-l-[#4689C8]',
+    lightBg: 'bg-[#EAF3FB]'
   },
   {
     number: 2,
     id: 'Contacted',
     label: 'Contacted',
     icon: Phone,
-    color: 'bg-sky-500',
-    textColor: 'text-sky-600',
-    borderColor: 'border-l-sky-500',
-    lightBg: 'bg-sky-50'
+    color: 'bg-[#5FC8D6]',
+    textColor: 'text-[#39AFC0]',
+    borderColor: 'border-l-[#5FC8D6]',
+    lightBg: 'bg-[#E8F8FA]'
   },
   {
     number: 3,
     id: 'Responded',
     label: 'Responded',
     icon: MessageSquare,
-    color: 'bg-teal-500',
-    textColor: 'text-teal-600',
-    borderColor: 'border-l-teal-500',
-    lightBg: 'bg-teal-50'
+    color: 'bg-[#39AFC0]',
+    textColor: 'text-[#39AFC0]',
+    borderColor: 'border-l-[#39AFC0]',
+    lightBg: 'bg-[#E8F8FA]'
   },
   {
     number: 4,
     id: 'Qualified',
     label: 'Qualified',
     icon: Target,
-    color: 'bg-indigo-600',
-    textColor: 'text-indigo-600',
-    borderColor: 'border-l-indigo-600',
-    lightBg: 'bg-indigo-50'
+    color: 'bg-[#78A9D7]',
+    textColor: 'text-[#3475B2]',
+    borderColor: 'border-l-[#78A9D7]',
+    lightBg: 'bg-[#EAF3FB]'
   },
   {
     number: 5,
     id: 'Meeting Scheduled',
     label: 'Meeting Scheduled',
     icon: Calendar,
-    color: 'bg-purple-600',
-    textColor: 'text-purple-600',
-    borderColor: 'border-l-purple-600',
+    color: 'bg-[#8965E0]',
+    textColor: 'text-[#8965E0]',
+    borderColor: 'border-l-[#8965E0]',
     lightBg: 'bg-purple-50'
   },
   {
@@ -117,90 +117,90 @@ export const LEAD_STATUSES = [
     id: 'Requirement Analysis',
     label: 'Requirement Analysis',
     icon: Search,
-    color: 'bg-cyan-600',
-    textColor: 'text-cyan-600',
-    borderColor: 'border-l-cyan-600',
-    lightBg: 'bg-cyan-50'
+    color: 'bg-[#5FC8D6]',
+    textColor: 'text-[#39AFC0]',
+    borderColor: 'border-l-[#5FC8D6]',
+    lightBg: 'bg-[#E8F8FA]'
   },
   {
     number: 7,
     id: 'Proposal Sent',
     label: 'Proposal Sent',
     icon: FileText,
-    color: 'bg-amber-500',
-    textColor: 'text-amber-600',
-    borderColor: 'border-l-amber-500',
-    lightBg: 'bg-amber-50'
+    color: 'bg-[#4689C8]',
+    textColor: 'text-[#4689C8]',
+    borderColor: 'border-l-[#4689C8]',
+    lightBg: 'bg-[#EAF3FB]'
   },
   {
     number: 8,
     id: 'Negotiation',
     label: 'Negotiation',
     icon: Handshake,
-    color: 'bg-orange-500',
-    textColor: 'text-orange-600',
-    borderColor: 'border-l-orange-500',
-    lightBg: 'bg-orange-50'
+    color: 'bg-[#8965E0]',
+    textColor: 'text-[#8965E0]',
+    borderColor: 'border-l-[#8965E0]',
+    lightBg: 'bg-purple-50'
   },
   {
     number: 9,
     id: 'Follow-up',
     label: 'Follow-up',
     icon: Clock,
-    color: 'bg-yellow-500',
-    textColor: 'text-yellow-600',
-    borderColor: 'border-l-yellow-500',
-    lightBg: 'bg-yellow-50'
+    color: 'bg-[#FB6340]',
+    textColor: 'text-[#FB6340]',
+    borderColor: 'border-l-[#FB6340]',
+    lightBg: 'bg-orange-50'
   },
   {
     number: 10,
     id: 'Won',
     label: 'Won',
     icon: CheckCircle2,
-    color: 'bg-emerald-600',
-    textColor: 'text-emerald-600',
-    borderColor: 'border-l-emerald-600',
-    lightBg: 'bg-emerald-50'
+    color: 'bg-[#20A36B]',
+    textColor: 'text-[#20A36B]',
+    borderColor: 'border-l-[#20A36B]',
+    lightBg: 'bg-[#EAF8F1]'
   },
   {
     number: 11,
     id: 'Lost',
     label: 'Lost',
     icon: XCircle,
-    color: 'bg-rose-600',
-    textColor: 'text-rose-600',
-    borderColor: 'border-l-rose-600',
-    lightBg: 'bg-rose-50'
+    color: 'bg-[#F5365C]',
+    textColor: 'text-[#F5365C]',
+    borderColor: 'border-l-[#F5365C]',
+    lightBg: 'bg-[#FDF2F2]'
   },
   {
     number: 12,
     id: 'On Hold',
     label: 'On Hold',
     icon: Moon,
-    color: 'bg-slate-500',
-    textColor: 'text-slate-600',
-    borderColor: 'border-l-slate-500',
-    lightBg: 'bg-slate-50'
+    color: 'bg-[#71869B]',
+    textColor: 'text-[#71869B]',
+    borderColor: 'border-l-[#71869B]',
+    lightBg: 'bg-[#F4F8FC]'
   },
   {
     number: 13,
     id: 'Re-engage Later',
     label: 'Re-engage Later',
     icon: RefreshCw,
-    color: 'bg-violet-600',
-    textColor: 'text-violet-600',
-    borderColor: 'border-l-violet-600',
-    lightBg: 'bg-violet-50'
+    color: 'bg-[#8965E0]',
+    textColor: 'text-[#8965E0]',
+    borderColor: 'border-l-[#8965E0]',
+    lightBg: 'bg-purple-50'
   },
   {
     number: 14,
     id: 'Archived',
     label: 'Archived',
     icon: Archive,
-    color: 'bg-zinc-600',
-    textColor: 'text-zinc-600',
-    borderColor: 'border-l-zinc-600',
-    lightBg: 'bg-zinc-50'
+    color: 'bg-[#71869B]',
+    textColor: 'text-[#71869B]',
+    borderColor: 'border-l-[#71869B]',
+    lightBg: 'bg-[#F4F8FC]'
   }
 ];
 
@@ -463,15 +463,15 @@ function LeadViewContent() {
   return (
     <AppLayout title="Lead Pipeline & Activity Details">
       <div className="container-fluid px-0 sm:px-2">
-        {/* MASTER OJT CONTAINER CARD */}
-        <div className="card shadow-sm mb-4 mainCard bg-white border border-[#e9ecef] rounded-lg overflow-hidden">
-          {/* Card Header (OJT Standard) */}
-          <div className="card-header px-4 sm:px-6 py-4 bg-white border-b border-[#e9ecef] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        {/* MASTER CONTAINER CARD */}
+        <div className="card shadow-sm mb-4 mainCard bg-white border border-[#DFEAF2] rounded-xl overflow-hidden">
+          {/* Card Header */}
+          <div className="card-header px-4 sm:px-6 py-4 bg-white border-b border-[#DFEAF2] flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               {/* Back Button */}
               <Link
                 href="/leads"
-                className="btn btn-sm inline-flex items-center justify-center w-8 h-8 rounded bg-[#f6f9fc] hover:bg-[#e9ecef] text-[#525f7f] border border-[#dee2e6] transition cursor-pointer"
+                className="btn btn-sm inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#F4F8FC] hover:bg-[#EAF3FB] text-[#19324D] border border-[#DFEAF2] transition cursor-pointer"
                 title="Back to Leads Ledger"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -479,29 +479,29 @@ function LeadViewContent() {
 
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight m-0">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight m-0">
                     {lead?.name || 'Lead Details'}
                   </h2>
                   {lead?.lead_number && (
-                    <span className="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/30">
+                    <span className="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-[#EAF3FB] text-[#4689C8] border border-[#78A9D7]/30">
                       #{lead.lead_number}
                     </span>
                   )}
                   {lead?.status && (
                     <span className={`px-2.5 py-0.5 rounded text-xs font-bold uppercase tracking-wider ${
                       lead.status === 'Won'
-                        ? 'bg-[#e8f7ee] text-[#2dce89] border border-[#2dce89]/30'
+                        ? 'bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30'
                         : lead.status === 'Lost'
-                        ? 'bg-[#fdf2f2] text-[#f5365c] border border-[#f5365c]/30'
+                        ? 'bg-[#FDF2F2] text-[#F5365C] border border-[#F5365C]/30'
                         : lead.status === 'On Hold'
                         ? 'bg-amber-50 text-amber-700 border border-amber-300'
-                        : 'bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/30'
+                        : 'bg-[#EAF3FB] text-[#4689C8] border border-[#78A9D7]/30'
                     }`}>
                       {lead.status}
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-[#8898aa] mt-0.5">
+                <p className="text-xs text-[#71869B] mt-0.5">
                   Client inquiry profile, sales pipeline lifecycle, and comprehensive interaction history.
                 </p>
               </div>
@@ -515,7 +515,7 @@ function LeadViewContent() {
                   <button
                     type="button"
                     onClick={() => setIsConvertModalOpen(true)}
-                    className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#2dce89] to-[#20a36b] hover:opacity-90 rounded shadow-xs transition cursor-pointer"
+                    className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#20A36B] to-[#5FC8D6] hover:opacity-90 rounded-lg shadow-xs transition cursor-pointer"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>Convert to Client</span>
@@ -526,7 +526,7 @@ function LeadViewContent() {
                 {lead.converted_client_id && (
                   <Link
                     href={`/projects?search=${encodeURIComponent(lead.name || '')}`}
-                    className="btn btn-sm inline-flex items-center gap-1 px-3 py-2 text-xs font-bold bg-[#e8f7ee] text-[#2dce89] border border-[#2dce89]/40 rounded shadow-2xs"
+                    className="btn btn-sm inline-flex items-center gap-1 px-3 py-2 text-xs font-bold bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/40 rounded-lg shadow-2xs"
                   >
                     <UserCheck className="w-3.5 h-3.5" />
                     <span>Client #{lead.converted_client_number || 'Linked'}</span>
@@ -537,7 +537,7 @@ function LeadViewContent() {
                 <button
                   type="button"
                   onClick={() => setIsEditModalOpen(true)}
-                  className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#525f7f] bg-white hover:bg-[#f6f9fc] border border-[#dee2e6] rounded shadow-xs transition cursor-pointer"
+                  className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#19324D] bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] rounded-lg shadow-xs transition cursor-pointer"
                   title="Edit Inquiry Details"
                 >
                   <Edit3 className="w-3.5 h-3.5 text-[#4689C8]" />
@@ -550,7 +550,7 @@ function LeadViewContent() {
                     value={lead.status}
                     disabled={updatingStatus}
                     onChange={(e) => handleStatusChange(e.target.value)}
-                    className="px-2.5 py-1.5 text-xs font-bold rounded border border-[#dee2e6] bg-white text-[#172b4d] focus:border-[#4689C8] outline-none cursor-pointer"
+                    className="px-2.5 py-1.5 text-xs font-bold rounded-lg border border-[#DFEAF2] bg-white text-[#19324D] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none cursor-pointer"
                   >
                     {LEAD_STATUSES.map((s) => (
                       <option key={s.id} value={s.id}>
@@ -565,7 +565,7 @@ function LeadViewContent() {
                   <button
                     type="button"
                     onClick={() => setIsDeleteModalOpen(true)}
-                    className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#f5365c] bg-[#fdf2f2] hover:bg-[#fad2d2] border border-[#f5365c]/30 rounded shadow-xs transition cursor-pointer"
+                    className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#F5365C] bg-[#FDF2F2] hover:bg-[#F5365C]/10 border border-[#F5365C]/30 rounded-lg shadow-xs transition cursor-pointer"
                     title="Delete Lead"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -577,7 +577,7 @@ function LeadViewContent() {
                   type="button"
                   onClick={fetchLeadDetails}
                   disabled={loading}
-                  className="btn btn-sm inline-flex items-center justify-center w-8 h-8 rounded bg-white hover:bg-[#f6f9fc] text-[#525f7f] border border-[#dee2e6] shadow-xs transition cursor-pointer disabled:opacity-50"
+                  className="btn btn-sm inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white hover:bg-[#EAF3FB] text-[#19324D] border border-[#DFEAF2] shadow-xs transition cursor-pointer disabled:opacity-50"
                   title="Reload details"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4689C8]' : ''}`} />
@@ -587,10 +587,10 @@ function LeadViewContent() {
           </div>
 
           {/* Card Body */}
-          <div className="card-body p-4 sm:p-6 bg-[#f8f9fe]/40 space-y-6">
+          <div className="card-body p-4 sm:p-6 bg-[#F4F8FC]/50 space-y-6">
             {/* Loading */}
             {loading && !lead && (
-              <div className="py-20 text-center text-[#8898aa]">
+              <div className="py-20 text-center text-[#71869B]">
                 <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#4689C8] mb-3" />
                 <p className="text-sm font-semibold">Loading lead information and activity history...</p>
               </div>
@@ -598,14 +598,14 @@ function LeadViewContent() {
 
             {/* Error Message */}
             {!loading && error && (
-              <div className="p-6 text-center bg-white border border-red-200 rounded-lg shadow-xs my-6">
+              <div className="p-6 text-center bg-white border border-red-200 rounded-xl shadow-xs my-6">
                 <AlertCircle className="w-10 h-10 text-red-500 mx-auto mb-2" />
-                <h3 className="text-base font-bold text-[#172b4d]">Unable to Load Lead View</h3>
+                <h3 className="text-base font-bold text-[#19324D]">Unable to Load Lead View</h3>
                 <p className="text-xs text-red-600 mt-1 max-w-md mx-auto">{error}</p>
                 <div className="mt-4 flex items-center justify-center gap-3">
                   <Link
                     href="/leads"
-                    className="btn btn-sm px-4 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded"
+                    className="btn btn-sm px-4 py-2 text-xs font-semibold text-white bg-[#4689C8] hover:bg-[#3475B2] rounded-lg"
                   >
                     Return to Leads Ledger
                   </Link>
@@ -615,9 +615,9 @@ function LeadViewContent() {
 
             {!loading && lead && (
               <>
-                {/* 1. OJT LEAD & CLIENT INFORMATION CARD (Hertzsoft Standard Brand Styling) */}
-                <div className="card shadow-sm border-0 rounded-lg overflow-hidden bg-white">
-                  <div className="bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] text-white px-5 py-3.5 flex items-center justify-between">
+                {/* 1. LEAD & CLIENT INFORMATION CARD */}
+                <div className="card shadow-sm border border-[#DFEAF2] rounded-xl overflow-hidden bg-white">
+                  <div className="bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] text-white px-5 py-3.5 flex items-center justify-between">
                     <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
                       <User className="w-4 h-4 text-white" />
                       <span>Lead Profile &amp; Contact Information</span>
@@ -627,47 +627,47 @@ function LeadViewContent() {
                     </span>
                   </div>
 
-                  {/* 2-Column Grid of Bordered Field Boxes (Exact OJT .profile-item) */}
+                  {/* 2-Column Grid of Bordered Field Boxes */}
                   <div className="p-4 sm:p-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                       {/* Name */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Client / Contact Person
                         </div>
-                        <div className="text-sm font-bold text-[#172b4d] mt-0.5 flex items-center gap-1.5">
+                        <div className="text-sm font-bold text-[#19324D] mt-0.5 flex items-center gap-1.5">
                           <User className="w-3.5 h-3.5 text-[#4689C8]" />
                           <span>{lead.name}</span>
                         </div>
                       </div>
 
                       {/* Business / Company Name */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Business / Company Name
                         </div>
-                        <div className="text-sm font-bold text-[#172b4d] mt-0.5 flex items-center gap-1.5">
+                        <div className="text-sm font-bold text-[#19324D] mt-0.5 flex items-center gap-1.5">
                           <Building2 className="w-3.5 h-3.5 text-[#4689C8]" />
                           <span>{lead.company_name || 'Individual Client'}</span>
                         </div>
                       </div>
 
                       {/* Contact Number with WhatsApp link */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Primary Contact No
                         </div>
-                        <div className="text-sm font-bold text-[#172b4d] mt-0.5 flex items-center gap-2">
+                        <div className="text-sm font-bold text-[#19324D] mt-0.5 flex items-center gap-2">
                           <span className="font-mono">{lead.phone || '—'}</span>
                           {lead.phone && (
                             <a
                               href={`https://wa.me/${waPhone}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 transition"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-[#20A36B]/10 text-[#20A36B] hover:bg-[#20A36B]/20 transition"
                               title="Chat on WhatsApp"
                             >
-                              <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" />
+                              <WhatsAppIcon className="w-3.5 h-3.5 text-[#20A36B]" />
                               <span>WhatsApp</span>
                             </a>
                           )}
@@ -675,83 +675,83 @@ function LeadViewContent() {
                       </div>
 
                       {/* Email */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Email Address
                         </div>
-                        <div className="text-sm font-semibold text-[#172b4d] mt-0.5 flex items-center gap-1.5">
-                          <Mail className="w-3.5 h-3.5 text-[#8898aa]" />
+                        <div className="text-sm font-semibold text-[#19324D] mt-0.5 flex items-center gap-1.5">
+                          <Mail className="w-3.5 h-3.5 text-[#71869B]" />
                           {lead.email ? (
                             <a href={`mailto:${lead.email}`} className="text-[#4689C8] hover:underline">
                               {lead.email}
                             </a>
                           ) : (
-                            <span className="text-[#adb5bd] font-normal">Not Provided</span>
+                            <span className="text-[#71869B] font-normal">Not Provided</span>
                           )}
                         </div>
                       </div>
 
                       {/* Lead Inquiry */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white hover:border-[#4689C8]/40 transition md:col-span-2">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition md:col-span-2">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Lead Inquiry
                         </div>
-                        <div className="text-sm font-bold text-[#172b4d] mt-0.5">
+                        <div className="text-sm font-bold text-[#19324D] mt-0.5">
                           {lead.service_interest || lead.requirement || 'General Inquiry'}
                         </div>
                       </div>
 
                       {/* City / Location */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           City / Geographic Location
                         </div>
-                        <div className="text-sm font-semibold text-[#172b4d] mt-0.5 flex items-center gap-1.5">
-                          <MapPin className="w-3.5 h-3.5 text-[#8898aa]" />
+                        <div className="text-sm font-semibold text-[#19324D] mt-0.5 flex items-center gap-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-[#71869B]" />
                           <span>{lead.city || 'Not Specified'}</span>
                         </div>
                       </div>
 
                       {/* Lead Source */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Lead Generation Source
                         </div>
-                        <div className="text-sm font-semibold text-[#172b4d] mt-0.5 flex items-center gap-1.5">
-                          <Compass className="w-3.5 h-3.5 text-[#8898aa]" />
+                        <div className="text-sm font-semibold text-[#19324D] mt-0.5 flex items-center gap-1.5">
+                          <Compass className="w-3.5 h-3.5 text-[#71869B]" />
                           <span>{lead.source || 'Website Inquiry'}</span>
                         </div>
                       </div>
 
                       {/* Assigned Employee / Owner */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Assigned Officer / Owner
                         </div>
-                        <div className="text-sm font-semibold text-[#172b4d] mt-0.5 flex items-center gap-1.5">
+                        <div className="text-sm font-semibold text-[#19324D] mt-0.5 flex items-center gap-1.5">
                           <UserCheck className="w-3.5 h-3.5 text-[#4689C8]" />
                           <span>{lead.assigned_to_name || 'Admin'}</span>
                         </div>
                       </div>
 
                       {/* Logged Date */}
-                      <div className="border border-[#dee2e6] p-2.5 rounded bg-white hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Registration Date &amp; Time
                         </div>
-                        <div className="text-sm font-semibold text-[#172b4d] mt-0.5 flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-[#8898aa]" />
+                        <div className="text-sm font-semibold text-[#19324D] mt-0.5 flex items-center gap-1.5">
+                          <Calendar className="w-3.5 h-3.5 text-[#71869B]" />
                           <span>{formatDateTime(lead.created_at)}</span>
                         </div>
                       </div>
 
                       {/* Remark */}
                       {lead.internal_notes && (
-                        <div className="border border-[#dee2e6] p-2.5 rounded bg-white hover:border-[#4689C8]/40 transition md:col-span-2">
-                          <div className="text-[11px] font-bold text-[#8898aa] uppercase tracking-wider">
+                        <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition md:col-span-2">
+                          <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                             Remark / Notes
                           </div>
-                          <div className="text-xs text-[#525f7f] mt-1 leading-relaxed">
+                          <div className="text-xs text-[#71869B] mt-1 leading-relaxed">
                             {lead.internal_notes}
                           </div>
                         </div>
@@ -761,13 +761,13 @@ function LeadViewContent() {
                 </div>
 
                 {/* 2. SALES PIPELINE PROGRESSION STEPPER */}
-                <div className="card shadow-sm border-0 rounded-lg overflow-hidden bg-white">
-                  <div className="bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] text-white px-5 py-3.5 flex items-center justify-between">
+                <div className="card shadow-sm border border-[#DFEAF2] rounded-xl overflow-hidden bg-white">
+                  <div className="bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] text-white px-5 py-3.5 flex items-center justify-between">
                     <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
                       <TrendingUp className="w-4 h-4 text-white" />
                       <span>Sales Pipeline Progression</span>
                     </h5>
-                    <span className="text-xs text-[#e0f7fa]">
+                    <span className="text-xs text-[#E8F8FA]">
                       Current Stage: <strong className="text-white uppercase">{lead.status}</strong>
                     </span>
                   </div>
@@ -775,7 +775,7 @@ function LeadViewContent() {
                   <div className="p-5 sm:p-6">
                     {/* Stepper Bar */}
                     <div className="relative">
-                      <div className="hidden sm:block absolute top-1/2 left-0 right-0 h-1 bg-[#e9ecef] -translate-y-1/2 z-0" />
+                      <div className="hidden sm:block absolute top-1/2 left-0 right-0 h-1 bg-[#DFEAF2] -translate-y-1/2 z-0" />
                       
                       <div className="grid grid-cols-2 sm:grid-cols-6 gap-3 relative z-10">
                         {PIPELINE_STAGES.map((stage, idx) => {
@@ -790,23 +790,23 @@ function LeadViewContent() {
                               onClick={() => handleStatusChange(stage)}
                               className={`p-3 rounded-lg border text-center transition cursor-pointer flex flex-col items-center justify-center ${
                                 isCurrent
-                                  ? 'bg-[#f0f7fd] border-[#4689C8] shadow-sm ring-2 ring-[#4689C8]/20'
+                                  ? 'bg-[#EAF3FB] border-[#4689C8] shadow-sm ring-2 ring-[#4689C8]/20'
                                   : isCompleted
-                                  ? 'bg-[#e8f7ee] border-[#2dce89]/40 hover:bg-[#d8f3e3]'
-                                  : 'bg-white border-[#dee2e6] hover:bg-[#f6f9fc]'
+                                  ? 'bg-[#EAF8F1] border-[#20A36B]/40 hover:bg-[#d8f3e3]'
+                                  : 'bg-white border-[#DFEAF2] hover:bg-[#F4F8FC]'
                               }`}
                             >
                               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mb-1 ${
                                 isCurrent
                                   ? 'bg-[#4689C8] text-white shadow-xs animate-pulse'
                                   : isCompleted
-                                  ? 'bg-[#2dce89] text-white'
-                                  : 'bg-slate-100 text-[#8898aa]'
+                                  ? 'bg-[#20A36B] text-white'
+                                  : 'bg-[#F4F8FC] text-[#71869B]'
                               }`}>
                                 {isCompleted ? <Check className="w-3.5 h-3.5" /> : idx + 1}
                               </div>
                               <span className={`text-xs font-bold leading-tight ${
-                                isCurrent ? 'text-[#4689C8]' : isCompleted ? 'text-[#2dce89]' : 'text-[#525f7f]'
+                                isCurrent ? 'text-[#4689C8]' : isCompleted ? 'text-[#20A36B]' : 'text-[#71869B]'
                               }`}>
                                 {stage}
                               </span>
@@ -820,7 +820,7 @@ function LeadViewContent() {
                     {(lead.status === 'Lost' || lead.status === 'On Hold') && (
                       <div className={`mt-4 p-3.5 rounded-lg border text-xs flex items-center justify-between ${
                         lead.status === 'Lost'
-                          ? 'bg-[#fdf2f2] border-[#f5365c]/30 text-[#f5365c]'
+                          ? 'bg-[#FDF2F2] border-[#F5365C]/30 text-[#F5365C]'
                           : 'bg-amber-50 border-amber-300 text-amber-800'
                       }`}>
                         <div>
@@ -839,14 +839,14 @@ function LeadViewContent() {
                 </div>
 
                 {/* 3. ACTIVITY HISTORY SECTION (Vertical Timeline) */}
-                <div className="card shadow-sm border-0 rounded-lg overflow-hidden bg-white">
-                  <div className="bg-gradient-to-r from-[#172b4d] to-[#213a63] text-white px-5 py-3.5 flex items-center justify-between">
+                <div className="card shadow-sm border border-[#DFEAF2] rounded-xl overflow-hidden bg-white">
+                  <div className="bg-gradient-to-r from-[#19324D] to-[#3475B2] text-white px-5 py-3.5 flex items-center justify-between">
                     <div>
                       <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
                         <MessageSquare className="w-4 h-4 text-white" />
                         <span>Activity History ({followUps.length})</span>
                       </h5>
-                      <p className="text-xs text-slate-300 mt-0.5 m-0">
+                      <p className="text-xs text-[#E8F8FA] mt-0.5 m-0">
                         Real-time interaction logs &amp; activity timeline
                       </p>
                     </div>
@@ -854,7 +854,7 @@ function LeadViewContent() {
                     <button
                       type="button"
                       onClick={() => setIsAddingActivity(!isAddingActivity)}
-                      className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-xs transition cursor-pointer"
+                      className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-[#4689C8] hover:bg-[#3475B2] rounded-lg shadow-xs transition cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>{isAddingActivity ? 'Close Form' : 'Log Activity'}</span>
@@ -864,16 +864,16 @@ function LeadViewContent() {
                   <div className="p-4 sm:p-6">
                     {/* Collapsible New Activity Form */}
                     {isAddingActivity && (
-                      <div className="mb-6 p-4 sm:p-5 bg-[#f8f9fe] border border-[#e2e8f0] rounded-xl shadow-2xs">
-                        <div className="flex items-center justify-between mb-3 border-b border-[#e2e8f0] pb-2">
-                          <h6 className="text-xs font-bold text-[#172b4d] uppercase tracking-wider flex items-center gap-1.5 m-0">
+                      <div className="mb-6 p-4 sm:p-5 bg-[#F4F8FC] border border-[#DFEAF2] rounded-xl shadow-2xs">
+                        <div className="flex items-center justify-between mb-3 border-b border-[#DFEAF2] pb-2">
+                          <h6 className="text-xs font-bold text-[#19324D] uppercase tracking-wider flex items-center gap-1.5 m-0">
                             <Plus className="w-3.5 h-3.5 text-[#4689C8]" />
                             <span>Record New Activity / Remark</span>
                           </h6>
                           <button
                             type="button"
                             onClick={() => setIsAddingActivity(false)}
-                            className="text-xs text-[#8898aa] hover:text-[#172b4d] font-semibold cursor-pointer"
+                            className="text-xs text-[#71869B] hover:text-[#19324D] font-semibold cursor-pointer"
                           >
                             Cancel
                           </button>
@@ -882,13 +882,13 @@ function LeadViewContent() {
                         <form onSubmit={handleCreateActivity} className="space-y-3">
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                              <label className="block text-[11px] font-bold text-[#525f7f] uppercase mb-1">
+                              <label className="block text-[11px] font-bold text-[#19324D] uppercase mb-1">
                                 Lifecycle Status *
                               </label>
                               <select
                                 value={newActivityStatus}
                                 onChange={(e) => setNewActivityStatus(e.target.value)}
-                                className="w-full px-3 py-2 text-xs font-semibold rounded-lg border border-[#dee2e6] bg-white text-[#172b4d] focus:border-[#4689C8] outline-none cursor-pointer"
+                                className="w-full px-3 py-2 text-xs font-semibold rounded-lg border border-[#DFEAF2] bg-white text-[#19324D] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none cursor-pointer"
                               >
                                 {LEAD_STATUSES.map((s) => (
                                   <option key={s.id} value={s.id}>
@@ -899,7 +899,7 @@ function LeadViewContent() {
                             </div>
 
                             <div className="flex items-end">
-                              <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#525f7f] pb-2 select-none">
+                              <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#19324D] pb-2 select-none">
                                 <input
                                   type="checkbox"
                                   checked={syncLeadStatus}
@@ -912,7 +912,7 @@ function LeadViewContent() {
                           </div>
 
                           <div>
-                            <label className="block text-[11px] font-bold text-[#525f7f] uppercase mb-1">
+                            <label className="block text-[11px] font-bold text-[#19324D] uppercase mb-1">
                               Remark / Notes *
                             </label>
                             <textarea
@@ -920,7 +920,7 @@ function LeadViewContent() {
                               value={newActivityRemark}
                               onChange={(e) => setNewActivityRemark(e.target.value)}
                               placeholder="Enter conversation notes or interaction remarks here..."
-                              className="w-full px-3 py-2 text-xs rounded-lg border border-[#dee2e6] bg-white text-[#172b4d] focus:border-[#4689C8] outline-none leading-relaxed resize-none"
+                              className="w-full px-3 py-2 text-xs rounded-lg border border-[#DFEAF2] bg-white text-[#19324D] placeholder-[#71869B] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none leading-relaxed resize-none"
                               required
                             />
                           </div>
@@ -932,14 +932,14 @@ function LeadViewContent() {
                                 setIsAddingActivity(false);
                                 setNewActivityRemark('');
                               }}
-                              className="btn btn-sm px-3.5 py-1.5 text-xs font-semibold text-[#525f7f] bg-white border border-[#dee2e6] hover:bg-[#f6f9fc] rounded cursor-pointer"
+                              className="btn btn-sm px-3.5 py-1.5 text-xs font-semibold text-[#19324D] bg-white border border-[#DFEAF2] hover:bg-[#EAF3FB] rounded-lg cursor-pointer"
                             >
                               Cancel
                             </button>
                             <button
                               type="submit"
                               disabled={submittingActivity}
-                              className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-[#4689C8] hover:bg-[#3876b0] rounded shadow-xs disabled:opacity-50 cursor-pointer"
+                              className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-[#4689C8] hover:bg-[#3475B2] rounded-lg shadow-xs disabled:opacity-50 cursor-pointer"
                             >
                               <Send className="w-3.5 h-3.5" />
                               <span>{submittingActivity ? 'Saving...' : 'Save Activity Record'}</span>
@@ -951,18 +951,18 @@ function LeadViewContent() {
 
                     {/* VERTICAL TIMELINE CONTAINER */}
                     {followUps.length === 0 ? (
-                      <div className="py-12 text-center text-[#64748b] bg-[#f8f9fe]/50 border border-dashed border-[#cbd5e1] rounded-xl">
-                        <MessageSquare className="w-10 h-10 mx-auto text-[#94a3b8] mb-2.5 opacity-60" />
-                        <h4 className="font-bold text-sm text-[#334155]">No interaction activities recorded yet</h4>
-                        <p className="text-xs text-[#64748b] mt-1 max-w-sm mx-auto">
+                      <div className="py-12 text-center text-[#71869B] bg-[#F4F8FC] border border-dashed border-[#DFEAF2] rounded-xl">
+                        <MessageSquare className="w-10 h-10 mx-auto text-[#71869B]/40 mb-2.5 opacity-60" />
+                        <h4 className="font-bold text-sm text-[#19324D]">No interaction activities recorded yet</h4>
+                        <p className="text-xs text-[#71869B] mt-1 max-w-sm mx-auto">
                           Click &quot;Log Activity&quot; above or update the pipeline stage to start capturing conversation remarks.
                         </p>
                       </div>
                     ) : (
                       <div className="relative pt-2 pb-4 px-1 sm:px-4">
                         {/* Continuous vertical timeline stem line */}
-                        <div className="hidden sm:block absolute left-[169px] top-6 bottom-6 w-0.5 bg-slate-200" />
-                        <div className="sm:hidden absolute left-5 top-6 bottom-6 w-0.5 bg-slate-200" />
+                        <div className="hidden sm:block absolute left-[169px] top-6 bottom-6 w-0.5 bg-[#DFEAF2]" />
+                        <div className="sm:hidden absolute left-5 top-6 bottom-6 w-0.5 bg-[#DFEAF2]" />
 
                         <div className="space-y-7">
                           {followUps.map((item, idx) => {
@@ -977,7 +977,7 @@ function LeadViewContent() {
                               >
                                 {/* 1. Date & Time (Left column on desktop, above on mobile) */}
                                 <div className="pl-12 sm:pl-0 sm:w-[130px] sm:text-right flex-shrink-0 pt-1">
-                                  <span className="text-[11px] font-mono font-medium text-slate-500 tracking-tight">
+                                  <span className="text-[11px] font-mono font-medium text-[#71869B] tracking-tight">
                                     {formattedDate}
                                   </span>
                                 </div>
@@ -993,7 +993,7 @@ function LeadViewContent() {
                                 <div className="pl-12 sm:pl-0 flex-1 min-w-0">
                                   {/* Status Name Header */}
                                   <div className="flex items-center gap-2 mb-2 pt-0.5">
-                                    <h4 className="text-sm font-bold text-[#1e293b] tracking-tight m-0">
+                                    <h4 className="text-sm font-bold text-[#19324D] tracking-tight m-0">
                                       {meta.label}
                                     </h4>
                                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${meta.lightBg} ${meta.textColor} border border-current/20`}>
@@ -1004,14 +1004,14 @@ function LeadViewContent() {
                                   {/* Sub-branch Connector & Single Remark Card */}
                                   <div className="flex items-start gap-2.5">
                                     {/* Branch connector line with circle */}
-                                    <div className="flex items-center h-6 text-slate-300 select-none pt-1">
-                                      <span className="w-3.5 h-0.5 bg-slate-300 inline-block" />
-                                      <span className="w-2 h-2 rounded-full border border-slate-300 bg-white inline-block -ml-0.5" />
+                                    <div className="flex items-center h-6 text-[#DFEAF2] select-none pt-1">
+                                      <span className="w-3.5 h-0.5 bg-[#DFEAF2] inline-block" />
+                                      <span className="w-2 h-2 rounded-full border border-[#DFEAF2] bg-white inline-block -ml-0.5" />
                                     </div>
 
                                     {/* Remark Card */}
-                                    <div className={`flex-1 bg-[#f8f9fa] border border-[#e2e8f0] border-l-4 ${meta.borderColor} rounded-r-lg p-3.5 shadow-2xs relative hover:bg-white hover:border-slate-300 transition duration-150`}>
-                                      <div className="text-xs sm:text-sm text-[#334155] leading-relaxed pr-8 whitespace-pre-wrap">
+                                    <div className={`flex-1 bg-[#F8FAFD] border border-[#DFEAF2] border-l-4 ${meta.borderColor} rounded-r-xl p-3.5 shadow-2xs relative hover:bg-white hover:border-[#CBDCEB] transition duration-150`}>
+                                      <div className="text-xs sm:text-sm text-[#19324D] leading-relaxed pr-8 whitespace-pre-wrap">
                                         {item.notes || 'Activity recorded without additional remarks.'}
                                       </div>
 
@@ -1021,7 +1021,7 @@ function LeadViewContent() {
                                           <button
                                             type="button"
                                             onClick={() => handleDeleteFollowUp(item.id)}
-                                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded border border-transparent hover:border-red-200 transition cursor-pointer"
+                                            className="p-1.5 text-[#71869B] hover:text-[#F5365C] hover:bg-[#FDF2F2] rounded-md border border-transparent hover:border-[#F5365C]/30 transition cursor-pointer"
                                             title="Delete Activity Record"
                                           >
                                             <Trash2 className="w-3.5 h-3.5" />
@@ -1088,7 +1088,7 @@ export default function LeadViewPage() {
         <AppLayout title="Lead Pipeline & Activity Details">
           <div className="py-20 text-center">
             <RefreshCw className="w-8 h-8 animate-spin text-[#4689C8] mx-auto mb-3" />
-            <p className="text-sm font-semibold text-[#525f7f]">Loading lead view...</p>
+            <p className="text-sm font-semibold text-[#71869B]">Loading lead view...</p>
           </div>
         </AppLayout>
       }

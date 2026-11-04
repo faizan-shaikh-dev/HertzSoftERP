@@ -156,16 +156,16 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-lg bg-white rounded-lg shadow-2xl border border-[#e9ecef] overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-lg bg-white rounded-lg shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header - OJT Style */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#e9ecef] bg-white">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#DFEAF2] bg-white">
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight">
               Record Payment
             </h3>
-            <p className="text-xs text-[#8898aa] mt-0.5">
+            <p className="text-xs text-[#71869B] mt-0.5">
               {activeProject ? `Credit payment against project #${activeProject.id}` : 'Record received funds against client contract'}
             </p>
           </div>
@@ -173,7 +173,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
           <button
             onClick={onClose}
             type="button"
-            className="text-[#172b4d] hover:text-[#525f7f] transition cursor-pointer p-0.5 rounded-full"
+            className="text-[#19324D] hover:text-[#71869B] transition cursor-pointer p-0.5 rounded-full"
             aria-label="Close dialog"
           >
             <XCircle className="w-7 h-7 stroke-[1.5]" />
@@ -182,13 +182,13 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
 
         {/* Project Selector (If opened without pre-selected project) */}
         {!project && (
-          <div className="px-6 py-3.5 bg-[#f8f9fe] border-b border-[#dee2e6]">
-            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5 flex items-center gap-1.5">
+          <div className="px-6 py-3.5 bg-[#F4F8FC] border-b border-[#DFEAF2]">
+            <label className="block text-xs font-semibold text-[#71869B] mb-1.5 flex items-center gap-1.5">
               <FolderKanban className="w-3.5 h-3.5 text-[#4689C8]" />
-              <span>Select Target Project <span className="text-[#f5365c] font-bold">*</span></span>
+              <span>Select Target Project <span className="text-[#F5365C] font-bold">*</span></span>
             </label>
             {loadingProjects ? (
-              <div className="flex items-center gap-2 text-xs text-[#8898aa] py-1">
+              <div className="flex items-center gap-2 text-xs text-[#71869B] py-1">
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-[#4689C8]" />
                 <span>Loading active client projects...</span>
               </div>
@@ -197,7 +197,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
                 value={selectedProjectId}
                 onChange={handleProjectSelect}
                 required
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer"
               >
                 <option value="">-- Choose a Project to credit --</option>
                 {projectsList.map((p) => (
@@ -212,12 +212,12 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
 
         {/* Project Balance Summary Banner */}
         {activeProject && (
-          <div className="px-6 py-3.5 bg-[#f8f9fe] border-b border-[#dee2e6] flex items-center justify-between text-xs">
+          <div className="px-6 py-3.5 bg-[#F4F8FC] border-b border-[#DFEAF2] flex items-center justify-between text-xs">
             <div>
-              <div className="font-bold text-[#172b4d] truncate max-w-[240px]">
+              <div className="font-bold text-[#19324D] truncate max-w-[240px]">
                 {activeProject.title}
               </div>
-              <div className="text-[11px] text-[#8898aa] flex items-center gap-1 mt-0.5">
+              <div className="text-[11px] text-[#71869B] flex items-center gap-1 mt-0.5">
                 <Building2 className="w-3 h-3 text-[#adb5bd]" />
                 <span>
                   {activeProject.client_company ? `${activeProject.client_company} (${activeProject.client_name})` : activeProject.client_name}
@@ -226,10 +226,10 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
             </div>
 
             <div className="text-right">
-              <span className="text-[10px] uppercase font-bold text-[#8898aa]">
+              <span className="text-[10px] uppercase font-bold text-[#71869B]">
                 Outstanding Due
               </span>
-              <div className="text-sm font-bold text-[#fb6340]">
+              <div className="text-sm font-bold text-[#FB6340]">
                 {formatCurrency(activeProject.due_balance)}
               </div>
             </div>
@@ -239,7 +239,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
         {/* Modal Form */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1 bg-white">
           {error && (
-            <div className="p-3 rounded-md bg-[#fdf2f2] border border-[#f5365c]/30 text-xs text-[#f5365c] flex items-center gap-2">
+            <div className="p-3 rounded-md bg-[#FDF2F2] border border-[#F5365C]/30 text-xs text-[#F5365C] flex items-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{error}</span>
             </div>
@@ -247,11 +247,11 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
 
           {/* Amount to Credit */}
           <div>
-            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-              Payment Amount (INR) <span className="text-[#f5365c] font-bold ml-0.5">*</span>
+            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+              Payment Amount (INR) <span className="text-[#F5365C] font-bold ml-0.5">*</span>
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8898aa]">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#71869B]">
                 <IndianRupee className="w-4 h-4" />
               </div>
               <input
@@ -261,7 +261,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="e.g. 50000"
-                className="w-full pl-9 pr-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
           </div>
@@ -269,26 +269,26 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
           {/* Date & Payment Method */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Payment Date <span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+                Payment Date <span className="text-[#F5365C] font-bold ml-0.5">*</span>
               </label>
               <input
                 type="date"
                 required
                 value={paymentDate}
                 onChange={(e) => setPaymentDate(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] outline-none transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Payment Mode <span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+                Payment Mode <span className="text-[#F5365C] font-bold ml-0.5">*</span>
               </label>
               <select
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] outline-none transition cursor-pointer"
               >
                 {PAYMENT_METHODS.map((m) => (
                   <option key={m} value={m}>{m}</option>
@@ -299,7 +299,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
 
           {/* Transaction UTR / Ref */}
           <div>
-            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
               UTR / Cheque / Transaction Reference
             </label>
             <input
@@ -307,13 +307,13 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
               value={transactionRef}
               onChange={(e) => setTransactionRef(e.target.value)}
               placeholder="e.g. UPI/20261028/789234 or HDFC000123"
-              className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition"
+              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] outline-none transition"
             />
           </div>
 
           {/* Remarks */}
           <div>
-            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
               Payment Remarks & Receipt Notes
             </label>
             <textarea
@@ -321,24 +321,24 @@ export default function PaymentModal({ isOpen, onClose, project = null, onSucces
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Milestone installment received via bank transfer..."
-              className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] outline-none transition resize-y"
+              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] outline-none transition resize-y"
             />
           </div>
 
           {/* Modal Footer Actions */}
-          <div className="pt-4 border-t border-[#e9ecef] flex items-center justify-end gap-3 mt-4">
+          <div className="pt-4 border-t border-[#DFEAF2] flex items-center justify-end gap-3 mt-4">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-5 py-2.5 bg-white hover:bg-[#f6f9fc] border border-[#dee2e6] text-[#525f7f] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
+              className="px-5 py-2.5 bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] text-[#71869B] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading || !activeProject}
-              className="px-6 py-2.5 bg-gradient-to-r from-[#2dce89] via-[#28b376] to-[#20a36b] hover:from-[#25a970] hover:to-[#1a8557] text-white font-bold text-xs sm:text-sm rounded shadow-sm shadow-[#2dce89]/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+              className="px-6 py-2.5 bg-gradient-to-r from-[#20A36B] via-[#28b376] to-[#20a36b] hover:from-[#25a970] hover:to-[#1a8557] text-white font-bold text-xs sm:text-sm rounded shadow-sm shadow-[#20A36B]/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>

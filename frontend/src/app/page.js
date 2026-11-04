@@ -132,21 +132,21 @@ export default function DashboardPage() {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Won':
-        return 'bg-[#2dce89] text-white';
+        return 'bg-[#20A36B] text-white';
       case 'New':
-        return 'bg-[#ffd600] text-[#172b4d]';
+        return 'bg-[#E8F8FA] text-[#39AFC0] border border-[#91DCE5]';
       case 'Contacted':
-        return 'bg-[#11cdef] text-white';
+        return 'bg-[#5FC8D6] text-white';
       case 'Qualified':
-        return 'bg-[#5e72e4] text-white';
+        return 'bg-[#78A9D7] text-white';
       case 'Quotation Sent':
         return 'bg-[#4689C8] text-white';
       case 'Negotiation':
-        return 'bg-[#8965e0] text-white';
+        return 'bg-[#8965E0] text-white';
       case 'Lost':
-        return 'bg-[#f5365c] text-white';
+        return 'bg-[#F5365C] text-white';
       case 'On Hold':
-        return 'bg-[#8898aa] text-white';
+        return 'bg-[#71869B] text-white';
       default:
         return 'bg-[#4689C8] text-white';
     }
@@ -154,15 +154,15 @@ export default function DashboardPage() {
 
   return (
     <AppLayout title="Operations & Business Dashboard">
-      {/* MASTER OJT CONTAINER CARD */}
-      <div className="card shadow-sm mb-4 mainCard bg-white border border-[#e9ecef] rounded-lg overflow-hidden">
-        {/* Card Header (OJT Style) */}
-        <div className="card-header px-6 py-4 bg-white border-b border-[#e9ecef] flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* MASTER CONTAINER CARD */}
+      <div className="card shadow-sm mb-4 mainCard bg-white border border-[#DFEAF2] rounded-xl overflow-hidden">
+        {/* Card Header */}
+        <div className="card-header px-6 py-4 bg-white border-b border-[#DFEAF2] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight m-0">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight m-0">
               Dashboard Overview
             </h2>
-            <p className="text-xs text-[#8898aa] mt-0.5">
+            <p className="text-xs text-[#71869B] mt-0.5">
               Centralized ERP & Operations Real-time Overview
             </p>
           </div>
@@ -171,7 +171,7 @@ export default function DashboardPage() {
             <button
               onClick={() => fetchStats(true)}
               disabled={loading}
-              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#525f7f] bg-white hover:bg-[#f6f9fc] border border-[#e9ecef] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
+              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#19324D] bg-white hover:bg-[#EAF3FB] hover:text-[#4689C8] border border-[#DFEAF2] rounded-lg shadow-xs transition cursor-pointer disabled:opacity-50"
               title="Refresh dashboard stats"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4689C8]' : ''}`} />
@@ -184,7 +184,7 @@ export default function DashboardPage() {
         <div className="card-body p-4 sm:p-6 space-y-6">
           {/* Error Notice */}
           {error && (
-            <div className="p-4 rounded-md bg-[#fdf2f2] border border-[#f5365c]/30 flex items-center justify-between text-[#f5365c] text-sm">
+            <div className="p-4 rounded-lg bg-[#FDF2F2] border border-[#F5365C]/30 flex items-center justify-between text-[#F5365C] text-sm">
               <div className="flex items-center gap-2.5">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
                 <span>{error}</span>
@@ -198,16 +198,16 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Top 4 KPI Metric Cards (OJT / Argon card-stats layout) */}
+          {/* Top 4 KPI Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* 1. Inquiries */}
-            <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+            <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
               <div className="flex items-start justify-between">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                     Total Inquiries
                   </span>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-[#172b4d] tracking-tight mt-1">
+                  <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1">
                     {stats?.leads?.total || 0}
                   </div>
                 </div>
@@ -215,94 +215,94 @@ export default function DashboardPage() {
                   <Users className="w-5 h-5" />
                 </div>
               </div>
-              <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center gap-2 text-xs">
-                <span className="inline-flex items-center gap-1 font-bold text-[#2dce89]">
+              <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center gap-2 text-xs">
+                <span className="inline-flex items-center gap-1 font-bold text-[#20A36B]">
                   <TrendingUp className="w-3.5 h-3.5" />
                   {stats?.leads?.won || 0} Won Deals
                 </span>
-                <span className="text-[#8898aa] font-medium">
+                <span className="text-[#71869B] font-medium">
                   • {stats?.leads?.active_pipeline || 0} Active
                 </span>
               </div>
             </div>
 
             {/* 2. Client Projects */}
-            <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+            <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
               <div className="flex items-start justify-between">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                     Client Projects
                   </span>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-[#172b4d] tracking-tight mt-1">
+                  <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1">
                     {stats?.projects?.active || 0}
                   </div>
                 </div>
-                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#5e72e4] to-[#825ee4] text-white flex items-center justify-center shadow-md shadow-[#5e72e4]/25">
+                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#3475B2] to-[#78A9D7] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
                   <FolderKanban className="w-5 h-5" />
                 </div>
               </div>
-              <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center gap-2 text-xs">
-                <span className="inline-flex items-center gap-1 font-bold text-[#2dce89]">
+              <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center gap-2 text-xs">
+                <span className="inline-flex items-center gap-1 font-bold text-[#20A36B]">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   {stats?.projects?.completed || 0} Completed
                 </span>
-                <span className="text-[#8898aa] font-medium">
+                <span className="text-[#71869B] font-medium">
                   • {stats?.projects?.total || 0} Total Contracts
                 </span>
               </div>
             </div>
 
             {/* 3. Revenue Collected */}
-            <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+            <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
               <div className="flex items-start justify-between">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                     Revenue Collected
                   </span>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-[#172b4d] tracking-tight mt-1">
+                  <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1">
                     {formatCurrency(stats?.financials?.total_collected)}
                   </div>
                 </div>
-                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#2dce89] to-[#20a36b] text-white flex items-center justify-center shadow-md shadow-[#2dce89]/25">
+                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
                   <TrendingUp className="w-5 h-5" />
                 </div>
               </div>
-              <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+              <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                 <span>Total Deal Value:</span>
-                <span className="font-bold text-[#172b4d]">
+                <span className="font-bold text-[#19324D]">
                   {formatCurrency(stats?.financials?.total_deal_value)}
                 </span>
               </div>
             </div>
 
             {/* 4. Pending Dues */}
-            <div className="card bg-white border border-[#e9ecef] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
+            <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
               <div className="flex items-start justify-between">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#8898aa]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
                     Pending Dues
                   </span>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-[#172b4d] tracking-tight mt-1">
+                  <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1">
                     {formatCurrency(stats?.financials?.total_pending_due)}
                   </div>
                 </div>
-                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#fb6340] to-[#f5365c] text-white flex items-center justify-center shadow-md shadow-[#fb6340]/25">
+                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#FB6340] to-[#F5365C] text-white flex items-center justify-center shadow-md shadow-[#F5365C]/25">
                   <CreditCard className="w-5 h-5" />
                 </div>
               </div>
-              <div className="mt-3 pt-2.5 border-t border-[#f8f9fe] flex items-center justify-between text-xs text-[#8898aa]">
+              <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                 <span>Issued Certs:</span>
-                <span className="font-bold text-[#4689C8] bg-[#f0f7fd] px-2 py-0.5 rounded border border-[#4689C8]/20 text-[11px]">
+                <span className="font-bold text-[#4689C8] bg-[#EAF3FB] px-2.5 py-0.5 rounded-full border border-[#78A9D7]/30 text-[11px]">
                   {stats?.documents?.total_certificates_issued || 0} Documents
                 </span>
               </div>
             </div>
           </div>
 
-          {/* OJT TABLE SECTION */}
+          {/* TABLE SECTION */}
           <div className="space-y-3 pt-2">
-            {/* OJT DataTables Style Tab Toolbar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#dee2e6] pb-2">
+            {/* Tab Toolbar */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#DFEAF2] pb-2">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -310,15 +310,15 @@ export default function DashboardPage() {
                     setActiveTab('leads');
                     setCurrentPage(1);
                   }}
-                  className={`px-4 py-2 text-xs font-bold rounded-t-md transition border-b-2 cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-4 py-2 text-xs font-bold rounded-t-lg transition border-b-2 cursor-pointer flex items-center gap-1.5 ${
                     activeTab === 'leads'
-                      ? 'border-[#4689C8] text-[#4689C8] bg-[#f8f9fe]'
-                      : 'border-transparent text-[#8898aa] hover:text-[#525f7f]'
+                      ? 'border-[#4689C8] text-[#4689C8] bg-[#EAF3FB]'
+                      : 'border-transparent text-[#71869B] hover:text-[#19324D] hover:bg-[#F4F8FC]'
                   }`}
                 >
                   <Users className="w-3.5 h-3.5" />
                   <span>Recent Inquiries Pipeline</span>
-                  <span className="ml-1 px-1.5 py-0.5 bg-[#e9ecef] text-[#525f7f] rounded-full text-[10px] font-bold">
+                  <span className="ml-1 px-1.5 py-0.5 bg-[#DFEAF2] text-[#19324D] rounded-full text-[10px] font-bold">
                     {stats?.recent_activity?.recent_leads?.length || 0}
                   </span>
                 </button>
@@ -329,15 +329,15 @@ export default function DashboardPage() {
                     setActiveTab('payments');
                     setCurrentPage(1);
                   }}
-                  className={`px-4 py-2 text-xs font-bold rounded-t-md transition border-b-2 cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-4 py-2 text-xs font-bold rounded-t-lg transition border-b-2 cursor-pointer flex items-center gap-1.5 ${
                     activeTab === 'payments'
-                      ? 'border-[#4689C8] text-[#4689C8] bg-[#f8f9fe]'
-                      : 'border-transparent text-[#8898aa] hover:text-[#525f7f]'
+                      ? 'border-[#4689C8] text-[#4689C8] bg-[#EAF3FB]'
+                      : 'border-transparent text-[#71869B] hover:text-[#19324D] hover:bg-[#F4F8FC]'
                   }`}
                 >
                   <CreditCard className="w-3.5 h-3.5" />
                   <span>Recent Collections & Payments</span>
-                  <span className="ml-1 px-1.5 py-0.5 bg-[#e9ecef] text-[#525f7f] rounded-full text-[10px] font-bold">
+                  <span className="ml-1 px-1.5 py-0.5 bg-[#DFEAF2] text-[#19324D] rounded-full text-[10px] font-bold">
                     {stats?.recent_activity?.recent_payments?.length || 0}
                   </span>
                 </button>
@@ -347,7 +347,7 @@ export default function DashboardPage() {
                 {activeTab === 'leads' ? (
                   <Link
                     href="/leads"
-                    className="inline-flex items-center gap-1 text-xs font-bold text-[#4689C8] hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-[#4689C8] hover:text-[#3475B2] hover:underline"
                   >
                     <span>View All Leads Pipeline</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
@@ -355,7 +355,7 @@ export default function DashboardPage() {
                 ) : (
                   <Link
                     href="/payments"
-                    className="inline-flex items-center gap-1 text-xs font-bold text-[#4689C8] hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-[#4689C8] hover:text-[#3475B2] hover:underline"
                   >
                     <span>View All Payment Ledger</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
@@ -366,7 +366,7 @@ export default function DashboardPage() {
 
             {/* DataTables Controls Toolbar */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-2">
-              <div className="flex items-center gap-1.5 text-xs text-[#8898aa]">
+              <div className="flex items-center gap-1.5 text-xs text-[#71869B]">
                 <span>Show</span>
                 <select
                   value={itemsPerPage}
@@ -374,7 +374,7 @@ export default function DashboardPage() {
                     setItemsPerPage(Number(e.target.value));
                     setCurrentPage(1);
                   }}
-                  className="text-xs px-2 py-1 bg-white border border-[#dee2e6] rounded text-[#172b4d] font-bold outline-none focus:border-[#4689C8] cursor-pointer"
+                  className="text-xs px-2.5 py-1 bg-white border border-[#DFEAF2] rounded-md text-[#19324D] font-bold outline-none focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 cursor-pointer"
                 >
                   <option value={10}>10</option>
                   <option value={25}>25</option>
@@ -384,7 +384,7 @@ export default function DashboardPage() {
               </div>
 
               <div className="relative w-full sm:w-64">
-                <Search className="w-3.5 h-3.5 text-[#adb5bd] absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-[#71869B] absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder={`Search ${activeTab === 'leads' ? 'inquiries' : 'collections'}...`}
@@ -393,40 +393,40 @@ export default function DashboardPage() {
                     setTableSearch(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full pl-8 pr-3 py-1.5 text-xs bg-white text-[#172b4d] placeholder-[#adb5bd] rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none"
+                  className="w-full pl-8 pr-3 py-1.5 text-xs bg-white text-[#19324D] placeholder-[#71869B] rounded-lg border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none"
                 />
               </div>
             </div>
 
-            {/* OJT BORDERED & STRIPED DATATABLE */}
+            {/* BORDERED & STRIPED DATATABLE */}
             {activeTab === 'leads' ? (
               /* TAB 1: LEADS INQUIRIES DATATABLE */
-              <div className="table-responsive border border-[#dee2e6] rounded-md overflow-x-auto shadow-2xs">
+              <div className="table-responsive border border-[#DFEAF2] rounded-lg overflow-x-auto shadow-2xs">
                 <table className="w-full text-left table-striped table-bordered table-hover align-items-center table-sm">
-                  <thead className="thead-light bg-[#f8f9fe] text-[11px] font-bold uppercase text-[#8898aa] tracking-wider border-b border-[#dee2e6]">
+                  <thead className="thead-light bg-[#EAF3FB] text-[11px] font-bold uppercase text-[#19324D] tracking-wider border-b border-[#DFEAF2]">
                     <tr>
-                      <th className="py-3 px-3.5 border-r border-[#dee2e6] text-center w-12">#</th>
-                      <th className="py-3 px-4 border-r border-[#dee2e6]">Client & Contact</th>
-                      <th className="py-3 px-4 border-r border-[#dee2e6]">Company / Business</th>
-                      <th className="py-3 px-4 border-r border-[#dee2e6]">Lead Inquiry</th>
-                                            <th className="py-3 px-4 border-r border-[#dee2e6] text-center">Pipeline Status</th>
-                      <th className="py-3 px-4 border-r border-[#dee2e6] text-center">Created On</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center w-12">#</th>
+                      <th className="py-3 px-4 border-r border-[#DFEAF2]">Client & Contact</th>
+                      <th className="py-3 px-4 border-r border-[#DFEAF2]">Company / Business</th>
+                      <th className="py-3 px-4 border-r border-[#DFEAF2]">Lead Inquiry</th>
+                      <th className="py-3 px-4 border-r border-[#DFEAF2] text-center">Pipeline Status</th>
+                      <th className="py-3 px-4 border-r border-[#DFEAF2] text-center">Created On</th>
                       <th className="py-3 px-4 text-center w-28">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#dee2e6] text-xs">
+                  <tbody className="divide-y divide-[#DFEAF2] text-xs">
                     {paginatedLeads.length > 0 ? (
                       paginatedLeads.map((lead, index) => (
-                        <tr key={lead.id} className="transition-colors duration-150 odd:bg-white even:bg-[#f4f6f8] hover:bg-[#eaf2fc]">
-                          <td className="py-3 px-3.5 border-r border-[#dee2e6] text-center font-bold text-[#4689C8] font-mono">
+                        <tr key={lead.id} className="transition-colors duration-150 odd:bg-white even:bg-[#F8FAFD] hover:bg-[#EAF3FB]">
+                          <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-center font-bold text-[#4689C8] font-mono">
                             {lead.lead_number ? `#${lead.lead_number}` : `#${index + 1}`}
                           </td>
 
-                          <td className="py-3 px-4 border-r border-[#dee2e6]">
-                            <div className="font-bold text-[#172b4d] text-xs">
+                          <td className="py-3 px-4 border-r border-[#DFEAF2]">
+                            <div className="font-bold text-[#19324D] text-xs">
                               {lead.name}
                             </div>
-                            <div className="text-[11px] text-[#8898aa] flex items-center gap-1.5 mt-0.5">
+                            <div className="text-[11px] text-[#71869B] flex items-center gap-1.5 mt-0.5">
                               {lead.phone && (() => {
                                 const cleanDigits = String(lead.phone).replace(/\D/g, '');
                                 const waPhone = cleanDigits.length === 10 ? `91${cleanDigits}` : cleanDigits;
@@ -435,49 +435,48 @@ export default function DashboardPage() {
                                     href={`https://wa.me/${waPhone}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-1 font-mono text-[#25D366] hover:text-[#1ebe57] font-semibold hover:underline"
+                                    className="flex items-center gap-1 font-mono text-[#20A36B] hover:text-[#178553] font-semibold hover:underline"
                                     title="Click to chat on WhatsApp"
                                   >
-                                    <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366] shrink-0" />
+                                    <WhatsAppIcon className="w-3.5 h-3.5 text-[#20A36B] shrink-0" />
                                     <span>{lead.phone}</span>
                                   </a>
                                 );
                               })()}
                               {lead.email && (
                                 <span className="flex items-center gap-1">
-                                  <Mail className="w-3 h-3 text-[#adb5bd]" />
+                                  <Mail className="w-3 h-3 text-[#71869B]" />
                                   {lead.email}
                                 </span>
                               )}
                             </div>
                           </td>
 
-                          <td className="py-3 px-4 border-r border-[#dee2e6]">
-                            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#172b4d]">
+                          <td className="py-3 px-4 border-r border-[#DFEAF2]">
+                            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#19324D]">
                               <Building2 className="w-3.5 h-3.5 text-[#4689C8]" />
                               <span>{lead.company_name || 'Individual Client'}</span>
                             </div>
                           </td>
 
-                          <td className="py-3 px-4 border-r border-[#dee2e6] font-medium text-[#525f7f]">
+                          <td className="py-3 px-4 border-r border-[#DFEAF2] font-medium text-[#71869B]">
                             {lead.service_interest || 'Custom Web Application'}
                           </td>
 
-
-                          <td className="py-3 px-4 border-r border-[#dee2e6] text-center">
+                          <td className="py-3 px-4 border-r border-[#DFEAF2] text-center">
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusBadge(lead.status)}`}>
                               {lead.status}
                             </span>
                           </td>
 
-                          <td className="py-3 px-4 border-r border-[#dee2e6] text-center text-[#8898aa] text-[11px]">
+                          <td className="py-3 px-4 border-r border-[#DFEAF2] text-center text-[#71869B] text-[11px]">
                             {formatDate(lead.created_at)}
                           </td>
 
                           <td className="py-3 px-4 text-center">
                             <Link
                               href={`/leads/view?id=${lead.id}`}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-blue-50 hover:bg-[#4689C8] hover:text-white border border-blue-200 rounded transition cursor-pointer"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#EAF3FB] hover:bg-[#4689C8] hover:text-white border border-[#78A9D7]/40 rounded transition cursor-pointer"
                               title="View Lead Pipeline & Activity History"
                             >
                               <span>View</span>
@@ -488,7 +487,7 @@ export default function DashboardPage() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="8" className="py-12 text-center text-xs text-[#8898aa]">
+                        <td colSpan="8" className="py-12 text-center text-xs text-[#71869B]">
                           {tableSearch ? 'No inquiries matching your search criteria.' : 'No recent inquiries recorded.'}
                         </td>
                       </tr>
@@ -498,58 +497,58 @@ export default function DashboardPage() {
               </div>
             ) : (
               /* TAB 2: PAYMENTS COLLECTIONS DATATABLE */
-              <div className="table-responsive border border-[#dee2e6] rounded-md overflow-x-auto shadow-2xs">
+              <div className="table-responsive border border-[#DFEAF2] rounded-lg overflow-x-auto shadow-2xs">
                 <table className="w-full text-left table-striped table-bordered table-hover align-items-center table-sm">
-                  <thead className="thead-light bg-[#f8f9fe] text-[11px] font-bold uppercase text-[#8898aa] tracking-wider border-b border-[#dee2e6]">
+                  <thead className="thead-light bg-[#EAF3FB] text-[11px] font-bold uppercase text-[#19324D] tracking-wider border-b border-[#DFEAF2]">
                     <tr>
-                      <th className="py-3 px-3.5 border-r border-[#dee2e6] text-center w-12">#</th>
-                      <th className="py-3 px-4 border-r border-[#dee2e6]">Client Name</th>
-                      <th className="py-3 px-4 border-r border-[#dee2e6]">Company / Enterprise</th>
-                      <th className="py-3 px-4 border-r border-[#dee2e6]">Project Contract</th>
-                      <th className="py-3 px-4 border-r border-[#dee2e6] text-right">Amount Credited</th>
-                      <th className="py-3 px-4 border-r border-[#dee2e6] text-center">Payment Mode</th>
-                      <th className="py-3 px-4 border-r border-[#dee2e6] text-center">Payment Date</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center w-12">#</th>
+                      <th className="py-3 px-4 border-r border-[#DFEAF2]">Client Name</th>
+                      <th className="py-3 px-4 border-r border-[#DFEAF2]">Company / Enterprise</th>
+                      <th className="py-3 px-4 border-r border-[#DFEAF2]">Project Contract</th>
+                      <th className="py-3 px-4 border-r border-[#DFEAF2] text-right">Amount Credited</th>
+                      <th className="py-3 px-4 border-r border-[#DFEAF2] text-center">Payment Mode</th>
+                      <th className="py-3 px-4 border-r border-[#DFEAF2] text-center">Payment Date</th>
                       <th className="py-3 px-4 text-center w-28">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#dee2e6] text-xs">
+                  <tbody className="divide-y divide-[#DFEAF2] text-xs">
                     {paginatedPayments.length > 0 ? (
                       paginatedPayments.map((pm, index) => (
-                        <tr key={pm.id} className="transition-colors duration-150 odd:bg-white even:bg-[#f4f6f8] hover:bg-[#eaf2fc]">
-                          <td className="py-3 px-3.5 border-r border-[#dee2e6] text-center font-bold text-[#4689C8] font-mono">
+                        <tr key={pm.id} className="transition-colors duration-150 odd:bg-white even:bg-[#F8FAFD] hover:bg-[#EAF3FB]">
+                          <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-center font-bold text-[#4689C8] font-mono">
                             #{index + 1}
                           </td>
 
-                          <td className="py-3 px-4 border-r border-[#dee2e6] font-bold text-[#172b4d]">
+                          <td className="py-3 px-4 border-r border-[#DFEAF2] font-bold text-[#19324D]">
                             {pm.client_name}
                           </td>
 
-                          <td className="py-3 px-4 border-r border-[#dee2e6] text-xs font-semibold text-[#525f7f]">
+                          <td className="py-3 px-4 border-r border-[#DFEAF2] text-xs font-semibold text-[#71869B]">
                             {pm.client_company || '—'}
                           </td>
 
-                          <td className="py-3 px-4 border-r border-[#dee2e6] font-medium text-[#172b4d]">
+                          <td className="py-3 px-4 border-r border-[#DFEAF2] font-medium text-[#19324D]">
                             {pm.project_title}
                           </td>
 
-                          <td className="py-3 px-4 border-r border-[#dee2e6] text-right font-extrabold text-[#2dce89]">
+                          <td className="py-3 px-4 border-r border-[#DFEAF2] text-right font-extrabold text-[#20A36B]">
                             {formatCurrency(pm.amount_paid)}
                           </td>
 
-                          <td className="py-3 px-4 border-r border-[#dee2e6] text-center">
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#f4f5f7] text-[#525f7f] border border-[#dee2e6]">
+                          <td className="py-3 px-4 border-r border-[#DFEAF2] text-center">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#F4F8FC] text-[#19324D] border border-[#DFEAF2]">
                               {pm.payment_method || 'Bank Transfer'}
                             </span>
                           </td>
 
-                          <td className="py-3 px-4 border-r border-[#dee2e6] text-center text-[#8898aa] text-[11px]">
+                          <td className="py-3 px-4 border-r border-[#DFEAF2] text-center text-[#71869B] text-[11px]">
                             {formatDate(pm.payment_date)}
                           </td>
 
                           <td className="py-3 px-4 text-center">
                             <Link
                               href="/payments"
-                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-blue-50 hover:bg-[#4689C8] hover:text-white border border-blue-200 rounded transition cursor-pointer"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#EAF3FB] hover:bg-[#4689C8] hover:text-white border border-[#78A9D7]/40 rounded transition cursor-pointer"
                             >
                               <span>Receipt</span>
                               <ArrowUpRight className="w-3 h-3" />
@@ -559,7 +558,7 @@ export default function DashboardPage() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="8" className="py-12 text-center text-xs text-[#8898aa]">
+                        <td colSpan="8" className="py-12 text-center text-xs text-[#71869B]">
                           {tableSearch ? 'No collections matching your search criteria.' : 'No recent payment installments recorded yet.'}
                         </td>
                       </tr>
@@ -569,8 +568,8 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {/* OJT DATATABLES BOTTOM FOOTER: ROW COUNT & PAGINATION */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 text-xs text-[#8898aa]">
+            {/* DATATABLES BOTTOM FOOTER: ROW COUNT & PAGINATION */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 text-xs text-[#71869B]">
               <div>
                 Showing {totalFilteredCount === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} to{' '}
                 {Math.min(currentPage * itemsPerPage, totalFilteredCount)} of {totalFilteredCount} entries
@@ -581,7 +580,7 @@ export default function DashboardPage() {
                   type="button"
                   disabled={currentPage <= 1}
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  className="px-2.5 py-1 rounded border border-[#dee2e6] text-xs font-semibold text-[#525f7f] hover:bg-[#f8f9fe] disabled:opacity-40 transition cursor-pointer flex items-center gap-1"
+                  className="px-2.5 py-1 rounded-md border border-[#DFEAF2] text-xs font-semibold text-[#19324D] hover:bg-[#EAF3FB] disabled:opacity-40 transition cursor-pointer flex items-center gap-1"
                 >
                   <ChevronLeft className="w-3 h-3" />
                   <span>Previous</span>
@@ -592,10 +591,10 @@ export default function DashboardPage() {
                     key={pg}
                     type="button"
                     onClick={() => setCurrentPage(pg)}
-                    className={`w-7 h-7 rounded text-xs font-bold transition cursor-pointer ${
+                    className={`w-7 h-7 rounded-md text-xs font-bold transition cursor-pointer ${
                       currentPage === pg
                         ? 'bg-[#4689C8] text-white shadow-xs'
-                        : 'border border-[#dee2e6] text-[#525f7f] hover:bg-[#f8f9fe]'
+                        : 'border border-[#DFEAF2] text-[#71869B] hover:bg-[#EAF3FB] hover:text-[#19324D]'
                     }`}
                   >
                     {pg}
@@ -606,7 +605,7 @@ export default function DashboardPage() {
                   type="button"
                   disabled={currentPage >= totalPages}
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  className="px-2.5 py-1 rounded border border-[#dee2e6] text-xs font-semibold text-[#525f7f] hover:bg-[#f8f9fe] disabled:opacity-40 transition cursor-pointer flex items-center gap-1"
+                  className="px-2.5 py-1 rounded-md border border-[#DFEAF2] text-xs font-semibold text-[#19324D] hover:bg-[#EAF3FB] disabled:opacity-40 transition cursor-pointer flex items-center gap-1"
                 >
                   <span>Next</span>
                   <ChevronRight className="w-3 h-3" />

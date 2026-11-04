@@ -1,37 +1,93 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  /* Primary Brand Colors */
+  --primary: #4689C8;
+  --primary-dark: #3475B2;
+  --primary-light: #78A9D7;
+  --primary-soft: #EAF3FB;
+
+  /* Secondary Brand Colors */
+  --secondary: #5FC8D6;
+  --secondary-dark: #39AFC0;
+  --secondary-light: #91DCE5;
+  --secondary-soft: #E8F8FA;
+
+  /* Backgrounds & Surfaces */
+  --background: #F4F8FC;
+  --surface: #FFFFFF;
+  --border: #DFEAF2;
+
+  /* Typography */
+  --text-primary: #19324D;
+  --text-secondary: #71869B;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 6px rgba(70, 137, 200, 0.08);
+  --shadow-md: 0 4px 12px rgba(70, 137, 200, 0.12);
+  --shadow-lg: 0 8px 24px rgba(70, 137, 200, 0.15);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: #4689C8;
+  --color-primary-dark: #3475B2;
+  --color-primary-light: #78A9D7;
+  --color-primary-soft: #EAF3FB;
+
+  --color-secondary: #5FC8D6;
+  --color-secondary-dark: #39AFC0;
+  --color-secondary-light: #91DCE5;
+  --color-secondary-soft: #E8F8FA;
+
+  --color-background: #F4F8FC;
+  --color-surface: #FFFFFF;
+  --color-border: #DFEAF2;
+
+  --color-text-primary: #19324D;
+  --color-text-secondary: #71869B;
+
+  --shadow-brand-sm: 0 2px 6px rgba(70, 137, 200, 0.08);
+  --shadow-brand-md: 0 4px 12px rgba(70, 137, 200, 0.12);
+  --shadow-brand-lg: 0 8px 24px rgba(70, 137, 200, 0.15);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-/* Global Clean Table Alternating Zebra Rows (Gray & White) */
+/* Global Clean Table Alternating Zebra Rows */
 .table-striped > tbody > tr:nth-of-type(odd),
 tbody.table-striped-rows > tr:nth-of-type(odd) {
-  background-color: #f4f6f8;
+  background-color: #F8FAFD;
 }
 
 .table-striped > tbody > tr:nth-of-type(even),
 tbody.table-striped-rows > tr:nth-of-type(even) {
-  background-color: #ffffff;
+  background-color: #FFFFFF;
 }
 
 .table-hover > tbody > tr:hover,
 tbody.table-striped-rows > tr:hover {
-  background-color: #eaf2fc !important;
+  background-color: #EAF3FB !important;
   transition: background-color 0.15s ease-in-out;
 }
 
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F4F8FC;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBDCEB;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #78A9D7;
+}

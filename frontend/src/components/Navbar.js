@@ -59,7 +59,7 @@ export default function Navbar({
   const isAdmin = user?.role?.toLowerCase().includes('admin');
 
   return (
-    <header className="sticky top-0 z-30 h-16 sm:h-20 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] border-b-2 border-[#5FC8D6]/40 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-md">
+    <header className="sticky top-0 z-30 h-16 sm:h-20 bg-gradient-to-r from-[#4689C8] via-[#3475B2] to-[#5FC8D6] border-b border-[#3475B2]/20 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-md">
       {/* Left: Mobile Drawer Toggler (Hidden on Desktop) & White Typography Title */}
       <div className="flex items-center gap-3 sm:gap-4">
         <button
@@ -81,7 +81,7 @@ export default function Navbar({
           <h1 className="text-base sm:text-xl font-bold tracking-tight text-white leading-tight">
             {title}
           </h1>
-          <p className="hidden sm:block text-[11px] text-[#e0f7fa] font-medium leading-none mt-1">
+          <p className="hidden sm:block text-[11px] text-[#E8F8FA] font-medium leading-none mt-1">
             Hertzsoft Technologies Centralized Operations
           </p>
         </div>
@@ -129,16 +129,16 @@ export default function Navbar({
 
           {/* Dropdown Menu Box */}
           {dropdownOpen && (
-            <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-2xl border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+            <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border border-[#DFEAF2] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
               {/* Dropdown Header Info */}
-              <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-bold text-[#8898aa] uppercase tracking-wider">
+              <div className="px-4 py-3 border-b border-[#DFEAF2]">
+                <p className="text-[10px] font-bold text-[#71869B] uppercase tracking-wider">
                   Welcome!
                 </p>
-                <p className="text-sm font-bold text-[#172b4d] truncate mt-0.5">
+                <p className="text-sm font-bold text-[#19324D] truncate mt-0.5">
                   {displayName}
                 </p>
-                <p className="text-xs text-slate-500 truncate">
+                <p className="text-xs text-[#71869B] truncate">
                   {displayEmail}
                 </p>
                 <div className="mt-2">
@@ -148,7 +148,7 @@ export default function Navbar({
                       Administrator
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#f0f7fd] text-[#4689C8] border border-[#4689C8]/25">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#EAF3FB] text-[#4689C8] border border-[#78A9D7]/30">
                       <UserCheck className="w-3 h-3" />
                       {user?.role || 'Staff Member'}
                     </span>
@@ -163,13 +163,13 @@ export default function Navbar({
                     setDropdownOpen(false);
                     setProfileModalOpen(true);
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-[#4689C8] hover:bg-blue-50/80 rounded-lg transition-colors text-left cursor-pointer"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-[#19324D] hover:text-[#4689C8] hover:bg-[#EAF3FB] rounded-lg transition-colors text-left cursor-pointer"
                 >
                   <User className="w-4 h-4 text-[#4689C8]" />
                   <span>Edit Profile & Account</span>
                 </button>
 
-                <div className="border-t border-slate-100 my-1" />
+                <div className="border-t border-[#DFEAF2] my-1" />
 
                 <button
                   onClick={() => {

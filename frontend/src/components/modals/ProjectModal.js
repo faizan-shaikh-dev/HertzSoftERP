@@ -174,16 +174,16 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-xl bg-white rounded-lg shadow-2xl border border-[#e9ecef] overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-xl bg-white rounded-lg shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header - OJT Style */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#e9ecef] bg-white">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#DFEAF2] bg-white">
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#172b4d] tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight">
               {isEdit ? 'Edit Client Project' : 'Create Project'}
             </h3>
-            <p className="text-xs text-[#8898aa] mt-0.5">
+            <p className="text-xs text-[#71869B] mt-0.5">
               {isEdit ? `Modifying project contract #${project.id}` : 'Record a new contract with milestones & payment terms'}
             </p>
           </div>
@@ -191,7 +191,7 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
           <button
             onClick={onClose}
             type="button"
-            className="text-[#172b4d] hover:text-[#525f7f] transition cursor-pointer p-0.5 rounded-full"
+            className="text-[#19324D] hover:text-[#71869B] transition cursor-pointer p-0.5 rounded-full"
             aria-label="Close dialog"
           >
             <XCircle className="w-7 h-7 stroke-[1.5]" />
@@ -201,7 +201,7 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
         {/* Modal Form */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1 bg-white">
           {error && (
-            <div className="p-3 rounded-md bg-[#fdf2f2] border border-[#f5365c]/30 text-xs text-[#f5365c] flex items-center gap-2">
+            <div className="p-3 rounded-md bg-[#FDF2F2] border border-[#F5365C]/30 text-xs text-[#F5365C] flex items-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{error}</span>
             </div>
@@ -210,8 +210,8 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
           {/* Client Selection or Inline Creation */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-semibold text-[#525f7f]">
-                Client / Company <span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              <label className="block text-xs font-semibold text-[#71869B]">
+                Client / Company <span className="text-[#F5365C] font-bold ml-0.5">*</span>
               </label>
               <button
                 type="button"
@@ -224,7 +224,7 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
             </div>
 
             {isCreatingNewClient ? (
-              <div className="p-3.5 rounded-md bg-[#f8f9fe] border border-[#dee2e6] space-y-2.5">
+              <div className="p-3.5 rounded-md bg-[#F4F8FC] border border-[#DFEAF2] space-y-2.5">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-[#4689C8]">
                   Quick Client Registration
                 </span>
@@ -235,28 +235,28 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
                     value={newClientName}
                     onChange={(e) => setNewClientName(e.target.value)}
                     placeholder="Contact Name *"
-                    className="w-full px-3 py-2 bg-white text-xs text-[#172b4d] rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none"
+                    className="w-full px-3 py-2 bg-white text-xs text-[#19324D] rounded border border-[#DFEAF2] focus:border-[#4689C8] outline-none"
                   />
                   <input
                     type="text"
                     value={newClientCompany}
                     onChange={(e) => setNewClientCompany(e.target.value)}
                     placeholder="Company Name"
-                    className="w-full px-3 py-2 bg-white text-xs text-[#172b4d] rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none"
+                    className="w-full px-3 py-2 bg-white text-xs text-[#19324D] rounded border border-[#DFEAF2] focus:border-[#4689C8] outline-none"
                   />
                   <input
                     type="tel"
                     value={newClientPhone}
                     onChange={(e) => setNewClientPhone(e.target.value)}
                     placeholder="Phone Number"
-                    className="w-full px-3 py-2 bg-white text-xs text-[#172b4d] rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none font-mono"
+                    className="w-full px-3 py-2 bg-white text-xs text-[#19324D] rounded border border-[#DFEAF2] focus:border-[#4689C8] outline-none font-mono"
                   />
                   <input
                     type="email"
                     value={newClientEmail}
                     onChange={(e) => setNewClientEmail(e.target.value)}
                     placeholder="Email Address"
-                    className="w-full px-3 py-2 bg-white text-xs text-[#172b4d] rounded border border-[#dee2e6] focus:border-[#4689C8] outline-none"
+                    className="w-full px-3 py-2 bg-white text-xs text-[#19324D] rounded border border-[#DFEAF2] focus:border-[#4689C8] outline-none"
                   />
                 </div>
               </div>
@@ -265,7 +265,7 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
                 value={clientId}
                 onChange={(e) => setClientId(e.target.value)}
                 disabled={loadingClients}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer"
               >
                 {clients.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -278,8 +278,8 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
 
           {/* Project Title */}
           <div>
-            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-              Project Title <span className="text-[#f5365c] font-bold ml-0.5">*</span>
+            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+              Project Title <span className="text-[#F5365C] font-bold ml-0.5">*</span>
             </label>
             <input
               type="text"
@@ -287,18 +287,18 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Cloud ERP Software & Operations Portal"
-              className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
             />
           </div>
 
           {/* Cost & Status */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
-                Total Contract Value (INR) <span className="text-[#f5365c] font-bold ml-0.5">*</span>
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+                Total Contract Value (INR) <span className="text-[#F5365C] font-bold ml-0.5">*</span>
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8898aa]">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#71869B]">
                   <IndianRupee className="w-4 h-4" />
                 </div>
                 <input
@@ -308,19 +308,19 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
                   value={totalCost}
                   onChange={(e) => setTotalCost(e.target.value)}
                   placeholder="e.g. 250000"
-                  className="w-full pl-9 pr-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                  className="w-full pl-9 pr-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Execution Status
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer"
               >
                 {STATUS_OPTIONS.map((st) => (
                   <option key={st} value={st}>{st}</option>
@@ -329,33 +329,33 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Start Date
               </label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
                 Estimated Deadline
               </label>
               <input
                 type="date"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
               />
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-semibold text-[#525f7f] mb-1.5">
+            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
               Project Description & Key Deliverables
             </label>
             <textarea
@@ -363,24 +363,24 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Outline deliverables, technical stack, or project milestones..."
-              className="w-full px-3.5 py-2.5 bg-white text-[#172b4d] placeholder-[#adb5bd] text-sm rounded-md border border-[#dee2e6] focus:border-[#4689C8] focus:ring-1 focus:ring-[#4689C8] outline-none transition resize-y"
+              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition resize-y"
             />
           </div>
 
           {/* Modal Footer Actions */}
-          <div className="pt-4 border-t border-[#e9ecef] flex items-center justify-end gap-3 mt-4">
+          <div className="pt-4 border-t border-[#DFEAF2] flex items-center justify-end gap-3 mt-4">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-5 py-2.5 bg-white hover:bg-[#f6f9fc] border border-[#dee2e6] text-[#525f7f] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
+              className="px-5 py-2.5 bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] text-[#71869B] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 bg-gradient-to-r from-[#326fa8] via-[#4689C8] to-[#4689C8] hover:from-[#2a5d8d] hover:to-[#3876b0] text-white font-bold text-xs sm:text-sm rounded shadow-sm shadow-[#4689C8]/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+              className="px-6 py-2.5 bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] hover:from-[#2a5d8d] hover:to-[#3475B2] text-white font-bold text-xs sm:text-sm rounded shadow-sm shadow-[#4689C8]/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>
