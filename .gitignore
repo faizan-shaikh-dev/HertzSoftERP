@@ -7,7 +7,10 @@ Backend/node_modules/
 Backend/.env
 *.env
 
-# Local test scripts
+
+# Local test scripts & notes
+notes.txt
+*.notes.txt
 test_api.js
 Backend/test_api.js
 
