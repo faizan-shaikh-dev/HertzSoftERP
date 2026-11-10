@@ -107,10 +107,6 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
       setError('Please provide a project title.');
       return;
     }
-    if (!totalCost || Number(totalCost) < 0) {
-      setError('Please specify a valid total contract amount.');
-      return;
-    }
 
     setLoading(true);
 
@@ -143,7 +139,7 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
         client_id: String(finalClientId),
         title: title.trim(),
         description: description.trim() || null,
-        total_cost: Number(totalCost),
+        total_cost: totalCost ? Number(totalCost) : (project?.total_cost || 0),
         status,
         start_date: startDate || null,
         deadline: deadline || null
@@ -296,7 +292,7 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
-                Total Contract Value (INR) <span className="text-[#F5365C] font-bold ml-0.5">*</span>
+                Total Contract Value (INR) <span className="text-[10px] text-[#71869B] font-normal">(Optional)</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#71869B]">
@@ -304,11 +300,10 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
                 </div>
                 <input
                   type="number"
-                  required
                   min="0"
                   value={totalCost}
                   onChange={(e) => setTotalCost(e.target.value)}
-                  placeholder="e.g. 250000"
+                  placeholder="Optional contract value"
                   className="w-full pl-9 pr-3.5 py-2.5 bg-white text-[#19324D] placeholder-[#adb5bd] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
                 />
               </div>

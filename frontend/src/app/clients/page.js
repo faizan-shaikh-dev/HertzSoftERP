@@ -106,6 +106,34 @@ export default function ClientsPage() {
     setCurrentPage(1);
   }, [searchQuery, itemsPerPage]);
 
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '—';
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+    } catch {
+      return dateStr;
+    }
+  };
+
+  const formatTime = (dateStr) => {
+    if (!dateStr) return '';
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+    } catch {
+      return '';
+    }
+  };
+
   const formatDateTime = (dateStr) => {
     if (!dateStr) return '—';
     try {
@@ -237,26 +265,24 @@ export default function ClientsPage() {
             <table className="w-full text-xs text-left border-collapse">
               <thead className="bg-[#EAF3FB] text-[#19324D] text-[11px] font-bold uppercase tracking-wider border-b border-[#DFEAF2]">
                 <tr>
-                  <th className="py-3 px-3.5 border-r border-[#DFEAF2] w-48">Client Profile</th>
-                  <th className="py-3 px-3.5 border-r border-[#DFEAF2] w-44">Original Lead</th>
-                  <th className="py-3 px-3.5 border-r border-[#DFEAF2] w-52">Contact Details</th>
-                  <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Lead Inquiry</th>
-                  <th className="py-3 px-3.5 border-r border-[#DFEAF2] w-44">Conversion Date</th>
-                  <th className="py-3 px-3.5 border-r border-[#DFEAF2] w-36">Assigned Owner</th>
-                  <th className="py-3 px-3.5 text-center w-28">Actions</th>
+                  <th className="py-3.5 px-4 border-r border-[#DFEAF2] min-w-[240px]">Client Profile</th>
+                  <th className="py-3.5 px-4 border-r border-[#DFEAF2] min-w-[200px]">Contact Details</th>
+                  <th className="py-3.5 px-4 border-r border-[#DFEAF2] min-w-[170px]">Conversion Date</th>
+                  <th className="py-3.5 px-4 border-r border-[#DFEAF2] min-w-[150px]">Assigned Owner</th>
+                  <th className="py-3.5 px-4 text-center min-w-[170px]">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#DFEAF2]">
                 {loading ? (
                   <tr>
-                    <td colSpan="7" className="py-16 text-center text-[#71869B] bg-white">
+                    <td colSpan="5" className="py-16 text-center text-[#71869B] bg-white">
                       <RefreshCw className="w-7 h-7 animate-spin mx-auto text-[#4689C8] mb-2" />
                       <p className="font-semibold text-xs">Loading clients...</p>
                     </td>
                   </tr>
                 ) : paginatedLeads.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="py-16 text-center text-[#71869B] bg-white">
+                    <td colSpan="5" className="py-16 text-center text-[#71869B] bg-white">
                       <UserCheck className="w-10 h-10 mx-auto text-[#71869B] mb-2 opacity-60" />
                       <h4 className="font-bold text-sm text-[#19324D]">No Clients Found</h4>
                       <p className="text-xs text-[#71869B] mt-1 max-w-sm mx-auto">
@@ -271,6 +297,7 @@ export default function ClientsPage() {
                   paginatedLeads.map((item, idx) => {
                     const isEven = idx % 2 === 0;
                     const waPhone = getCleanPhone(item.phone);
+                    const companyName = item.converted_client_company || item.company_name;
 
                     return (
                       <tr 
@@ -280,54 +307,52 @@ export default function ClientsPage() {
                         } hover:bg-[#EAF3FB]`}
                       >
                         {/* 1. Client Profile */}
-                        <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
-                          <div className="space-y-1">
-                            <Link
-                              href={`/projects?search=${encodeURIComponent(item.name || '')}`}
-                              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#EAF8F1] text-[#20A36B] hover:bg-[#d4f2df] border border-[#20A36B]/40 transition"
-                              title="Open Client Projects"
-                            >
-                              <UserCheck className="w-3 h-3" />
-                              <span>Client #{item.converted_client_number || 'Linked'}</span>
-                              <ExternalLink className="w-2.5 h-2.5 opacity-60" />
-                            </Link>
-
-                            <div className="text-xs font-bold text-[#19324D]">
-                              {item.converted_client_company || item.company_name || item.name}
+                        <td className="py-3.5 px-4 border-r border-[#DFEAF2]">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-lg bg-[#EAF8F1] text-[#20A36B] font-bold flex items-center justify-center flex-shrink-0 border border-[#20A36B]/20 shadow-2xs">
+                              <Building2 className="w-4 h-4" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="text-xs font-bold text-[#19324D] hover:text-[#4689C8] transition truncate">
+                                {companyName || item.name}
+                              </div>
+                              <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30">
+                                  <UserCheck className="w-2.5 h-2.5" />
+                                  <span>Client #{item.converted_client_number || 'Linked'}</span>
+                                </span>
+                                {item.lead_number && (
+                                  <span 
+                                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#EAF3FB] text-[#4689C8] border border-[#78A9D7]/30"
+                                    title={`Origin Lead #${item.lead_number}`}
+                                  >
+                                    <Tag className="w-2.5 h-2.5" />
+                                    <span>Lead #{item.lead_number}</span>
+                                  </span>
+                                )}
+                                {companyName && item.name && (
+                                  <span className="text-[11px] text-[#71869B] truncate">
+                                    • {item.name}
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </td>
 
-                        {/* 2. Original Lead */}
-                        <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
-                          <div className="space-y-1">
-                            <Link
-                              href={`/leads/view?id=${item.id}`}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#EAF3FB] text-[#4689C8] hover:bg-[#4689C8] hover:text-white border border-[#78A9D7]/40 transition"
-                              title="View Lead Pipeline Details"
-                            >
-                              <Tag className="w-3 h-3" />
-                              <span>Lead #{item.lead_number}</span>
-                            </Link>
-                            <div className="text-xs font-semibold text-[#19324D]">
-                              {item.name}
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* 3. Contact Details */}
-                        <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
+                        {/* 2. Contact Details */}
+                        <td className="py-3.5 px-4 border-r border-[#DFEAF2]">
                           <div className="space-y-1">
                             <div className="flex items-center gap-1.5 text-xs text-[#19324D] font-semibold">
-                              <Phone className="w-3 h-3 text-[#71869B]" />
+                              <Phone className="w-3.5 h-3.5 text-[#71869B] flex-shrink-0" />
                               <span>{item.phone || '—'}</span>
                               {waPhone && (
                                 <a
                                   href={`https://wa.me/${waPhone}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-[#20A36B] hover:opacity-80 transition ml-1"
-                                  title="WhatsApp Chat"
+                                  className="inline-flex items-center text-[#20A36B] hover:opacity-80 transition ml-1"
+                                  title="Chat on WhatsApp"
                                 >
                                   <WhatsAppIcon className="w-3.5 h-3.5" />
                                 </a>
@@ -335,8 +360,8 @@ export default function ClientsPage() {
                             </div>
                             {item.email && (
                               <div className="flex items-center gap-1.5 text-[11px] text-[#4689C8] truncate">
-                                <Mail className="w-3 h-3 text-[#71869B]" />
-                                <a href={`mailto:${item.email}`} className="hover:underline truncate">
+                                <Mail className="w-3.5 h-3.5 text-[#71869B] flex-shrink-0" />
+                                <a href={`mailto:${item.email}`} className="hover:underline truncate" title={item.email}>
                                   {item.email}
                                 </a>
                               </div>
@@ -344,51 +369,50 @@ export default function ClientsPage() {
                           </div>
                         </td>
 
-                        {/* 4. Lead Inquiry */}
-                        <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
-                          <div className="text-xs text-[#19324D] font-semibold leading-relaxed">
-                            {item.service_interest || item.requirement || 'General Inquiry'}
-                          </div>
-                          {item.company_name && (
-                            <div className="text-[11px] text-[#71869B] flex items-center gap-1 mt-0.5">
-                              <Building2 className="w-3 h-3" />
-                              <span>{item.company_name}</span>
+                        {/* 3. Conversion Date */}
+                        <td className="py-3.5 px-4 border-r border-[#DFEAF2]">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg bg-[#EAF8F1] flex items-center justify-center flex-shrink-0 text-[#20A36B] border border-[#20A36B]/20">
+                              <Calendar className="w-4 h-4" />
                             </div>
-                          )}
-                        </td>
-
-                        {/* 5. Conversion Date */}
-                        <td className="py-3 px-3.5 border-r border-[#DFEAF2] font-mono text-[11px] text-[#71869B]">
-                          <div className="flex items-center gap-1.5">
-                            <Calendar className="w-3.5 h-3.5 text-[#20A36B] flex-shrink-0" />
-                            <span>{formatDateTime(item.converted_at || item.updated_at)}</span>
+                            <div>
+                              <div className="text-xs font-bold text-[#19324D]">
+                                {formatDate(item.converted_at || item.updated_at)}
+                              </div>
+                              <div className="text-[10px] text-[#71869B] font-mono mt-0.5">
+                                {formatTime(item.converted_at || item.updated_at)}
+                              </div>
+                            </div>
                           </div>
                         </td>
 
-                        {/* 6. Assigned Owner */}
-                        <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
-                          <span className="text-xs font-semibold text-[#19324D]">
-                            {item.assigned_to_name || 'Admin'}
-                          </span>
+                        {/* 4. Assigned Owner */}
+                        <td className="py-3.5 px-4 border-r border-[#DFEAF2]">
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F4F8FC] border border-[#DFEAF2] text-xs text-[#19324D] font-semibold">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#20A36B]"></span>
+                            <span>{item.assigned_to_name || 'Admin'}</span>
+                          </div>
                         </td>
 
-                        {/* 7. Actions */}
-                        <td className="py-3 px-3.5 text-center">
-                          <div className="inline-flex items-center gap-1">
+                        {/* 5. Actions */}
+                        <td className="py-3.5 px-4 text-center">
+                          <div className="inline-flex items-center justify-center gap-1.5 flex-wrap">
                             <Link
-                              href={`/leads/view?id=${item.id}`}
-                              className="p-1.5 rounded-md text-[#4689C8] hover:bg-[#EAF3FB] border border-transparent hover:border-[#78A9D7]/40 transition"
-                              title="View Lead Activity History"
+                              href={`/projects?search=${encodeURIComponent(companyName || item.name || '')}`}
+                              className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-[#20A36B] bg-[#EAF8F1] hover:bg-[#20A36B] hover:text-white border border-[#20A36B]/30 rounded-md shadow-2xs transition cursor-pointer"
+                              title="Open Client Projects & Contracts"
                             >
-                              <Eye className="w-3.5 h-3.5" />
+                              <FolderKanban className="w-3.5 h-3.5" />
+                              <span>Projects</span>
                             </Link>
 
                             <Link
-                              href={`/projects?search=${encodeURIComponent(item.name || '')}`}
-                              className="p-1.5 rounded-md text-[#20A36B] hover:bg-[#EAF8F1] border border-transparent hover:border-[#20A36B]/30 transition"
-                              title="Open Client Projects & Invoices"
+                              href={`/leads/view?id=${item.id}`}
+                              className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-[#4689C8] bg-[#EAF3FB] hover:bg-[#4689C8] hover:text-white border border-[#78A9D7]/40 rounded-md shadow-2xs transition cursor-pointer"
+                              title="View Lead Pipeline Details"
                             >
-                              <FolderKanban className="w-3.5 h-3.5" />
+                              <Eye className="w-3.5 h-3.5" />
+                              <span>Lead</span>
                             </Link>
                           </div>
                         </td>

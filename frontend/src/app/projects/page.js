@@ -18,18 +18,15 @@ import {
   Clock,
   AlertCircle,
   TrendingUp,
-  CreditCard,
   Edit,
   Trash2,
   Eye,
   X,
-  Wallet,
   UserCheck,
   Tag
 } from 'lucide-react';
 import { 
   ProjectModal, 
-  PaymentModal, 
   ConfirmDeleteModal 
 } from '@/components/modals';
 
@@ -62,9 +59,6 @@ export default function ProjectsPage() {
   // Modals state
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
-
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [paymentProject, setPaymentProject] = useState(null);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState(null);
@@ -167,10 +161,10 @@ export default function ProjectsPage() {
   };
 
   // Aggregate metrics
-  const totalContractVal = projects.reduce((acc, p) => acc + Number(p.total_cost || 0), 0);
-  const totalCollectedVal = projects.reduce((acc, p) => acc + Number(p.total_paid || 0), 0);
   const activeCount = projects.filter(p => p.status === 'In Progress').length;
+  const testingCount = projects.filter(p => p.status === 'Testing & Review').length;
   const completedCount = projects.filter(p => p.status === 'Completed').length;
+  const deliveryRate = projects.length > 0 ? Math.round((completedCount / projects.length) * 100) : 0;
 
   return (
     <AppLayout title="Projects & Client Contracts">
@@ -185,7 +179,7 @@ export default function ProjectsPage() {
                 <span>Projects & Client Contracts</span>
               </h2>
               <p className="text-xs text-[#71869B] mt-0.5">
-                Manage client project deliverables, milestone contracts, payment schedules, and technical completion.
+                Manage client project deliverables, milestone contracts, execution timeline, and technical completion.
               </p>
             </div>
 
@@ -259,46 +253,46 @@ export default function ProjectsPage() {
                 </div>
               </div>
 
-              {/* 3. Total Contract Value */}
+              {/* 3. Testing & Review */}
               <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                 <div className="flex items-start justify-between">
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
-                      Total Contract Value
+                      Testing & Review
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#19324D] tracking-tight mt-1">
-                      {formatCurrency(totalContractVal)}
+                    <div className="text-xl sm:text-2xl font-extrabold text-[#8965E0] tracking-tight mt-1">
+                      {testingCount}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#3475B2] to-[#4689C8] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
-                    <TrendingUp className="w-5 h-5" />
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#8965E0] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#8965E0]/25">
+                    <Search className="w-5 h-5" />
                   </div>
                 </div>
                 <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
-                  <span>Scope:</span>
-                  <span className="font-bold text-[#19324D]">{projects.length} Total Contracts</span>
+                  <span>Lifecycle:</span>
+                  <span className="font-bold text-[#8965E0]">QA &amp; Client Review</span>
                 </div>
               </div>
 
-              {/* 4. Realized Collections */}
+              {/* 4. Delivery Success Rate */}
               <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
                 <div className="flex items-start justify-between">
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
-                      Total Collections
+                      Delivery Success Rate
                     </span>
                     <div className="text-xl sm:text-2xl font-extrabold text-[#20A36B] tracking-tight mt-1">
-                      {formatCurrency(totalCollectedVal)}
+                      {deliveryRate}%
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#39AFC0] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
-                    <Wallet className="w-5 h-5" />
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
+                    <CheckCircle2 className="w-5 h-5" />
                   </div>
                 </div>
                 <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
-                  <span>Collected:</span>
+                  <span>Performance:</span>
                   <span className="font-bold text-[#20A36B]">
-                    {totalContractVal > 0 ? Math.round((totalCollectedVal / totalContractVal) * 100) : 0}% Realized
+                    {completedCount} of {projects.length} Completed
                   </span>
                 </div>
               </div>
@@ -395,10 +389,9 @@ export default function ProjectsPage() {
                 <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
                   <thead className="thead-light bg-[#EAF3FB] text-[#19324D] text-[11px] font-bold uppercase tracking-wider border-b border-[#DFEAF2]">
                     <tr>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Project & Client</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Project &amp; Client</th>
                       <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">Lifecycle Status</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-right">Contract Value</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Collection Progress</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Deliverables &amp; Scope</th>
                       <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Timeline</th>
                       <th className="py-3 px-3.5 text-center">Actions</th>
                     </tr>
@@ -406,14 +399,14 @@ export default function ProjectsPage() {
                   <tbody className="divide-y divide-[#DFEAF2]">
                     {loading && projects.length === 0 ? (
                       <tr>
-                        <td colSpan="6" className="py-12 text-center text-[#71869B]">
+                        <td colSpan="5" className="py-12 text-center text-[#71869B]">
                           <Loader2 className="w-6 h-6 animate-spin text-[#4689C8] mx-auto mb-2" />
                           <span className="text-xs font-semibold">Loading projects ledger...</span>
                         </td>
                       </tr>
                     ) : paginatedProjects.length === 0 ? (
                       <tr>
-                        <td colSpan="6" className="py-12 text-center text-[#71869B]">
+                        <td colSpan="5" className="py-12 text-center text-[#71869B]">
                           <FolderKanban className="w-8 h-8 mx-auto text-[#71869B]/40 mb-2" />
                           <p className="text-xs font-semibold text-[#19324D]">No projects found matching criteria</p>
                           <p className="text-[11px] text-[#71869B] mt-0.5">
@@ -425,10 +418,6 @@ export default function ProjectsPage() {
                       </tr>
                     ) : (
                       paginatedProjects.map((project, idx) => {
-                        const percentPaid = project.total_cost > 0
-                          ? Math.min(100, Math.round((Number(project.total_paid || 0) / Number(project.total_cost)) * 100))
-                          : 0;
-
                         return (
                           <tr
                             key={project.id}
@@ -493,37 +482,11 @@ export default function ProjectsPage() {
                               </span>
                             </td>
 
-                            {/* 3. Contract Value */}
-                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-right font-mono font-bold text-xs text-[#19324D]">
-                              {formatCurrency(project.total_cost)}
-                            </td>
-
-                            {/* 4. Payment Progress Bar */}
+                            {/* 3. Deliverables & Key Scope */}
                             <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
-                              <div className="flex items-center justify-between text-[11px] mb-1">
-                                <span className="font-bold text-[#20A36B]">
-                                  {formatCurrency(project.total_paid)}
-                                </span>
-                                <span className="font-semibold text-[#FB6340]">
-                                  Due: {formatCurrency(project.due_balance)}
-                                </span>
-                              </div>
-
-                              <div className="w-full bg-[#DFEAF2] rounded-full h-1.5 overflow-hidden">
-                                <div 
-                                  className={`h-full transition-all duration-500 rounded-full ${
-                                    percentPaid >= 100 
-                                      ? 'bg-[#20A36B]' 
-                                      : percentPaid > 50 
-                                      ? 'bg-[#4689C8]' 
-                                      : 'bg-[#FB6340]'
-                                  }`}
-                                  style={{ width: `${percentPaid}%` }}
-                                />
-                              </div>
-                              <div className="text-[10px] text-[#71869B] mt-0.5 font-medium">
-                                {percentPaid}% cleared
-                              </div>
+                              <p className="text-xs text-[#19324D] font-medium line-clamp-2 max-w-xs m-0" title={project.description}>
+                                {project.description || 'Milestones and technical deliverables outlined in project scope.'}
+                              </p>
                             </td>
 
                             {/* 5. Timeline */}
@@ -550,19 +513,6 @@ export default function ProjectsPage() {
                                   <Eye className="w-3.5 h-3.5" />
                                   <span>View</span>
                                 </Link>
-
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setPaymentProject(project);
-                                    setIsPaymentModalOpen(true);
-                                  }}
-                                  className="btn btn-sm inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-[#20A36B] bg-[#EAF8F1] hover:bg-[#20A36B] hover:text-white border border-[#20A36B]/30 rounded-md shadow-2xs transition cursor-pointer"
-                                  title="Record Payment Installment"
-                                >
-                                  <CreditCard className="w-3 h-3" />
-                                  <span>+ Pay</span>
-                                </button>
 
                                 <button
                                   type="button"
@@ -661,17 +611,6 @@ export default function ProjectsPage() {
           setEditingProject(null);
         }}
         project={editingProject}
-        onSuccess={() => fetchProjects(false)}
-      />
-
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={isPaymentModalOpen}
-        onClose={() => {
-          setIsPaymentModalOpen(false);
-          setPaymentProject(null);
-        }}
-        prefilledProject={paymentProject}
         onSuccess={() => fetchProjects(false)}
       />
 

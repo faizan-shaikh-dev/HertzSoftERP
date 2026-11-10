@@ -39,8 +39,7 @@ import {
 import { toast } from 'react-toastify';
 import AppLayout from '@/components/AppLayout';
 import projectService from '@/services/projectService';
-import paymentService from '@/services/paymentService';
-import { PaymentModal, ProjectModal, PaymentReceiptModal, ConfirmDeleteModal } from '@/components/modals';
+import { ProjectModal, ConfirmDeleteModal } from '@/components/modals';
 import { useAuth } from '@/context/AuthContext';
 
 function WhatsAppIcon({ className = "w-3.5 h-3.5" }) {
@@ -182,39 +181,10 @@ function ProjectViewContent() {
   const [error, setError] = useState(null);
 
   // Modals state
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [editingPayment, setEditingPayment] = useState(null);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
-  const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
-  const [selectedReceiptPayment, setSelectedReceiptPayment] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
-
-  // Helper handlers for recording and editing payments
-  const handleOpenNewPaymentModal = () => {
-    setEditingPayment(null);
-    setIsPaymentModalOpen(true);
-  };
-
-  const handleOpenEditPaymentModal = (pm) => {
-    setEditingPayment(pm);
-    setIsPaymentModalOpen(true);
-  };
-
-  const handleDeletePayment = async (paymentId) => {
-    if (!window.confirm('Are you sure you want to delete this payment installment? This action will adjust project balances.')) {
-      return;
-    }
-    try {
-      await paymentService.deletePayment(paymentId);
-      toast.success('Payment installment removed successfully.');
-      fetchProjectDetails();
-    } catch (err) {
-      console.error('Error deleting payment installment:', err);
-      toast.error(err?.response?.data?.error?.message || 'Failed to delete payment installment.');
-    }
-  };
 
   // Activity Logging form state
   const [isAddingActivity, setIsAddingActivity] = useState(false);
@@ -405,12 +375,6 @@ function ProjectViewContent() {
     }
   };
 
-  // Financial & Milestone calculations
-  const totalCost = Number(project?.total_cost || 0);
-  const totalPaid = Number(project?.total_paid || 0);
-  const dueBalance = Math.max(0, totalCost - totalPaid);
-  const percentPaid = totalCost > 0 ? Math.min(100, Math.round((totalPaid / totalCost) * 100)) : 0;
-
   // Pipeline stage calculations
   const normalizedCurrentStatus = useMemo(() => {
     if (!project?.status) return 'Planning';
@@ -456,7 +420,7 @@ function ProjectViewContent() {
                   )}
                 </div>
                 <p className="text-xs text-[#71869B] mt-0.5">
-                  End-to-end client deliverable, pipeline lifecycle milestones, and installments ledger.
+                  End-to-end client deliverables, pipeline lifecycle milestones, and execution timeline.
                 </p>
               </div>
             </div>
@@ -464,17 +428,6 @@ function ProjectViewContent() {
             {/* Header Right Action Buttons */}
             {project && (
               <div className="flex items-center gap-2 flex-wrap">
-                {/* Record Payment Button */}
-                <button
-                  type="button"
-                  onClick={handleOpenNewPaymentModal}
-                  className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#20A36B] hover:bg-[#178553] rounded-lg shadow-xs transition cursor-pointer"
-                  title="Record payment installment for this project"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Record Payment</span>
-                </button>
-
                 {/* Edit Project Button */}
                 <button
                   type="button"
@@ -731,41 +684,10 @@ function ProjectViewContent() {
                         </div>
                       </div>
 
-                      {/* Billing Address */}
-                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
-                          Billing Address
-                        </div>
-                        <div className="text-xs font-semibold text-[#19324D] mt-0.5 flex items-start gap-1.5">
-                          <MapPin className="w-3.5 h-3.5 text-[#71869B] mt-0.5 flex-shrink-0" />
-                          <span>{project.client_address || 'No address specified'}</span>
-                        </div>
-                      </div>
-
-                      {/* Contract Value & Clearance */}
-                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
-                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
-                          Contract Value &amp; Clearance
-                        </div>
-                        <div className="text-xs font-bold text-[#19324D] mt-0.5 flex items-center gap-2">
-                          <span className="text-sm font-extrabold text-[#19324D]">
-                            {formatCurrency(totalCost)}
-                          </span>
-                          <span className="text-[#71869B]">•</span>
-                          <span className="text-xs font-bold text-[#20A36B]">
-                            {formatCurrency(totalPaid)} Paid
-                          </span>
-                          <span className="text-[#71869B]">•</span>
-                          <span className="text-xs font-bold text-[#F5365C]">
-                            {formatCurrency(dueBalance)} Due
-                          </span>
-                        </div>
-                      </div>
-
                       {/* Start Date */}
                       <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
                         <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
-                          Contract Start Date
+                          Project Start Date
                         </div>
                         <div className="text-xs font-semibold text-[#19324D] mt-0.5 flex items-center gap-1.5">
                           <Calendar className="w-3.5 h-3.5 text-[#4689C8]" />
@@ -776,11 +698,22 @@ function ProjectViewContent() {
                       {/* Expected Completion Date */}
                       <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
                         <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
-                          Expected Completion / Target Date
+                          Target Completion Date
                         </div>
                         <div className="text-xs font-semibold text-[#19324D] mt-0.5 flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5 text-[#39AFC0]" />
                           <span>{formatDate(project.target_date || project.deadline)}</span>
+                        </div>
+                      </div>
+
+                      {/* Billing Address */}
+                      <div className="md:col-span-2 border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
+                          Billing Address
+                        </div>
+                        <div className="text-xs font-semibold text-[#19324D] mt-0.5 flex items-start gap-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-[#71869B] mt-0.5 flex-shrink-0" />
+                          <span>{project.client_address || 'No address specified'}</span>
                         </div>
                       </div>
 
@@ -797,85 +730,7 @@ function ProjectViewContent() {
                   </div>
                 </div>
 
-                {/* 2. PROJECT PROGRESSION STEPPER (Interactive Lifecycle Pipeline) */}
-                <div className="card shadow-sm border border-[#DFEAF2] rounded-xl overflow-hidden bg-white">
-                  <div className="bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] text-white px-5 py-3.5 flex items-center justify-between">
-                    <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
-                      <TrendingUp className="w-4 h-4 text-white" />
-                      <span>Project Delivery Lifecycle Progression</span>
-                    </h5>
-                    <span className="text-xs text-[#E8F8FA]">
-                      Current Stage: <strong className="text-white uppercase">{project.status}</strong>
-                    </span>
-                  </div>
-
-                  <div className="p-5 sm:p-6">
-                    {/* Stepper Bar */}
-                    <div className="relative">
-                      <div className="hidden sm:block absolute top-1/2 left-0 right-0 h-1 bg-[#DFEAF2] -translate-y-1/2 z-0" />
-                      
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 relative z-10">
-                        {PROJECT_PIPELINE.map((stage, idx) => {
-                          const currentIdx = PROJECT_PIPELINE.indexOf(normalizedCurrentStatus);
-                          const isStageCompleted = currentIdx >= 0 && idx < currentIdx;
-                          const isCurrent = normalizedCurrentStatus === stage;
-
-                          return (
-                            <button
-                              key={stage}
-                              type="button"
-                              onClick={() => handleStatusChange(stage)}
-                              className={`p-3 rounded-lg border text-center transition cursor-pointer flex flex-col items-center justify-center ${
-                                isCurrent
-                                  ? 'bg-[#EAF3FB] border-[#4689C8] shadow-sm ring-2 ring-[#4689C8]/20'
-                                  : isStageCompleted
-                                  ? 'bg-[#EAF8F1] border-[#20A36B]/40 hover:bg-[#d8f3e3]'
-                                  : 'bg-white border-[#DFEAF2] hover:bg-[#F4F8FC]'
-                              }`}
-                            >
-                              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mb-1 ${
-                                isCurrent
-                                  ? 'bg-[#4689C8] text-white shadow-xs animate-pulse'
-                                  : isStageCompleted
-                                  ? 'bg-[#20A36B] text-white'
-                                  : 'bg-[#F4F8FC] text-[#71869B]'
-                              }`}>
-                                {isStageCompleted ? <Check className="w-3.5 h-3.5" /> : idx + 1}
-                              </div>
-                              <span className={`text-xs font-bold leading-tight ${
-                                isCurrent ? 'text-[#4689C8]' : isStageCompleted ? 'text-[#20A36B]' : 'text-[#71869B]'
-                              }`}>
-                                {stage}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Handling On Hold & Cancelled States */}
-                    {(project.status === 'On Hold' || project.status === 'Cancelled') && (
-                      <div className={`mt-4 p-3.5 rounded-lg border text-xs flex items-center justify-between ${
-                        project.status === 'Cancelled'
-                          ? 'bg-[#FDF2F2] border-[#F5365C]/30 text-[#F5365C]'
-                          : 'bg-amber-50 border-amber-300 text-amber-800'
-                      }`}>
-                        <div>
-                          <strong>{project.status} State:</strong> Project delivery is currently paused or inactive.
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => handleStatusChange('In Progress')}
-                          className="px-3 py-1 rounded bg-white border border-current font-bold text-xs hover:opacity-90 transition cursor-pointer"
-                        >
-                          Resume Project Delivery
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* 3. ACTIVITY & MILESTONE HISTORY (Vertical Timeline) */}
+                {/* 2. ACTIVITY & MILESTONE HISTORY (Vertical Timeline) */}
                 <div className="card shadow-sm border border-[#DFEAF2] rounded-xl overflow-hidden bg-white">
                   <div className="bg-gradient-to-r from-[#19324D] to-[#3475B2] text-white px-5 py-3.5 flex items-center justify-between">
                     <div>
@@ -1082,91 +937,61 @@ function ProjectViewContent() {
                   </div>
                 </div>
 
-                {/* 4. STATISTICS / ANALYTICS SECTION */}
+                {/* 4. PROJECT SCOPE & DELIVERY METRICS */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Left Card: Financials & Collections Overview */}
+                  {/* Left Card: Project Contract & Scope Details */}
                   <div className="rounded-xl p-5 text-white shadow-md relative overflow-hidden"
                     style={{ background: 'linear-gradient(135deg, #4689C8 0%, #5FC8D6 100%)' }}
                   >
                     <div className="flex items-center justify-between">
                       <div className="space-y-3">
                         <h5 className="text-sm font-bold uppercase tracking-wider text-white/95 flex items-center gap-1.5 m-0">
-                          <TrendingUp className="w-4 h-4 text-white" />
-                          <span>Financials &amp; Payments</span>
+                          <FolderKanban className="w-4 h-4 text-white" />
+                          <span>Project Milestones &amp; Scope</span>
                         </h5>
 
                         <div className="grid grid-cols-2 gap-4 pt-1">
                           <div>
                             <div className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-                              {formatCurrency(totalCost)}
+                              {activities.length}
                             </div>
                             <div className="text-[11px] text-white/85 font-semibold mt-0.5 uppercase tracking-wider">
-                              Total Cost
+                              Logged Milestones
                             </div>
                           </div>
 
                           <div>
                             <div className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-                              {formatCurrency(totalPaid)}
+                              Stage #{currentStatusMeta.number || 1}
                             </div>
                             <div className="text-[11px] text-white/85 font-semibold mt-0.5 uppercase tracking-wider">
-                              Amount Paid
+                              Active Phase
                             </div>
                           </div>
                         </div>
 
-                        <div className="pt-2 text-xs text-white/90 font-medium border-t border-white/20">
-                          Pending Balance Due:{' '}
-                          <span className="font-extrabold text-white bg-black/20 px-2 py-0.5 rounded">
-                            {formatCurrency(dueBalance)}
-                          </span>
+                        <div className="pt-2 text-xs text-white/90 font-medium border-t border-white/20 flex items-center justify-between flex-wrap gap-2">
+                          <span>Initiated: <strong>{formatDate(project.start_date || project.created_at)}</strong></span>
+                          <span>Target: <strong>{formatDate(project.target_date || project.deadline)}</strong></span>
                         </div>
                       </div>
 
-                      {/* Circular Progress Ring */}
-                      <div className="flex-shrink-0 flex items-center justify-center relative w-20 h-20 sm:w-24 sm:h-24">
-                        <svg className="w-full h-full -rotate-90">
-                          <circle
-                            cx="48"
-                            cy="48"
-                            r="38"
-                            fill="none"
-                            stroke="rgba(255, 255, 255, 0.25)"
-                            strokeWidth="7"
-                          />
-                          <circle
-                            cx="48"
-                            cy="48"
-                            r="38"
-                            fill="none"
-                            stroke="#ffffff"
-                            strokeWidth="7"
-                            strokeLinecap="round"
-                            strokeDasharray={`${(percentPaid / 100) * 238.76}, 238.76`}
-                            className="transition-all duration-700 ease-out"
-                          />
-                        </svg>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                          <span className="text-sm sm:text-base font-extrabold text-white leading-none">
-                            {percentPaid}%
-                          </span>
-                          <span className="text-[9px] uppercase tracking-wider text-white/85 font-bold mt-0.5">
-                            Paid
-                          </span>
-                        </div>
+                      {/* Icon Badge */}
+                      <div className="flex-shrink-0 hidden sm:flex items-center justify-center w-20 h-20 rounded-2xl bg-white/15 backdrop-blur-xs border border-white/25">
+                        <FolderKanban className="w-10 h-10 text-white" />
                       </div>
                     </div>
                   </div>
 
-                  {/* Right Card: Project Milestones & Lifecycle */}
+                  {/* Right Card: Delivery Status & Lifecycle Progress */}
                   <div className="rounded-xl p-5 text-white shadow-md relative overflow-hidden"
                     style={{ background: 'linear-gradient(135deg, #3475B2 0%, #4689C8 100%)' }}
                   >
                     <div className="flex items-center justify-between">
                       <div className="space-y-3">
                         <h5 className="text-sm font-bold uppercase tracking-wider text-white/95 flex items-center gap-1.5 m-0">
-                          <FolderKanban className="w-4 h-4 text-white" />
-                          <span>Delivery Status &amp; Installments</span>
+                          <CheckCircle2 className="w-4 h-4 text-white" />
+                          <span>Delivery Status &amp; Progress</span>
                         </h5>
 
                         <div className="grid grid-cols-2 gap-4 pt-1">
@@ -1175,16 +1000,16 @@ function ProjectViewContent() {
                               {project.status || 'Planning'}
                             </div>
                             <div className="text-[11px] text-white/85 font-semibold mt-0.5 uppercase tracking-wider">
-                              Lifecycle Phase
+                              Current Phase
                             </div>
                           </div>
 
                           <div>
                             <div className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-                              {project.payment_history?.length || 0}
+                              {completionPercentage}%
                             </div>
                             <div className="text-[11px] text-white/85 font-semibold mt-0.5 uppercase tracking-wider">
-                              Installments
+                              Execution Status
                             </div>
                           </div>
                         </div>
@@ -1233,148 +1058,11 @@ function ProjectViewContent() {
                   </div>
                 </div>
 
-                {/* 5. DETAILED PAYMENT TRANSACTIONS REPORT */}
-                <div className="card shadow-sm border border-[#DFEAF2] rounded-xl overflow-hidden bg-white">
-                  <div className="bg-gradient-to-r from-[#20A36B] to-[#39AFC0] text-white px-5 py-3.5 flex items-center justify-between">
-                    <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
-                      <CreditCard className="w-4 h-4 text-white" />
-                      <span>Project Installments &amp; Payment Ledger ({project.payment_history?.length || 0})</span>
-                    </h5>
-
-                    <button
-                      type="button"
-                      onClick={() => setIsPaymentModalOpen(true)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold bg-white/20 hover:bg-white/30 text-white transition cursor-pointer"
-                    >
-                      <Plus className="w-3 h-3" />
-                      <span>Record Installment</span>
-                    </button>
-                  </div>
-
-                  <div className="p-4 sm:p-5">
-                    {(!project.payment_history || project.payment_history.length === 0) ? (
-                      <div className="py-8 text-center text-[#71869B]">
-                        <CreditCard className="w-8 h-8 mx-auto text-[#71869B]/40 mb-1.5" />
-                        <p className="text-xs font-semibold text-[#19324D]">No payment installments recorded for this project yet</p>
-                        <p className="text-[11px] text-[#71869B] mt-0.5">Click &quot;Record Installment&quot; above to log the first credited amount.</p>
-                        <button
-                          type="button"
-                          onClick={() => setIsPaymentModalOpen(true)}
-                          className="mt-3 btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#20A36B] hover:bg-[#178553] rounded-lg shadow-xs cursor-pointer"
-                        >
-                          <Plus className="w-3.5 h-3.5" />
-                          <span>Record First Payment</span>
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="table-responsive border border-[#DFEAF2] rounded-lg overflow-hidden">
-                        <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
-                          <thead className="thead-light bg-[#EAF3FB] text-[#19324D] text-[11px] font-bold uppercase tracking-wider border-b border-[#DFEAF2]">
-                            <tr>
-                              <th className="py-3 px-3.5 border-r border-[#DFEAF2] w-12 text-center">#</th>
-                              <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Payment Date</th>
-                              <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-right">Amount Paid</th>
-                              <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">Payment Mode</th>
-                              <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Recorded By</th>
-                              <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">Status</th>
-                              <th className="py-3 px-3.5 text-center">Receipt</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-[#DFEAF2]">
-                            {project.payment_history.map((pm, idx) => (
-                              <tr 
-                                key={pm.id} 
-                                className={`transition-colors duration-150 ${
-                                  idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white'
-                                } hover:bg-[#EAF3FB]`}
-                              >
-                                {/* Row Num */}
-                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-center font-bold text-[#71869B]">
-                                  {idx + 1}
-                                </td>
-
-                                {/* Date */}
-                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-[#19324D]">
-                                  <div className="font-bold text-[#19324D]">
-                                    {formatDate(pm.payment_date || pm.created_at)}
-                                  </div>
-                                  <div className="text-[10px] text-[#71869B]">
-                                    {formatDateTime(pm.created_at)}
-                                  </div>
-                                </td>
-
-                                {/* Amount */}
-                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-right font-extrabold text-[#20A36B]">
-                                  {formatCurrency(pm.amount_paid)}
-                                </td>
-
-                                {/* Mode */}
-                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-center">
-                                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#F4F8FC] text-[#19324D] border border-[#DFEAF2]">
-                                    {pm.payment_method || pm.payment_mode || 'Bank Transfer'}
-                                  </span>
-                                </td>
-
-                                {/* Recorded By */}
-                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-[#19324D]">
-                                  {pm.recorded_by_name || 'Admin'}
-                                </td>
-
-                                {/* Status */}
-                                <td className="py-2.5 px-3.5 border-r border-[#DFEAF2] text-center">
-                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30">
-                                    <CheckCircle className="w-3 h-3" />
-                                    <span>Success</span>
-                                  </span>
-                                </td>
-
-                                {/* Receipt Action */}
-                                <td className="py-2.5 px-3.5 text-center">
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      setSelectedReceiptPayment({
-                                        ...pm,
-                                        client_name: project.client_name,
-                                        client_company: project.client_company,
-                                        client_email: project.client_email,
-                                        client_phone: project.client_phone,
-                                        project_title: project.title
-                                      });
-                                      setIsReceiptModalOpen(true);
-                                    }}
-                                    className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#EAF3FB] hover:bg-[#4689C8] hover:text-white border border-[#78A9D7]/40 rounded-md shadow-2xs transition cursor-pointer"
-                                    title="Print Payment Receipt"
-                                  >
-                                    <Receipt className="w-3 h-3" />
-                                    <span>Receipt</span>
-                                  </button>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
-                </div>
               </>
             )}
           </div>
         </div>
       </div>
-
-      {/* Record Payment Modal */}
-      <PaymentModal
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        onSuccess={() => {
-          setIsPaymentModalOpen(false);
-          toast.success('Installment recorded successfully.');
-          fetchProjectDetails();
-        }}
-        prefilledProject={project}
-      />
 
       {/* Edit Project Modal */}
       <ProjectModal
@@ -1388,16 +1076,6 @@ function ProjectViewContent() {
         project={project}
       />
 
-      {/* Official Payment Receipt Modal */}
-      <PaymentReceiptModal
-        isOpen={isReceiptModalOpen}
-        onClose={() => {
-          setIsReceiptModalOpen(false);
-          setSelectedReceiptPayment(null);
-        }}
-        payment={selectedReceiptPayment}
-      />
-
       {/* Delete Project Confirmation Modal */}
       <ConfirmDeleteModal
         isOpen={isDeleteModalOpen}
@@ -1405,7 +1083,7 @@ function ProjectViewContent() {
         onConfirm={confirmDeleteProject}
         loading={deleting}
         title="Delete Project Contract"
-        message={`Are you sure you want to permanently delete project contract "${project?.title}"? This will remove all associated activity records and payment installments.`}
+        message={`Are you sure you want to permanently delete project contract "${project?.title}"? This will remove all associated activity records.`}
       />
     </AppLayout>
   );

@@ -459,7 +459,8 @@ function LeadViewContent() {
     }
   };
 
-  const cleanPhone = lead?.phone ? String(lead.phone).replace(/\D/g, '') : '';
+  const targetWhatsapp = lead?.whatsapp_no || lead?.alternate_phone || lead?.phone;
+  const cleanPhone = targetWhatsapp ? String(targetWhatsapp).replace(/\D/g, '') : '';
   const waPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
 
   return (
@@ -704,19 +705,39 @@ function LeadViewContent() {
                         </div>
                       </div>
 
-                      {/* Contact Number with WhatsApp link */}
+                      {/* Primary Contact Number */}
                       <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#4689C8]/40 transition">
                         <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
                           Primary Contact No
                         </div>
                         <div className="text-sm font-bold text-[#19324D] mt-0.5 flex items-center gap-2">
+                          <Phone className="w-3.5 h-3.5 text-[#4689C8]" />
                           <span className="font-mono">{lead.phone || '—'}</span>
                           {lead.phone && (
+                            <a
+                              href={`tel:${lead.phone}`}
+                              className="text-xs text-[#4689C8] hover:underline font-semibold ml-auto"
+                              title="Call"
+                            >
+                              Call
+                            </a>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* WhatsApp Number with direct chat link */}
+                      <div className="border border-[#DFEAF2] p-2.5 rounded-lg bg-white hover:border-[#20A36B]/40 transition">
+                        <div className="text-[11px] font-bold text-[#71869B] uppercase tracking-wider">
+                          WhatsApp Number
+                        </div>
+                        <div className="text-sm font-bold text-[#19324D] mt-0.5 flex items-center gap-2">
+                          <span className="font-mono">{lead.whatsapp_no || lead.alternate_phone || lead.phone || '—'}</span>
+                          {waPhone && (
                             <a
                               href={`https://wa.me/${waPhone}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-[#20A36B]/10 text-[#20A36B] hover:bg-[#20A36B]/20 transition"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-[#20A36B]/10 text-[#20A36B] hover:bg-[#20A36B]/20 transition ml-auto"
                               title="Chat on WhatsApp"
                             >
                               <WhatsAppIcon className="w-3.5 h-3.5 text-[#20A36B]" />
@@ -808,89 +829,36 @@ function LeadViewContent() {
                           </div>
                         </div>
                       )}
-                    </div>
-                  </div>
-                </div>
 
-                {/* 2. SALES PIPELINE PROGRESSION STEPPER */}
-                <div className="card shadow-sm border border-[#DFEAF2] rounded-xl overflow-hidden bg-white">
-                  <div className="bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] text-white px-5 py-3.5 flex items-center justify-between">
-                    <h5 className="text-sm sm:text-base font-bold flex items-center gap-2 m-0 text-white">
-                      <TrendingUp className="w-4 h-4 text-white" />
-                      <span>Sales Pipeline Progression</span>
-                    </h5>
-                    <span className="text-xs text-[#E8F8FA]">
-                      Current Stage: <strong className="text-white uppercase">{lead.status}</strong>
-                    </span>
-                  </div>
-
-                  <div className="p-5 sm:p-6">
-                    {/* Stepper Bar */}
-                    <div className="relative">
-                      <div className="hidden sm:block absolute top-1/2 left-0 right-0 h-1 bg-[#DFEAF2] -translate-y-1/2 z-0" />
-                      
-                      <div className="grid grid-cols-2 sm:grid-cols-6 gap-3 relative z-10">
-                        {PIPELINE_STAGES.map((stage, idx) => {
-                          const currentIdx = PIPELINE_STAGES.indexOf(lead.status);
-                          const isCompleted = currentIdx >= 0 && idx < currentIdx;
-                          const isCurrent = lead.status === stage;
-
-                          return (
-                            <button
-                              key={stage}
-                              type="button"
-                              onClick={() => handleStatusChange(stage)}
-                              className={`p-3 rounded-lg border text-center transition cursor-pointer flex flex-col items-center justify-center ${
-                                isCurrent
-                                  ? 'bg-[#EAF3FB] border-[#4689C8] shadow-sm ring-2 ring-[#4689C8]/20'
-                                  : isCompleted
-                                  ? 'bg-[#EAF8F1] border-[#20A36B]/40 hover:bg-[#d8f3e3]'
-                                  : 'bg-white border-[#DFEAF2] hover:bg-[#F4F8FC]'
-                              }`}
-                            >
-                              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mb-1 ${
-                                isCurrent
-                                  ? 'bg-[#4689C8] text-white shadow-xs animate-pulse'
-                                  : isCompleted
-                                  ? 'bg-[#20A36B] text-white'
-                                  : 'bg-[#F4F8FC] text-[#71869B]'
-                              }`}>
-                                {isCompleted ? <Check className="w-3.5 h-3.5" /> : idx + 1}
-                              </div>
-                              <span className={`text-xs font-bold leading-tight ${
-                                isCurrent ? 'text-[#4689C8]' : isCompleted ? 'text-[#20A36B]' : 'text-[#71869B]'
-                              }`}>
-                                {stage}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Handling Lost & On Hold Statuses */}
-                    {(lead.status === 'Lost' || lead.status === 'On Hold') && (
-                      <div className={`mt-4 p-3.5 rounded-lg border text-xs flex items-center justify-between ${
-                        lead.status === 'Lost'
-                          ? 'bg-[#FDF2F2] border-[#F5365C]/30 text-[#F5365C]'
-                          : 'bg-amber-50 border-amber-300 text-amber-800'
-                      }`}>
-                        <div>
-                          <strong>{lead.status} State:</strong> {lead.lost_reason || lead.on_hold_reason || 'Marked as non-active stage.'}
+                      {/* Lost Reason */}
+                      {lead.status === 'Lost' && (
+                        <div className="border border-red-200 bg-red-50 p-2.5 rounded-lg md:col-span-2">
+                          <div className="text-[11px] font-bold text-red-600 uppercase tracking-wider">
+                            Reason for Loss
+                          </div>
+                          <div className="text-xs text-red-700 mt-1 font-medium">
+                            {lead.lost_reason || 'No specific loss reason recorded.'}
+                          </div>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => handleStatusChange('Contacted')}
-                          className="px-3 py-1 rounded bg-white border border-current font-bold text-xs hover:opacity-90 transition cursor-pointer"
-                        >
-                          Reopen Pipeline
-                        </button>
-                      </div>
-                    )}
+                      )}
+
+                      {/* On Hold Reason */}
+                      {lead.status === 'On Hold' && (
+                        <div className="border border-amber-200 bg-amber-50 p-2.5 rounded-lg md:col-span-2">
+                          <div className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">
+                            On-Hold Reason &amp; Revisit Date
+                          </div>
+                          <div className="text-xs text-amber-800 mt-1 font-medium">
+                            {lead.on_hold_reason || 'No on-hold reason recorded.'}
+                            {lead.revisit_date && ` • Target Revisit: ${formatDate(lead.revisit_date)}`}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                {/* 3. ACTIVITY HISTORY SECTION (Vertical Timeline) */}
+                {/* 2. ACTIVITY HISTORY SECTION (Vertical Timeline) */}
                 <div className="card shadow-sm border border-[#DFEAF2] rounded-xl overflow-hidden bg-white">
                   <div className="bg-gradient-to-r from-[#19324D] to-[#3475B2] text-white px-5 py-3.5 flex items-center justify-between">
                     <div>

@@ -58,6 +58,76 @@ const STATUS_OPTIONS = [
   'On Hold'
 ];
 
+const getStatusBadgeStyle = (status) => {
+  switch (status) {
+    case 'Won':
+      return {
+        bg: 'bg-[#EAF8F1]',
+        text: 'text-[#20A36B]',
+        border: 'border-[#20A36B]/40',
+        dot: 'bg-[#20A36B]'
+      };
+    case 'Lost':
+      return {
+        bg: 'bg-[#FDF2F2]',
+        text: 'text-[#F5365C]',
+        border: 'border-[#F5365C]/40',
+        dot: 'bg-[#F5365C]'
+      };
+    case 'New':
+    case 'New Lead':
+      return {
+        bg: 'bg-[#E8F8FA]',
+        text: 'text-[#1D9FB1]',
+        border: 'border-[#5FC8D6]/50',
+        dot: 'bg-[#5FC8D6]'
+      };
+    case 'Contacted':
+      return {
+        bg: 'bg-[#EAF3FB]',
+        text: 'text-[#3475B2]',
+        border: 'border-[#78A9D7]/50',
+        dot: 'bg-[#3475B2]'
+      };
+    case 'Qualified':
+      return {
+        bg: 'bg-[#F0F4FA]',
+        text: 'text-[#4689C8]',
+        border: 'border-[#4689C8]/40',
+        dot: 'bg-[#4689C8]'
+      };
+    case 'Quotation Sent':
+    case 'Proposal Sent':
+      return {
+        bg: 'bg-[#EEF2FC]',
+        text: 'text-[#4689C8]',
+        border: 'border-[#4689C8]/50',
+        dot: 'bg-[#4689C8]'
+      };
+    case 'Negotiation':
+      return {
+        bg: 'bg-[#F4EFFE]',
+        text: 'text-[#8965E0]',
+        border: 'border-[#8965E0]/40',
+        dot: 'bg-[#8965E0]'
+      };
+    case 'On Hold':
+      return {
+        bg: 'bg-[#F4F8FC]',
+        text: 'text-[#71869B]',
+        border: 'border-[#DFEAF2]',
+        dot: 'bg-[#71869B]'
+      };
+    default:
+      return {
+        bg: 'bg-[#F4F8FC]',
+        text: 'text-[#71869B]',
+        border: 'border-[#DFEAF2]',
+        dot: 'bg-[#71869B]'
+      };
+  }
+};
+
 function WhatsAppIcon({ className = "w-3.5 h-3.5" }) {
   return (
     <svg 
@@ -638,20 +708,29 @@ export default function LeadsPage() {
                             <span>{lead.company_name}</span>
                           </div>
                         )}
-                        {lead.phone && (() => {
-                          const cleanDigits = String(lead.phone).replace(/\D/g, '');
+                        {(() => {
+                          const targetWhatsapp = lead.whatsapp_no || lead.alternate_phone || lead.phone;
+                          if (!targetWhatsapp) return null;
+                          const cleanDigits = String(targetWhatsapp).replace(/\D/g, '');
                           const waPhone = cleanDigits.length === 10 ? `91${cleanDigits}` : cleanDigits;
                           return (
-                            <a
-                              href={`https://wa.me/${waPhone}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 mt-0.5 text-[11px] font-mono text-[#20A36B] hover:text-[#178553] font-semibold hover:underline transition"
-                              title="Click to chat on WhatsApp"
-                            >
-                              <WhatsAppIcon className="w-3.5 h-3.5 text-[#20A36B] shrink-0" />
-                              <span>{lead.phone}</span>
-                            </a>
+                            <div className="mt-0.5">
+                              <a
+                                href={`https://wa.me/${waPhone}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 text-[11px] font-mono text-[#20A36B] hover:text-[#178553] font-semibold hover:underline transition"
+                                title={`Chat on WhatsApp (${targetWhatsapp})`}
+                              >
+                                <WhatsAppIcon className="w-3.5 h-3.5 text-[#20A36B] shrink-0" />
+                                <span>{lead.phone || targetWhatsapp}</span>
+                              </a>
+                              {lead.whatsapp_no && lead.whatsapp_no !== lead.phone && (
+                                <div className="text-[10px] text-[#20A36B] font-mono font-medium">
+                                  WA: {lead.whatsapp_no}
+                                </div>
+                              )}
+                            </div>
                           );
                         })()}
                         {lead.email && (
@@ -673,36 +752,18 @@ export default function LeadsPage() {
                         )}
                       </td>
 
-                      {/* 4. Pipeline Status */}
+                      {/* 4. Pipeline Status (Read-Only Status Badge) */}
                       <td className="py-2.5 px-3 border-r border-[#DFEAF2]">
-                        <div className="flex flex-col items-start gap-1">
-                          <select
-                            value={lead.status}
-                            onChange={(e) => handleStatusChange(lead, e.target.value)}
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider outline-none border cursor-pointer ${
-                              lead.status === 'Won'
-                                ? 'bg-[#20A36B] text-white border-[#20A36B]'
-                                : lead.status === 'Lost'
-                                ? 'bg-[#F5365C] text-white border-[#F5365C]'
-                                : lead.status === 'New'
-                                ? 'bg-[#E8F8FA] text-[#39AFC0] border-[#91DCE5]'
-                                : lead.status === 'Contacted'
-                                ? 'bg-[#5FC8D6] text-white border-[#5FC8D6]'
-                                : lead.status === 'Qualified'
-                                ? 'bg-[#78A9D7] text-white border-[#78A9D7]'
-                                : lead.status === 'Quotation Sent'
-                                ? 'bg-[#4689C8] text-white border-[#4689C8]'
-                                : lead.status === 'Negotiation'
-                                ? 'bg-[#8965E0] text-white border-[#8965E0]'
-                                : 'bg-[#71869B] text-white border-[#71869B]'
-                            }`}
-                          >
-                            {STATUS_OPTIONS.map((st) => (
-                              <option key={st} value={st} className="bg-white text-[#19324D] font-normal">
-                                {st}
-                              </option>
-                            ))}
-                          </select>
+                        <div className="flex flex-col items-start gap-1.5">
+                          {(() => {
+                            const style = getStatusBadgeStyle(lead.status);
+                            return (
+                              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider border shadow-2xs ${style.bg} ${style.text} ${style.border}`}>
+                                <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
+                                <span>{lead.status}</span>
+                              </span>
+                            );
+                          })()}
 
                           {lead.status === 'Lost' && lead.lost_reason && (
                             <p className="text-[10px] text-[#F5365C] truncate max-w-[140px]" title={lead.lost_reason}>
@@ -725,13 +786,13 @@ export default function LeadsPage() {
                               title="Convert Won Inquiry to Active Client"
                             >
                               <Sparkles className="w-2.5 h-2.5" />
-                              <span>Convert</span>
+                              <span>Convert to Client</span>
                             </button>
                           )}
                           {lead.converted_client_id && (
                             <Link
                               href={`/projects?search=${encodeURIComponent(lead.name || '')}`}
-                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#EAF8F1] text-[#20A36B] hover:bg-[#d4f2df] border border-[#20A36B]/30 transition shadow-2xs"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-[#EAF8F1] text-[#20A36B] hover:bg-[#d4f2df] border border-[#20A36B]/30 transition shadow-2xs"
                               title="View Project Contracts for this Client"
                             >
                               <UserCheck className="w-2.5 h-2.5 text-[#20A36B]" />

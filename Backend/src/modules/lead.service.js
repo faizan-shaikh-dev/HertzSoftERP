@@ -19,6 +19,7 @@ export const createLead = async (leadData, userId) => {
     lead_type = 'Client',
     name,
     phone,
+    whatsapp_no = null,
     alternate_phone = null,
     email = null,
     company_name = null,
@@ -45,16 +46,17 @@ export const createLead = async (leadData, userId) => {
 
   await pool.query(
     `INSERT INTO leads 
-      (lead_type, name, phone, normalized_phone, alternate_phone, email, company_name, website, designation, city, 
+      (lead_type, name, phone, whatsapp_no, normalized_phone, alternate_phone, email, company_name, website, designation, city, 
        requirement, service_interest, source, source_details, estimated_budget, expected_decision_date, 
        domain_available, hosting_available, status, priority, internal_notes, duplicate_override, assigned_to, created_by)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       lead_type,
       name,
       phone,
+      whatsapp_no || alternate_phone || null,
       normalized_phone,
-      alternate_phone || null,
+      alternate_phone || whatsapp_no || null,
       email || null,
       company_name || null,
       website || null,
@@ -504,15 +506,18 @@ export const convertLeadToClient = async (leadId, clientOverrides = {}, userId) 
   if (clientOverrides.internal_notes) noteParts.push(`Client Notes: ${clientOverrides.internal_notes}`);
   const combinedNotes = noteParts.join('\n');
 
+  const whatsapp_no = clientOverrides.whatsapp_no || lead.whatsapp_no || lead.alternate_phone || null;
+
   // 4. Insert into clients table
   await pool.query(
     `INSERT INTO clients 
-      (name, company_name, phone, normalized_phone, email, billing_email, website, billing_address, onboarding_status, internal_notes, converted_from_lead_id, created_by)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      (name, company_name, phone, whatsapp_no, normalized_phone, email, billing_email, website, billing_address, onboarding_status, internal_notes, converted_from_lead_id, created_by)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       clientName,
       companyName || null,
       phone || null,
+      whatsapp_no || null,
       normalized_phone || null,
       email || null,
       billingEmail || null,

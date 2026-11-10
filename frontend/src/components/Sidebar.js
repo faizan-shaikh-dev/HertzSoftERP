@@ -123,25 +123,8 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
           </div>
         </div>
 
-        {/* Desktop Centered Sidebar Arrow Toggle Button */}
-        {onToggleCollapse && (
-          <button
-            onClick={onToggleCollapse}
-            type="button"
-            className="hidden lg:flex items-center justify-center absolute -right-3.5 top-1/2 -translate-y-1/2 z-50 w-7 h-7 rounded-full bg-white border border-[#DFEAF2] text-[#71869B] hover:text-[#4689C8] hover:border-[#4689C8] shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group"
-            title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            {isCollapsed ? (
-              <ChevronRight className="w-4 h-4 text-[#4689C8] transition-transform duration-200 group-hover:scale-110" />
-            ) : (
-              <ChevronLeft className="w-4 h-4 text-[#71869B] group-hover:text-[#4689C8] transition-transform duration-200 group-hover:scale-110" />
-            )}
-          </button>
-        )}
-
         {/* Navigation Menu Links */}
-        <div className={`flex-1 py-4 space-y-1.5 overflow-y-auto ${
+        <div className={`flex-1 py-4 space-y-1.5 overflow-y-auto no-scrollbar scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
           isCollapsed ? 'px-2' : 'px-3'
         }`}>
           {!isCollapsed ? (
@@ -205,6 +188,23 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
             {!isCollapsed ? 'Hertzsoft ERP • v2.0' : 'v2.0'}
           </p>
         </div>
+
+        {/* Desktop Centered Sidebar Arrow Toggle Button (Rendered on top of all sidebar content) */}
+        {onToggleCollapse && (
+          <button
+            onClick={onToggleCollapse}
+            type="button"
+            className="hidden lg:flex items-center justify-center absolute -right-3.5 top-1/2 -translate-y-1/2 z-50 w-7 h-7 rounded-full bg-white border border-[#DFEAF2] text-[#71869B] hover:text-[#4689C8] hover:border-[#4689C8] shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group"
+            title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {isCollapsed ? (
+              <ChevronRight className="w-4 h-4 text-[#4689C8] transition-transform duration-200 group-hover:scale-110" />
+            ) : (
+              <ChevronLeft className="w-4 h-4 text-[#71869B] group-hover:text-[#4689C8] transition-transform duration-200 group-hover:scale-110" />
+            )}
+          </button>
+        )}
       </aside>
     </>
   );
