@@ -275,6 +275,11 @@ function LeadViewContent() {
   const [deleting, setDeleting] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
 
+  // Delete Activity / Follow-up Modal state
+  const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false);
+  const [activityToDelete, setActivityToDelete] = useState(null);
+  const [deletingActivity, setDeletingActivity] = useState(false);
+
   // Activity Logging form state
   const [isAddingActivity, setIsAddingActivity] = useState(false);
   const [newActivityStatus, setNewActivityStatus] = useState('Contacted');
@@ -345,15 +350,26 @@ function LeadViewContent() {
     }
   };
 
-  // Delete Follow-up Item
-  const handleDeleteFollowUp = async (followUpId) => {
-    if (!confirm('Are you sure you want to delete this activity record?')) return;
+  // Trigger Delete Follow-up modal
+  const openDeleteActivityModal = (activity) => {
+    setActivityToDelete(activity);
+    setIsDeleteActivityModalOpen(true);
+  };
+
+  // Confirm Delete Follow-up Item
+  const confirmDeleteActivity = async () => {
+    if (!activityToDelete) return;
     try {
-      await leadService.deleteFollowUp(followUpId);
+      setDeletingActivity(true);
+      await leadService.deleteFollowUp(activityToDelete.id);
       toast.success('Activity record removed.');
+      setIsDeleteActivityModalOpen(false);
+      setActivityToDelete(null);
       await fetchLeadDetails();
     } catch (err) {
       toast.error(err.message || 'Failed to delete activity.');
+    } finally {
+      setDeletingActivity(false);
     }
   };
 
@@ -1040,7 +1056,7 @@ function LeadViewContent() {
                                         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                                           <button
                                             type="button"
-                                            onClick={() => handleDeleteFollowUp(item.id)}
+                                            onClick={() => openDeleteActivityModal(item)}
                                             className="p-1.5 text-[#71869B] hover:text-[#F5365C] hover:bg-[#FDF2F2] rounded-md border border-transparent hover:border-[#F5365C]/30 transition cursor-pointer"
                                             title="Delete Activity Record"
                                           >
@@ -1096,6 +1112,19 @@ function LeadViewContent() {
         loading={deleting}
         title="Delete Lead Record"
         message={`Are you sure you want to permanently delete lead inquiry #${lead?.lead_number || lead?.id} for ${lead?.name}? This will remove all associated activity history.`}
+      />
+
+      {/* Confirm Delete Activity / Interaction Modal */}
+      <ConfirmDeleteModal
+        isOpen={isDeleteActivityModalOpen}
+        onClose={() => {
+          setIsDeleteActivityModalOpen(false);
+          setActivityToDelete(null);
+        }}
+        onConfirm={confirmDeleteActivity}
+        loading={deletingActivity}
+        title="Delete Activity Record"
+        message="Are you sure you want to delete this interaction note? This entry will be permanently removed from the lead activity history."
       />
     </AppLayout>
   );

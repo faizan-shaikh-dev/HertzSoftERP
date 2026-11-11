@@ -186,6 +186,11 @@ function ProjectViewContent() {
   const [deleting, setDeleting] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
 
+  // Delete Activity / Milestone Modal state
+  const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false);
+  const [activityToDelete, setActivityToDelete] = useState(null);
+  const [deletingActivity, setDeletingActivity] = useState(false);
+
   // Activity Logging form state
   const [isAddingActivity, setIsAddingActivity] = useState(false);
   const [newActivityStatus, setNewActivityStatus] = useState('In Progress');
@@ -344,17 +349,28 @@ function ProjectViewContent() {
     }
   };
 
-  // Delete an activity record
-  const handleDeleteActivity = async (activityId) => {
-    if (!window.confirm('Are you sure you want to delete this activity record?')) return;
+  // Trigger Delete Milestone / Activity modal
+  const openDeleteActivityModal = (activity) => {
+    setActivityToDelete(activity);
+    setIsDeleteActivityModalOpen(true);
+  };
+
+  // Confirm Delete Activity / Milestone
+  const confirmDeleteActivity = async () => {
+    if (!activityToDelete) return;
 
     try {
-      await projectService.deleteProjectActivity(activityId);
+      setDeletingActivity(true);
+      await projectService.deleteProjectActivity(activityToDelete.id);
       toast.success('Activity removed.');
-      setActivities((prev) => prev.filter((a) => a.id !== activityId));
+      setActivities((prev) => prev.filter((a) => a.id !== activityToDelete.id));
+      setIsDeleteActivityModalOpen(false);
+      setActivityToDelete(null);
     } catch (err) {
       console.error('Failed to delete activity:', err);
       toast.error(err?.response?.data?.error?.message || 'Failed to delete activity.');
+    } finally {
+      setDeletingActivity(false);
     }
   };
 
@@ -917,7 +933,7 @@ function ProjectViewContent() {
                                         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                                           <button
                                             type="button"
-                                            onClick={() => handleDeleteActivity(item.id)}
+                                            onClick={() => openDeleteActivityModal(item)}
                                             className="p-1.5 text-[#71869B] hover:text-[#F5365C] hover:bg-[#FDF2F2] rounded-md border border-transparent hover:border-[#F5365C]/30 transition cursor-pointer"
                                             title="Delete Activity Record"
                                           >
@@ -1084,6 +1100,19 @@ function ProjectViewContent() {
         loading={deleting}
         title="Delete Project Contract"
         message={`Are you sure you want to permanently delete project contract "${project?.title}"? This will remove all associated activity records.`}
+      />
+
+      {/* Delete Milestone / Activity Confirmation Modal */}
+      <ConfirmDeleteModal
+        isOpen={isDeleteActivityModalOpen}
+        onClose={() => {
+          setIsDeleteActivityModalOpen(false);
+          setActivityToDelete(null);
+        }}
+        onConfirm={confirmDeleteActivity}
+        loading={deletingActivity}
+        title="Delete Milestone / Activity"
+        message="Are you sure you want to delete this activity milestone? This entry will be permanently removed from the project timeline."
       />
     </AppLayout>
   );
