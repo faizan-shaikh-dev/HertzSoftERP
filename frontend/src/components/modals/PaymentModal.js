@@ -12,16 +12,18 @@ import {
   Building2,
   FolderKanban,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Receipt,
+  FileText
 } from 'lucide-react';
 
 const PAYMENT_METHODS = [
-  'Bank Transfer (NEFT/IMPS)',
-  'UPI / QR Code',
+  'UPI',
+  'NEFT / IMPS (Bank Transfer)',
   'Cheque',
   'Cash',
   'Credit Card / Debit Card',
-  'Razorpay / Gateway'
+  'Payment Gateway'
 ];
 
 export default function PaymentModal({ isOpen, onClose, project = null, prefilledProject = null, payment = null, onSuccess }) {
@@ -38,6 +40,8 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
   const [paymentDate, setPaymentDate] = useState(new Date().toISOString().slice(0, 10));
   const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHODS[0]);
   const [transactionRef, setTransactionRef] = useState('');
+  const [invoiceNumber, setInvoiceNumber] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState('Part Payment');
   const [notes, setNotes] = useState('');
 
   const [loading, setLoading] = useState(false);
@@ -76,6 +80,8 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
         setPaymentDate(payment.payment_date ? payment.payment_date.slice(0, 10) : new Date().toISOString().slice(0, 10));
         setPaymentMethod(payment.payment_method || PAYMENT_METHODS[0]);
         setTransactionRef(payment.transaction_reference || '');
+        setInvoiceNumber(payment.invoice_number || '');
+        setPaymentStatus(payment.payment_status || 'Part Payment');
         setNotes(payment.notes || '');
       } else if (projectData) {
         setSelectedProjectId(String(projectData.id));
@@ -83,6 +89,8 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
         setPaymentDate(new Date().toISOString().slice(0, 10));
         setPaymentMethod(PAYMENT_METHODS[0]);
         setTransactionRef('');
+        setInvoiceNumber(projectData.invoice_number || 'HIN26001');
+        setPaymentStatus('Part Payment');
         setNotes('');
       } else {
         setSelectedProjectId('');
@@ -90,6 +98,8 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
         setPaymentDate(new Date().toISOString().slice(0, 10));
         setPaymentMethod(PAYMENT_METHODS[0]);
         setTransactionRef('');
+        setInvoiceNumber('HIN26001');
+        setPaymentStatus('Part Payment');
         setNotes('');
       }
     }
@@ -97,25 +107,23 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
 
   if (!isOpen || !mounted) return null;
 
-  // Active target project (either from prop or from projectsList selection)
-  const activeProject = projectData || projectsList.find((p) => String(p.id) === String(selectedProjectId)) || null;
+  const activeProject = projectData || projectsList.find((p) => String(p.id) === String(selectedProjectId));
 
-  const formatCurrency = (amt) => {
+  const formatCurrency = (val) => {
+    if (val === null || val === undefined || isNaN(val)) return '₹0';
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(amt || 0);
+      maximumFractionDigits: 2
+    }).format(Number(val));
   };
 
   const handleProjectSelect = (e) => {
     const projId = e.target.value;
     setSelectedProjectId(projId);
-    setError('');
-
-    const found = projectsList.find((p) => String(p.id) === String(projId));
-    if (found && found.due_balance > 0) {
-      setAmount(String(found.due_balance));
+    const chosen = projectsList.find((p) => String(p.id) === String(projId));
+    if (chosen && chosen.due_balance > 0) {
+      setAmount(String(chosen.due_balance));
     } else {
       setAmount('');
     }
@@ -145,6 +153,9 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
         payment_date: paymentDate,
         payment_method: paymentMethod,
         transaction_reference: transactionRef.trim() || null,
+        invoice_number: invoiceNumber.trim() || null,
+        invoice_amount: activeProject?.total_cost || null,
+        payment_status: paymentStatus,
         notes: notes.trim() || null
       };
 
@@ -152,8 +163,8 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
         await paymentService.updatePayment(payment.id, payload);
         toast.success(`Payment installment of ${formatCurrency(numericAmount)} updated successfully!`);
       } else {
-        await paymentService.recordPayment(payload);
-        toast.success(`Payment of ${formatCurrency(numericAmount)} recorded successfully!`);
+        const res = await paymentService.recordPayment(payload);
+        toast.success(`Payment recorded! Official Receipt #${res.data?.receipt_number || 'Generated'} issued.`);
       }
 
       if (onSuccess) onSuccess();
@@ -174,42 +185,45 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-lg bg-white rounded-lg shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-lg bg-white rounded-xl shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto max-h-[92vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#DFEAF2] bg-[#F4F8FC]">
-          <div>
-            <h3 className="text-base font-bold text-[#19324D] m-0">
-              {isEdit ? 'Edit Payment Installment' : 'Record Payment'}
-            </h3>
-            <p className="text-xs text-[#71869B] mt-0.5">
-              {isEdit
-                ? `Update payment installment details for #${payment.id?.slice(0, 8)}`
-                : `Credit payment against project #${activeProject?.id ? String(activeProject.id).slice(0, 8) : 'account'}`}
-            </p>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-[#0077B6] text-white">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-white/20 text-white flex items-center justify-center">
+              <Receipt className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-white m-0">
+                {isEdit ? 'Edit Payment Installment' : 'Record Payment & Issue Receipt'}
+              </h3>
+              <p className="text-xs text-blue-100 mt-0.5">
+                Issues sequential receipt number (e.g. HIN26001-R1 / HR26001).
+              </p>
+            </div>
           </div>
 
           <button
             onClick={onClose}
             type="button"
-            className="text-[#19324D] hover:text-[#71869B] transition cursor-pointer p-0.5 rounded-full"
-            aria-label="Close dialog"
+            className="text-white hover:bg-white/20 transition cursor-pointer p-1 rounded-full"
+            aria-label="Close"
           >
-            <XCircle className="w-7 h-7 stroke-[1.5]" />
+            <XCircle className="w-6 h-6" />
           </button>
         </div>
 
-        {/* Project Selector (If opened without pre-selected project and not editing) */}
+        {/* Project Selector */}
         {!projectData && !isEdit && (
-          <div className="px-6 py-3.5 bg-[#F4F8FC] border-b border-[#DFEAF2]">
-            <label className="block text-xs font-semibold text-[#71869B] mb-1.5 flex items-center gap-1.5">
-              <FolderKanban className="w-3.5 h-3.5 text-[#4689C8]" />
-              <span>Select Target Project <span className="text-[#F5365C] font-bold">*</span></span>
+          <div className="px-6 py-3.5 bg-slate-50 border-b border-slate-200">
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+              <FolderKanban className="w-3.5 h-3.5 text-[#0077B6]" />
+              <span>Select Target Project <span className="text-red-500 font-bold">*</span></span>
             </label>
             {loadingProjects ? (
-              <div className="flex items-center gap-2 text-xs text-[#71869B] py-1">
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#4689C8]" />
+              <div className="flex items-center gap-2 text-xs text-slate-500 py-1">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0077B6]" />
                 <span>Loading active client projects...</span>
               </div>
             ) : (
@@ -217,7 +231,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
                 value={selectedProjectId}
                 onChange={handleProjectSelect}
                 required
-                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-md border border-slate-300 focus:border-[#0077B6] outline-none cursor-pointer"
               >
                 <option value="">-- Choose a Project to credit --</option>
                 {projectsList.map((p) => (
@@ -232,22 +246,22 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
 
         {/* Project Balance Summary Banner */}
         {activeProject && (
-          <div className="px-6 py-3.5 bg-[#F4F8FC] border-b border-[#DFEAF2] flex items-center justify-between text-xs">
+          <div className="px-6 py-3 bg-[#E0F2FE] border-b border-[#BAE6FD] flex items-center justify-between text-xs">
             <div>
-              <div className="font-bold text-[#19324D] truncate max-w-[240px]">
+              <div className="font-bold text-[#0077B6] truncate max-w-[240px]">
                 {activeProject.title}
               </div>
-              <div className="text-[11px] text-[#71869B] flex items-center gap-1 mt-0.5">
-                <Building2 className="w-3 h-3 text-[#71869B]" />
+              <div className="text-[11px] text-slate-600 flex items-center gap-1 mt-0.5">
+                <Building2 className="w-3 h-3 text-slate-500" />
                 <span>{activeProject.client_company || activeProject.client_name}</span>
               </div>
             </div>
 
             <div className="text-right">
-              <div className="text-[10px] text-[#71869B] font-bold uppercase tracking-wider">
+              <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
                 Outstanding Due
               </div>
-              <div className="text-sm font-extrabold text-[#F5365C] font-mono">
+              <div className="text-sm font-extrabold text-red-600 font-mono">
                 {formatCurrency(activeProject.due_balance)}
               </div>
             </div>
@@ -257,7 +271,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
         {/* Modal Form */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1 bg-white">
           {error && (
-            <div className="p-3 rounded-md bg-[#FDF2F2] border border-[#F5365C]/30 text-xs text-[#F5365C] flex items-center gap-2">
+            <div className="p-3 rounded-md bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{error}</span>
             </div>
@@ -265,11 +279,11 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
 
           {/* Amount Paid */}
           <div>
-            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
-              Amount Paid (INR) <span className="text-[#F5365C] font-bold">*</span>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              Amount Received (INR) <span className="text-red-500 font-bold">*</span>
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#71869B] font-bold">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">
                 ₹
               </span>
               <input
@@ -279,36 +293,67 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
                 required
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="e.g. 50000"
-                className="w-full pl-8 pr-3.5 py-2.5 bg-white text-[#19324D] text-base font-bold rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition font-mono"
+                placeholder="e.g. 80000"
+                className="w-full pl-8 pr-3.5 py-2.5 bg-white text-slate-900 text-base font-bold rounded-md border border-slate-300 focus:border-[#0077B6] outline-none font-mono"
               />
+            </div>
+          </div>
+
+          {/* Invoice Number & Payment Status */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1">
+                <FileText className="w-3.5 h-3.5 text-[#0077B6]" />
+                <span>Against Invoice No.</span>
+              </label>
+              <input
+                type="text"
+                value={invoiceNumber}
+                onChange={(e) => setInvoiceNumber(e.target.value)}
+                placeholder="e.g. HIN26001"
+                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-md border border-slate-300 focus:border-[#0077B6] outline-none font-mono uppercase"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                Payment Status
+              </label>
+              <select
+                value={paymentStatus}
+                onChange={(e) => setPaymentStatus(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-md border border-slate-300 focus:border-[#0077B6] outline-none cursor-pointer"
+              >
+                <option value="Part Payment">Part Payment</option>
+                <option value="Full Payment">Full Payment</option>
+              </select>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Payment Date */}
             <div>
-              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
-                Payment Date <span className="text-[#F5365C] font-bold">*</span>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                Payment Date <span className="text-red-500 font-bold">*</span>
               </label>
               <input
                 type="date"
                 required
                 value={paymentDate}
                 onChange={(e) => setPaymentDate(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition"
+                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-md border border-slate-300 focus:border-[#0077B6] outline-none"
               />
             </div>
 
             {/* Payment Mode */}
             <div>
-              <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
-                Payment Mode <span className="text-[#F5365C] font-bold">*</span>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                Payment Mode <span className="text-red-500 font-bold">*</span>
               </label>
               <select
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-md border border-slate-300 focus:border-[#0077B6] outline-none cursor-pointer"
               >
                 {PAYMENT_METHODS.map((method) => (
                   <option key={method} value={method}>
@@ -321,56 +366,56 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
 
           {/* Reference / UTR Number */}
           <div>
-            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
-              UTR / Cheque / Transaction Reference
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              UTR / Transaction ID / Reference No.
             </label>
             <input
               type="text"
               value={transactionRef}
               onChange={(e) => setTransactionRef(e.target.value)}
-              placeholder="e.g. HDFC0001234567 or UPI/4231980"
-              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition font-mono uppercase"
+              placeholder="e.g. 687549021359"
+              className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-md border border-slate-300 focus:border-[#0077B6] outline-none font-mono uppercase"
             />
           </div>
 
           {/* Remarks & Notes */}
           <div>
-            <label className="block text-xs font-semibold text-[#71869B] mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
               Payment Remarks & Receipt Notes
             </label>
             <textarea
               rows="2"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="e.g. Milestone 1 advance clearance or 50% kick-off installment..."
-              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none transition resize-none"
+              placeholder="e.g. 40% kick-off installment credited via UPI..."
+              className="w-full px-3.5 py-2 bg-white text-slate-900 text-xs rounded-md border border-slate-300 focus:border-[#0077B6] outline-none resize-none"
             />
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#DFEAF2]">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-5 py-2.5 bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] text-[#71869B] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
+              className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold text-xs rounded transition cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading || (!activeProject && !selectedProjectId)}
-              className="px-6 py-2.5 bg-gradient-to-r from-[#20A36B] via-[#28b376] to-[#20a36b] hover:from-[#25a970] hover:to-[#1a8557] text-white font-bold text-xs sm:text-sm rounded shadow-sm shadow-[#20A36B]/30 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+              className="px-6 py-2.5 bg-[#0077B6] hover:bg-[#005f92] text-white font-bold text-xs sm:text-sm rounded shadow-xs transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin text-white" />
-                  <span>{isEdit ? 'Updating Payment...' : 'Recording Payment...'}</span>
+                  <span>Issuing Receipt...</span>
                 </>
               ) : (
                 <>
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>{isEdit ? 'Save Changes' : 'Confirm & Record Payment'}</span>
+                  <span>{isEdit ? 'Save Changes' : 'Confirm & Issue Official Receipt'}</span>
                 </>
               )}
             </button>

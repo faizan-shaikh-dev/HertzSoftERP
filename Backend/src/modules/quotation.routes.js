@@ -5,10 +5,10 @@ import {
   getQuotationById,
   updateQuotation,
   reviseQuotation,
+  convertToInvoice,
   updateQuotationStatus,
   deleteQuotation,
-  getQuotationMetrics,
-  getPrintableQuotation
+  getQuotationMetrics
 } from './quotation.controller.js';
 import { authenticateToken, authorizeRoles } from '../middleware/authMiddleware.js';
 
@@ -20,17 +20,14 @@ router.use(authenticateToken);
 // Metrics endpoint
 router.get('/metrics', getQuotationMetrics);
 
-// Printable HTML view
-router.get('/:id/print', getPrintableQuotation);
-
 // Quotation Endpoints
 router.post('/', createQuotation);                                         // Create new quotation
 router.get('/', getQuotations);                                            // Get all quotations
 router.get('/:id', getQuotationById);                                      // Get single quotation
 router.put('/:id', updateQuotation);                                       // Update draft quotation
 router.post('/:id/revise', reviseQuotation);                               // Revise (Version 2, Supersedes Version 1)
+router.post('/:id/convert-invoice', convertToInvoice);                     // Convert to Invoice
 router.patch('/:id/status', updateQuotationStatus);                        // Update quotation status
 router.delete('/:id', authorizeRoles('Administrator'), deleteQuotation);   // Delete quotation (Admin only)
 
 export default router;
-

@@ -1,27 +1,36 @@
 import pool from '../config/db.js';
+import { generateEstimateNumber, generateInvoiceNumber } from '../utils/financeNumbering.js';
+import { logAudit, getAuditLogs } from '../utils/auditLogger.js';
+import { numberToIndianWords } from '../utils/numberToWords.js';
 
-// Helper to generate sequential quotation number (e.g. QT-2026-0001)
-export const generateQuotationNumber = async () => {
-  const currentYear = new Date().getFullYear();
-  const prefix = `QT-${currentYear}-`;
+export const DEFAULT_TERMS = `Estimate valid for 15 days. Third party fees (hosting, domain, app store accounts, SMS / WhatsApp / email credits, paid APIs and gateway transaction fees) are extra. Client to provide content, branding and access credentials. Additional features / scope changes will be quoted separately. Includes 30 day defect fix warranty after handover; ongoing maintenance is excluded. GST invoicing will follow applicable law. This estimate is not a tax invoice or receipt.`;
 
-  const [rows] = await pool.query(
-    'SELECT quotation_number FROM quotations WHERE quotation_number LIKE ? ORDER BY quotation_number DESC LIMIT 1',
-    [`${prefix}%`]
-  );
+export const DEFAULT_SCOPE_MODULES = [
+  { module: 'User App', deliverables: 'Login / registration, profile, dashboard, browse services / products, search and basic filters.' },
+  { module: 'Payment Gateway', deliverables: 'Booking / order request flow, history, one payment gateway integration, push notifications and contact form' },
+  { module: 'Admin Panel', deliverables: 'Admin login, user and listing management, booking / order status, basic reports, database and APIs' },
+  { module: 'Testing & Deployment', deliverables: 'Testing, bug fixing, production build and deployment assistance.' }
+];
 
-  if (rows.length === 0) {
-    return `${prefix}0001`;
-  }
+export const DEFAULT_THIRD_PARTY_COSTS = [
+  { service: 'Domain Registration', billing_basis: 'Yearly', amount: '2000' },
+  { service: 'Shared Hosting', billing_basis: 'Yearly', amount: '1500' },
+  { service: 'SMS Gateway', billing_basis: 'Usage based', amount: 'As per Provider' },
+  { service: 'Google Map API', billing_basis: 'Usage based', amount: 'As per hit' },
+  { service: 'Admin Panel Management', billing_basis: 'Monthly', amount: '5000' }
+];
 
-  const lastNumStr = rows[0].quotation_number.replace(prefix, '');
-  const lastNum = parseInt(lastNumStr, 10);
-  const nextNum = isNaN(lastNum) ? 1 : lastNum + 1;
-  return `${prefix}${String(nextNum).padStart(4, '0')}`;
-};
+export const DEFAULT_PAYMENT_MILESTONES = [
+  { percent: 40, condition: 'on confirmation & kick off' },
+  { percent: 40, condition: 'on UAT build / core completion' },
+  { percent: 20, condition: 'before final handover' }
+];
+
+// Re-export generateEstimateNumber as generateQuotationNumber for backwards compatibility
+export const generateQuotationNumber = generateEstimateNumber;
 
 // Helper: Calculate Line Items & Quotation Totals
-const calculateTotals = (items = [], discountRate = 0, taxRate = 0) => {
+export const calculateTotals = (items = [], discountRate = 0, taxRate = 0, directDiscountAmount = null) => {
   let subtotal = 0;
   const processedItems = items.map((item, index) => {
     const qty = Number(item.quantity) || 1;
@@ -49,7 +58,12 @@ const calculateTotals = (items = [], discountRate = 0, taxRate = 0) => {
   });
 
   const discRateNum = Number(discountRate) || 0;
-  const discountAmount = Math.round(subtotal * (discRateNum / 100) * 100) / 100;
+  let discountAmount = 0;
+  if (directDiscountAmount !== null && directDiscountAmount !== undefined && directDiscountAmount !== '') {
+    discountAmount = Math.round(Number(directDiscountAmount) * 100) / 100;
+  } else if (discRateNum > 0) {
+    discountAmount = Math.round(subtotal * (discRateNum / 100) * 100) / 100;
+  }
 
   const taxableAmount = Math.max(0, subtotal - discountAmount);
   const taxRateNum = Number(taxRate) || 0;
@@ -68,7 +82,7 @@ const calculateTotals = (items = [], discountRate = 0, taxRate = 0) => {
   };
 };
 
-// 1. Create a New Quotation
+// 1. Create a New Quotation / Estimate
 export const createQuotation = async (data, userId) => {
   const {
     client_id,
@@ -76,11 +90,17 @@ export const createQuotation = async (data, userId) => {
     title = 'Commercial Proposal & Quotation',
     quotation_date = new Date().toISOString().slice(0, 10),
     valid_until,
+    timeline = '45 Days',
+    project_type = 'Mobile Application',
     items = [],
     discount_rate = 0,
-    tax_rate = 18.00,
-    terms_and_conditions = '1. 50% Advance on project initiation.\n2. 50% Upon milestone completion.\n3. Quotation is valid for 30 days from date of issue.',
-    notes = null
+    discount_amount: directDiscount = null,
+    tax_rate = 0,
+    terms_and_conditions = DEFAULT_TERMS,
+    notes = null,
+    scope_modules = DEFAULT_SCOPE_MODULES,
+    third_party_costs = DEFAULT_THIRD_PARTY_COSTS,
+    payment_milestones = DEFAULT_PAYMENT_MILESTONES
   } = data;
 
   // Check if client exists
@@ -91,34 +111,35 @@ export const createQuotation = async (data, userId) => {
     throw error;
   }
 
-  // Calculate validity date (default 30 days from quotation_date if not specified)
+  // Calculate validity date (default 15 days for estimate)
   let validity = valid_until;
   if (!validity) {
     const d = new Date(quotation_date);
-    d.setDate(d.getDate() + 30);
+    d.setDate(d.getDate() + 15);
     validity = d.toISOString().slice(0, 10);
   }
 
-  // Generate Quotation Number
-  const quotationNumber = await generateQuotationNumber();
+  // Generate Estimate Number (HE26001)
+  const quotationNumber = await generateEstimateNumber(quotation_date);
 
   // Compute Totals
   const {
     processedItems,
     subtotal,
     discount_rate: finalDiscountRate,
-    discount_amount,
+    discount_amount: finalDiscountAmount,
     tax_rate: finalTaxRate,
     tax_amount,
     total_amount
-  } = calculateTotals(items, discount_rate, tax_rate);
+  } = calculateTotals(items, discount_rate, tax_rate, directDiscount);
 
   // Insert into quotations table
-  const [quotationResult] = await pool.query(
+  await pool.query(
     `INSERT INTO quotations 
-      (quotation_number, version, client_id, project_id, title, quotation_date, valid_until, status,
-       subtotal, discount_rate, discount_amount, tax_rate, tax_amount, total_amount, terms_and_conditions, notes, created_by)
-     VALUES (?, 1, ?, ?, ?, ?, ?, 'Draft', ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      (quotation_number, version, client_id, project_id, title, quotation_date, valid_until, timeline, project_type, status,
+       subtotal, discount_rate, discount_amount, tax_rate, tax_amount, total_amount, terms_and_conditions, notes,
+       scope_modules, third_party_costs, payment_milestones, created_by)
+     VALUES (?, 1, ?, ?, ?, ?, ?, ?, ?, 'Draft', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       quotationNumber,
       client_id,
@@ -126,19 +147,24 @@ export const createQuotation = async (data, userId) => {
       title,
       quotation_date,
       validity,
+      timeline,
+      project_type,
       subtotal,
       finalDiscountRate,
-      discount_amount,
+      finalDiscountAmount,
       finalTaxRate,
       tax_amount,
       total_amount,
       terms_and_conditions,
       notes || null,
+      JSON.stringify(scope_modules || []),
+      JSON.stringify(third_party_costs || []),
+      JSON.stringify(payment_milestones || []),
       userId
     ]
   );
 
-  // Retrieve the generated ID (since DEFAULT (uuid()) generates it in MySQL)
+  // Retrieve the generated ID
   const [insertedRows] = await pool.query(
     'SELECT id FROM quotations WHERE quotation_number = ? AND version = 1 ORDER BY created_at DESC LIMIT 1',
     [quotationNumber]
@@ -165,6 +191,16 @@ export const createQuotation = async (data, userId) => {
       [itemValues]
     );
   }
+
+  // Audit Log
+  await logAudit({
+    actor_user_id: userId,
+    action: 'CREATED',
+    entity_type: 'quotation',
+    entity_id: quotationNumber,
+    summary: `Created new Estimate ${quotationNumber} for ${clientRows[0].name} (Total: ₹ ${total_amount.toLocaleString('en-IN')})`,
+    metadata: { quotation_number: quotationNumber, total_amount, client_name: clientRows[0].name }
+  });
 
   return getQuotationById(quotationId);
 };
@@ -206,8 +242,8 @@ export const getQuotations = async ({ client_id, project_id, status, search }) =
 
   if (search && search.trim()) {
     const q = `%${search.trim()}%`;
-    query += ' AND (q.quotation_number LIKE ? OR q.title LIKE ? OR c.name LIKE ? OR c.company_name LIKE ?)';
-    params.push(q, q, q, q);
+    query += ' AND (q.quotation_number LIKE ? OR q.invoice_number LIKE ? OR q.title LIKE ? OR c.name LIKE ? OR c.company_name LIKE ?)';
+    params.push(q, q, q, q, q);
   }
 
   query += ' ORDER BY q.quotation_date DESC, q.created_at DESC';
@@ -216,7 +252,7 @@ export const getQuotations = async ({ client_id, project_id, status, search }) =
   return rows;
 };
 
-// 3. Get Single Quotation by ID (including all line items & versions)
+// 3. Get Single Quotation by ID (including all line items & versions & audit history)
 export const getQuotationById = async (id) => {
   const [rows] = await pool.query(
     `SELECT 
@@ -244,12 +280,28 @@ export const getQuotationById = async (id) => {
 
   const quotation = rows[0];
 
+  // Parse JSON fields safely
+  try {
+    quotation.scope_modules = typeof quotation.scope_modules === 'string' ? JSON.parse(quotation.scope_modules) : (quotation.scope_modules || []);
+  } catch (e) { quotation.scope_modules = []; }
+
+  try {
+    quotation.third_party_costs = typeof quotation.third_party_costs === 'string' ? JSON.parse(quotation.third_party_costs) : (quotation.third_party_costs || []);
+  } catch (e) { quotation.third_party_costs = []; }
+
+  try {
+    quotation.payment_milestones = typeof quotation.payment_milestones === 'string' ? JSON.parse(quotation.payment_milestones) : (quotation.payment_milestones || []);
+  } catch (e) { quotation.payment_milestones = []; }
+
   // Fetch Line Items
   const [items] = await pool.query(
     'SELECT * FROM quotation_items WHERE quotation_id = ? ORDER BY sort_order ASC, id ASC',
     [id]
   );
   quotation.items = items;
+
+  // Amount in words
+  quotation.amount_in_words = numberToIndianWords(quotation.total_amount);
 
   // Fetch Other Versions (Audit History)
   const [versionRows] = await pool.query(
@@ -261,11 +313,14 @@ export const getQuotationById = async (id) => {
   );
   quotation.versions = versionRows;
 
+  // Fetch Audit Logs
+  quotation.audit_logs = await getAuditLogs('quotation', quotation.quotation_number);
+
   return quotation;
 };
 
-// 4. Update Draft Quotation
-export const updateQuotation = async (id, data) => {
+// 4. Update Draft Quotation (direct in-place edit during negotiations)
+export const updateQuotation = async (id, data, userId) => {
   const [currentRows] = await pool.query('SELECT * FROM quotations WHERE id = ?', [id]);
   if (currentRows.length === 0) {
     const error = new Error('Quotation not found');
@@ -275,9 +330,9 @@ export const updateQuotation = async (id, data) => {
 
   const current = currentRows[0];
 
-  // Only allow updating Draft quotations to prevent tampering with historical quotes
-  if (current.status !== 'Draft') {
-    const error = new Error(`Cannot edit quotation with status "${current.status}". Use the "Revise" feature to create a new version.`);
+  // Allow editing Draft or Sent quotations during negotiations
+  if (current.status === 'Superseded') {
+    const error = new Error('Cannot edit a superseded quotation. Use the "Revise" feature to create a new version.');
     error.statusCode = 400;
     throw error;
   }
@@ -286,44 +341,56 @@ export const updateQuotation = async (id, data) => {
     title = current.title,
     quotation_date = current.quotation_date,
     valid_until = current.valid_until,
+    timeline = current.timeline,
+    project_type = current.project_type,
     project_id = current.project_id,
     items = [],
     discount_rate = current.discount_rate,
+    discount_amount: directDiscount = data.discount_amount !== undefined ? data.discount_amount : current.discount_amount,
     tax_rate = current.tax_rate,
     terms_and_conditions = current.terms_and_conditions,
-    notes = current.notes
+    notes = current.notes,
+    scope_modules = data.scope_modules !== undefined ? data.scope_modules : current.scope_modules,
+    third_party_costs = data.third_party_costs !== undefined ? data.third_party_costs : current.third_party_costs,
+    payment_milestones = data.payment_milestones !== undefined ? data.payment_milestones : current.payment_milestones
   } = data;
 
   const {
     processedItems,
     subtotal,
     discount_rate: finalDiscountRate,
-    discount_amount,
+    discount_amount: finalDiscountAmount,
     tax_rate: finalTaxRate,
     tax_amount,
     total_amount
-  } = calculateTotals(items, discount_rate, tax_rate);
+  } = calculateTotals(items, discount_rate, tax_rate, directDiscount);
 
   // Update Quotation Record
   await pool.query(
     `UPDATE quotations 
-     SET title = ?, quotation_date = ?, valid_until = ?, project_id = ?,
+     SET title = ?, quotation_date = ?, valid_until = ?, timeline = ?, project_type = ?, project_id = ?,
          subtotal = ?, discount_rate = ?, discount_amount = ?, tax_rate = ?, tax_amount = ?, total_amount = ?,
-         terms_and_conditions = ?, notes = ?
+         terms_and_conditions = ?, notes = ?,
+         scope_modules = ?, third_party_costs = ?, payment_milestones = ?
      WHERE id = ?`,
     [
       title,
       quotation_date,
       valid_until,
+      timeline,
+      project_type,
       project_id || null,
       subtotal,
       finalDiscountRate,
-      discount_amount,
+      finalDiscountAmount,
       finalTaxRate,
       tax_amount,
       total_amount,
       terms_and_conditions,
       notes || null,
+      JSON.stringify(scope_modules || []),
+      JSON.stringify(third_party_costs || []),
+      JSON.stringify(payment_milestones || []),
       id
     ]
   );
@@ -351,14 +418,23 @@ export const updateQuotation = async (id, data) => {
     );
   }
 
+  // Audit Log
+  await logAudit({
+    actor_user_id: userId,
+    action: 'UPDATED',
+    entity_type: 'quotation',
+    entity_id: current.quotation_number,
+    summary: `Updated Estimate ${current.quotation_number} (v${current.version}) - New Grand Total: ₹ ${total_amount.toLocaleString('en-IN')}`,
+    metadata: { old_total: current.total_amount, new_total: total_amount }
+  });
+
   return getQuotationById(id);
 };
 
-// 5. Revise Quotation (Versioning: v1 becomes Superseded, creates v2 Draft)
+// 5. Revise Quotation (Versioning: v1 becomes Superseded, creates v2 Draft for negotiations)
 export const reviseQuotation = async (id, revisionData, userId) => {
   const current = await getQuotationById(id);
 
-  // If already superseded, disallow
   if (current.status === 'Superseded') {
     const error = new Error('This quotation version has already been superseded by a newer version.');
     error.statusCode = 400;
@@ -372,35 +448,42 @@ export const reviseQuotation = async (id, revisionData, userId) => {
   );
 
   const nextVersion = Number(current.version || 1) + 1;
-
   const items = revisionData.items && revisionData.items.length > 0 ? revisionData.items : current.items;
   const discountRate = revisionData.discount_rate !== undefined ? revisionData.discount_rate : current.discount_rate;
+  const directDiscount = revisionData.discount_amount !== undefined ? revisionData.discount_amount : current.discount_amount;
   const taxRate = revisionData.tax_rate !== undefined ? revisionData.tax_rate : current.tax_rate;
 
   const {
     processedItems,
     subtotal,
     discount_rate: finalDiscountRate,
-    discount_amount,
+    discount_amount: finalDiscountAmount,
     tax_rate: finalTaxRate,
     tax_amount,
     total_amount
-  } = calculateTotals(items, discountRate, taxRate);
+  } = calculateTotals(items, discountRate, taxRate, directDiscount);
 
   const quotationDate = revisionData.quotation_date || new Date().toISOString().slice(0, 10);
   let validUntil = revisionData.valid_until;
   if (!validUntil) {
     const d = new Date(quotationDate);
-    d.setDate(d.getDate() + 30);
+    d.setDate(d.getDate() + 15);
     validUntil = d.toISOString().slice(0, 10);
   }
+
+  const timeline = revisionData.timeline !== undefined ? revisionData.timeline : current.timeline;
+  const projectType = revisionData.project_type !== undefined ? revisionData.project_type : current.project_type;
+  const scopeModules = revisionData.scope_modules !== undefined ? revisionData.scope_modules : current.scope_modules;
+  const thirdPartyCosts = revisionData.third_party_costs !== undefined ? revisionData.third_party_costs : current.third_party_costs;
+  const paymentMilestones = revisionData.payment_milestones !== undefined ? revisionData.payment_milestones : current.payment_milestones;
 
   // 2. Insert New Version
   await pool.query(
     `INSERT INTO quotations 
-      (quotation_number, version, parent_quotation_id, client_id, project_id, title, quotation_date, valid_until, status,
-       subtotal, discount_rate, discount_amount, tax_rate, tax_amount, total_amount, terms_and_conditions, notes, created_by)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Draft', ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      (quotation_number, version, parent_quotation_id, client_id, project_id, title, quotation_date, valid_until, timeline, project_type, status,
+       subtotal, discount_rate, discount_amount, tax_rate, tax_amount, total_amount, terms_and_conditions, notes,
+       scope_modules, third_party_costs, payment_milestones, created_by)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Draft', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       current.quotation_number,
       nextVersion,
@@ -410,14 +493,19 @@ export const reviseQuotation = async (id, revisionData, userId) => {
       revisionData.title || current.title,
       quotationDate,
       validUntil,
+      timeline,
+      projectType,
       subtotal,
       finalDiscountRate,
-      discount_amount,
+      finalDiscountAmount,
       finalTaxRate,
       tax_amount,
       total_amount,
       revisionData.terms_and_conditions || current.terms_and_conditions,
       revisionData.notes !== undefined ? revisionData.notes : current.notes,
+      JSON.stringify(scopeModules || []),
+      JSON.stringify(thirdPartyCosts || []),
+      JSON.stringify(paymentMilestones || []),
       userId
     ]
   );
@@ -450,17 +538,58 @@ export const reviseQuotation = async (id, revisionData, userId) => {
     );
   }
 
+  // Audit Log
+  await logAudit({
+    actor_user_id: userId,
+    action: 'REVISED',
+    entity_type: 'quotation',
+    entity_id: current.quotation_number,
+    summary: `Negotiation Revision: Estimate ${current.quotation_number} revised to version ${nextVersion} (₹ ${current.total_amount?.toLocaleString('en-IN')} ➔ ₹ ${total_amount.toLocaleString('en-IN')})`,
+    metadata: { version: nextVersion, old_total: current.total_amount, new_total: total_amount }
+  });
+
   return getQuotationById(newQuotationId);
 };
 
-// 6. Update Quotation Status
-export const updateQuotationStatus = async (id, status) => {
+// 6. Convert Estimate to Official Tax Invoice (Generates HIN26001 and sets status to Accepted)
+export const convertToInvoice = async (id, userId) => {
+  const quotation = await getQuotationById(id);
+
+  if (quotation.invoice_number) {
+    return quotation;
+  }
+
+  const invoiceNumber = await generateInvoiceNumber(quotation.quotation_date);
+
+  await pool.query(
+    `UPDATE quotations 
+     SET invoice_number = ?, status = CASE WHEN status IN ('Draft', 'Sent') THEN 'Accepted' ELSE status END
+     WHERE id = ?`,
+    [invoiceNumber, id]
+  );
+
+  await logAudit({
+    actor_user_id: userId,
+    action: 'CONVERTED_TO_INVOICE',
+    entity_type: 'quotation',
+    entity_id: quotation.quotation_number,
+    summary: `Estimate ${quotation.quotation_number} converted to official Invoice ${invoiceNumber}`,
+    metadata: { invoice_number: invoiceNumber, amount: quotation.total_amount }
+  });
+
+  return getQuotationById(id);
+};
+
+// 7. Update Quotation Status
+export const updateQuotationStatus = async (id, status, userId) => {
   const validStatuses = ['Draft', 'Sent', 'Accepted', 'Rejected', 'Expired', 'Superseded'];
   if (!validStatuses.includes(status)) {
     const error = new Error(`Invalid status "${status}". Allowed: ${validStatuses.join(', ')}`);
     error.statusCode = 400;
     throw error;
   }
+
+  const current = await getQuotationById(id);
 
   const [res] = await pool.query(
     'UPDATE quotations SET status = ? WHERE id = ?',
@@ -473,11 +602,20 @@ export const updateQuotationStatus = async (id, status) => {
     throw error;
   }
 
+  await logAudit({
+    actor_user_id: userId,
+    action: 'STATUS_CHANGED',
+    entity_type: 'quotation',
+    entity_id: current.quotation_number,
+    summary: `Estimate ${current.quotation_number} status changed to ${status}`,
+    metadata: { old_status: current.status, new_status: status }
+  });
+
   return getQuotationById(id);
 };
 
-// 7. Delete Quotation
-export const deleteQuotation = async (id) => {
+// 8. Delete Quotation
+export const deleteQuotation = async (id, userId) => {
   const [rows] = await pool.query('SELECT status, quotation_number FROM quotations WHERE id = ?', [id]);
   if (rows.length === 0) {
     const error = new Error('Quotation not found');
@@ -485,11 +623,23 @@ export const deleteQuotation = async (id) => {
     throw error;
   }
 
+  const quoteNum = rows[0].quotation_number;
+
   await pool.query('DELETE FROM quotations WHERE id = ?', [id]);
+
+  await logAudit({
+    actor_user_id: userId,
+    action: 'DELETED',
+    entity_type: 'quotation',
+    entity_id: quoteNum,
+    summary: `Deleted quotation record ${quoteNum}`,
+    metadata: { quotation_number: quoteNum }
+  });
+
   return { message: 'Quotation deleted successfully' };
 };
 
-// 8. Financial & Quotations Metrics Summary
+// 9. Financial & Quotations Metrics Summary
 export const getQuotationMetrics = async () => {
   const [totalRows] = await pool.query('SELECT COUNT(*) AS total_count, COALESCE(SUM(total_amount), 0) AS total_val FROM quotations');
   const [acceptedRows] = await pool.query("SELECT COUNT(*) AS count, COALESCE(SUM(total_amount), 0) AS val FROM quotations WHERE status = 'Accepted'");
@@ -511,202 +661,3 @@ export const getQuotationMetrics = async () => {
     conversion_rate: conversionRate
   };
 };
-
-// 9. Generate Official Printable HTML Template for Quotation
-export const generatePrintableHtml = async (id) => {
-  const q = await getQuotationById(id);
-
-  const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 2
-    }).format(val || 0);
-  };
-
-  const formatDate = (d) => {
-    if (!d) return '—';
-    return new Date(d).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    });
-  };
-
-  const lineItemsHtml = (q.items || []).map((item, index) => `
-    <tr>
-      <td style="padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 13px; text-align: center; color: #64748b;">${index + 1}</td>
-      <td style="padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 13px; color: #1e293b; font-weight: 500;">
-        ${item.description}
-      </td>
-      <td style="padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 13px; text-align: center; color: #334155;">${item.quantity}</td>
-      <td style="padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 13px; text-align: right; color: #334155;">${formatCurrency(item.rate)}</td>
-      <td style="padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 13px; text-align: right; color: #334155;">${item.discount_percent > 0 ? `${item.discount_percent}%` : '—'}</td>
-      <td style="padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 13px; text-align: right; color: #334155;">${item.tax_percent > 0 ? `${item.tax_percent}%` : '—'}</td>
-      <td style="padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 13px; text-align: right; font-weight: 700; color: #0f172a;">${formatCurrency(item.amount)}</td>
-    </tr>
-  `).join('');
-
-  return `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <title>Quotation ${q.quotation_number} (v${q.version}) - Hertzsoft</title>
-      <style>
-        * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f8fafc; margin: 0; padding: 30px; color: #1e293b; }
-        .page { max-width: 820px; margin: 0 auto; background: #ffffff; padding: 48px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
-        .header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 24px; border-bottom: 3px solid #4689C8; margin-bottom: 28px; }
-        .brand-title { font-size: 24px; font-weight: 800; color: #4689C8; letter-spacing: -0.5px; }
-        .brand-sub { font-size: 12px; color: #64748b; margin-top: 4px; line-height: 1.4; }
-        .quote-badge { text-align: right; }
-        .quote-title { font-size: 26px; font-weight: 800; color: #4689C8; letter-spacing: -0.5px; }
-        .quote-num { font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 4px; font-family: monospace; }
-        .version-pill { display: inline-block; padding: 2px 8px; background: #f0f7fd; color: #4689C8; border: 1px solid rgba(70, 137, 200, 0.4); border-radius: 4px; font-size: 11px; font-weight: 700; margin-top: 4px; }
-        
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
-        .card-box { background: #f8fafc; padding: 16px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 12.5px; line-height: 1.5; }
-        .card-label { font-size: 10.5px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-        .client-name { font-size: 14px; font-weight: 700; color: #0f172a; }
-        
-        table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-        th { background: #f6f9fc; padding: 10px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #475569; letter-spacing: 0.5px; border-top: 1px solid #cbd5e1; border-bottom: 2px solid #cbd5e1; }
-        
-        .totals-section { display: flex; justify-content: flex-end; margin-bottom: 30px; }
-        .totals-table { width: 320px; font-size: 13px; }
-        .totals-table tr td { padding: 6px 0; }
-        .totals-table tr.total-row td { padding-top: 10px; border-top: 2px solid #4689C8; font-size: 16px; font-weight: 800; color: #4689C8; }
-
-        .terms-box { background: #fafafa; border: 1px solid #e5e7eb; border-radius: 6px; padding: 16px; font-size: 12px; line-height: 1.6; margin-bottom: 36px; }
-        .terms-title { font-weight: 700; color: #374151; margin-bottom: 6px; font-size: 12px; text-transform: uppercase; }
-
-        .signature-area { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 24px; border-top: 1px solid #e2e8f0; }
-        .sign-box { text-align: center; width: 200px; }
-        .sign-line { border-bottom: 1px solid #94a3b8; height: 40px; margin-bottom: 8px; }
-
-        @media print {
-          body { padding: 0; background: none; }
-          .page { border: none; box-shadow: none; padding: 20px; max-width: 100%; }
-          .no-print { display: none !important; }
-        }
-      </style>
-    </head>
-    <body>
-      <div class="no-print" style="max-width: 820px; margin: 0 auto 16px; text-align: right;">
-        <button onclick="window.print()" style="padding: 10px 20px; background: #4689C8; color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px;">
-          🖨️ Print / Save as PDF
-        </button>
-      </div>
-
-      <div class="page">
-        <!-- Header -->
-        <div class="header">
-          <div>
-            <div class="brand-title">HERTZSOFT TECHNOLOGIES</div>
-            <div class="brand-sub">
-              Enterprise Software Solutions & IT Consultancy<br>
-              Email: info@hertzsoft.com | Web: https://hertzsoft.com
-            </div>
-          </div>
-          <div class="quote-badge">
-            <div class="quote-title">QUOTATION</div>
-            <div class="quote-num">${q.quotation_number}</div>
-            <div class="version-pill">Version ${q.version} ${q.status === 'Superseded' ? '(Superseded)' : ''}</div>
-          </div>
-        </div>
-
-        <!-- Meta Info Grid -->
-        <div class="grid-2">
-          <div class="card-box">
-            <div class="card-label">Quotation Prepared For:</div>
-            <div class="client-name">${q.client_name}</div>
-            ${q.client_company ? `<div><strong>Company:</strong> ${q.client_company}</div>` : ''}
-            ${q.client_email ? `<div><strong>Email:</strong> ${q.client_email}</div>` : ''}
-            ${q.client_phone ? `<div><strong>Phone:</strong> ${q.client_phone}</div>` : ''}
-            ${q.client_billing_address ? `<div><strong>Address:</strong> ${q.client_billing_address}</div>` : ''}
-          </div>
-
-          <div class="card-box">
-            <div class="card-label">Proposal Details:</div>
-            <div><strong>Subject:</strong> ${q.title}</div>
-            ${q.project_title ? `<div><strong>Project:</strong> ${q.project_title}</div>` : ''}
-            <div><strong>Issue Date:</strong> ${formatDate(q.quotation_date)}</div>
-            <div><strong>Valid Until:</strong> ${formatDate(q.valid_until)}</div>
-            <div><strong>Status:</strong> <span style="font-weight: 700;">${q.status}</span></div>
-          </div>
-        </div>
-
-        <!-- Line Items Table -->
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 40px; text-align: center;">#</th>
-              <th>Description / Scope Deliverables</th>
-              <th style="width: 60px; text-align: center;">Qty</th>
-              <th style="width: 100px; text-align: right;">Rate</th>
-              <th style="width: 70px; text-align: right;">Disc</th>
-              <th style="width: 70px; text-align: right;">Tax</th>
-              <th style="width: 120px; text-align: right;">Total Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${lineItemsHtml}
-          </tbody>
-        </table>
-
-        <!-- Totals Calculation -->
-        <div class="totals-section">
-          <table class="totals-table">
-            <tr>
-              <td style="color: #64748b;">Subtotal:</td>
-              <td style="text-align: right; font-weight: 600;">${formatCurrency(q.subtotal)}</td>
-            </tr>
-            ${q.discount_amount > 0 ? `
-            <tr>
-              <td style="color: #64748b;">Discount (${q.discount_rate}%):</td>
-              <td style="text-align: right; color: #dc2626; font-weight: 600;">- ${formatCurrency(q.discount_amount)}</td>
-            </tr>` : ''}
-            <tr>
-              <td style="color: #64748b;">Tax / GST (${q.tax_rate}%):</td>
-              <td style="text-align: right; font-weight: 600;">+ ${formatCurrency(q.tax_amount)}</td>
-            </tr>
-            <tr class="total-row">
-              <td>Grand Total:</td>
-              <td style="text-align: right;">${formatCurrency(q.total_amount)}</td>
-            </tr>
-          </table>
-        </div>
-
-        <!-- Terms and Notes -->
-        ${q.terms_and_conditions ? `
-        <div class="terms-box">
-          <div class="terms-title">Terms & Conditions:</div>
-          <div style="white-space: pre-line; color: #4b5563;">${q.terms_and_conditions}</div>
-        </div>` : ''}
-
-        ${q.notes ? `
-        <div style="font-size: 12px; color: #64748b; margin-bottom: 24px;">
-          <strong>Additional Notes:</strong> ${q.notes}
-        </div>` : ''}
-
-        <!-- Signatures Area -->
-        <div class="signature-area">
-          <div class="sign-box">
-            <div class="sign-line"></div>
-            <div style="font-size: 12px; font-weight: 700; color: #0f172a;">Client Acceptance Signature</div>
-            <div style="font-size: 10px; color: #64748b;">Date & Stamp</div>
-          </div>
-
-          <div class="sign-box">
-            <div class="sign-line"></div>
-            <div style="font-size: 12px; font-weight: 700; color: #0f172a;">Authorized Signatory</div>
-            <div style="font-size: 10px; color: #64748b;">Hertzsoft Technologies</div>
-          </div>
-        </div>
-      </div>
-    </body>
-    </html>
-  `;
-};
-

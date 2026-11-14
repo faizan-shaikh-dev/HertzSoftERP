@@ -43,13 +43,19 @@ export const quotationService = {
     return response.data;
   },
 
-  // 8. Delete quotation (Admin only)
+  // 8. Convert Estimate to Invoice
+  convertToInvoice: async (id) => {
+    const response = await api.post(`/quotations/${id}/convert-invoice`);
+    return response.data;
+  },
+
+  // 9. Delete quotation (Admin only)
   deleteQuotation: async (id) => {
     const response = await api.delete(`/quotations/${id}`);
     return response.data;
   },
 
-  // 9. Printable HTML URL
+  // 10. Printable HTML URL
   getPrintableUrl: (id) => {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
     return `${baseUrl}/quotations/${id}/print`;
@@ -57,4 +63,3 @@ export const quotationService = {
 };
 
 export default quotationService;
-

@@ -23,7 +23,7 @@ export const createQuotation = async (req, res, next) => {
       });
     }
 
-    const quotation = await quotationService.createQuotation(req.body, req.user.id);
+    const quotation = await quotationService.createQuotation(req.body, req.user?.id);
 
     res.status(201).json({
       success: true,
@@ -72,7 +72,7 @@ export const getQuotationById = async (req, res, next) => {
 // 4. Update Draft Quotation
 export const updateQuotation = async (req, res, next) => {
   try {
-    const updated = await quotationService.updateQuotation(req.params.id, req.body);
+    const updated = await quotationService.updateQuotation(req.params.id, req.body, req.user?.id);
 
     res.status(200).json({
       success: true,
@@ -86,7 +86,7 @@ export const updateQuotation = async (req, res, next) => {
 // 5. Revise Quotation (Create v2, mark v1 as Superseded)
 export const reviseQuotation = async (req, res, next) => {
   try {
-    const revised = await quotationService.reviseQuotation(req.params.id, req.body, req.user.id);
+    const revised = await quotationService.reviseQuotation(req.params.id, req.body, req.user?.id);
 
     res.status(201).json({
       success: true,
@@ -97,7 +97,21 @@ export const reviseQuotation = async (req, res, next) => {
   }
 };
 
-// 6. Update Quotation Status
+// 6. Convert to Official Invoice (Assign HIN26001)
+export const convertToInvoice = async (req, res, next) => {
+  try {
+    const updated = await quotationService.convertToInvoice(req.params.id, req.user?.id);
+
+    res.status(200).json({
+      success: true,
+      data: updated
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 7. Update Quotation Status
 export const updateQuotationStatus = async (req, res, next) => {
   try {
     const { status } = req.body;
@@ -110,7 +124,7 @@ export const updateQuotationStatus = async (req, res, next) => {
       });
     }
 
-    const updated = await quotationService.updateQuotationStatus(req.params.id, status);
+    const updated = await quotationService.updateQuotationStatus(req.params.id, status, req.user?.id);
 
     res.status(200).json({
       success: true,
@@ -121,10 +135,10 @@ export const updateQuotationStatus = async (req, res, next) => {
   }
 };
 
-// 7. Delete Quotation
+// 8. Delete Quotation
 export const deleteQuotation = async (req, res, next) => {
   try {
-    const result = await quotationService.deleteQuotation(req.params.id);
+    const result = await quotationService.deleteQuotation(req.params.id, req.user?.id);
 
     res.status(200).json({
       success: true,
@@ -135,7 +149,7 @@ export const deleteQuotation = async (req, res, next) => {
   }
 };
 
-// 8. Financial & Quotations Metrics Summary
+// 9. Financial & Quotations Metrics Summary
 export const getQuotationMetrics = async (req, res, next) => {
   try {
     const metrics = await quotationService.getQuotationMetrics();
@@ -148,15 +162,3 @@ export const getQuotationMetrics = async (req, res, next) => {
     next(error);
   }
 };
-
-// 9. Get Printable HTML View
-export const getPrintableQuotation = async (req, res, next) => {
-  try {
-    const html = await quotationService.generatePrintableHtml(req.params.id);
-    res.setHeader('Content-Type', 'text/html');
-    res.send(html);
-  } catch (error) {
-    next(error);
-  }
-};
-
