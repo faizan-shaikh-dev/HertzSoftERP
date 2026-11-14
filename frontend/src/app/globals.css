@@ -59,6 +59,14 @@ body {
   padding: 0;
 }
 
+/* Responsive Table Utility */
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Global Clean Table Alternating Zebra Rows */
 .table-striped > tbody > tr:nth-of-type(odd),
 tbody.table-striped-rows > tr:nth-of-type(odd) {

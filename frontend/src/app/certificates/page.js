@@ -361,16 +361,16 @@ export default function CertificatesPage() {
               </div>
 
               {/* OJT Certificates Table */}
-              <div className="table-responsive border border-[#DFEAF2] rounded-md overflow-hidden">
-                <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
+              <div className="w-full overflow-x-auto border border-[#DFEAF2] rounded-md shadow-xs bg-white">
+                <table className="table table-hover table-striped table-bordered w-full min-w-[850px] text-xs text-left">
                   <thead className="thead-light bg-[#EAF3FB] text-[#71869B] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#DFEAF2]">
                     <tr>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Candidate / Recipient</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Document Category</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Specialization / Domain</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Verification ID</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Issue Date</th>
-                      <th className="py-3 px-3.5 text-center">Preview & Actions</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[200px]">Candidate / Recipient</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[150px] whitespace-nowrap">Document Category</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[180px]">Specialization / Domain</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[140px] whitespace-nowrap">Verification ID</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[120px] whitespace-nowrap">Issue Date</th>
+                      <th className="py-3 px-3.5 min-w-[150px] whitespace-nowrap text-center">Preview &amp; Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#DFEAF2]">

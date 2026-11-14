@@ -385,15 +385,15 @@ export default function ProjectsPage() {
               </div>
 
               {/* Projects Table */}
-              <div className="table-responsive border border-[#DFEAF2] rounded-lg overflow-hidden">
-                <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
+              <div className="w-full overflow-x-auto border border-[#DFEAF2] rounded-lg shadow-xs bg-white">
+                <table className="table table-hover table-striped table-bordered w-full min-w-[880px] text-xs text-left">
                   <thead className="thead-light bg-[#EAF3FB] text-[#19324D] text-[11px] font-bold uppercase tracking-wider border-b border-[#DFEAF2]">
                     <tr>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Project &amp; Client</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">Lifecycle Status</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Deliverables &amp; Scope</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Timeline</th>
-                      <th className="py-3 px-3.5 text-center">Actions</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[220px]">Project &amp; Client</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[130px] text-center whitespace-nowrap">Lifecycle Status</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[200px]">Deliverables &amp; Scope</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[150px] whitespace-nowrap">Timeline</th>
+                      <th className="py-3 px-3.5 min-w-[160px] text-center whitespace-nowrap">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#DFEAF2]">

@@ -185,13 +185,13 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-lg bg-white rounded-xl shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto max-h-[92vh] flex flex-col"
+        className="relative w-full max-w-xl sm:max-w-2xl bg-white rounded-xl shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto max-h-[92vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-[#0077B6] text-white">
+        <div className="flex items-center justify-between px-5 sm:px-6 py-3.5 sm:py-4 border-b border-slate-200 bg-[#0077B6] text-white">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-white/20 text-white flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg bg-white/20 text-white flex items-center justify-center shrink-0">
               <Receipt className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -207,7 +207,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
           <button
             onClick={onClose}
             type="button"
-            className="text-white hover:bg-white/20 transition cursor-pointer p-1 rounded-full"
+            className="text-white hover:bg-white/20 transition cursor-pointer p-1 rounded-full shrink-0"
             aria-label="Close"
           >
             <XCircle className="w-6 h-6" />
@@ -216,7 +216,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
 
         {/* Project Selector */}
         {!projectData && !isEdit && (
-          <div className="px-6 py-3.5 bg-slate-50 border-b border-slate-200">
+          <div className="px-5 sm:px-6 py-3.5 bg-slate-50 border-b border-slate-200">
             <label className="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
               <FolderKanban className="w-3.5 h-3.5 text-[#0077B6]" />
               <span>Select Target Project <span className="text-red-500 font-bold">*</span></span>
@@ -227,37 +227,44 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
                 <span>Loading active client projects...</span>
               </div>
             ) : (
-              <select
-                value={selectedProjectId}
-                onChange={handleProjectSelect}
-                required
-                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-md border border-slate-300 focus:border-[#0077B6] outline-none cursor-pointer"
-              >
-                <option value="">-- Choose a Project to credit --</option>
-                {projectsList.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.title} ({p.client_company ? `${p.client_company} - ${p.client_name}` : p.client_name}) — Due: {formatCurrency(p.due_balance)}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={selectedProjectId}
+                  onChange={handleProjectSelect}
+                  required
+                  className="w-full max-w-full px-3.5 py-2.5 bg-white text-slate-900 text-xs sm:text-sm rounded-md border border-slate-300 focus:border-[#0077B6] focus:ring-1 focus:ring-[#0077B6] outline-none cursor-pointer truncate"
+                >
+                  <option value="">-- Choose a Project to credit --</option>
+                  {projectsList.map((p) => {
+                    const shortTitle = p.title.length > 36 ? p.title.slice(0, 36) + '...' : p.title;
+                    const client = p.client_company || p.client_name || 'Client';
+                    const shortClient = client.length > 24 ? client.slice(0, 24) + '...' : client;
+                    return (
+                      <option key={p.id} value={p.id} title={`${p.title} (${client})`}>
+                        {shortTitle} ({shortClient}) — Due: {formatCurrency(p.due_balance)}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             )}
           </div>
         )}
 
         {/* Project Balance Summary Banner */}
         {activeProject && (
-          <div className="px-6 py-3 bg-[#E0F2FE] border-b border-[#BAE6FD] flex items-center justify-between text-xs">
-            <div>
-              <div className="font-bold text-[#0077B6] truncate max-w-[240px]">
+          <div className="px-5 sm:px-6 py-3 bg-[#E0F2FE] border-b border-[#BAE6FD] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+            <div className="min-w-0 flex-1">
+              <div className="font-bold text-[#0077B6] truncate" title={activeProject.title}>
                 {activeProject.title}
               </div>
-              <div className="text-[11px] text-slate-600 flex items-center gap-1 mt-0.5">
-                <Building2 className="w-3 h-3 text-slate-500" />
-                <span>{activeProject.client_company || activeProject.client_name}</span>
+              <div className="text-[11px] text-slate-600 flex items-center gap-1 mt-0.5 truncate">
+                <Building2 className="w-3 h-3 text-slate-500 shrink-0" />
+                <span className="truncate">{activeProject.client_company || activeProject.client_name}</span>
               </div>
             </div>
 
-            <div className="text-right">
+            <div className="text-left sm:text-right shrink-0">
               <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
                 Outstanding Due
               </div>
@@ -269,7 +276,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
         )}
 
         {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1 bg-white">
+        <form onSubmit={handleSubmit} className="p-5 sm:p-6 overflow-y-auto space-y-4 flex-1 bg-white">
           {error && (
             <div className="p-3 rounded-md bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -282,8 +289,8 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
               Amount Received (INR) <span className="text-red-500 font-bold">*</span>
             </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold">
+            <div className="flex rounded-md shadow-2xs border border-slate-300 focus-within:border-[#0077B6] focus-within:ring-1 focus-within:ring-[#0077B6] overflow-hidden bg-white">
+              <span className="inline-flex items-center px-3.5 bg-slate-100 text-slate-700 font-bold text-sm border-r border-slate-300 select-none">
                 ₹
               </span>
               <input
@@ -293,8 +300,8 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
                 required
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="e.g. 80000"
-                className="w-full pl-8 pr-3.5 py-2.5 bg-white text-slate-900 text-base font-bold rounded-md border border-slate-300 focus:border-[#0077B6] outline-none font-mono"
+                placeholder="80,000"
+                className="flex-1 px-3.5 py-2.5 bg-white text-slate-900 text-base font-bold outline-none font-mono placeholder:text-slate-400 placeholder:font-normal"
               />
             </div>
           </div>
@@ -393,19 +400,19 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
+          <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3 pt-3 border-t border-slate-200">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold text-xs rounded transition cursor-pointer"
+              className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold text-xs rounded transition cursor-pointer text-center"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading || (!activeProject && !selectedProjectId)}
-              className="px-6 py-2.5 bg-[#0077B6] hover:bg-[#005f92] text-white font-bold text-xs sm:text-sm rounded shadow-xs transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+              className="px-6 py-2.5 bg-[#0077B6] hover:bg-[#005f92] text-white font-bold text-xs sm:text-sm rounded shadow-xs transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>

@@ -261,15 +261,15 @@ export default function ClientsPage() {
           </div>
 
           {/* TABLE CONTAINER */}
-          <div className="table-responsive border border-[#DFEAF2] rounded-lg overflow-hidden shadow-xs">
-            <table className="w-full text-xs text-left border-collapse">
+          <div className="w-full overflow-x-auto border border-[#DFEAF2] rounded-lg shadow-xs bg-white">
+            <table className="w-full min-w-[880px] text-xs text-left border-collapse">
               <thead className="bg-[#EAF3FB] text-[#19324D] text-[11px] font-bold uppercase tracking-wider border-b border-[#DFEAF2]">
                 <tr>
                   <th className="py-3.5 px-4 border-r border-[#DFEAF2] min-w-[240px]">Client Profile</th>
                   <th className="py-3.5 px-4 border-r border-[#DFEAF2] min-w-[200px]">Contact Details</th>
-                  <th className="py-3.5 px-4 border-r border-[#DFEAF2] min-w-[170px]">Conversion Date</th>
-                  <th className="py-3.5 px-4 border-r border-[#DFEAF2] min-w-[150px]">Assigned Owner</th>
-                  <th className="py-3.5 px-4 text-center min-w-[170px]">Actions</th>
+                  <th className="py-3.5 px-4 border-r border-[#DFEAF2] min-w-[170px] whitespace-nowrap">Conversion Date</th>
+                  <th className="py-3.5 px-4 border-r border-[#DFEAF2] min-w-[150px] whitespace-nowrap">Assigned Owner</th>
+                  <th className="py-3.5 px-4 text-center min-w-[170px] whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#DFEAF2]">

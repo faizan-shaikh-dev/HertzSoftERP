@@ -694,8 +694,8 @@ export default function QuotationModal({
                 </button>
               </div>
 
-              <div className="border border-slate-200 rounded-lg overflow-hidden">
-                <table className="w-full text-left text-xs">
+              <div className="border border-slate-200 rounded-lg overflow-x-auto">
+                <table className="w-full min-w-[480px] text-left text-xs">
                   <thead className="bg-[#0077B6] text-white text-[11px] font-bold uppercase tracking-wide">
                     <tr>
                       <th className="py-2.5 px-3 w-1/3">Included Module</th>
@@ -977,8 +977,8 @@ export default function QuotationModal({
                 </button>
               </div>
 
-              <div className="border border-slate-200 rounded-lg overflow-hidden">
-                <table className="w-full text-left text-xs">
+              <div className="border border-slate-200 rounded-lg overflow-x-auto">
+                <table className="w-full min-w-[480px] text-left text-xs">
                   <thead className="bg-[#0077B6] text-white text-[11px] font-bold uppercase tracking-wide">
                     <tr>
                       <th className="py-2.5 px-3">Service</th>
@@ -1058,8 +1058,8 @@ export default function QuotationModal({
                   </button>
                 </div>
 
-                <div className="border border-slate-200 rounded-lg overflow-hidden">
-                  <table className="w-full text-left text-xs">
+                <div className="border border-slate-200 rounded-lg overflow-x-auto">
+                  <table className="w-full min-w-[480px] text-left text-xs">
                     <thead className="bg-[#0077B6] text-white text-[11px] font-bold uppercase tracking-wide">
                       <tr>
                         <th className="py-2.5 px-3 w-28 text-center">Percent (%)</th>

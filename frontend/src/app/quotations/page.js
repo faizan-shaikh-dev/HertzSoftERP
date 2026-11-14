@@ -438,17 +438,17 @@ export default function QuotationsPage() {
               </div>
 
               {/* Quotations Table */}
-              <div className="table-responsive border border-[#DFEAF2] rounded-md overflow-hidden">
-                <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
+              <div className="w-full overflow-x-auto border border-[#DFEAF2] rounded-md shadow-xs bg-white">
+                <table className="table table-hover table-striped table-bordered w-full min-w-[980px] text-xs text-left">
                   <thead className="thead-light bg-[#EAF3FB] text-[#19324D] text-[11px] font-bold uppercase tracking-wider border-b border-[#DFEAF2]">
                     <tr>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Quote # & Version</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Client & Project</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Proposal Scope</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-right">Total Amount</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Validity Date</th>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">Status</th>
-                      <th className="py-3 px-3.5 text-center">Actions</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[150px] whitespace-nowrap">Quote # &amp; Version</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[200px]">Client &amp; Project</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[220px]">Proposal Scope</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[130px] whitespace-nowrap text-right">Total Amount</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[120px] whitespace-nowrap">Validity Date</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[120px] whitespace-nowrap text-center">Status</th>
+                      <th className="py-3 px-3.5 min-w-[170px] whitespace-nowrap text-center">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#DFEAF2]">
@@ -597,8 +597,8 @@ export default function QuotationsPage() {
                             </td>
 
                             {/* 7. Action Buttons */}
-                            <td className="py-3 px-3.5 text-center">
-                              <div className="flex items-center justify-center gap-1.5">
+                            <td className="py-3 px-3.5 text-center whitespace-nowrap">
+                              <div className="flex items-center justify-center gap-1.5 whitespace-nowrap">
                                 {/* Detailed View Page */}
                                 <Link
                                   href={`/quotations/view?id=${q.id}`}

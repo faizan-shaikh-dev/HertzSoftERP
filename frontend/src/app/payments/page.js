@@ -658,17 +658,17 @@ export default function PaymentsPage() {
                 </div>
 
                 {/* OJT Payments Table */}
-                <div className="table-responsive border border-[#DFEAF2] rounded-md overflow-hidden">
-                  <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
+                <div className="w-full overflow-x-auto border border-[#DFEAF2] rounded-md shadow-xs bg-white">
+                  <table className="table table-hover table-striped table-bordered w-full min-w-[980px] text-xs text-left">
                     <thead className="thead-light bg-[#EAF3FB] text-[#71869B] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#DFEAF2]">
                       <tr>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Receipt / Ref ID</th>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Client &amp; Project</th>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-right">Amount Credited</th>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Payment Date</th>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">Payment Mode</th>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Recorded By / Remarks</th>
-                        <th className="py-3 px-3.5 text-center">Actions</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[150px] whitespace-nowrap">Receipt / Ref ID</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[220px]">Client &amp; Project</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[150px] whitespace-nowrap text-right">Amount Credited</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[130px] whitespace-nowrap">Payment Date</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[110px] whitespace-nowrap text-center">Payment Mode</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[200px]">Recorded By / Remarks</th>
+                        <th className="py-3 px-3.5 min-w-[160px] whitespace-nowrap text-center">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#DFEAF2]">
@@ -703,7 +703,7 @@ export default function PaymentsPage() {
                               } hover:bg-[#EAF3FB]`}
                             >
                               {/* Receipt ID & UTR */}
-                              <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
+                              <td className="py-3 px-3.5 border-r border-[#DFEAF2] whitespace-nowrap">
                                 <div className="font-mono font-bold text-[#19324D] text-xs">
                                   {receiptId}
                                 </div>
@@ -741,14 +741,15 @@ export default function PaymentsPage() {
                               </td>
 
                               {/* Amount Credited */}
-                              <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-right font-mono font-bold">
-                                <span className="px-2 py-0.5 rounded text-xs bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30">
-                                  + {formatCurrency(p.amount_paid)}
+                              <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-right font-mono font-bold whitespace-nowrap">
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold whitespace-nowrap bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30 shadow-2xs">
+                                  <span>+</span>
+                                  <span>{formatCurrency(p.amount_paid)}</span>
                                 </span>
                               </td>
 
                               {/* Payment Date */}
-                              <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
+                              <td className="py-3 px-3.5 border-r border-[#DFEAF2] whitespace-nowrap">
                                 <div className="font-semibold text-[#19324D] flex items-center gap-1">
                                   <Calendar className="w-3 h-3 text-[#71869B]" />
                                   <span>{formatDate(p.payment_date)}</span>
@@ -761,7 +762,7 @@ export default function PaymentsPage() {
                               </td>
 
                               {/* Payment Mode */}
-                              <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-center">
+                              <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-center whitespace-nowrap">
                                 <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#EAF3FB] text-[#4689C8] border border-[#4689C8]/25">
                                   {p.payment_method || 'Online'}
                                 </span>
@@ -782,7 +783,7 @@ export default function PaymentsPage() {
                               </td>
 
                               {/* Actions */}
-                              <td className="py-3 px-3.5 text-center">
+                              <td className="py-3 px-3.5 text-center whitespace-nowrap">
                                 <div className="inline-flex items-center gap-1.5 justify-center">
                                   {/* Edit Payment */}
                                   <button
@@ -1084,18 +1085,18 @@ export default function PaymentsPage() {
                 </div>
 
                 {/* OJT Expenses Table */}
-                <div className="table-responsive border border-[#DFEAF2] rounded-md overflow-hidden">
-                  <table className="table table-hover table-striped table-bordered w-full text-xs text-left">
+                <div className="w-full overflow-x-auto border border-[#DFEAF2] rounded-md shadow-xs bg-white">
+                  <table className="table table-hover table-striped table-bordered w-full min-w-[960px] text-xs text-left">
                     <thead className="thead-light bg-[#EAF3FB] text-[#71869B] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#DFEAF2]">
                       <tr>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] w-36">Voucher / Ref #</th>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Expense Title / Description</th>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Category</th>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Vendor / Payee</th>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Date</th>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-right">Amount (₹)</th>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2]">Payment Mode</th>
-                        <th className="py-3 px-3.5 text-center w-24">Actions</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[140px] whitespace-nowrap">Voucher / Ref #</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[220px]">Expense Title / Description</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[130px] whitespace-nowrap">Category</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[140px]">Vendor / Payee</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[120px] whitespace-nowrap">Date</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[130px] whitespace-nowrap text-right">Amount (₹)</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[120px] whitespace-nowrap">Payment Mode</th>
+                        <th className="py-3 px-3.5 min-w-[100px] whitespace-nowrap text-center">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#DFEAF2]">
@@ -1117,7 +1118,7 @@ export default function PaymentsPage() {
                               idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white'
                             } hover:bg-[#EAF3FB]`}
                           >
-                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] font-mono font-bold text-[#19324D]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] font-mono font-bold text-[#19324D] whitespace-nowrap">
                               {ex.reference_no}
                             </td>
                             <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
@@ -1128,7 +1129,7 @@ export default function PaymentsPage() {
                                 </div>
                               )}
                             </td>
-                            <td className="py-3 px-3.5 border-r border-[#DFEAF2]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] whitespace-nowrap">
                               <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-[#EAF3FB] text-[#4689C8] border border-[#4689C8]/20">
                                 {ex.category}
                               </span>
@@ -1136,18 +1137,19 @@ export default function PaymentsPage() {
                             <td className="py-3 px-3.5 border-r border-[#DFEAF2] font-semibold text-[#71869B]">
                               {ex.vendor}
                             </td>
-                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-[#71869B]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-[#71869B] whitespace-nowrap">
                               {formatDate(ex.expense_date)}
                             </td>
-                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-right font-mono font-bold">
-                              <span className="px-2 py-0.5 rounded text-xs bg-[#FDF2F2] text-[#F5365C] border border-[#F5365C]/30">
-                                - {formatCurrency(ex.amount)}
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-right font-mono font-bold whitespace-nowrap">
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-[#FDF2F2] text-[#F5365C] border border-[#F5365C]/30 shadow-2xs">
+                                <span>-</span>
+                                <span>{formatCurrency(ex.amount)}</span>
                               </span>
                             </td>
-                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-[#71869B] text-[11px]">
+                            <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-[#71869B] text-[11px] whitespace-nowrap">
                               {ex.payment_method}
                             </td>
-                            <td className="py-3 px-3.5 text-center">
+                            <td className="py-3 px-3.5 text-center whitespace-nowrap">
                               <div className="inline-flex items-center gap-1.5 justify-center">
                                 <button
                                   type="button"
