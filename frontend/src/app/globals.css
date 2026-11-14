@@ -105,3 +105,95 @@ tbody.table-striped-rows > tr:hover {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
 }
+
+/* ==========================================================================
+   Hertzsoft ERP Custom Toast Notification Styling (Replaces Green with Brand Blue)
+   ========================================================================== */
+:root {
+  --toastify-color-success: #0077B6 !important;
+  --toastify-color-info: #4689C8 !important;
+  --toastify-color-warning: #FB6340 !important;
+  --toastify-color-error: #F5365C !important;
+  --toastify-color-progress-success: #5FC8D6 !important;
+}
+
+.Toastify__toast-container {
+  z-index: 999999 !important;
+}
+
+.Toastify__toast {
+  font-family: inherit !important;
+  border-radius: 12px !important;
+  padding: 14px 18px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.2px !important;
+  box-shadow: 0 10px 25px -5px rgba(25, 50, 77, 0.25), 0 8px 10px -6px rgba(25, 50, 77, 0.15) !important;
+}
+
+/* Success Toast - Matches Hertzsoft Primary Brand Gradient (Navy -> Blue -> Cyan) */
+.Toastify__toast--success,
+.Toastify__toast--colored.Toastify__toast--success {
+  background: linear-gradient(135deg, #19324D 0%, #3475B2 55%, #4689C8 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(95, 200, 214, 0.45) !important;
+}
+
+.Toastify__toast--success .Toastify__toast-icon svg,
+.Toastify__toast--colored.Toastify__toast--success .Toastify__toast-icon svg {
+  fill: #5FC8D6 !important;
+}
+
+.Toastify__progress-bar--success,
+.Toastify__progress-bar--colored.Toastify__progress-bar--success {
+  background: linear-gradient(to right, #4689C8, #5FC8D6) !important;
+}
+
+/* Info Toast */
+.Toastify__toast--info,
+.Toastify__toast--colored.Toastify__toast--info {
+  background: linear-gradient(135deg, #19324D 0%, #0077B6 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(70, 137, 200, 0.4) !important;
+}
+
+.Toastify__toast--info .Toastify__toast-icon svg,
+.Toastify__toast--colored.Toastify__toast--info .Toastify__toast-icon svg {
+  fill: #78A9D7 !important;
+}
+
+.Toastify__progress-bar--info,
+.Toastify__progress-bar--colored.Toastify__progress-bar--info {
+  background: #5FC8D6 !important;
+}
+
+/* Error Toast - Soft Crimson */
+.Toastify__toast--error,
+.Toastify__toast--colored.Toastify__toast--error {
+  background: #F5365C !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.Toastify__progress-bar--error,
+.Toastify__progress-bar--colored.Toastify__progress-bar--error {
+  background: #FEB9C8 !important;
+}
+
+/* Warning Toast - Warm Amber */
+.Toastify__toast--warning,
+.Toastify__toast--colored.Toastify__toast--warning {
+  background: #FB6340 !important;
+  color: #FFFFFF !important;
+}
+
+/* Close button styling */
+.Toastify__close-button {
+  color: #FFFFFF !important;
+  opacity: 0.75 !important;
+}
+
+.Toastify__close-button:hover {
+  opacity: 1 !important;
+}
+
