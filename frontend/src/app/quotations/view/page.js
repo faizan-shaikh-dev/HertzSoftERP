@@ -241,7 +241,7 @@ function QuotationViewContent() {
                     type="button"
                     onClick={handleConvertToInvoice}
                     disabled={converting}
-                    className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-[#0077B6] hover:opacity-95 rounded shadow-xs transition cursor-pointer disabled:opacity-50"
+                    className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-[#20A36B] hover:bg-[#178553] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
                     title="Accept and Generate Official Invoice (HIN26001)"
                   >
                     {converting ? (

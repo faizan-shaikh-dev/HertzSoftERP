@@ -20,7 +20,7 @@ import {
   Edit3, 
   Trash2, 
   MessageSquare, 
-  Sparkles, 
+  UserPlus, 
   UserCheck, 
   ChevronRight, 
   FileText, 
@@ -68,7 +68,7 @@ export const LEAD_STATUSES = [
     number: 1,
     id: 'New Lead',
     label: 'New Lead',
-    icon: Sparkles,
+    icon: UserPlus,
     color: 'bg-[#4689C8]',
     textColor: 'text-[#4689C8]',
     borderColor: 'border-l-[#4689C8]',
@@ -534,9 +534,9 @@ function LeadViewContent() {
                   <button
                     type="button"
                     onClick={() => setIsConvertModalOpen(true)}
-                    className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#20A36B] to-[#5FC8D6] hover:opacity-90 rounded-lg shadow-xs transition cursor-pointer"
+                    className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-[#20A36B] hover:bg-[#188a59] rounded-lg shadow-xs transition cursor-pointer"
                   >
-                    <Sparkles className="w-3.5 h-3.5" />
+                    <UserPlus className="w-3.5 h-3.5" />
                     <span>Convert to Client</span>
                   </button>
                 )}

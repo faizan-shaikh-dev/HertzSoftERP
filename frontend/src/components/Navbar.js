@@ -59,7 +59,7 @@ export default function Navbar({
   const isAdmin = user?.role?.toLowerCase().includes('admin');
 
   return (
-    <header className="sticky top-0 z-30 h-16 sm:h-20 bg-gradient-to-r from-[#4689C8] via-[#3475B2] to-[#5FC8D6] border-b border-[#3475B2]/20 px-4 sm:px-6 lg:px-8 flex items-center justify-between shadow-md">
+    <header className="sticky top-0 z-30 h-16 sm:h-20 bg-[#0077B6] border-b border-[#005f92] px-5 sm:px-8 flex items-center justify-between shadow-xs">
       {/* Left: Mobile Drawer Toggler (Hidden on Desktop) & White Typography Title */}
       <div className="flex items-center gap-3 sm:gap-4">
         <button
@@ -81,7 +81,7 @@ export default function Navbar({
           <h1 className="text-base sm:text-xl font-bold tracking-tight text-white leading-tight">
             {title}
           </h1>
-          <p className="hidden sm:block text-[11px] text-[#E8F8FA] font-medium leading-none mt-1">
+          <p className="hidden sm:block text-[11px] text-blue-100 font-medium leading-none mt-1">
             Hertzsoft Technologies Centralized Operations
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function Navbar({
           <button
             onClick={() => setDropdownOpen((prev) => !prev)}
             type="button"
-            className="flex items-center gap-2.5 p-1 sm:px-2.5 rounded-lg hover:bg-white/15 transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 cursor-pointer text-left"
+            className="flex items-center gap-2.5 p-1 sm:px-2.5 rounded-lg hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/20 cursor-pointer text-left"
             aria-expanded={dropdownOpen}
             aria-haspopup="true"
           >
@@ -102,7 +102,7 @@ export default function Navbar({
               <span className="text-xs font-bold text-white leading-tight">
                 {displayName}
               </span>
-              <span className="text-[10px] text-white/85 font-medium leading-tight">
+              <span className="text-[10px] text-blue-100 font-medium leading-tight">
                 {displayEmail}
               </span>
             </div>

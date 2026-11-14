@@ -77,33 +77,33 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
         }`}
       >
         {/* Brand Header */}
-        <div className={`h-16 sm:h-20 border-b border-[#DFEAF2] flex items-center transition-all bg-white ${
-          isCollapsed ? 'justify-center px-2' : 'justify-between px-4 sm:px-5'
+        <div className={`h-16 sm:h-20 border-b border-[#DFEAF2] flex items-center bg-white ${
+          isCollapsed ? 'justify-center px-2' : 'justify-between px-5 sm:px-6'
         }`}>
           <Link 
             href="/" 
-            className="flex items-center gap-2 group"
+            className="flex items-center gap-2"
             title="Hertzsoft ERP Portal"
           >
             {isCollapsed ? (
-              <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-[#DFEAF2] bg-white p-1 flex-shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform shadow-xs">
+              <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-[#DFEAF2] bg-[#F4F8FC] p-1.5 flex-shrink-0 flex items-center justify-center shadow-2xs">
                 <Image
                   src="/logo-icon.svg"
                   alt="Hertzsoft Logo"
-                  width={34}
-                  height={34}
+                  width={32}
+                  height={32}
                   className="object-contain"
                   priority
                 />
               </div>
             ) : (
-              <div className="flex flex-col items-start py-1 group-hover:opacity-90 transition-opacity">
+              <div className="flex flex-col items-start py-1">
                 <Image
                   src="/logo.svg"
                   alt="Hertzsoft Technologies"
-                  width={160}
-                  height={42}
-                  className="h-9 w-auto object-contain"
+                  width={155}
+                  height={40}
+                  className="h-8.5 w-auto object-contain"
                   priority
                 />
               </div>
@@ -124,11 +124,11 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
         </div>
 
         {/* Navigation Menu Links */}
-        <div className={`flex-1 py-4 space-y-1.5 overflow-y-auto no-scrollbar scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
-          isCollapsed ? 'px-2' : 'px-3'
+        <div className={`flex-1 py-5 space-y-2 overflow-y-auto no-scrollbar scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
+          isCollapsed ? 'px-2' : 'px-3.5'
         }`}>
           {!isCollapsed ? (
-            <div className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+            <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
               Navigation
             </div>
           ) : (
@@ -151,18 +151,18 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
                 href={item.href}
                 onClick={onClose}
                 title={isCollapsed ? item.label : undefined}
-                className={`flex items-center text-xs sm:text-sm transition-all group relative rounded-lg ${
+                className={`flex items-center text-xs sm:text-sm group relative rounded-lg ${
                   isCollapsed
-                    ? 'justify-center p-2.5 w-12 h-12 mx-auto'
-                    : 'gap-3 px-3.5 py-2.5 mx-1'
+                    ? 'justify-center p-2.5 w-11 h-11 mx-auto'
+                    : 'gap-3 px-3.5 py-2.5 mx-0.5'
                 } ${
                   isActive
-                    ? 'bg-[#EAF3FB] text-[#4689C8] font-bold shadow-xs border border-[#4689C8]/20'
-                    : 'text-[#71869B] hover:text-[#4689C8] hover:bg-[#EAF3FB]/50 font-medium'
+                    ? 'bg-[#EAF3FB] text-[#0077B6] font-bold shadow-2xs border border-[#0077B6]/20'
+                    : 'text-[#71869B] hover:text-[#19324D] hover:bg-[#F4F8FC] font-medium'
                 }`}
               >
-                <Icon className={`w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-105 ${
-                  isActive ? 'text-[#4689C8]' : 'text-[#71869B] group-hover:text-[#4689C8]'
+                <Icon className={`w-5 h-5 flex-shrink-0 ${
+                  isActive ? 'text-[#0077B6]' : 'text-[#71869B] group-hover:text-[#19324D]'
                 }`} />
 
                 {!isCollapsed && (
@@ -183,7 +183,7 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
         </div>
 
         {/* Clean Footer */}
-        <div className="py-3 px-4 border-t border-[#DFEAF2] bg-[#F4F8FC] text-center">
+        <div className="py-3.5 px-4 border-t border-[#DFEAF2] bg-[#F8FAFC] text-center">
           <p className="text-[10px] font-semibold text-[#71869B] uppercase tracking-wider truncate">
             {!isCollapsed ? 'Hertzsoft ERP • v2.0' : 'v2.0'}
           </p>
@@ -194,14 +194,14 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
           <button
             onClick={onToggleCollapse}
             type="button"
-            className="hidden lg:flex items-center justify-center absolute -right-3.5 top-1/2 -translate-y-1/2 z-50 w-7 h-7 rounded-full bg-white border border-[#DFEAF2] text-[#71869B] hover:text-[#4689C8] hover:border-[#4689C8] shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group"
+            className="hidden lg:flex items-center justify-center absolute -right-3.5 top-1/2 -translate-y-1/2 z-50 w-7 h-7 rounded-full bg-white border border-[#DFEAF2] text-[#71869B] hover:text-[#0077B6] hover:border-[#0077B6] shadow-xs hover:shadow-sm cursor-pointer group"
             title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
             aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             {isCollapsed ? (
-              <ChevronRight className="w-4 h-4 text-[#4689C8] transition-transform duration-200 group-hover:scale-110" />
+              <ChevronRight className="w-4 h-4 text-[#0077B6]" />
             ) : (
-              <ChevronLeft className="w-4 h-4 text-[#71869B] group-hover:text-[#4689C8] transition-transform duration-200 group-hover:scale-110" />
+              <ChevronLeft className="w-4 h-4 text-[#71869B] group-hover:text-[#0077B6]" />
             )}
           </button>
         )}

@@ -13,8 +13,7 @@ import {
   Loader2, 
   AlertCircle,
   FileText,
-  CheckCircle2,
-  Sparkles
+  CheckCircle2
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import leadService from '@/services/leadService';
@@ -313,7 +312,7 @@ export default function ConvertToClientModal({
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-4 h-4" />
+                  <UserCheck className="w-4 h-4" />
                   <span>Confirm & Convert to Client</span>
                 </>
               )}

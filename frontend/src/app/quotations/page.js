@@ -244,7 +244,7 @@ export default function QuotationsPage() {
                   setModalMode('create');
                   setIsQuotationModalOpen(true);
                 }}
-                className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#4689C8] hover:bg-[#3475B2] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
+                className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#0077B6] hover:bg-[#005f92] rounded shadow-xs transition cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Create Quotation</span>
@@ -256,7 +256,7 @@ export default function QuotationsPage() {
                 className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#71869B] bg-white hover:bg-[#EAF3FB] hover:text-[#4689C8] border border-[#DFEAF2] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
                 title="Refresh quotations ledger"
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4689C8]' : ''}`} />
+                <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#0077B6]' : ''}`} />
                 <span className="hidden sm:inline">Refresh</span>
               </button>
             </div>
@@ -265,86 +265,86 @@ export default function QuotationsPage() {
           {/* Card Body */}
           <div className="card-body p-4 sm:p-6 space-y-6">
             {/* Financial Metrics Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
               {/* 1. Total Proposals */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                       Total Proposals
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#19324D] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1 font-mono">
                       {formatCurrency(metrics.total_value)}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#4689C8] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
-                    <FileSpreadsheet className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#EAF3FB] border border-[#0077B6]/20 text-[#0077B6] flex items-center justify-center shrink-0">
+                    <FileSpreadsheet className="w-5 h-5 text-[#0077B6]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Drafted Quotes:</span>
                   <span className="font-bold text-[#19324D]">{metrics.total_count} Proposals</span>
                 </div>
               </div>
 
               {/* 2. Accepted Deals */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                       Accepted Deals
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#19324D] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#20A36B] tracking-tight mt-1 font-mono">
                       {formatCurrency(metrics.accepted_value)}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
-                    <CheckCircle2 className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#EAF8F1] border border-[#20A36B]/20 text-[#20A36B] flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-5 h-5 text-[#20A36B]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Client Won:</span>
                   <span className="font-bold text-[#20A36B]">{metrics.accepted_count} Accepted</span>
                 </div>
               </div>
 
               {/* 3. In Review / Pending */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                       In Review / Sent
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#19324D] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#FB6340] tracking-tight mt-1 font-mono">
                       {formatCurrency(metrics.pending_value)}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#FB6340] to-[#F5365C] text-white flex items-center justify-center shadow-md shadow-[#FB6340]/25">
-                    <Clock className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#FEF4E6] border border-[#FB6340]/20 text-[#FB6340] flex items-center justify-center shrink-0">
+                    <Clock className="w-5 h-5 text-[#FB6340]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Awaiting Decision:</span>
                   <span className="font-bold text-[#FB6340]">{metrics.pending_count} Quotes</span>
                 </div>
               </div>
 
               {/* 4. Conversion Rate */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                       Conversion Rate
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#19324D] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#0077B6] tracking-tight mt-1 font-mono">
                       {metrics.conversion_rate}%
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#8965E0] to-[#3475B2] text-white flex items-center justify-center shadow-md shadow-[#8965E0]/25">
-                    <TrendingUp className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#EAF3FB] border border-[#0077B6]/20 text-[#0077B6] flex items-center justify-center shrink-0">
+                    <TrendingUp className="w-5 h-5 text-[#0077B6]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Expired / Lost:</span>
                   <span className="font-bold text-[#71869B]">{metrics.expired_count} Quotes</span>
                 </div>

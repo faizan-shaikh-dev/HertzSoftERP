@@ -166,7 +166,7 @@ export default function CertificatesPage() {
               {isAdminOrHR && (
                 <button
                   onClick={() => setIsIssueModalOpen(true)}
-                  className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] hover:from-[#2a5d8d] hover:to-[#3475B2] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
+                  className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#0077B6] hover:bg-[#005f92] rounded shadow-xs transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Issue New Document</span>
@@ -188,86 +188,86 @@ export default function CertificatesPage() {
           {/* Card Body */}
           <div className="card-body p-4 sm:p-6 space-y-6">
             {/* KPI Metric Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
               {/* Total Documents */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                       Total Issued Documents
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#19324D] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1">
                       {certificates.length}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#4689C8] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
-                    <Award className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#EAF3FB] border border-[#0077B6]/20 text-[#0077B6] flex items-center justify-center shrink-0">
+                    <Award className="w-5 h-5 text-[#0077B6]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Status:</span>
-                  <span className="font-bold text-[#4689C8]">Authenticated Records</span>
+                  <span className="font-bold text-[#0077B6]">Authenticated Records</span>
                 </div>
               </div>
 
               {/* Internship Certificates */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                       Internship Certificates
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#11cdef] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#0077B6] tracking-tight mt-1">
                       {internshipCount}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#11cdef] to-[#1171ef] text-white flex items-center justify-center shadow-md shadow-[#11cdef]/25">
-                    <GraduationCap className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#EAF3FB] border border-[#0077B6]/20 text-[#0077B6] flex items-center justify-center shrink-0">
+                    <GraduationCap className="w-5 h-5 text-[#0077B6]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Students / Interns:</span>
-                  <span className="font-bold text-[#11cdef]">Verified Completions</span>
+                  <span className="font-bold text-[#0077B6]">Verified Completions</span>
                 </div>
               </div>
 
               {/* Offers & Appointments */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
-                      Offer & Appointments
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
+                      Offer &amp; Appointments
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#20A36B] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#20A36B] tracking-tight mt-1">
                       {appointmentCount}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
-                    <UserCheck className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#EAF8F1] border border-[#20A36B]/20 text-[#20A36B] flex items-center justify-center shrink-0">
+                    <UserCheck className="w-5 h-5 text-[#20A36B]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>HR Registry:</span>
                   <span className="font-bold text-[#20A36B]">Hired Candidates</span>
                 </div>
               </div>
 
               {/* Experience Letters */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                       Experience Letters
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#8965e0] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1">
                       {experienceCount}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#3475B2] to-[#78A9D7] text-white flex items-center justify-center shadow-md shadow-[#8965e0]/25">
-                    <Briefcase className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#F4F8FC] border border-[#DFEAF2] text-[#19324D] flex items-center justify-center shrink-0">
+                    <Briefcase className="w-5 h-5 text-[#19324D]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Tenure Records:</span>
                   <span className="font-bold text-[#8965e0]">Relieved Employees</span>
                 </div>

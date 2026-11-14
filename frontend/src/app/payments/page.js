@@ -408,7 +408,7 @@ export default function PaymentsPage() {
                     setEditingPayment(null);
                     setIsPaymentModalOpen(true);
                   }}
-                  className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] hover:from-[#2a5d8d] hover:to-[#3475B2] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
+                  className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#0077B6] hover:bg-[#005f92] rounded shadow-xs transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Record Payment</span>
@@ -419,7 +419,7 @@ export default function PaymentsPage() {
                     setActiveExpenseToEdit(null);
                     setIsExpenseModalOpen(true);
                   }}
-                  className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] hover:from-[#2a5d8d] hover:to-[#3475B2] rounded shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
+                  className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#0077B6] hover:bg-[#005f92] rounded shadow-xs transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Record Expense</span>
@@ -472,90 +472,90 @@ export default function PaymentsPage() {
             {/* TAB 1: COMMERCIAL COLLECTIONS */}
             {activeTab === 'collections' && (
               <>
-                {/* Financial Metrics Cards (OJT Metric Cards) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Financial Metrics Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
                   {/* 1. Total Collections */}
-                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                    <div className="flex items-start justify-between">
+                  <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                    <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                           Total Collections
                         </span>
-                        <div className="text-xl sm:text-2xl font-extrabold text-[#20A36B] tracking-tight mt-1">
+                        <div className="text-xl sm:text-2xl font-extrabold text-[#20A36B] tracking-tight mt-1 font-mono">
                           {formatCurrency(financialSummary.total_collected)}
                         </div>
                       </div>
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
-                        <Wallet className="w-5 h-5" />
+                      <div className="w-10 h-10 rounded-lg bg-[#EAF8F1] border border-[#20A36B]/20 text-[#20A36B] flex items-center justify-center shrink-0">
+                        <Wallet className="w-5 h-5 text-[#20A36B]" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
+                    <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Status:</span>
                       <span className="font-bold text-[#20A36B]">Realized Funds</span>
                     </div>
                   </div>
 
                   {/* 2. Total Contract Value */}
-                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                    <div className="flex items-start justify-between">
+                  <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                    <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                           Total Project Value
                         </span>
-                        <div className="text-xl sm:text-2xl font-extrabold text-[#19324D] tracking-tight mt-1">
+                        <div className="text-xl sm:text-2xl font-extrabold text-[#19324D] tracking-tight mt-1 font-mono">
                           {formatCurrency(financialSummary.total_project_value)}
                         </div>
                       </div>
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#4689C8] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
-                        <TrendingUp className="w-5 h-5" />
+                      <div className="w-10 h-10 rounded-lg bg-[#EAF3FB] border border-[#4689C8]/20 text-[#0077B6] flex items-center justify-center shrink-0">
+                        <TrendingUp className="w-5 h-5 text-[#0077B6]" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
+                    <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Agreed Scope:</span>
                       <span className="font-bold text-[#19324D]">Active Contracts</span>
                     </div>
                   </div>
 
                   {/* 3. Pending Due Balance */}
-                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                    <div className="flex items-start justify-between">
+                  <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                    <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                           Pending Receivables
                         </span>
-                        <div className="text-xl sm:text-2xl font-extrabold text-[#F5365C] tracking-tight mt-1">
+                        <div className="text-xl sm:text-2xl font-extrabold text-[#F5365C] tracking-tight mt-1 font-mono">
                           {formatCurrency(financialSummary.total_pending_due)}
                         </div>
                       </div>
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#F5365C] to-[#e01a47] text-white flex items-center justify-center shadow-md shadow-[#F5365C]/25">
-                        <IndianRupee className="w-5 h-5" />
+                      <div className="w-10 h-10 rounded-lg bg-[#FDF2F2] border border-[#F5365C]/20 text-[#F5365C] flex items-center justify-center shrink-0">
+                        <IndianRupee className="w-5 h-5 text-[#F5365C]" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
+                    <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Outstanding:</span>
                       <span className="font-bold text-[#F5365C]">To Be Invoiced</span>
                     </div>
                   </div>
 
                   {/* 4. Collection Rate */}
-                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                    <div className="flex items-start justify-between">
+                  <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                    <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                           Collection Rate
                         </span>
-                        <div className="text-xl sm:text-2xl font-extrabold text-[#11cdef] tracking-tight mt-1">
+                        <div className="text-xl sm:text-2xl font-extrabold text-[#0077B6] tracking-tight mt-1 font-mono">
                           {collectionRate}%
                         </div>
                       </div>
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#11cdef] to-[#1171ef] text-white flex items-center justify-center shadow-md shadow-[#11cdef]/25">
-                        <FileCheck className="w-5 h-5" />
+                      <div className="w-10 h-10 rounded-lg bg-[#EAF3FB] border border-[#0077B6]/20 text-[#0077B6] flex items-center justify-center shrink-0">
+                        <FileCheck className="w-5 h-5 text-[#0077B6]" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC]">
+                    <div className="mt-4 pt-3 border-t border-[#DFEAF2]">
                       <div className="w-full bg-[#DFEAF2] rounded-full h-1.5 overflow-hidden">
                         <div
-                          className="bg-[#11cdef] h-1.5 rounded-full transition-all duration-500"
+                          className="bg-[#0077B6] h-1.5 rounded-full"
                           style={{ width: `${collectionRate}%` }}
                         />
                       </div>
@@ -907,90 +907,92 @@ export default function PaymentsPage() {
             {activeTab === 'expenses' && (
               <>
                 {/* Operational Expense Metric Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
                   {/* 1. Total Operating Expenses */}
-                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                    <div className="flex items-start justify-between">
+                  <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                    <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                           Total Operating Expenses
                         </span>
-                        <div className="text-xl sm:text-2xl font-extrabold text-[#F5365C] tracking-tight mt-1">
+                        <div className="text-xl sm:text-2xl font-extrabold text-[#F5365C] tracking-tight mt-1 font-mono">
                           {formatCurrency(totalExpenseAmount)}
                         </div>
                       </div>
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#F5365C] to-[#e01a47] text-white flex items-center justify-center shadow-md shadow-[#F5365C]/25">
-                        <Wallet className="w-5 h-5" />
+                      <div className="w-10 h-10 rounded-lg bg-[#FDF2F2] border border-[#F5365C]/20 text-[#F5365C] flex items-center justify-center shrink-0">
+                        <Wallet className="w-5 h-5 text-[#F5365C]" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
+                    <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Overhead Cost:</span>
                       <span className="font-bold text-[#F5365C]">{expenses.length} Records</span>
                     </div>
                   </div>
 
                   {/* 2. Cloud & Infra Spend */}
-                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                    <div className="flex items-start justify-between">
+                  <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                    <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                           Cloud &amp; Servers
                         </span>
-                        <div className="text-xl sm:text-2xl font-extrabold text-[#11cdef] tracking-tight mt-1">
+                        <div className="text-xl sm:text-2xl font-extrabold text-[#0077B6] tracking-tight mt-1 font-mono">
                           {formatCurrency(hostingExpenseAmount)}
                         </div>
                       </div>
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#11cdef] to-[#1171ef] text-white flex items-center justify-center shadow-md shadow-[#11cdef]/25">
-                        <Server className="w-5 h-5" />
+                      <div className="w-10 h-10 rounded-lg bg-[#EAF3FB] border border-[#0077B6]/20 text-[#0077B6] flex items-center justify-center shrink-0">
+                        <Server className="w-5 h-5 text-[#0077B6]" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
+                    <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Hosting &amp; DNS:</span>
-                      <span className="font-bold text-[#11cdef]">Core Tech Ops</span>
+                      <span className="font-bold text-[#0077B6]">Core Tech Ops</span>
                     </div>
                   </div>
 
                   {/* 3. Software & SaaS */}
-                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                    <div className="flex items-start justify-between">
+                  <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                    <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                           Software &amp; SaaS Tools
                         </span>
-                        <div className="text-xl sm:text-2xl font-extrabold text-[#8965e0] tracking-tight mt-1">
+                        <div className="text-xl sm:text-2xl font-extrabold text-[#19324D] tracking-tight mt-1 font-mono">
                           {formatCurrency(softwareExpenseAmount)}
                         </div>
                       </div>
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#8965e0] to-[#724ec7] text-white flex items-center justify-center shadow-md shadow-[#8965e0]/25">
-                        <Layers className="w-5 h-5" />
+                      <div className="w-10 h-10 rounded-lg bg-[#F4F8FC] border border-[#DFEAF2] text-[#19324D] flex items-center justify-center shrink-0">
+                        <Layers className="w-5 h-5 text-[#19324D]" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
+                    <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Licensing:</span>
-                      <span className="font-bold text-[#8965e0]">Dev &amp; Design Tools</span>
+                      <span className="font-bold text-[#19324D]">Dev &amp; Design Tools</span>
                     </div>
                   </div>
 
                   {/* 4. Net Cashflow Margin */}
-                  <div className="card bg-white border border-[#DFEAF2] rounded-lg shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                    <div className="flex items-start justify-between">
+                  <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                    <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                           Net Operating Cashflow
                         </span>
-                        <div className={`text-xl sm:text-2xl font-extrabold tracking-tight mt-1 ${netCashflow >= 0 ? 'text-[#20A36B]' : 'text-[#F5365C]'}`}>
+                        <div className={`text-xl sm:text-2xl font-extrabold tracking-tight mt-1 font-mono ${
+                          netCashflow >= 0 ? 'text-[#20A36B]' : 'text-[#F5365C]'
+                        }`}>
                           {formatCurrency(netCashflow)}
                         </div>
                       </div>
-                      <div className={`w-11 h-11 rounded-full text-white flex items-center justify-center shadow-md ${
+                      <div className={`w-10 h-10 rounded-lg border flex items-center justify-center shrink-0 ${
                         netCashflow >= 0 
-                          ? 'bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] shadow-[#20A36B]/25'
-                          : 'bg-gradient-to-tr from-[#F5365C] to-[#e01a47] shadow-[#F5365C]/25'
+                          ? 'bg-[#EAF8F1] border-[#20A36B]/20 text-[#20A36B]' 
+                          : 'bg-[#FDF2F2] border-[#F5365C]/20 text-[#F5365C]'
                       }`}>
-                        {netCashflow >= 0 ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
+                        <TrendingUp className="w-5 h-5" />
                       </div>
                     </div>
-                    <div className="mt-3 pt-2.5 border-t border-[#F4F8FC] flex items-center justify-between text-xs text-[#71869B]">
+                    <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                       <span>Realized Margin:</span>
                       <span className={`font-bold ${netCashflow >= 0 ? 'text-[#20A36B]' : 'text-[#F5365C]'}`}>
                         {marginPercent}% of Collections

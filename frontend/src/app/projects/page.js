@@ -189,7 +189,7 @@ export default function ProjectsPage() {
                   setEditingProject(null);
                   setIsProjectModalOpen(true);
                 }}
-                className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#4689C8] to-[#5FC8D6] hover:opacity-90 rounded-lg shadow-sm shadow-[#4689C8]/25 transition cursor-pointer"
+                className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#0077B6] hover:bg-[#005f92] rounded shadow-xs transition cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Create New Project</span>
@@ -198,10 +198,10 @@ export default function ProjectsPage() {
               <button
                 onClick={() => fetchProjects(true)}
                 disabled={loading}
-                className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#19324D] bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] rounded-lg shadow-xs transition cursor-pointer disabled:opacity-50"
+                className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#19324D] bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
                 title="Refresh projects"
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#4689C8]' : ''}`} />
+                <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#0077B6]' : ''}`} />
                 <span className="hidden sm:inline">Refresh</span>
               </button>
             </div>
@@ -210,86 +210,86 @@ export default function ProjectsPage() {
           {/* Card Body */}
           <div className="card-body p-4 sm:p-6 space-y-6">
             {/* KPI Metric Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
               {/* 1. Active In Progress */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                       Active Projects
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#39AFC0] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#0077B6] tracking-tight mt-1">
                       {activeCount}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#4689C8] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
-                    <Clock className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#EAF3FB] border border-[#0077B6]/20 text-[#0077B6] flex items-center justify-center shrink-0">
+                    <Clock className="w-5 h-5 text-[#0077B6]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Status:</span>
-                  <span className="font-bold text-[#39AFC0]">In Progress</span>
+                  <span className="font-bold text-[#0077B6]">In Progress</span>
                 </div>
               </div>
 
               {/* 2. Completed Contracts */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                       Completed Deals
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#20A36B] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#20A36B] tracking-tight mt-1">
                       {completedCount}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
-                    <CheckCircle2 className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#EAF8F1] border border-[#20A36B]/20 text-[#20A36B] flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-5 h-5 text-[#20A36B]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Lifecycle:</span>
-                  <span className="font-bold text-[#20A36B]">Delivered & Closed</span>
+                  <span className="font-bold text-[#20A36B]">Delivered &amp; Closed</span>
                 </div>
               </div>
 
               {/* 3. Testing & Review */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
-                      Testing & Review
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
+                      Testing &amp; Review
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#8965E0] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1">
                       {testingCount}
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#8965E0] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#8965E0]/25">
-                    <Search className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#F4F8FC] border border-[#DFEAF2] text-[#19324D] flex items-center justify-center shrink-0">
+                    <Search className="w-5 h-5 text-[#19324D]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Lifecycle:</span>
-                  <span className="font-bold text-[#8965E0]">QA &amp; Client Review</span>
+                  <span className="font-bold text-[#19324D]">QA &amp; Client Review</span>
                 </div>
               </div>
 
               {/* 4. Delivery Success Rate */}
-              <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-                <div className="flex items-start justify-between">
+              <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                       Delivery Success Rate
                     </span>
-                    <div className="text-xl sm:text-2xl font-extrabold text-[#20A36B] tracking-tight mt-1">
+                    <div className="text-2xl sm:text-3xl font-extrabold text-[#20A36B] tracking-tight mt-1">
                       {deliveryRate}%
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
-                    <CheckCircle2 className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-lg bg-[#EAF8F1] border border-[#20A36B]/20 text-[#20A36B] flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-5 h-5 text-[#20A36B]" />
                   </div>
                 </div>
-                <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
+                <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                   <span>Performance:</span>
                   <span className="font-bold text-[#20A36B]">
                     {completedCount} of {projects.length} Completed

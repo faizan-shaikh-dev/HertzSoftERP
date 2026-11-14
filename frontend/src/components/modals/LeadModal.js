@@ -16,7 +16,6 @@ import {
   FileText, 
   IndianRupee, 
   Loader2, 
-  Sparkles,
   Layers,
   Globe,
   MapPin,

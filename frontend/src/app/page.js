@@ -199,101 +199,101 @@ export default function DashboardPage() {
           )}
 
           {/* Top 4 KPI Metric Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {/* 1. Inquiries */}
-            <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-              <div className="flex items-start justify-between">
+            <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+              <div className="flex items-start justify-between gap-3">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                     Total Inquiries
                   </span>
                   <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1">
                     {stats?.leads?.total || 0}
                   </div>
                 </div>
-                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#4689C8] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
-                  <Users className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-lg bg-[#EAF3FB] border border-[#4689C8]/20 text-[#0077B6] flex items-center justify-center shrink-0">
+                  <Users className="w-5 h-5 text-[#0077B6]" />
                 </div>
               </div>
-              <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center gap-2 text-xs">
+              <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center gap-2 text-xs">
                 <span className="inline-flex items-center gap-1 font-bold text-[#20A36B]">
                   <TrendingUp className="w-3.5 h-3.5" />
                   {stats?.leads?.won || 0} Won Deals
                 </span>
-                <span className="text-[#71869B] font-medium">
+                <span className="text-[#71869B]">
                   • {stats?.leads?.active_pipeline || 0} Active
                 </span>
               </div>
             </div>
 
             {/* 2. Client Projects */}
-            <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-              <div className="flex items-start justify-between">
+            <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+              <div className="flex items-start justify-between gap-3">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                     Client Projects
                   </span>
                   <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1">
                     {stats?.projects?.active || 0}
                   </div>
                 </div>
-                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#3475B2] to-[#78A9D7] text-white flex items-center justify-center shadow-md shadow-[#4689C8]/25">
-                  <FolderKanban className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-lg bg-[#EAF3FB] border border-[#4689C8]/20 text-[#0077B6] flex items-center justify-center shrink-0">
+                  <FolderKanban className="w-5 h-5 text-[#0077B6]" />
                 </div>
               </div>
-              <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center gap-2 text-xs">
+              <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center gap-2 text-xs">
                 <span className="inline-flex items-center gap-1 font-bold text-[#20A36B]">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   {stats?.projects?.completed || 0} Completed
                 </span>
-                <span className="text-[#71869B] font-medium">
-                  • {stats?.projects?.total || 0} Total Contracts
+                <span className="text-[#71869B]">
+                  • {stats?.projects?.total || 0} Total
                 </span>
               </div>
             </div>
 
             {/* 3. Revenue Collected */}
-            <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-              <div className="flex items-start justify-between">
+            <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+              <div className="flex items-start justify-between gap-3">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                     Revenue Collected
                   </span>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1">
+                  <div className="text-2xl sm:text-3xl font-extrabold text-[#20A36B] tracking-tight mt-1 font-mono">
                     {formatCurrency(stats?.financials?.total_collected)}
                   </div>
                 </div>
-                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#20A36B] to-[#5FC8D6] text-white flex items-center justify-center shadow-md shadow-[#20A36B]/25">
-                  <TrendingUp className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-lg bg-[#EAF8F1] border border-[#20A36B]/20 text-[#20A36B] flex items-center justify-center shrink-0">
+                  <TrendingUp className="w-5 h-5 text-[#20A36B]" />
                 </div>
               </div>
-              <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
+              <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                 <span>Total Deal Value:</span>
-                <span className="font-bold text-[#19324D]">
+                <span className="font-bold text-[#19324D] font-mono">
                   {formatCurrency(stats?.financials?.total_deal_value)}
                 </span>
               </div>
             </div>
 
             {/* 4. Pending Dues */}
-            <div className="card bg-white border border-[#DFEAF2] rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col justify-between">
-              <div className="flex items-start justify-between">
+            <div className="bg-white border border-[#DFEAF2] rounded-xl p-5 shadow-xs flex flex-col justify-between">
+              <div className="flex items-start justify-between gap-3">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#71869B]">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-[#71869B]">
                     Pending Dues
                   </span>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-[#19324D] tracking-tight mt-1">
+                  <div className="text-2xl sm:text-3xl font-extrabold text-[#F5365C] tracking-tight mt-1 font-mono">
                     {formatCurrency(stats?.financials?.total_pending_due)}
                   </div>
                 </div>
-                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#FB6340] to-[#F5365C] text-white flex items-center justify-center shadow-md shadow-[#F5365C]/25">
-                  <CreditCard className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-lg bg-[#FDF2F2] border border-[#F5365C]/20 text-[#F5365C] flex items-center justify-center shrink-0">
+                  <CreditCard className="w-5 h-5 text-[#F5365C]" />
                 </div>
               </div>
-              <div className="mt-3 pt-2.5 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
+              <div className="mt-4 pt-3 border-t border-[#DFEAF2] flex items-center justify-between text-xs text-[#71869B]">
                 <span>Issued Certs:</span>
-                <span className="font-bold text-[#4689C8] bg-[#EAF3FB] px-2.5 py-0.5 rounded-full border border-[#78A9D7]/30 text-[11px]">
-                  {stats?.documents?.total_certificates_issued || 0} Documents
+                <span className="font-bold text-[#0077B6] bg-[#EAF3FB] px-2 py-0.5 rounded text-[11px] border border-[#0077B6]/20">
+                  {stats?.documents?.total_certificates_issued || 0} Docs
                 </span>
               </div>
             </div>

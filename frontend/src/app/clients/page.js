@@ -198,7 +198,7 @@ export default function ClientsPage() {
 
             <Link
               href="/projects"
-              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#4689C8] to-[#5FC8D6] hover:opacity-90 rounded-lg shadow-xs transition"
+              className="btn btn-sm inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-[#0077B6] hover:bg-[#005f92] rounded shadow-xs transition"
             >
               <FolderKanban className="w-3.5 h-3.5" />
               <span>Client Projects</span>
