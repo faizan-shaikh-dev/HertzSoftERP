@@ -351,22 +351,22 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
       />
 
       <div 
-        className="relative w-full max-w-3xl bg-white rounded-xl shadow-2xl border border-[#DFEAF2] overflow-hidden my-4 sm:my-8 animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] flex flex-col"
+        className="relative w-full max-w-3xl bg-white dark:bg-[#1E293B] rounded-xl shadow-2xl border border-[#DFEAF2] dark:border-[#334155] overflow-hidden my-4 sm:my-8 animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-labelledby="lead-modal-title"
       >
         {/* Modal Header (Hertzsoft Branded) */}
-        <div className="px-6 pt-5 pb-4 flex items-center justify-between bg-white flex-shrink-0 border-b border-[#DFEAF2]">
+        <div className="px-6 pt-5 pb-4 flex items-center justify-between bg-white dark:bg-[#1E293B] flex-shrink-0 border-b border-[#DFEAF2] dark:border-[#334155]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#4689C8] to-[#5FC8D6] text-white flex items-center justify-center shadow-sm shadow-[#4689C8]/25 flex-shrink-0">
               <Briefcase className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 id="lead-modal-title" className="text-lg sm:text-xl font-bold text-[#19324D] tracking-tight m-0">
+              <h2 id="lead-modal-title" className="text-lg sm:text-xl font-bold text-[#19324D] dark:text-[#F8FAFC] tracking-tight m-0">
                 {isEdit ? 'Edit Lead Record' : 'Register New Lead'}
               </h2>
-              <p className="text-xs text-[#71869B] mt-0.5">
+              <p className="text-xs text-[#71869B] dark:text-[#94A3B8] mt-0.5">
                 Client inquiry, service & scope, and team assignment.
               </p>
             </div>
@@ -374,7 +374,7 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
 
           <button
             onClick={onClose}
-            className="text-[#71869B] hover:text-[#19324D] transition cursor-pointer p-1 rounded-full hover:bg-[#EAF3FB]"
+            className="text-[#71869B] dark:text-[#94A3B8] hover:text-[#19324D] dark:hover:text-[#F8FAFC] transition cursor-pointer p-1 rounded-full hover:bg-[#EAF3FB] dark:hover:bg-[#334155]"
             aria-label="Close modal"
           >
             <X className="w-6 h-6" />
@@ -724,12 +724,12 @@ export default function LeadModal({ isOpen, onClose, lead = null, onSuccess }) {
           </div>
 
           {/* Modal Footer Actions */}
-          <div className="pt-4 border-t border-[#DFEAF2] flex items-center justify-end gap-3 mt-4">
+          <div className="pt-4 border-t border-[#DFEAF2] dark:border-[#334155] flex items-center justify-end gap-3 mt-4">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-5 py-2.5 bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] text-[#71869B] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
+              className="px-5 py-2.5 bg-white dark:bg-[#1E293B] hover:bg-[#EAF3FB] dark:hover:bg-[#253349] border border-[#DFEAF2] dark:border-[#334155] text-[#71869B] dark:text-[#CBD5E1] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
             >
               Cancel
             </button>

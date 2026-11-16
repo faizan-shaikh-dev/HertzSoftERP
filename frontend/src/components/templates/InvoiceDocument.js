@@ -40,7 +40,7 @@ export default function InvoiceDocument({ quotation, printable = false }) {
   const invoiceNumber = quotation.invoice_number || quotation.quotation_number?.replace('HE', 'HIN') || 'HIN26001';
 
   return (
-    <div className={`w-full max-w-4xl mx-auto bg-white text-[#1e293b] font-sans ${printable ? 'p-0 shadow-none' : 'p-6 sm:p-10 shadow-lg rounded-xl border border-slate-200'}`}>
+    <div className={`printable-document w-full max-w-4xl mx-auto bg-white text-[#1e293b] font-sans ${printable ? 'p-0 shadow-none' : 'p-6 sm:p-10 shadow-lg rounded-xl border border-slate-200'}`}>
       
       {/* 1. Header Row */}
       <div className="flex items-start justify-between border-b border-slate-200 pb-4 mb-4">

@@ -109,16 +109,16 @@ export default function EditProfileModal({ isOpen, onClose }) {
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-lg bg-white rounded-lg shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-lg bg-white dark:bg-[#1E293B] rounded-lg shadow-2xl border border-[#DFEAF2] dark:border-[#334155] overflow-hidden my-auto animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header - OJT Style */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#DFEAF2] bg-white">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#DFEAF2] dark:border-[#334155] bg-white dark:bg-[#1E293B]">
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#19324D] dark:text-[#F8FAFC] tracking-tight">
               Edit Profile
             </h3>
-            <p className="text-xs text-[#71869B] mt-0.5">
+            <p className="text-xs text-[#71869B] dark:text-[#94A3B8] mt-0.5">
               Update your display name, contact email, and credentials
             </p>
           </div>
@@ -126,7 +126,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
           <button
             onClick={onClose}
             type="button"
-            className="text-[#19324D] hover:text-[#71869B] transition cursor-pointer p-0.5 rounded-full"
+            className="text-[#19324D] dark:text-[#F8FAFC] hover:text-[#71869B] dark:hover:text-[#94A3B8] transition cursor-pointer p-0.5 rounded-full"
             aria-label="Close modal"
           >
             <XCircle className="w-7 h-7 stroke-[1.5]" />
@@ -134,7 +134,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
         </div>
 
         {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4 bg-white">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 bg-white dark:bg-[#1E293B]">
           {/* Success Banner */}
           {success && (
             <div className="p-3.5 rounded-md bg-[#eafaf1] border border-[#20A36B]/30 flex items-center gap-2.5 text-[#20A36B] text-xs font-semibold">

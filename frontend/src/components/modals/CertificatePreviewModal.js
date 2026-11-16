@@ -52,7 +52,7 @@ export default function CertificatePreviewModal({ isOpen, onClose, certificate =
         aria-hidden="true"
       />
 
-      <div className="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden my-auto h-[92vh] flex flex-col">
+      <div className="relative w-full max-w-4xl bg-white dark:bg-[#0F172A] rounded-xl shadow-2xl border border-slate-200 dark:border-[#334155] overflow-hidden my-auto h-[92vh] flex flex-col">
         {/* Top Control Bar */}
         <div className="px-6 py-4 bg-gradient-to-r from-[#3475B2] via-[#4689C8] to-[#5FC8D6] border-b-2 border-[#5FC8D6]/40 text-white flex items-center justify-between shrink-0 shadow-md">
           <div className="flex items-center gap-3 min-w-0">

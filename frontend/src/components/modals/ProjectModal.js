@@ -171,16 +171,16 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-xl bg-white rounded-lg shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-xl bg-white dark:bg-[#1E293B] rounded-lg shadow-2xl border border-[#DFEAF2] dark:border-[#334155] overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header - OJT Style */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#DFEAF2] bg-white">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#DFEAF2] dark:border-[#334155] bg-white dark:bg-[#1E293B]">
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#19324D] dark:text-[#F8FAFC] tracking-tight">
               {isEdit ? 'Edit Client Project' : 'Create Project'}
             </h3>
-            <p className="text-xs text-[#71869B] mt-0.5">
+            <p className="text-xs text-[#71869B] dark:text-[#94A3B8] mt-0.5">
               {isEdit ? `Modifying project contract #${project.id}` : 'Record a new contract with milestones & payment terms'}
             </p>
           </div>
@@ -364,12 +364,12 @@ export default function ProjectModal({ isOpen, onClose, project = null, onSucces
           </div>
 
           {/* Modal Footer Actions */}
-          <div className="pt-4 border-t border-[#DFEAF2] flex items-center justify-end gap-3 mt-4">
+          <div className="pt-4 border-t border-[#DFEAF2] dark:border-[#334155] flex items-center justify-end gap-3 mt-4">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-5 py-2.5 bg-white hover:bg-[#EAF3FB] border border-[#DFEAF2] text-[#71869B] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
+              className="px-5 py-2.5 bg-white dark:bg-[#1E293B] hover:bg-[#EAF3FB] dark:hover:bg-[#253349] border border-[#DFEAF2] dark:border-[#334155] text-[#71869B] dark:text-[#CBD5E1] font-semibold text-xs sm:text-sm rounded shadow-2xs transition cursor-pointer"
             >
               Cancel
             </button>

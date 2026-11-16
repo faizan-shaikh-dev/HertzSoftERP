@@ -208,23 +208,23 @@ export default function FollowUpModal({
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-2xl bg-white rounded-lg shadow-2xl border border-[#DFEAF2] overflow-hidden flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-2xl bg-white dark:bg-[#1E293B] rounded-lg shadow-2xl border border-[#DFEAF2] dark:border-[#334155] overflow-hidden flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header - OJT Style */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#DFEAF2] bg-white">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#DFEAF2] dark:border-[#334155] bg-white dark:bg-[#1E293B]">
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#19324D] dark:text-[#F8FAFC] tracking-tight">
               Follow-up & Interaction
             </h3>
-            <p className="text-xs text-[#71869B] mt-0.5">
+            <p className="text-xs text-[#71869B] dark:text-[#94A3B8] mt-0.5">
               {lead.lead_number ? `#${lead.lead_number} • ` : ''}{lead.name} {lead.company_name ? `(${lead.company_name})` : ''}
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-[#19324D] hover:text-[#71869B] transition cursor-pointer p-0.5 rounded-full"
+            className="text-[#19324D] dark:text-[#F8FAFC] hover:text-[#71869B] dark:hover:text-[#94A3B8] transition cursor-pointer p-0.5 rounded-full"
             aria-label="Close dialog"
           >
             <XCircle className="w-7 h-7 stroke-[1.5]" />
@@ -232,14 +232,14 @@ export default function FollowUpModal({
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex border-b border-[#DFEAF2] bg-[#F4F8FC] px-6 pt-2">
+        <div className="flex border-b border-[#DFEAF2] dark:border-[#334155] bg-[#F4F8FC] dark:bg-[#0F172A] px-6 pt-2">
           <button
             type="button"
             onClick={() => setActiveTab('log')}
             className={`pb-2.5 px-4 text-xs font-bold transition border-b-2 cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'log'
-                ? 'border-[#4689C8] text-[#4689C8]'
-                : 'border-transparent text-[#71869B] hover:text-[#71869B]'
+                ? 'border-[#4689C8] text-[#4689C8] dark:text-[#5FC8D6] dark:border-[#5FC8D6]'
+                : 'border-transparent text-[#71869B] dark:text-[#94A3B8] hover:text-[#19324D] dark:hover:text-[#F8FAFC]'
             }`}
           >
             <Plus className="w-3.5 h-3.5" />
@@ -251,20 +251,20 @@ export default function FollowUpModal({
             onClick={() => setActiveTab('history')}
             className={`pb-2.5 px-4 text-xs font-bold transition border-b-2 cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'history'
-                ? 'border-[#4689C8] text-[#4689C8]'
-                : 'border-transparent text-[#71869B] hover:text-[#71869B]'
+                ? 'border-[#4689C8] text-[#4689C8] dark:text-[#5FC8D6] dark:border-[#5FC8D6]'
+                : 'border-transparent text-[#71869B] dark:text-[#94A3B8] hover:text-[#19324D] dark:hover:text-[#F8FAFC]'
             }`}
           >
             <Clock className="w-3.5 h-3.5" />
             <span>Activity History</span>
-            <span className="ml-1 px-1.5 py-0.2 bg-[#DFEAF2] text-[#71869B] rounded-full text-[10px] font-bold">
+            <span className="ml-1 px-1.5 py-0.2 bg-[#DFEAF2] dark:bg-[#334155] text-[#71869B] dark:text-[#F8FAFC] rounded-full text-[10px] font-bold">
               {history.length}
             </span>
           </button>
         </div>
 
         {/* Tab Body */}
-        <div className="p-6 overflow-y-auto flex-1 bg-white">
+        <div className="p-6 overflow-y-auto flex-1 bg-white dark:bg-[#1E293B]">
           {error && (
             <div className="mb-4 p-3 rounded-md bg-[#FDF2F2] border border-[#F5365C]/30 text-xs text-[#F5365C] flex items-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />

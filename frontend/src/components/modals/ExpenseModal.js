@@ -118,18 +118,18 @@ export default function ExpenseModal({ isOpen, onClose, onSave, expense = null }
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs">
       <div className="fixed inset-0 -z-10" onClick={onClose} aria-hidden="true" />
 
-      <div className="relative w-full max-w-xl bg-white rounded-xl shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto max-h-[92vh] flex flex-col">
+      <div className="relative w-full max-w-xl bg-white dark:bg-[#1E293B] rounded-xl shadow-2xl border border-[#DFEAF2] dark:border-[#334155] overflow-hidden my-auto max-h-[92vh] flex flex-col">
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-[#DFEAF2] bg-white">
+        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-[#DFEAF2] dark:border-[#334155] bg-white dark:bg-[#1E293B]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#4689C8] to-[#5FC8D6] flex items-center justify-center text-white shadow-sm">
               <Wallet className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-[#19324D] tracking-tight">
+              <h3 className="text-xl font-bold text-[#19324D] dark:text-[#F8FAFC] tracking-tight">
                 {expense ? 'Edit Operational Expense' : 'Record Internal Expense'}
               </h3>
-              <p className="text-xs text-[#71869B] mt-0.5">
+              <p className="text-xs text-[#71869B] dark:text-[#94A3B8] mt-0.5">
                 Internal company reporting &amp; cashflow cost management
               </p>
             </div>
@@ -138,7 +138,7 @@ export default function ExpenseModal({ isOpen, onClose, onSave, expense = null }
           <button
             onClick={onClose}
             type="button"
-            className="text-[#adb5bd] hover:text-[#71869B] transition cursor-pointer p-0.5 rounded-full"
+            className="text-[#adb5bd] dark:text-[#94A3B8] hover:text-[#71869B] dark:hover:text-[#F8FAFC] transition cursor-pointer p-0.5 rounded-full"
             aria-label="Close dialog"
           >
             <XCircle className="w-6 h-6 stroke-[1.5]" />
@@ -146,7 +146,7 @@ export default function ExpenseModal({ isOpen, onClose, onSave, expense = null }
         </div>
 
         {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1 bg-white">
+        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1 bg-white dark:bg-[#1E293B]">
           {error && (
             <div className="p-3 rounded-md bg-[#FDF2F2] border border-[#F5365C]/30 text-xs text-[#F5365C]">
               {error}
@@ -282,11 +282,11 @@ export default function ExpenseModal({ isOpen, onClose, onSave, expense = null }
           </div>
 
           {/* Dual-Button Modal Footer */}
-          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#DFEAF2]">
+          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#DFEAF2] dark:border-[#334155]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded border border-[#DFEAF2] text-[#71869B] hover:bg-[#EAF3FB] font-semibold text-xs tracking-wide transition cursor-pointer"
+              className="px-4 py-2.5 rounded border border-[#DFEAF2] dark:border-[#334155] bg-white dark:bg-[#1E293B] text-[#71869B] dark:text-[#CBD5E1] hover:bg-[#EAF3FB] dark:hover:bg-[#253349] font-semibold text-xs tracking-wide transition cursor-pointer"
             >
               Cancel
             </button>

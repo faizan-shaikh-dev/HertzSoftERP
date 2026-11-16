@@ -27,7 +27,7 @@ export default function ConfirmDeleteModal({
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-md bg-white rounded-lg shadow-2xl border border-[#DFEAF2] overflow-hidden my-auto p-6 sm:p-8 text-center"
+        className="relative w-full max-w-md bg-white dark:bg-[#1E293B] rounded-lg shadow-2xl border border-[#DFEAF2] dark:border-[#334155] overflow-hidden my-auto p-6 sm:p-8 text-center"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -35,19 +35,19 @@ export default function ConfirmDeleteModal({
           onClick={onClose}
           disabled={loading}
           type="button"
-          className="absolute top-4 right-4 text-[#19324D] hover:text-[#71869B] transition cursor-pointer p-0.5 rounded-full"
+          className="absolute top-4 right-4 text-[#19324D] dark:text-[#F8FAFC] hover:text-[#71869B] dark:hover:text-[#94A3B8] transition cursor-pointer p-0.5 rounded-full"
           aria-label="Close dialog"
         >
           <XCircle className="w-6 h-6 stroke-[1.5]" />
         </button>
 
         {/* Warning Icon Badge */}
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#FDF2F2] text-[#F5365C] flex items-center justify-center shadow-xs">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#FDF2F2] dark:bg-red-950/40 text-[#F5365C] dark:text-red-400 flex items-center justify-center shadow-xs">
           <Trash2 className="w-7 h-7" />
         </div>
 
         {/* Title & Message */}
-        <h3 className="text-xl font-bold text-[#19324D] tracking-tight">
+        <h3 className="text-xl font-bold text-[#19324D] dark:text-[#F8FAFC] tracking-tight">
           {title}
         </h3>
         
@@ -57,7 +57,7 @@ export default function ConfirmDeleteModal({
           </p>
         )}
 
-        <p className="mt-2 text-xs sm:text-sm text-[#71869B] leading-relaxed max-w-sm mx-auto">
+        <p className="mt-2 text-xs sm:text-sm text-[#71869B] dark:text-[#94A3B8] leading-relaxed max-w-sm mx-auto">
           {message}
         </p>
 
@@ -67,7 +67,7 @@ export default function ConfirmDeleteModal({
             type="button"
             onClick={onClose}
             disabled={loading}
-            className="w-full sm:w-auto px-5 py-2.5 rounded border border-[#DFEAF2] text-xs font-semibold text-[#71869B] hover:bg-[#F4F8FC] transition cursor-pointer"
+            className="w-full sm:w-auto px-5 py-2.5 rounded border border-[#DFEAF2] dark:border-[#334155] bg-white dark:bg-[#1E293B] text-xs font-semibold text-[#71869B] dark:text-[#CBD5E1] hover:bg-[#F4F8FC] dark:hover:bg-[#253349] transition cursor-pointer"
           >
             Cancel
           </button>

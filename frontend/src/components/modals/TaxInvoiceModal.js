@@ -24,9 +24,9 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto bg-slate-900/60 backdrop-blur-xs">
       <div className="fixed inset-0 -z-10" onClick={onClose} aria-hidden="true" />
 
-      <div className="relative w-full max-w-4xl bg-slate-100 rounded-xl shadow-2xl border border-slate-200 overflow-hidden my-auto max-h-[95vh] flex flex-col">
+      <div className="relative w-full max-w-4xl bg-slate-100 dark:bg-[#0F172A] rounded-xl shadow-2xl border border-slate-200 dark:border-[#334155] overflow-hidden my-auto max-h-[95vh] flex flex-col">
         {/* Top Control Bar */}
-        <div className="px-6 py-3.5 bg-[#0077B6] text-white flex items-center justify-between shrink-0 shadow-sm print:hidden">
+        <div className="px-6 py-3.5 bg-[#0077B6] dark:bg-[#0F172A] dark:border-b dark:border-[#334155] text-white flex items-center justify-between shrink-0 shadow-sm print:hidden">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-white/15 text-white border border-white/25 flex items-center justify-center">
               <FileText className="w-5 h-5" />
@@ -40,7 +40,7 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation }) {
                   Tax Invoice
                 </span>
               </div>
-              <p className="text-[11px] text-blue-100 mt-0.5">
+              <p className="text-[11px] text-blue-100 dark:text-[#94A3B8] mt-0.5">
                 Official Commercial GST Tax Invoice Preview
               </p>
             </div>
@@ -50,7 +50,7 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation }) {
             <button
               onClick={handlePrint}
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-[#0077B6] bg-white hover:bg-slate-50 rounded-md shadow-xs transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-[#0077B6] dark:text-[#5FC8D6] bg-white dark:bg-[#1E293B] hover:bg-slate-50 dark:hover:bg-[#253349] dark:border dark:border-[#334155] rounded-md shadow-xs transition cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print / Save as PDF</span>
@@ -68,7 +68,7 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation }) {
         </div>
 
         {/* Modal Body: 1:1 InvoiceDocument */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 bg-slate-100 print:p-0 print:bg-white">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 bg-slate-100 dark:bg-[#0B132B] print:p-0 print:bg-white">
           <InvoiceDocument quotation={quotation} />
         </div>
       </div>

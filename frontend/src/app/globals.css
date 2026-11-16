@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   /* Primary Brand Colors */
   --primary: #4689C8;
@@ -26,6 +28,23 @@
   --shadow-sm: 0 2px 6px rgba(70, 137, 200, 0.08);
   --shadow-md: 0 4px 12px rgba(70, 137, 200, 0.12);
   --shadow-lg: 0 8px 24px rgba(70, 137, 200, 0.15);
+}
+
+.dark {
+  /* Dark Mode Palette - Corporate Slate / Navy */
+  --background: #0B132B;
+  --surface: #1E293B;
+  --border: #334155;
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+
+  --primary-soft: #1E293B;
+  --secondary-soft: #162C3D;
+
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
 @theme inline {
@@ -84,6 +103,22 @@ tbody.table-striped-rows > tr:hover {
   transition: background-color 0.15s ease-in-out;
 }
 
+/* Dark Mode Table Alternating Zebra Rows */
+.dark .table-striped > tbody > tr:nth-of-type(odd),
+.dark tbody.table-striped-rows > tr:nth-of-type(odd) {
+  background-color: #162032;
+}
+
+.dark .table-striped > tbody > tr:nth-of-type(even),
+.dark tbody.table-striped-rows > tr:nth-of-type(even) {
+  background-color: #1E293B;
+}
+
+.dark .table-hover > tbody > tr:hover,
+.dark tbody.table-striped-rows > tr:hover {
+  background-color: #253349 !important;
+}
+
 /* Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
@@ -98,6 +133,160 @@ tbody.table-striped-rows > tr:hover {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #78A9D7;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0B132B;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Printable Documents Safety (always retain white paper and black ink) */
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+  }
+}
+.printable-document,
+.printable-document * {
+  background-color: #FFFFFF !important;
+  color: #19324D !important;
+}
+
+/* ==========================================================================
+   Dark Mode Global Overrides for Consistent ERP Experience
+   ========================================================================== */
+.dark {
+  color-scheme: dark;
+}
+
+/* Global Dark Inputs, Selects, and Textareas */
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not(.keep-white),
+.dark select:not(.keep-white),
+.dark textarea:not(.keep-white) {
+  background-color: #0F172A !important;
+  border-color: #334155 !important;
+  color: #F8FAFC !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748B !important;
+}
+
+.dark select option {
+  background-color: #0F172A !important;
+  color: #F8FAFC !important;
+}
+
+/* Form input addon icons and prefixes */
+.dark .input-prefix,
+.dark .input-group-addon {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #94A3B8 !important;
+}
+
+/* Dark Mode Surface and Text Class Overrides */
+.dark .bg-white:not(.keep-white):not(.printable-document):not(.printable-document *) {
+  background-color: #1E293B;
+}
+
+.dark .border-\[\#DFEAF2\] {
+  border-color: #334155;
+}
+
+.dark .border-slate-200,
+.dark .border-slate-300 {
+  border-color: #334155;
+}
+
+.dark .text-\[\#19324D\] {
+  color: #F8FAFC;
+}
+
+.dark .text-\[\#71869B\] {
+  color: #94A3B8;
+}
+
+.dark .text-slate-700,
+.dark .text-slate-800,
+.dark .text-slate-900 {
+  color: #F8FAFC;
+}
+
+.dark .text-slate-600 {
+  color: #CBD5E1;
+}
+
+.dark .text-slate-500 {
+  color: #94A3B8;
+}
+
+.dark .bg-\[\#F4F8FC\] {
+  background-color: #0B132B;
+}
+
+.dark .bg-\[\#F8FAFD\],
+.dark .bg-\[\#F8FAFC\],
+.dark .bg-slate-50 {
+  background-color: #0F172A;
+}
+
+.dark .bg-slate-100 {
+  background-color: #1E293B;
+}
+
+.dark .divide-\[\#DFEAF2\] > :not([hidden]) ~ :not([hidden]) {
+  border-color: #334155;
+}
+
+.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #334155;
+}
+
+/* Soft brand badges in dark mode */
+.dark .bg-\[\#EAF3FB\] {
+  background-color: #162C3D;
+  color: #5FC8D6;
+}
+
+.dark .bg-emerald-50,
+.dark .bg-\[\#EAF8F1\] {
+  background-color: rgba(32, 163, 107, 0.18) !important;
+}
+
+.dark .bg-purple-50 {
+  background-color: rgba(137, 101, 224, 0.18) !important;
+}
+
+.dark .bg-amber-50,
+.dark .bg-yellow-50 {
+  background-color: rgba(245, 158, 11, 0.18) !important;
+}
+
+.dark .bg-red-50,
+.dark .bg-\[\#FDF2F2\] {
+  background-color: rgba(245, 54, 92, 0.18) !important;
+}
+
+.dark .bg-blue-50,
+.dark .bg-\[\#E8F8FA\] {
+  background-color: rgba(95, 200, 214, 0.18) !important;
+}
+
+.dark .border-\[\#0077B6\]\/20,
+.dark .border-\[\#4689C8\]\/20 {
+  border-color: rgba(95, 200, 214, 0.3);
+}
+
+.dark .border-\[\#78A9D7\]\/30 {
+  border-color: rgba(95, 200, 214, 0.25);
 }
 
 /* Scrollbar hiding utilities (keeps mouse/touch scrolling fully functional while hiding bar) */
