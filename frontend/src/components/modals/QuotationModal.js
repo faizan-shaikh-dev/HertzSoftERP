@@ -27,19 +27,13 @@ import {
 const DEFAULT_TERMS = `Estimate valid for 15 days. Third party fees (hosting, domain, app store accounts, SMS / WhatsApp / email credits, paid APIs and gateway transaction fees) are extra. Client to provide content, branding and access credentials. Additional features / scope changes will be quoted separately. Includes 30 day defect fix warranty after handover; ongoing maintenance is excluded. GST invoicing will follow applicable law. This estimate is not a tax invoice or receipt.`;
 
 const DEFAULT_SCOPE_MODULES = [
-  { module: 'User App', deliverables: 'Login / registration, profile, dashboard, browse services / products, search and basic filters.' },
-  { module: 'Payment Gateway', deliverables: 'Booking / order request flow, history, one payment gateway integration, push notifications and contact form' },
-  { module: 'Admin Panel', deliverables: 'Admin login, user and listing management, booking / order status, basic reports, database and APIs' },
-  { module: 'Testing & Deployment', deliverables: 'Testing, bug fixing, production build and deployment assistance.' }
+  { module: 'Core Application & Interface', deliverables: 'Responsive user interface, core functional workflows, user authentication & dashboard.' },
+  { module: 'Backend & Database Architecture', deliverables: 'Secure database setup, REST APIs, business logic execution & notification workflows.' },
+  { module: 'Admin Dashboard & Control', deliverables: 'Role-based access, management dashboards, reporting & data exports.' },
+  { module: 'Testing & Cloud Deployment', deliverables: 'Quality assurance testing, bug fixing, cloud server configuration & deployment.' }
 ];
 
-const DEFAULT_THIRD_PARTY_COSTS = [
-  { service: 'Domain Registration', billing_basis: 'Yearly', amount: '2000' },
-  { service: 'Shared Hosting', billing_basis: 'Yearly', amount: '1500' },
-  { service: 'SMS Gateway', billing_basis: 'Usage based', amount: 'As per Provider' },
-  { service: 'Google Map API', billing_basis: 'Usage based', amount: 'As per hit' },
-  { service: 'Admin Panel Management', billing_basis: 'Monthly', amount: '5000' }
-];
+const DEFAULT_THIRD_PARTY_COSTS = [];
 
 const DEFAULT_PAYMENT_MILESTONES = [
   { percent: 40, condition: 'on confirmation & kick off' },
@@ -47,13 +41,13 @@ const DEFAULT_PAYMENT_MILESTONES = [
   { percent: 20, condition: 'before final handover' }
 ];
 
-const DEFAULT_ITEMS = [
-  { description: 'Flutter Application Development Hybrid', quantity: 1, rate: '150000', discount_percent: 0, tax_percent: 0 },
-  { description: 'Admin Panel', quantity: 1, rate: '40000', discount_percent: 0, tax_percent: 0 },
-  { description: 'Static Website', quantity: 1, rate: '15000', discount_percent: 0, tax_percent: 0 },
-  { description: 'Testing & Deployment', quantity: 1, rate: '15000', discount_percent: 0, tax_percent: 0 },
-  { description: 'Handover', quantity: 1, rate: '10000', discount_percent: 0, tax_percent: 0 }
-];
+const DEFAULT_EMPTY_ITEM = {
+  description: '',
+  quantity: 1,
+  rate: '',
+  discount_percent: 0,
+  tax_percent: 0
+};
 
 export default function QuotationModal({
   isOpen,
@@ -74,8 +68,8 @@ export default function QuotationModal({
   const [clientId, setClientId] = useState('');
   const [projectId, setProjectId] = useState('');
   const [title, setTitle] = useState('');
-  const [projectType, setProjectType] = useState('Mobile Application');
-  const [timeline, setTimeline] = useState('45 Days');
+  const [projectType, setProjectType] = useState('');
+  const [timeline, setTimeline] = useState('');
   const [quotationDate, setQuotationDate] = useState(new Date().toISOString().slice(0, 10));
   const [validUntil, setValidUntil] = useState('');
 
@@ -83,9 +77,9 @@ export default function QuotationModal({
   const [scopeModules, setScopeModules] = useState(DEFAULT_SCOPE_MODULES);
 
   // Tab 3: Cost & Discount
-  const [items, setItems] = useState(DEFAULT_ITEMS);
+  const [items, setItems] = useState([DEFAULT_EMPTY_ITEM]);
   const [discountType, setDiscountType] = useState('flat'); // 'flat' | 'percent'
-  const [flatDiscount, setFlatDiscount] = useState('30000');
+  const [flatDiscount, setFlatDiscount] = useState('0');
   const [discountRate, setDiscountRate] = useState(0);
   const [taxRate, setTaxRate] = useState(0);
 
@@ -197,7 +191,7 @@ export default function QuotationModal({
           }))
         );
       } else {
-        setItems(DEFAULT_ITEMS);
+        setItems([DEFAULT_EMPTY_ITEM]);
       }
     } else {
       // Create mode default values
@@ -207,23 +201,66 @@ export default function QuotationModal({
 
       setClientId('');
       setProjectId('');
-      setTitle('Maths4All Mobile Application');
-      setProjectType('Mobile Application');
-      setTimeline('45 Days');
+      setTitle('');
+      setProjectType('');
+      setTimeline('');
       setQuotationDate(today.toISOString().slice(0, 10));
       setValidUntil(fifteenDays.toISOString().slice(0, 10));
       setDiscountType('flat');
-      setFlatDiscount('30000');
+      setFlatDiscount('0');
       setDiscountRate(0);
       setTaxRate(0);
       setTerms(DEFAULT_TERMS);
       setNotes('');
       setScopeModules(DEFAULT_SCOPE_MODULES);
-      setThirdPartyCosts(DEFAULT_THIRD_PARTY_COSTS);
+      setThirdPartyCosts([]);
       setPaymentMilestones(DEFAULT_PAYMENT_MILESTONES);
-      setItems(DEFAULT_ITEMS);
+      setItems([DEFAULT_EMPTY_ITEM]);
     }
   }, [isOpen, quotation, mode]);
+
+  // Project & Client selection handlers
+  const handleClientChange = (selectedClientId) => {
+    setClientId(selectedClientId);
+    if (projectId) {
+      const proj = projects.find((p) => String(p.id) === String(projectId));
+      if (proj && String(proj.client_id) !== String(selectedClientId)) {
+        setProjectId('');
+      }
+    }
+  };
+
+  const handleProjectChange = (selectedProjId) => {
+    setProjectId(selectedProjId);
+    if (!selectedProjId) return;
+
+    const proj = projects.find((p) => String(p.id) === String(selectedProjId));
+    if (proj) {
+      setTitle(proj.title || '');
+      if (proj.client_id) {
+        setClientId(String(proj.client_id));
+      }
+      if (proj.project_type) {
+        setProjectType(proj.project_type);
+      }
+      if (proj.total_cost && items.length === 1 && !items[0]?.description && !items[0]?.rate) {
+        setItems([
+          {
+            description: `${proj.title} - Scope & Development`,
+            quantity: 1,
+            rate: String(proj.total_cost),
+            discount_percent: 0,
+            tax_percent: 0
+          }
+        ]);
+      }
+    }
+  };
+
+  const availableProjects = useMemo(() => {
+    if (!clientId) return projects;
+    return projects.filter((p) => String(p.client_id) === String(clientId));
+  }, [projects, clientId]);
 
   // Line item handlers
   const handleAddItem = () => {
@@ -567,7 +604,7 @@ export default function QuotationModal({
                     <select
                       required
                       value={clientId}
-                      onChange={(e) => setClientId(e.target.value)}
+                      onChange={(e) => handleClientChange(e.target.value)}
                       className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-lg border border-slate-300 focus:border-[#0077B6] focus:ring-2 focus:ring-[#0077B6]/20 outline-none cursor-pointer"
                     >
                       <option value="">-- Select Client --</option>
@@ -588,11 +625,11 @@ export default function QuotationModal({
                   </label>
                   <select
                     value={projectId}
-                    onChange={(e) => setProjectId(e.target.value)}
+                    onChange={(e) => handleProjectChange(e.target.value)}
                     className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-lg border border-slate-300 focus:border-[#0077B6] focus:ring-2 focus:ring-[#0077B6]/20 outline-none cursor-pointer"
                   >
                     <option value="">-- No linked project / New Proposal --</option>
-                    {projects.map((p) => (
+                    {availableProjects.map((p) => (
                       <option key={p.id} value={p.id}>
                         {p.title} ({p.client_company || p.client_name})
                       </option>
@@ -612,7 +649,7 @@ export default function QuotationModal({
                     required
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="e.g. Maths4All Mobile Application"
+                    placeholder="e.g. Enterprise ERP & Mobile Application"
                     className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-lg border border-slate-300 focus:border-[#0077B6] outline-none"
                   />
                 </div>
@@ -625,7 +662,7 @@ export default function QuotationModal({
                     type="text"
                     value={projectType}
                     onChange={(e) => setProjectType(e.target.value)}
-                    placeholder="e.g. Mobile Application / ERP"
+                    placeholder="e.g. Web Application / Mobile App / ERP"
                     className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-lg border border-slate-300 focus:border-[#0077B6] outline-none"
                   />
                 </div>

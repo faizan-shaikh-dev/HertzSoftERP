@@ -256,10 +256,16 @@ tbody.table-striped-rows > tr:hover {
     color: #000000 !important;
   }
 }
-.printable-document,
-.printable-document * {
+.printable-document {
   background-color: #FFFFFF !important;
-  color: #19324D !important;
+  color: #19324D;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.dark .printable-document {
+  background-color: #FFFFFF !important;
+  color: #19324D;
 }
 
 /* ==========================================================================

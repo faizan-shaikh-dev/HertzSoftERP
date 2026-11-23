@@ -6,19 +6,13 @@ import { numberToIndianWords } from '../utils/numberToWords.js';
 export const DEFAULT_TERMS = `Estimate valid for 15 days. Third party fees (hosting, domain, app store accounts, SMS / WhatsApp / email credits, paid APIs and gateway transaction fees) are extra. Client to provide content, branding and access credentials. Additional features / scope changes will be quoted separately. Includes 30 day defect fix warranty after handover; ongoing maintenance is excluded. GST invoicing will follow applicable law. This estimate is not a tax invoice or receipt.`;
 
 export const DEFAULT_SCOPE_MODULES = [
-  { module: 'User App', deliverables: 'Login / registration, profile, dashboard, browse services / products, search and basic filters.' },
-  { module: 'Payment Gateway', deliverables: 'Booking / order request flow, history, one payment gateway integration, push notifications and contact form' },
-  { module: 'Admin Panel', deliverables: 'Admin login, user and listing management, booking / order status, basic reports, database and APIs' },
-  { module: 'Testing & Deployment', deliverables: 'Testing, bug fixing, production build and deployment assistance.' }
+  { module: 'Core Application & Interface', deliverables: 'Responsive user interface, core functional workflows, user authentication & dashboard.' },
+  { module: 'Backend & Database Architecture', deliverables: 'Secure database setup, REST APIs, business logic execution & notification workflows.' },
+  { module: 'Admin Dashboard & Control', deliverables: 'Role-based access, management dashboards, reporting & data exports.' },
+  { module: 'Testing & Cloud Deployment', deliverables: 'Quality assurance testing, bug fixing, cloud server configuration & deployment.' }
 ];
 
-export const DEFAULT_THIRD_PARTY_COSTS = [
-  { service: 'Domain Registration', billing_basis: 'Yearly', amount: '2000' },
-  { service: 'Shared Hosting', billing_basis: 'Yearly', amount: '1500' },
-  { service: 'SMS Gateway', billing_basis: 'Usage based', amount: 'As per Provider' },
-  { service: 'Google Map API', billing_basis: 'Usage based', amount: 'As per hit' },
-  { service: 'Admin Panel Management', billing_basis: 'Monthly', amount: '5000' }
-];
+export const DEFAULT_THIRD_PARTY_COSTS = [];
 
 export const DEFAULT_PAYMENT_MILESTONES = [
   { percent: 40, condition: 'on confirmation & kick off' },

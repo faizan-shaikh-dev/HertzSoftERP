@@ -139,7 +139,7 @@ export default function ReceiptDocument({ payment, printable = false }) {
             </div>
             <div>
               <span className="text-slate-500">Project Name:</span>{' '}
-              <strong className="text-slate-800">{payment.project_title || 'Maths4All Application'}</strong>
+              <strong className="text-slate-800">{payment.project_title || 'Commercial Project'}</strong>
             </div>
           </div>
         </div>
@@ -172,7 +172,7 @@ export default function ReceiptDocument({ payment, printable = false }) {
             <tr className="divide-x divide-slate-200 bg-white">
               <td className="py-2.5 px-3 bg-slate-50/60 font-semibold text-slate-600">Transaction Details</td>
               <td className="py-2.5 px-3 font-mono font-medium text-slate-800">
-                {payment.transaction_reference ? `ID: ${payment.transaction_reference}` : 'ID: 687549021359'}
+                {payment.transaction_reference ? `ID: ${payment.transaction_reference}` : 'ID: N/A'}
               </td>
             </tr>
             <tr className="divide-x divide-slate-200 bg-white">

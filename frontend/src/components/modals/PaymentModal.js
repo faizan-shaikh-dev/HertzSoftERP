@@ -89,7 +89,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
         setPaymentDate(new Date().toISOString().slice(0, 10));
         setPaymentMethod(PAYMENT_METHODS[0]);
         setTransactionRef('');
-        setInvoiceNumber(projectData.invoice_number || 'HIN26001');
+        setInvoiceNumber(projectData.invoice_number || '');
         setPaymentStatus('Part Payment');
         setNotes('');
       } else {
@@ -98,7 +98,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
         setPaymentDate(new Date().toISOString().slice(0, 10));
         setPaymentMethod(PAYMENT_METHODS[0]);
         setTransactionRef('');
-        setInvoiceNumber('HIN26001');
+        setInvoiceNumber('');
         setPaymentStatus('Part Payment');
         setNotes('');
       }
@@ -122,10 +122,20 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
     const projId = e.target.value;
     setSelectedProjectId(projId);
     const chosen = projectsList.find((p) => String(p.id) === String(projId));
-    if (chosen && chosen.due_balance > 0) {
-      setAmount(String(chosen.due_balance));
+    if (chosen) {
+      if (chosen.due_balance > 0) {
+        setAmount(String(chosen.due_balance));
+      } else {
+        setAmount('');
+      }
+      if (chosen.invoice_number) {
+        setInvoiceNumber(chosen.invoice_number);
+      } else {
+        setInvoiceNumber('');
+      }
     } else {
       setAmount('');
+      setInvoiceNumber('');
     }
   };
 
@@ -317,7 +327,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
                 type="text"
                 value={invoiceNumber}
                 onChange={(e) => setInvoiceNumber(e.target.value)}
-                placeholder="e.g. HIN26001"
+                placeholder="e.g. HIN26001 (Optional)"
                 className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-md border border-slate-300 focus:border-[#0077B6] outline-none font-mono uppercase"
               />
             </div>
@@ -380,7 +390,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
               type="text"
               value={transactionRef}
               onChange={(e) => setTransactionRef(e.target.value)}
-              placeholder="e.g. 687549021359"
+              placeholder="e.g. UTR / IMPS / Transaction Reference No."
               className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm rounded-md border border-slate-300 focus:border-[#0077B6] outline-none font-mono uppercase"
             />
           </div>

@@ -131,7 +131,7 @@ export default function InvoiceDocument({ quotation, printable = false }) {
             </div>
             <div>
               <span className="text-slate-500">Project Name:</span>{' '}
-              <strong className="text-slate-800">{quotation.title || quotation.project_title || 'Maths4All Application'}</strong>
+              <strong className="text-slate-800">{quotation.title || quotation.project_title || 'Software Development Project'}</strong>
             </div>
             {quotation.client_company && (
               <div>
@@ -162,7 +162,7 @@ export default function InvoiceDocument({ quotation, printable = false }) {
         </div>
         <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 text-[11px] uppercase tracking-wide">
+            <tr className="bg-[#0077B6] text-white font-bold text-[11px] uppercase tracking-wide">
               <th className="py-2 px-3 text-center w-14">SR. NO.</th>
               <th className="py-2 px-3">DESCRIPTION</th>
               <th className="py-2 px-3 text-center w-20">QTY</th>
