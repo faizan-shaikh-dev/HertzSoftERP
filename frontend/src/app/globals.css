@@ -127,12 +127,52 @@ main > div {
 }
 
 @media (max-width: 640px) {
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
   main {
     padding: 1rem !important;
   }
 
   main > div {
     gap: 1rem;
+  }
+
+  /* Let cards and filter bars shrink instead of pushing the page off-screen. */
+  main .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  main .flex {
+    min-width: 0;
+  }
+
+  main input,
+  main select,
+  main textarea {
+    min-width: 0;
+  }
+
+  main button,
+  main a[class*="btn"] {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  /* Keep wide data sets usable with a contained horizontal swipe. */
+  .table-responsive,
+  main .overflow-x-auto {
+    max-width: 100%;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Dialogs stay inside the viewport and keep their own scroll area. */
+  body > div [class*="max-w-"][class*="rounded"] {
+    max-height: calc(100dvh - 1rem);
   }
 
   table th,
