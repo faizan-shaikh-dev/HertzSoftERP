@@ -239,13 +239,12 @@ export default function ClientsPage() {
             {/* Search Box */}
             <div className="flex items-center gap-2">
               <div className="relative">
-                <Search className="w-3.5 h-3.5 text-[#71869B] absolute left-2.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search clients..."
-                  className="text-xs pl-8 pr-3 py-1.5 bg-white border border-[#DFEAF2] rounded-lg text-[#19324D] outline-none focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 w-64 sm:w-80 shadow-2xs placeholder-[#71869B]"
+                  className="text-xs px-3 py-1.5 bg-white border border-[#DFEAF2] rounded-lg text-[#19324D] outline-none focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 w-64 sm:w-80 shadow-2xs placeholder-[#71869B]"
                 />
                 {searchQuery && (
                   <button

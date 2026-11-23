@@ -34,8 +34,8 @@ export default function AppLayout({ children, title, allowedRoles, requiredRoles
           />
 
           {/* Dynamic Page Content */}
-          <main className="flex-1 p-4 sm:p-6 lg:p-8 flex flex-col justify-between">
-            <div className="max-w-7xl mx-auto w-full space-y-6">
+          <main className="flex-1 p-4 sm:p-5 lg:p-6 flex flex-col justify-between">
+            <div className="max-w-7xl mx-auto w-full space-y-5">
               {children}
             </div>
 

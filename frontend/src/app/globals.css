@@ -78,6 +78,70 @@ body {
   padding: 0;
 }
 
+/* Shared ERP controls: compact, calm, and consistent across page-local forms. */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+select,
+textarea {
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgba(70, 137, 200, 0.22);
+  outline-offset: 1px;
+}
+
+/* Keep dense lists readable without increasing their overall footprint. */
+table {
+  border-spacing: 0;
+}
+
+table th {
+  line-height: 1.35;
+  letter-spacing: 0.015em;
+}
+
+table td {
+  line-height: 1.45;
+  vertical-align: middle;
+}
+
+table th,
+table td {
+  overflow-wrap: anywhere;
+}
+
+/* Avoid nested page content forcing the viewport wider on phones. */
+main,
+main > div {
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  main {
+    padding: 1rem !important;
+  }
+
+  main > div {
+    gap: 1rem;
+  }
+
+  table th,
+  table td {
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+  }
+}
+
 /* Responsive Table Utility */
 .table-responsive {
   display: block;

@@ -384,7 +384,6 @@ export default function DashboardPage() {
               </div>
 
               <div className="relative w-full sm:w-64">
-                <Search className="w-3.5 h-3.5 text-[#71869B] absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder={`Search ${activeTab === 'leads' ? 'inquiries' : 'collections'}...`}
@@ -393,7 +392,7 @@ export default function DashboardPage() {
                     setTableSearch(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full pl-8 pr-3 py-1.5 text-xs bg-white text-[#19324D] placeholder-[#71869B] rounded-lg border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none"
+                  className="w-full px-3 py-1.5 text-xs bg-white text-[#19324D] placeholder-[#71869B] rounded-lg border border-[#DFEAF2] focus:border-[#4689C8] focus:ring-2 focus:ring-[#5FC8D6]/20 outline-none"
                 />
               </div>
             </div>

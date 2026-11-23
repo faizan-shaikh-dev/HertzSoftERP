@@ -419,9 +419,8 @@ export default function QuotationsPage() {
                         setCurrentPage(1);
                       }}
                       placeholder="Search quote #, title, client..."
-                      className="w-56 sm:w-64 pl-8 pr-7 py-1.5 text-xs bg-white border border-[#DFEAF2] rounded text-[#19324D] placeholder-[#71869B] focus:outline-none focus:border-[#4689C8] transition"
+                      className="w-56 sm:w-64 px-3 pr-7 py-1.5 text-xs bg-white border border-[#DFEAF2] rounded text-[#19324D] placeholder-[#71869B] focus:outline-none focus:border-[#4689C8] transition"
                     />
-                    <Search className="w-3.5 h-3.5 text-[#71869B] absolute left-2.5 top-1/2 -translate-y-1/2" />
                     {searchQuery && (
                       <button
                         onClick={() => {
