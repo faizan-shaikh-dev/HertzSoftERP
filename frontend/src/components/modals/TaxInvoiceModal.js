@@ -68,7 +68,7 @@ export default function TaxInvoiceModal({ isOpen, onClose, quotation }) {
         </div>
 
         {/* Modal Body: 1:1 InvoiceDocument */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 bg-slate-100 dark:bg-[#0B132B] print:p-0 print:bg-white">
+        <div className="p-4 sm:p-6 overflow-y-auto overflow-x-auto flex-1 bg-slate-100 dark:bg-[#0B132B] print:p-0 print:bg-white">
           <InvoiceDocument quotation={quotation} />
         </div>
       </div>

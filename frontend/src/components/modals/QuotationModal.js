@@ -222,37 +222,105 @@ export default function QuotationModal({
   // Project & Client selection handlers
   const handleClientChange = (selectedClientId) => {
     setClientId(selectedClientId);
+    if (!selectedClientId) {
+      setProjectId('');
+      return;
+    }
+
+    const clientObj = clients.find((c) => String(c.id) === String(selectedClientId));
+    const clientProjects = projects.filter((p) => String(p.client_id) === String(selectedClientId));
+
+    // If client has projects, automatically link the first project and fetch all details!
+    if (clientProjects.length === 1) {
+      handleProjectChange(clientProjects[0].id, clientProjects[0]);
+      return;
+    }
+
+    // If currently selected project doesn't belong to this client, clear it
     if (projectId) {
-      const proj = projects.find((p) => String(p.id) === String(projectId));
-      if (proj && String(proj.client_id) !== String(selectedClientId)) {
+      const currentProj = projects.find((p) => String(p.id) === String(projectId));
+      if (currentProj && String(currentProj.client_id) !== String(selectedClientId)) {
         setProjectId('');
+      }
+    }
+
+    // Auto-fetch title from client requirement or company if title is blank
+    if ((!title || title.trim() === '') && clientObj) {
+      if (clientObj.internal_notes) {
+        const match = clientObj.internal_notes.match(/(?:Requirement|Service|Project):\s*([^\n\r]+)/i);
+        if (match && match[1]) {
+          setTitle(match[1].trim());
+        }
+      }
+      if (!title && clientObj.company_name) {
+        setTitle(`${clientObj.company_name} Software & Web Portal`);
       }
     }
   };
 
-  const handleProjectChange = (selectedProjId) => {
+  const handleProjectChange = (selectedProjId, explicitProj = null) => {
     setProjectId(selectedProjId);
     if (!selectedProjId) return;
 
-    const proj = projects.find((p) => String(p.id) === String(selectedProjId));
+    const proj = explicitProj || projects.find((p) => String(p.id) === String(selectedProjId));
     if (proj) {
+      // 1. Auto-set Title
       setTitle(proj.title || '');
+
+      // 2. Auto-set Client
       if (proj.client_id) {
         setClientId(String(proj.client_id));
       }
+
+      // 3. Auto-populate Project Type
       if (proj.project_type) {
         setProjectType(proj.project_type);
+      } else if (proj.category) {
+        setProjectType(proj.category);
+      } else if (proj.title) {
+        const t = proj.title.toLowerCase();
+        if (t.includes('mobile') || t.includes('app')) {
+          setProjectType('Mobile Application');
+        } else if (t.includes('erp')) {
+          setProjectType('Enterprise ERP');
+        } else if (t.includes('web') || t.includes('portal') || t.includes('site')) {
+          setProjectType('Web Application & Portal');
+        } else {
+          setProjectType('Software Application');
+        }
       }
-      if (proj.total_cost && items.length === 1 && !items[0]?.description && !items[0]?.rate) {
-        setItems([
-          {
-            description: `${proj.title} - Scope & Development`,
-            quantity: 1,
-            rate: String(proj.total_cost),
-            discount_percent: 0,
-            tax_percent: 0
-          }
-        ]);
+
+      // 4. Auto-calculate Timeline
+      if (proj.start_date && proj.deadline) {
+        const dStart = new Date(proj.start_date);
+        const dEnd = new Date(proj.deadline);
+        const diffTime = Math.abs(dEnd - dStart);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays > 0) {
+          setTimeline(`${diffDays} Days`);
+        }
+      } else if (!timeline || timeline.trim() === '') {
+        setTimeline('45 Days');
+      }
+
+      // 5. Auto-populate Cost Breakdown (Line Items) from project total_cost
+      if (Number(proj.total_cost) > 0) {
+        if (items.length <= 1 && (!items[0]?.description || !items[0]?.rate)) {
+          setItems([
+            {
+              description: `${proj.title} - Scope & Development`,
+              quantity: 1,
+              rate: String(proj.total_cost),
+              discount_percent: 0,
+              tax_percent: 0
+            }
+          ]);
+        }
+      }
+
+      // 6. Auto-fill Notes from project description if available
+      if (proj.description && (!notes || notes.trim() === '')) {
+        setNotes(proj.description);
       }
     }
   };

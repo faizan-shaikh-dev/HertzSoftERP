@@ -14,7 +14,7 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
 
   if (!isOpen || !mounted || !quotation) return null;
 
-  const handlePrint = () => {
+  const handlePrint = () => {w
     window.print();
   };
 
@@ -69,7 +69,7 @@ export default function QuotationPreviewModal({ isOpen, onClose, quotation }) {
         </div>
 
         {/* Modal Body: 1:1 EstimateDocument */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 bg-slate-100 dark:bg-[#0B132B] print:p-0 print:bg-white">
+        <div className="p-4 sm:p-6 overflow-y-auto overflow-x-auto flex-1 bg-slate-100 dark:bg-[#0B132B] print:p-0 print:bg-white">
           <EstimateDocument quotation={quotation} />
         </div>
       </div>

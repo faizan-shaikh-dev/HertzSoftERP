@@ -249,13 +249,58 @@ tbody.table-striped-rows > tr:hover {
   background: #475569;
 }
 
-/* Printable Documents Safety (always retain white paper and black ink) */
+/* Printable Documents Safety (always retain white paper, background colors, and black ink) */
 @media print {
   body {
     background-color: #FFFFFF !important;
     color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide app navigation, chrome, modal overlays when printing document preview */
+  nav, aside, header, footer, .sidebar, .navbar, .print\:hidden, [aria-hidden="true"] {
+    display: none !important;
+  }
+
+  /* Reset modal containers so they don't clip or darken the paper */
+  .fixed.inset-0 {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .fixed.inset-0 > div[class*="max-w-"] {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .printable-document {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    page-break-after: avoid;
+  }
+
+  tr {
+    page-break-inside: avoid;
   }
 }
+
 .printable-document {
   background-color: #FFFFFF !important;
   color: #19324D;
