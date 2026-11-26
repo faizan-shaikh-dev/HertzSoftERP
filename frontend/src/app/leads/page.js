@@ -633,7 +633,6 @@ export default function LeadsPage() {
             <table className="w-full text-left text-xs text-[#19324D] border-collapse">
               <thead className="thead-light bg-[#EAF3FB] border-b border-[#DFEAF2] text-[#19324D] text-[11px] font-bold uppercase tracking-wider">
                 <tr>
-                  <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center w-16">Sr #</th>
                   <th 
                     onClick={() => handleSort('name')}
                     className="py-3 px-3.5 border-r border-[#DFEAF2] cursor-pointer select-none hover:text-[#4689C8]"
@@ -667,7 +666,7 @@ export default function LeadsPage() {
               <tbody className="divide-y divide-[#DFEAF2]">
                 {loading ? (
                   <tr>
-                    <td colSpan="5" className="py-16 text-center text-[#71869B]">
+                    <td colSpan="4" className="py-16 text-center text-[#71869B]">
                       <Loader2 className="w-7 h-7 animate-spin text-[#4689C8] mx-auto mb-2" />
                       <span className="text-xs font-medium">Loading inquiries from database...</span>
                     </td>
@@ -680,19 +679,8 @@ export default function LeadsPage() {
                         idx % 2 === 1 ? 'bg-[#F8FAFD]' : 'bg-white'
                       } hover:bg-[#EAF3FB]`}
                     >
-                      {/* 1. Sr # / Lead Number */}
-                      <td className="py-2.5 px-3 border-r border-[#DFEAF2] text-center font-bold text-[#19324D]">
-                        <Link 
-                          href={`/leads/view?id=${lead.id}`}
-                          className="font-mono text-[11px] text-[#4689C8] hover:underline font-bold"
-                          title="View Lead Pipeline & Activity History"
-                        >
-                          #{lead.lead_number || ((currentPage - 1) * itemsPerPage + idx + 1)}
-                        </Link>
-                      </td>
-
-                      {/* 2. Client & Contact */}
-                      <td className="py-2.5 px-3 border-r border-[#DFEAF2]">
+                      {/* Client & Contact */}
+                      <td className="py-2.5 px-3.5 border-r border-[#DFEAF2]">
                         <div className="font-bold text-[#19324D] text-xs">
                           <Link 
                             href={`/leads/view?id=${lead.id}`}
@@ -708,36 +696,43 @@ export default function LeadsPage() {
                             <span>{lead.company_name}</span>
                           </div>
                         )}
-                        {(() => {
-                          const targetWhatsapp = lead.whatsapp_no || lead.alternate_phone || lead.phone;
-                          if (!targetWhatsapp) return null;
-                          const cleanDigits = String(targetWhatsapp).replace(/\D/g, '');
-                          const waPhone = cleanDigits.length === 10 ? `91${cleanDigits}` : cleanDigits;
-                          return (
-                            <div className="mt-0.5">
-                              <a
-                                href={`https://wa.me/${waPhone}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 text-[11px] font-mono text-[#20A36B] hover:text-[#178553] font-semibold hover:underline transition"
-                                title={`Chat on WhatsApp (${targetWhatsapp})`}
-                              >
-                                <WhatsAppIcon className="w-3.5 h-3.5 text-[#20A36B] shrink-0" />
-                                <span>{lead.phone || targetWhatsapp}</span>
-                              </a>
-                              {lead.whatsapp_no && lead.whatsapp_no !== lead.phone && (
-                                <div className="text-[10px] text-[#20A36B] font-mono font-medium">
-                                  WA: {lead.whatsapp_no}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })()}
-                        {lead.email && (
-                          <div className="text-[10px] text-[#71869B] truncate max-w-[150px]">
-                            {lead.email}
-                          </div>
-                        )}
+                        <div className="flex flex-col gap-1 mt-1 text-[11px]">
+                          {(() => {
+                            const targetWhatsapp = lead.whatsapp_no || lead.alternate_phone || lead.phone;
+                            if (!targetWhatsapp) return null;
+                            const cleanDigits = String(targetWhatsapp).replace(/\D/g, '');
+                            const waPhone = cleanDigits.length === 10 ? `91${cleanDigits}` : cleanDigits;
+                            return (
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <a
+                                  href={`https://wa.me/${waPhone}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 font-mono text-[#20A36B] hover:text-[#178553] font-semibold hover:underline transition whitespace-nowrap"
+                                  title={`Chat on WhatsApp (${targetWhatsapp})`}
+                                >
+                                  <WhatsAppIcon className="w-3.5 h-3.5 text-[#20A36B] shrink-0" />
+                                  <span className="whitespace-nowrap">{lead.phone || targetWhatsapp}</span>
+                                </a>
+                                {lead.whatsapp_no && lead.whatsapp_no !== lead.phone && (
+                                  <span className="text-[10px] text-[#20A36B] font-mono font-medium whitespace-nowrap">
+                                    (WA: {lead.whatsapp_no})
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()}
+                          {lead.email && (
+                            <a
+                              href={`mailto:${lead.email}`}
+                              className="inline-flex items-center gap-1 text-[11px] text-[#71869B] hover:text-[#4689C8] hover:underline truncate max-w-[200px]"
+                              title={lead.email}
+                            >
+                              <Mail className="w-3 h-3 text-[#71869B] shrink-0" />
+                              <span className="truncate">{lead.email}</span>
+                            </a>
+                          )}
+                        </div>
                       </td>
 
                       {/* 3. Service & Requirement */}
@@ -844,7 +839,7 @@ export default function LeadsPage() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="py-16 text-center text-[#71869B]">
+                    <td colSpan="4" className="py-16 text-center text-[#71869B]">
                       <Users className="w-8 h-8 mx-auto text-[#71869B]/40 mb-2" />
                       <p className="text-xs font-bold text-[#19324D]">No client inquiries found</p>
                       <p className="text-[11px] text-[#71869B] mt-0.5">

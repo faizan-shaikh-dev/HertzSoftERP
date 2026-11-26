@@ -404,7 +404,6 @@ export default function DashboardPage() {
                 <table className="w-full text-left table-striped table-bordered table-hover align-items-center table-sm">
                   <thead className="thead-light bg-[#EAF3FB] text-[11px] font-bold uppercase text-[#19324D] tracking-wider border-b border-[#DFEAF2]">
                     <tr>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center w-12">#</th>
                       <th className="py-3 px-4 border-r border-[#DFEAF2]">Client & Contact</th>
                       <th className="py-3 px-4 border-r border-[#DFEAF2]">Company / Business</th>
                       <th className="py-3 px-4 border-r border-[#DFEAF2]">Lead Inquiry</th>
@@ -415,17 +414,13 @@ export default function DashboardPage() {
                   </thead>
                   <tbody className="divide-y divide-[#DFEAF2] text-xs">
                     {paginatedLeads.length > 0 ? (
-                      paginatedLeads.map((lead, index) => (
+                      paginatedLeads.map((lead) => (
                         <tr key={lead.id} className="transition-colors duration-150 odd:bg-white even:bg-[#F8FAFD] hover:bg-[#EAF3FB]">
-                          <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-center font-bold text-[#4689C8] font-mono">
-                            {lead.lead_number ? `#${lead.lead_number}` : `#${index + 1}`}
-                          </td>
-
                           <td className="py-3 px-4 border-r border-[#DFEAF2]">
                             <div className="font-bold text-[#19324D] text-xs">
                               {lead.name}
                             </div>
-                            <div className="text-[11px] text-[#71869B] flex items-center gap-1.5 mt-0.5">
+                            <div className="flex flex-col gap-1 mt-1 text-[11px] text-[#71869B]">
                               {lead.phone && (() => {
                                 const cleanDigits = String(lead.phone).replace(/\D/g, '');
                                 const waPhone = cleanDigits.length === 10 ? `91${cleanDigits}` : cleanDigits;
@@ -434,19 +429,23 @@ export default function DashboardPage() {
                                     href={`https://wa.me/${waPhone}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-1 font-mono text-[#20A36B] hover:text-[#178553] font-semibold hover:underline"
+                                    className="inline-flex items-center gap-1.5 font-mono text-[#20A36B] hover:text-[#178553] font-semibold hover:underline whitespace-nowrap"
                                     title="Click to chat on WhatsApp"
                                   >
                                     <WhatsAppIcon className="w-3.5 h-3.5 text-[#20A36B] shrink-0" />
-                                    <span>{lead.phone}</span>
+                                    <span className="whitespace-nowrap">{lead.phone}</span>
                                   </a>
                                 );
                               })()}
                               {lead.email && (
-                                <span className="flex items-center gap-1">
-                                  <Mail className="w-3 h-3 text-[#71869B]" />
-                                  {lead.email}
-                                </span>
+                                <a
+                                  href={`mailto:${lead.email}`}
+                                  className="inline-flex items-center gap-1.5 text-[#71869B] hover:text-[#4689C8] hover:underline truncate max-w-[220px]"
+                                  title={lead.email}
+                                >
+                                  <Mail className="w-3 h-3 text-[#71869B] shrink-0" />
+                                  <span className="truncate">{lead.email}</span>
+                                </a>
                               )}
                             </div>
                           </td>
@@ -486,7 +485,7 @@ export default function DashboardPage() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="8" className="py-12 text-center text-xs text-[#71869B]">
+                        <td colSpan="6" className="py-12 text-center text-xs text-[#71869B]">
                           {tableSearch ? 'No inquiries matching your search criteria.' : 'No recent inquiries recorded.'}
                         </td>
                       </tr>
@@ -500,7 +499,6 @@ export default function DashboardPage() {
                 <table className="w-full text-left table-striped table-bordered table-hover align-items-center table-sm">
                   <thead className="thead-light bg-[#EAF3FB] text-[11px] font-bold uppercase text-[#19324D] tracking-wider border-b border-[#DFEAF2]">
                     <tr>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] text-center w-12">#</th>
                       <th className="py-3 px-4 border-r border-[#DFEAF2]">Client Name</th>
                       <th className="py-3 px-4 border-r border-[#DFEAF2]">Company / Enterprise</th>
                       <th className="py-3 px-4 border-r border-[#DFEAF2]">Project Contract</th>
@@ -512,12 +510,8 @@ export default function DashboardPage() {
                   </thead>
                   <tbody className="divide-y divide-[#DFEAF2] text-xs">
                     {paginatedPayments.length > 0 ? (
-                      paginatedPayments.map((pm, index) => (
+                      paginatedPayments.map((pm) => (
                         <tr key={pm.id} className="transition-colors duration-150 odd:bg-white even:bg-[#F8FAFD] hover:bg-[#EAF3FB]">
-                          <td className="py-3 px-3.5 border-r border-[#DFEAF2] text-center font-bold text-[#4689C8] font-mono">
-                            #{index + 1}
-                          </td>
-
                           <td className="py-3 px-4 border-r border-[#DFEAF2] font-bold text-[#19324D]">
                             {pm.client_name}
                           </td>
@@ -557,7 +551,7 @@ export default function DashboardPage() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="8" className="py-12 text-center text-xs text-[#71869B]">
+                        <td colSpan="7" className="py-12 text-center text-xs text-[#71869B]">
                           {tableSearch ? 'No collections matching your search criteria.' : 'No recent payment installments recorded yet.'}
                         </td>
                       </tr>

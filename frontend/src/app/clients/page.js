@@ -341,16 +341,16 @@ export default function ClientsPage() {
 
                         {/* 2. Contact Details */}
                         <td className="py-3.5 px-4 border-r border-[#DFEAF2]">
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-1.5 text-xs text-[#19324D] font-semibold">
+                          <div className="flex flex-col gap-1">
+                            <div className="inline-flex items-center gap-1.5 text-xs text-[#19324D] font-semibold whitespace-nowrap">
                               <Phone className="w-3.5 h-3.5 text-[#71869B] flex-shrink-0" />
-                              <span>{item.phone || '—'}</span>
+                              <span className="whitespace-nowrap font-mono">{item.phone || '—'}</span>
                               {waPhone && (
                                 <a
                                   href={`https://wa.me/${waPhone}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center text-[#20A36B] hover:opacity-80 transition ml-1"
+                                  className="inline-flex items-center text-[#20A36B] hover:opacity-80 transition ml-0.5"
                                   title="Chat on WhatsApp"
                                 >
                                   <WhatsAppIcon className="w-3.5 h-3.5" />
@@ -358,7 +358,7 @@ export default function ClientsPage() {
                               )}
                             </div>
                             {item.email && (
-                              <div className="flex items-center gap-1.5 text-[11px] text-[#4689C8] truncate">
+                              <div className="inline-flex items-center gap-1.5 text-[11px] text-[#4689C8] truncate max-w-[200px]">
                                 <Mail className="w-3.5 h-3.5 text-[#71869B] flex-shrink-0" />
                                 <a href={`mailto:${item.email}`} className="hover:underline truncate" title={item.email}>
                                   {item.email}
