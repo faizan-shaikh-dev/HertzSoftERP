@@ -275,26 +275,24 @@ export default function InvoiceDocument({ quotation, printable = false }) {
             </div>
 
             {/* QR Code */}
-            <div className="shrink-0 flex flex-col items-center justify-center p-2 bg-white border border-slate-200 rounded text-center">
-              <QrCode className="w-16 h-16 text-slate-800" strokeWidth={1.5} />
+            <div className="shrink-0 flex flex-col items-center justify-center p-1.5 bg-white border border-slate-200 rounded text-center">
+              <img 
+                src="/images/hertzsoft-upi-qr.png" 
+                alt="Axis Bank UPI QR" 
+                className="w-16 h-16 object-contain" 
+              />
               <div className="text-[9px] font-mono text-slate-500 mt-1">8657242757@okbizaxis</div>
             </div>
           </div>
 
           {/* Right Column: Stamp & Signature */}
           <div className="flex flex-col items-center justify-center text-center p-2 pl-4">
-            <div className="my-1">
-              <div className="w-20 h-20 rounded-full border-2 border-[#0077B6]/50 flex flex-col items-center justify-center text-center p-1 bg-[#0077B6]/5 rotate-[-8deg]">
-                <div className="text-[7.5px] font-black uppercase text-[#0077B6] tracking-tighter leading-tight">
-                  HERTZSOFT TECH
-                </div>
-                <div className="text-[6.5px] text-[#0077B6]/80 uppercase font-semibold">
-                  PVT. LTD.
-                </div>
-                <div className="text-[6.5px] font-bold text-emerald-700 uppercase">
-                  OFFICIAL SEAL
-                </div>
-              </div>
+            <div className="my-1 flex items-center justify-center">
+              <img
+                src="/images/hertzsoft-stamp-signature.png"
+                alt="Official Stamp & Signature - Tahseen S. Ghatte"
+                className="w-36 h-auto object-contain max-h-20"
+              />
             </div>
 
             <div className="font-extrabold text-slate-900 text-xs uppercase tracking-wide mt-1">

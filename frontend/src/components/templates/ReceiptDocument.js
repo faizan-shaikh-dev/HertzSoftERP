@@ -229,15 +229,12 @@ export default function ReceiptDocument({ payment, printable = false }) {
           </div>
           
           {/* Stamp & Seal */}
-          <div className="my-1 relative">
-            <div className="w-16 h-16 rounded-full border-2 border-[#0077B6]/50 flex flex-col items-center justify-center text-center p-1 bg-[#0077B6]/5 rotate-[-8deg]">
-              <div className="text-[7px] font-black uppercase text-[#0077B6] tracking-tighter leading-tight">
-                HERTZSOFT
-              </div>
-              <div className="text-[6px] font-bold text-emerald-700 uppercase">
-                RECEIVED
-              </div>
-            </div>
+          <div className="my-1 flex items-center justify-center md:justify-end">
+            <img
+              src="/images/hertzsoft-stamp-signature.png"
+              alt="Official Stamp & Signature - Tahseen S. Ghatte"
+              className="w-36 h-auto object-contain max-h-20"
+            />
           </div>
 
           <div className="font-extrabold text-slate-900 text-xs uppercase tracking-wide mt-1">
