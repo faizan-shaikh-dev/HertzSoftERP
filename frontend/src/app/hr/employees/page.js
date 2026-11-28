@@ -128,7 +128,10 @@ export default function FullTimeEmployeesPage() {
         const matchEmail = (emp.email || '').toLowerCase().includes(q);
         const matchPhone = (emp.phone || '').toLowerCase().includes(q);
         const matchDesig = (emp.designation || '').toLowerCase().includes(q);
-        if (!matchName && !matchCode && !matchEmail && !matchPhone && !matchDesig) {
+        const matchCollege = (emp.college_name || '').toLowerCase().includes(q);
+        const matchUniversity = (emp.university_name || '').toLowerCase().includes(q);
+        const matchDegree = (emp.degree || '').toLowerCase().includes(q);
+        if (!matchName && !matchCode && !matchEmail && !matchPhone && !matchDesig && !matchCollege && !matchUniversity && !matchDegree) {
           return false;
         }
       }

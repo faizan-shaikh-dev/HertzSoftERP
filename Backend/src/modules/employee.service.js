@@ -58,9 +58,11 @@ export const getEmployees = async ({ type, department, status, work_mode, search
       e.email LIKE ? OR 
       e.phone LIKE ? OR 
       e.designation LIKE ? OR 
-      e.college_name LIKE ?
+      e.college_name LIKE ? OR
+      e.university_name LIKE ? OR
+      e.degree LIKE ?
     )`;
-    params.push(q, q, q, q, q, q);
+    params.push(q, q, q, q, q, q, q, q);
   }
 
   query += ' ORDER BY e.created_at DESC';
@@ -92,14 +94,16 @@ export const createEmployee = async (data, userId) => {
       gender, date_of_birth, department, designation, joining_date, status, work_mode,
       salary_monthly, probation_period_months, emergency_contact_name, emergency_contact_phone,
       pan_number, aadhaar_number, bank_name, account_number, ifsc_code, upi_id,
-      college_name, degree, internship_duration, internship_end_date, mentor_id, mentor_name,
+      college_name, degree, university_name, passing_year,
+      internship_duration, internship_end_date, mentor_id, mentor_name,
       stipend_monthly, is_paid, certificate_id, address, city, notes, created_by
     ) VALUES (
       ?, ?, ?, ?, ?, ?, ?,
       ?, ?, ?, ?, ?, ?, ?,
       ?, ?, ?, ?,
       ?, ?, ?, ?, ?, ?,
-      ?, ?, ?, ?, ?, ?,
+      ?, ?, ?, ?,
+      ?, ?, ?, ?,
       ?, ?, ?, ?, ?, ?, ?
     )`,
     [
@@ -129,6 +133,8 @@ export const createEmployee = async (data, userId) => {
       data.upi_id || null,
       data.college_name || null,
       data.degree || null,
+      data.university_name || null,
+      data.passing_year || null,
       data.internship_duration || null,
       data.internship_end_date || null,
       data.mentor_id || null,
@@ -154,7 +160,7 @@ export const updateEmployee = async (id, data) => {
     'gender', 'date_of_birth', 'department', 'designation', 'joining_date', 'status', 'work_mode',
     'salary_monthly', 'probation_period_months', 'emergency_contact_name', 'emergency_contact_phone',
     'pan_number', 'aadhaar_number', 'bank_name', 'account_number', 'ifsc_code', 'upi_id',
-    'college_name', 'degree', 'internship_duration', 'internship_end_date', 'mentor_id', 'mentor_name',
+    'college_name', 'degree', 'university_name', 'passing_year', 'internship_duration', 'internship_end_date', 'mentor_id', 'mentor_name',
     'stipend_monthly', 'is_paid', 'certificate_id', 'address', 'city', 'notes', 'resignation_date', 'exit_date'
   ];
 

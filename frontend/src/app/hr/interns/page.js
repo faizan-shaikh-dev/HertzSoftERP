@@ -122,9 +122,10 @@ export default function TraineesAndInternsPage() {
         const matchEmail = (intern.email || '').toLowerCase().includes(q);
         const matchPhone = (intern.phone || '').toLowerCase().includes(q);
         const matchCollege = (intern.college_name || '').toLowerCase().includes(q);
+        const matchUniversity = (intern.university_name || '').toLowerCase().includes(q);
         const matchDegree = (intern.degree || '').toLowerCase().includes(q);
         const matchMentor = (intern.mentor_name || '').toLowerCase().includes(q);
-        if (!matchName && !matchCode && !matchEmail && !matchPhone && !matchCollege && !matchDegree && !matchMentor) {
+        if (!matchName && !matchCode && !matchEmail && !matchPhone && !matchCollege && !matchUniversity && !matchDegree && !matchMentor) {
           return false;
         }
       }
@@ -427,10 +428,15 @@ export default function TraineesAndInternsPage() {
                         {/* College & Degree */}
                         <td className="py-3.5 px-4">
                           <div className="font-semibold text-[#19324D] dark:text-[#F8FAFC] truncate max-w-[200px]">
-                            {intern.college_name || 'Affiliated College'}
+                            {intern.college_name || intern.university_name || 'Affiliated College'}
                           </div>
-                          <div className="text-[11px] text-[#71869B] dark:text-[#94A3B8] truncate max-w-[200px]">
-                            {intern.degree || 'Degree Program'}
+                          <div className="text-[11px] text-[#71869B] dark:text-[#94A3B8] truncate max-w-[200px] flex items-center gap-1.5 mt-0.5">
+                            <span>{intern.degree || 'Degree Program'}</span>
+                            {intern.passing_year && (
+                              <span className="font-mono text-[10px] bg-slate-100 dark:bg-slate-800 px-1 rounded">
+                                ({intern.passing_year})
+                              </span>
+                            )}
                           </div>
                         </td>
 

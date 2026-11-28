@@ -108,7 +108,7 @@ export default function EmployeeViewModal({ isOpen, onClose, employee }) {
           {/* Role & Tenure */}
           <div>
             <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#71869B] mb-2 border-b border-[#DFEAF2] pb-1">
-              Tenure & Employment
+              Tenure &amp; Employment
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
@@ -121,6 +121,41 @@ export default function EmployeeViewModal({ isOpen, onClose, employee }) {
               </div>
             </div>
           </div>
+
+          {/* Education & Academic Background (Both Full-time and Interns) */}
+          {(employee.degree || employee.college_name || employee.university_name || employee.passing_year) && (
+            <div>
+              <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#71869B] mb-2 border-b border-[#DFEAF2] pb-1">
+                College &amp; Academic Background
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {employee.degree && (
+                  <div>
+                    <span className="text-[#71869B] block text-[11px]">Qualification / Degree</span>
+                    <span className="font-bold">{employee.degree}</span>
+                  </div>
+                )}
+                {employee.college_name && (
+                  <div>
+                    <span className="text-[#71869B] block text-[11px]">College / Institute</span>
+                    <span className="font-bold">{employee.college_name}</span>
+                  </div>
+                )}
+                {employee.university_name && (
+                  <div>
+                    <span className="text-[#71869B] block text-[11px]">University / Board</span>
+                    <span>{employee.university_name}</span>
+                  </div>
+                )}
+                {employee.passing_year && (
+                  <div>
+                    <span className="text-[#71869B] block text-[11px]">Passing Year</span>
+                    <span className="font-mono font-semibold">{employee.passing_year}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Full-Time Specific Compensation & Bank Details */}
           {!isIntern ? (
@@ -166,30 +201,28 @@ export default function EmployeeViewModal({ isOpen, onClose, employee }) {
               </div>
             </div>
           ) : (
-            /* Intern College & Mentor details */
+            /* Intern Tenure & Mentor details */
             <div>
               <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#71869B] mb-2 border-b border-[#DFEAF2] pb-1">
-                Academic & Internship Record
+                Internship Tenure &amp; Mentorship
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <span className="text-[#71869B] block text-[11px]">College / Institute</span>
-                  <span className="font-bold">{employee.college_name || '—'}</span>
-                </div>
-                <div>
-                  <span className="text-[#71869B] block text-[11px]">Degree / Branch</span>
-                  <span>{employee.degree || '—'}</span>
-                </div>
                 <div>
                   <span className="text-[#71869B] block text-[11px]">Internship Tenure</span>
                   <span className="font-semibold">{employee.internship_duration || '3 Months'}</span>
                 </div>
+                {employee.internship_end_date && (
+                  <div>
+                    <span className="text-[#71869B] block text-[11px]">Completion / End Date</span>
+                    <span className="font-bold">{formatDate(employee.internship_end_date)}</span>
+                  </div>
+                )}
                 <div>
                   <span className="text-[#71869B] block text-[11px]">Assigned Mentor</span>
                   <span className="font-semibold text-[#8965E0]">{employee.mentor_name || 'Assigned Lead'}</span>
                 </div>
                 <div>
-                  <span className="text-[#71869B] block text-[11px]">Stipend</span>
+                  <span className="text-[#71869B] block text-[11px]">Stipend Status</span>
                   <span className="font-bold">
                     {employee.is_paid ? `₹ ${formatCurrency(employee.stipend_monthly)} / month` : 'Academic OJT / Unpaid'}
                   </span>

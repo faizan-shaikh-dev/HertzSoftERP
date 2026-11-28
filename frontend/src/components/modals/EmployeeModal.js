@@ -15,7 +15,8 @@ import {
   CreditCard, 
   AlertCircle, 
   Loader2,
-  DollarSign
+  DollarSign,
+  Clock
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import employeeService from '@/services/employeeService';
@@ -77,9 +78,13 @@ export default function EmployeeModal({
   const [ifscCode, setIfscCode] = useState('');
   const [upiId, setUpiId] = useState('');
 
-  // Intern specific
+  // Education & College details (Both Full-time and Interns)
   const [collegeName, setCollegeName] = useState('');
   const [degree, setDegree] = useState('');
+  const [universityName, setUniversityName] = useState('');
+  const [passingYear, setPassingYear] = useState('');
+
+  // Intern specific
   const [internshipDuration, setInternshipDuration] = useState('3 Months');
   const [internshipEndDate, setInternshipEndDate] = useState('');
   const [mentorName, setMentorName] = useState('');
@@ -119,6 +124,9 @@ export default function EmployeeModal({
 
       setCollegeName(editingEmployee.college_name || '');
       setDegree(editingEmployee.degree || '');
+      setUniversityName(editingEmployee.university_name || '');
+      setPassingYear(editingEmployee.passing_year || '');
+
       setInternshipDuration(editingEmployee.internship_duration || '3 Months');
       setInternshipEndDate(editingEmployee.internship_end_date ? editingEmployee.internship_end_date.slice(0, 10) : '');
       setMentorName(editingEmployee.mentor_name || '');
@@ -156,6 +164,9 @@ export default function EmployeeModal({
 
       setCollegeName('');
       setDegree('');
+      setUniversityName('');
+      setPassingYear('');
+
       setInternshipDuration('3 Months');
       setInternshipEndDate('');
       setMentorName('');
@@ -221,9 +232,13 @@ export default function EmployeeModal({
       ifsc_code: ifscCode.trim() || undefined,
       upi_id: upiId.trim() || undefined,
 
-      // Intern
-      college_name: type === 'Intern' ? collegeName.trim() : undefined,
-      degree: type === 'Intern' ? degree.trim() : undefined,
+      // College & Education details (Both Full-time and Interns)
+      college_name: collegeName.trim() || undefined,
+      degree: degree.trim() || undefined,
+      university_name: universityName.trim() || undefined,
+      passing_year: passingYear.trim() || undefined,
+
+      // Intern specifics
       internship_duration: type === 'Intern' ? internshipDuration : undefined,
       internship_end_date: type === 'Intern' ? (internshipEndDate || undefined) : undefined,
       mentor_name: type === 'Intern' ? mentorName.trim() : undefined,
@@ -503,7 +518,69 @@ export default function EmployeeModal({
             </div>
           </div>
 
-          {/* Section 3: Full-time specifics OR Intern specifics */}
+          {/* Section 3: College & Academic Details (Both Full-Time and Interns) */}
+          <div>
+            <div className="text-xs font-bold uppercase tracking-wider text-[#0077B6] border-b border-[#DFEAF2] pb-1.5 mb-3 flex items-center gap-1.5">
+              <GraduationCap className="w-3.5 h-3.5" />
+              <span>College &amp; Academic Details</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <label className="block text-[#19324D] font-bold mb-1">
+                  Highest Qualification / Degree
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. B.Tech / BCA / MCA / B.Sc IT / MBA"
+                  value={degree}
+                  onChange={(e) => setDegree(e.target.value)}
+                  className="w-full px-3 py-2 border border-[#DFEAF2] rounded-lg text-[#19324D] focus:border-[#0077B6] outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#19324D] font-bold mb-1">
+                  College / Institute Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Thakur College of Engineering / VJTI"
+                  value={collegeName}
+                  onChange={(e) => setCollegeName(e.target.value)}
+                  className="w-full px-3 py-2 border border-[#DFEAF2] rounded-lg text-[#19324D] focus:border-[#0077B6] outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#19324D] font-bold mb-1">
+                  University / Board Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. University of Mumbai / SPPU"
+                  value={universityName}
+                  onChange={(e) => setUniversityName(e.target.value)}
+                  className="w-full px-3 py-2 border border-[#DFEAF2] rounded-lg text-[#19324D] focus:border-[#0077B6] outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#19324D] font-bold mb-1">
+                  Passing Year
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. 2024"
+                  value={passingYear}
+                  onChange={(e) => setPassingYear(e.target.value)}
+                  className="w-full px-3 py-2 border border-[#DFEAF2] rounded-lg text-[#19324D] font-mono focus:border-[#0077B6] outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section 4: Full-time specifics OR Intern specifics */}
           {type === 'Full-time' ? (
             <div>
               <div className="text-xs font-bold uppercase tracking-wider text-[#0077B6] border-b border-[#DFEAF2] pb-1.5 mb-3 flex items-center gap-1.5">
@@ -631,43 +708,17 @@ export default function EmployeeModal({
               </div>
             </div>
           ) : (
-            /* Intern specifics */
+            /* Intern specifics: Tenure, Mentor & Stipend */
             <div>
               <div className="text-xs font-bold uppercase tracking-wider text-[#8965E0] border-b border-[#DFEAF2] pb-1.5 mb-3 flex items-center gap-1.5">
-                <GraduationCap className="w-3.5 h-3.5" />
-                <span>College, Duration & Mentor Assignment</span>
+                <Clock className="w-3.5 h-3.5" />
+                <span>Internship Tenure, Mentorship &amp; Stipend</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div>
                   <label className="block text-[#19324D] font-bold mb-1">
-                    College / University / Institute Name *
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Mumbai University / VJTI"
-                    value={collegeName}
-                    onChange={(e) => setCollegeName(e.target.value)}
-                    className="w-full px-3 py-2 border border-[#DFEAF2] rounded-lg text-[#19324D] focus:border-[#8965E0] outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[#19324D] font-bold mb-1">
-                    Degree / Course / Stream
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. B.Tech Computer Engineering / MCA"
-                    value={degree}
-                    onChange={(e) => setDegree(e.target.value)}
-                    className="w-full px-3 py-2 border border-[#DFEAF2] rounded-lg text-[#19324D] focus:border-[#8965E0] outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[#19324D] font-bold mb-1">
-                    Internship Tenure & Duration
+                    Internship Tenure &amp; Duration
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <select

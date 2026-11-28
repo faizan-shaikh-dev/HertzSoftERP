@@ -33,9 +33,13 @@ CREATE TABLE IF NOT EXISTS employees (
   resignation_date DATE NULL,
   exit_date DATE NULL,
   
-  -- Intern specific fields
+  -- Education & College Background (Both Full-time and Interns)
   college_name VARCHAR(200) NULL,
   degree VARCHAR(120) NULL,
+  university_name VARCHAR(200) NULL,
+  passing_year VARCHAR(20) NULL,
+
+  -- Intern specific fields
   internship_duration VARCHAR(50) NULL,
   internship_end_date DATE NULL,
   mentor_id CHAR(36) NULL,
