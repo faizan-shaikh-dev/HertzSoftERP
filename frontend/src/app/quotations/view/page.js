@@ -59,7 +59,8 @@ function QuotationViewContent() {
   const [error, setError] = useState(null);
 
   // View Mode: 'document' (Estimate) | 'invoice' (Invoice) | 'overview' (Data Grid) | 'audit' (Version & Audit Log)
-  const [viewTab, setViewTab] = useState('document');
+  const tabParam = searchParams.get('tab');
+  const [viewTab, setViewTab] = useState(['document', 'invoice', 'overview', 'audit'].includes(tabParam) ? tabParam : 'document');
 
   // Modals state
   const [isQuotationModalOpen, setIsQuotationModalOpen] = useState(false);

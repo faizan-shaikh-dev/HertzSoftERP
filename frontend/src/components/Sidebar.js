@@ -20,7 +20,9 @@ import {
   Moon,
   UserCog,
   GraduationCap,
-  FileText
+  FileText,
+  Wallet,
+  Receipt
 } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -44,16 +46,27 @@ const NAV_ITEMS = [
     label: 'Projects',
     href: '/projects',
     icon: FolderKanban
+  }
+];
+
+const FINANCE_ITEMS = [
+  {
+    label: 'Estimates',
+    href: '/quotations',
+    icon: FileSpreadsheet,
+    description: 'Commercial estimates & proposals'
   },
   {
-    label: 'Quotations',
-    href: '/quotations',
-    icon: FileSpreadsheet
+    label: 'Invoices',
+    href: '/invoices',
+    icon: Receipt,
+    description: 'GST tax invoices & billing'
   },
   {
     label: 'Payments',
     href: '/payments',
-    icon: CreditCard
+    icon: CreditCard,
+    description: 'Receipts, vouchers & transactions'
   }
 ];
 
@@ -82,8 +95,17 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
   const pathname = usePathname();
   const { theme, toggleTheme, isDark, mounted } = useTheme();
   
+  const isFinanceActive = pathname.startsWith('/quotations') || pathname.startsWith('/invoices') || pathname.startsWith('/payments');
+  const [isFinanceOpen, setIsFinanceOpen] = useState(isFinanceActive);
+
   const isHrActive = pathname.startsWith('/hr') || pathname === '/certificates';
   const [isHrOpen, setIsHrOpen] = useState(isHrActive);
+
+  useEffect(() => {
+    if (pathname.startsWith('/quotations') || pathname.startsWith('/invoices') || pathname.startsWith('/payments')) {
+      setIsFinanceOpen(true);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (pathname.startsWith('/hr')) {
@@ -216,6 +238,106 @@ export default function Sidebar({ isOpen, onClose, isCollapsed = false, onToggle
               </Link>
             );
           })}
+
+          {/* Finance Dropdown Section */}
+          <div className="pt-1">
+            {!isCollapsed ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setIsFinanceOpen(!isFinanceOpen)}
+                  className={`w-full flex items-center justify-between text-xs sm:text-sm rounded-lg transition-colors px-3.5 py-2.5 mx-0.5 cursor-pointer ${
+                    isFinanceActive
+                      ? 'bg-[#EAF3FB]/70 dark:bg-[#1E293B]/70 text-[#0077B6] dark:text-[#5FC8D6] font-bold'
+                      : 'text-[#71869B] dark:text-[#94A3B8] hover:text-[#19324D] dark:hover:text-[#F8FAFC] hover:bg-[#F4F8FC] dark:hover:bg-[#1E293B] font-medium'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Wallet className={`w-5 h-5 flex-shrink-0 ${
+                      isFinanceActive ? 'text-[#0077B6] dark:text-[#5FC8D6]' : 'text-[#71869B] dark:text-[#94A3B8]'
+                    }`} />
+                    <span className="truncate">Finance</span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${
+                    isFinanceOpen ? 'rotate-180 text-[#0077B6] dark:text-[#5FC8D6]' : 'text-[#71869B] dark:text-[#64748B]'
+                  }`} />
+                </button>
+
+                {/* Sub-items */}
+                {isFinanceOpen && (
+                  <div className="pl-3.5 pr-1 py-1 space-y-1 border-l-2 border-[#0077B6]/25 dark:border-[#5FC8D6]/25 ml-5 my-1 animate-in fade-in slide-in-from-top-1 duration-150">
+                    {FINANCE_ITEMS.map((subItem) => {
+                      const SubIcon = subItem.icon;
+                      const isSubActive = pathname === subItem.href || (subItem.href !== '/' && pathname.startsWith(subItem.href + '/'));
+
+                      return (
+                        <Link
+                          key={subItem.href}
+                          href={subItem.href}
+                          onClick={onClose}
+                          className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs transition-colors ${
+                            isSubActive
+                              ? 'bg-[#0077B6] text-white font-bold shadow-xs'
+                              : 'text-[#71869B] dark:text-[#94A3B8] hover:text-[#19324D] dark:hover:text-[#F8FAFC] hover:bg-[#F4F8FC] dark:hover:bg-[#1E293B] font-medium'
+                          }`}
+                        >
+                          <SubIcon className={`w-4 h-4 flex-shrink-0 ${
+                            isSubActive ? 'text-white' : 'text-[#71869B] dark:text-[#94A3B8]'
+                          }`} />
+                          <span className="truncate">{subItem.label}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
+            ) : (
+              /* Collapsed Flyout / Icon */
+              <div className="relative group">
+                <Link
+                  href="/quotations"
+                  onClick={onClose}
+                  title="Finance"
+                  className={`flex items-center justify-center p-2.5 w-11 h-11 mx-auto rounded-lg transition-colors ${
+                    isFinanceActive
+                      ? 'bg-[#EAF3FB] dark:bg-[#1E293B] text-[#0077B6] dark:text-[#5FC8D6] font-bold shadow-2xs border border-[#0077B6]/20 dark:border-[#5FC8D6]/30'
+                      : 'text-[#71869B] dark:text-[#94A3B8] hover:text-[#19324D] dark:hover:text-[#F8FAFC] hover:bg-[#F4F8FC] dark:hover:bg-[#1E293B]'
+                  }`}
+                >
+                  <Wallet className={`w-5 h-5 flex-shrink-0 ${
+                    isFinanceActive ? 'text-[#0077B6] dark:text-[#5FC8D6]' : 'text-[#71869B] dark:text-[#94A3B8]'
+                  }`} />
+                </Link>
+
+                {/* Collapsed Hover Flyout */}
+                <div className="pointer-events-none group-hover:pointer-events-auto opacity-0 group-hover:opacity-100 transition-opacity absolute left-full ml-3 top-0 w-52 bg-white dark:bg-[#1E293B] border border-[#DFEAF2] dark:border-[#334155] rounded-xl shadow-xl p-2 z-50 space-y-1">
+                  <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#71869B] dark:text-[#64748B] border-b border-[#DFEAF2] dark:border-[#334155]/60 mb-1">
+                    Finance
+                  </div>
+                  {FINANCE_ITEMS.map((subItem) => {
+                    const SubIcon = subItem.icon;
+                    const isSubActive = pathname === subItem.href || (subItem.href !== '/' && pathname.startsWith(subItem.href + '/'));
+
+                    return (
+                      <Link
+                        key={subItem.href}
+                        href={subItem.href}
+                        onClick={onClose}
+                        className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-xs transition-colors ${
+                          isSubActive
+                            ? 'bg-[#0077B6] text-white font-bold'
+                            : 'text-[#19324D] dark:text-[#F8FAFC] hover:bg-[#F4F8FC] dark:hover:bg-[#334155]/50 font-medium'
+                        }`}
+                      >
+                        <SubIcon className="w-3.5 h-3.5 flex-shrink-0" />
+                        <span className="truncate">{subItem.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* HR Module Dropdown Section */}
           <div className="pt-1">

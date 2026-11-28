@@ -105,11 +105,11 @@ export default function QuotationsPage() {
       }
 
       if (isManual) {
-        toast.success('Quotations and commercial metrics refreshed!');
+        toast.success('Estimates and commercial metrics refreshed!');
       }
     } catch (err) {
-      console.error('Failed to load quotations:', err);
-      const msg = err.message || 'Could not fetch quotations. Check server connectivity.';
+      console.error('Failed to load estimates:', err);
+      const msg = err.message || 'Could not fetch estimates. Check server connectivity.';
       setError(msg);
       if (isManual) toast.error(msg);
     } finally {
@@ -125,11 +125,11 @@ export default function QuotationsPage() {
   const handleStatusChange = async (quotationId, newStatus) => {
     try {
       await quotationService.updateQuotationStatus(quotationId, newStatus);
-      toast.success(`Quotation status updated to "${newStatus}".`);
+      toast.success(`Estimate status updated to "${newStatus}".`);
       fetchData(false);
     } catch (err) {
-      console.error('Failed to update quotation status:', err);
-      toast.error(err.message || 'Failed to update quotation status.');
+      console.error('Failed to update estimate status:', err);
+      toast.error(err.message || 'Failed to update estimate status.');
     }
   };
 
@@ -139,13 +139,13 @@ export default function QuotationsPage() {
     try {
       setDeleting(true);
       await quotationService.deleteQuotation(quotationToDelete.id);
-      toast.success(`Quotation ${quotationToDelete.quotation_number} deleted.`);
+      toast.success(`Estimate ${quotationToDelete.quotation_number} deleted.`);
       setIsDeleteModalOpen(false);
       setQuotationToDelete(null);
       fetchData(false);
     } catch (err) {
-      console.error('Error deleting quotation:', err);
-      toast.error(err.message || 'Failed to delete quotation.');
+      console.error('Error deleting estimate:', err);
+      toast.error(err.message || 'Failed to delete estimate.');
     } finally {
       setDeleting(false);
     }
@@ -221,7 +221,7 @@ export default function QuotationsPage() {
   };
 
   return (
-    <AppLayout title="Quotations & Commercial Proposals">
+    <AppLayout title="Estimates & Commercial Proposals">
       <div className="container-fluid px-0 sm:px-2">
         {/* MASTER CONTAINER CARD */}
         <div className="card shadow-sm mb-4 mainCard bg-white border border-[#DFEAF2] rounded-xl overflow-hidden">
@@ -230,10 +230,10 @@ export default function QuotationsPage() {
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-[#19324D] tracking-tight m-0 flex items-center gap-2">
                 <FileSpreadsheet className="w-6 h-6 text-[#4689C8]" />
-                <span>Quotations & Commercial Proposals</span>
+                <span>Estimates &amp; Proposals</span>
               </h2>
               <p className="text-xs text-[#71869B] mt-0.5">
-                Create multi-item commercial proposals, track version revisions, and generate official client PDFs.
+                Create multi-item commercial proposals, track version revisions, and generate official client estimates.
               </p>
             </div>
 
@@ -247,14 +247,14 @@ export default function QuotationsPage() {
                 className="btn btn-sm inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#0077B6] hover:bg-[#005f92] rounded shadow-xs transition cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Create Quotation</span>
+                <span>New Estimate</span>
               </button>
 
               <button
                 onClick={() => fetchData(true)}
                 disabled={loading}
                 className="btn btn-sm inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#71869B] bg-white hover:bg-[#EAF3FB] hover:text-[#4689C8] border border-[#DFEAF2] rounded shadow-xs transition cursor-pointer disabled:opacity-50"
-                title="Refresh quotations ledger"
+                title="Refresh estimates ledger"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#0077B6]' : ''}`} />
                 <span className="hidden sm:inline">Refresh</span>
@@ -331,7 +331,7 @@ export default function QuotationsPage() {
                         setSearchQuery(e.target.value);
                         setCurrentPage(1);
                       }}
-                      placeholder="Search quote, title, client..."
+                      placeholder="Search estimate, title, client..."
                       className="w-56 sm:w-64 px-3 pr-7 py-1.5 text-xs bg-white border border-[#DFEAF2] rounded text-[#19324D] placeholder-[#71869B] focus:outline-none focus:border-[#4689C8] transition"
                     />
                     {searchQuery && (
@@ -354,7 +354,7 @@ export default function QuotationsPage() {
                 <table className="table table-hover table-striped table-bordered w-full min-w-[980px] text-xs text-left">
                   <thead className="thead-light bg-[#EAF3FB] text-[#19324D] text-[11px] font-bold uppercase tracking-wider border-b border-[#DFEAF2]">
                     <tr>
-                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[150px] whitespace-nowrap">Quote Code &amp; Version</th>
+                      <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[150px] whitespace-nowrap">Estimate Code &amp; Version</th>
                       <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[200px]">Client &amp; Project</th>
                       <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[220px]">Proposal Scope</th>
                       <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[130px] whitespace-nowrap text-right">Total Amount</th>
@@ -368,18 +368,18 @@ export default function QuotationsPage() {
                       <tr>
                         <td colSpan="7" className="py-12 text-center text-[#71869B]">
                           <Loader2 className="w-6 h-6 animate-spin text-[#4689C8] mx-auto mb-2" />
-                          <span className="text-xs font-semibold">Loading commercial proposals...</span>
+                          <span className="text-xs font-semibold">Loading commercial estimates...</span>
                         </td>
                       </tr>
                     ) : paginatedQuotations.length === 0 ? (
                       <tr>
                         <td colSpan="7" className="py-12 text-center text-[#71869B]">
                           <FileSpreadsheet className="w-8 h-8 mx-auto text-[#71869B] mb-2" />
-                          <p className="text-xs font-semibold text-[#19324D]">No quotations found matching your criteria</p>
+                          <p className="text-xs font-semibold text-[#19324D]">No estimates found matching your criteria</p>
                           <p className="text-[11px] text-[#71869B] mt-0.5">
                             {searchQuery || selectedStatus !== 'All'
                               ? 'Try resetting the search or status filters.'
-                              : 'Click "+ Create Quotation" above to draft the first estimate.'}
+                              : 'Click "New Estimate" above to draft your first estimate.'}
                           </p>
                         </td>
                       </tr>
@@ -515,7 +515,7 @@ export default function QuotationsPage() {
                                 <Link
                                   href={`/quotations/view?id=${q.id}`}
                                   className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#4689C8] bg-[#EAF3FB] hover:bg-[#4689C8] hover:text-white border border-[#4689C8]/30 rounded shadow-2xs transition cursor-pointer"
-                                  title="View Quotation Scope & Report"
+                                  title="View Estimate Scope & Report"
                                 >
                                   <Eye className="w-3.5 h-3.5" />
                                   <span>View</span>
@@ -526,7 +526,7 @@ export default function QuotationsPage() {
                                   type="button"
                                   onClick={() => handleOpenPreview(q)}
                                   className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-white bg-[#5FC8D6] hover:bg-[#39AFC0] rounded shadow-2xs transition cursor-pointer"
-                                  title="Preview & Download Official PDF"
+                                  title="Preview & Download Official Estimate PDF"
                                 >
                                   <Printer className="w-3.5 h-3.5" />
                                   <span>PDF</span>
@@ -538,7 +538,7 @@ export default function QuotationsPage() {
                                     type="button"
                                     onClick={() => handleOpenEditOrRevise(q, 'revise')}
                                     className="btn btn-sm inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-white bg-[#8965E0] hover:bg-[#724ec7] rounded shadow-2xs transition cursor-pointer"
-                                    title="Create Revised Version (vX)"
+                                    title="Create Revised Estimate (vX)"
                                   >
                                     <GitBranch className="w-3.5 h-3.5" />
                                     <span>Revise</span>
@@ -551,7 +551,7 @@ export default function QuotationsPage() {
                                     type="button"
                                     onClick={() => handleOpenEditOrRevise(q, 'edit')}
                                     className="p-1 rounded text-[#71869B] hover:text-[#4689C8] hover:bg-[#EAF3FB] border border-transparent hover:border-[#DFEAF2] transition cursor-pointer"
-                                    title="Edit Draft"
+                                    title="Edit Draft Estimate"
                                   >
                                     <Edit className="w-3.5 h-3.5" />
                                   </button>
@@ -566,7 +566,7 @@ export default function QuotationsPage() {
                                       setIsDeleteModalOpen(true);
                                     }}
                                     className="p-1 rounded text-[#71869B] hover:text-[#F5365C] hover:bg-red-50 border border-transparent hover:border-red-200 transition cursor-pointer"
-                                    title="Delete Quotation"
+                                    title="Delete Estimate"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
                                   </button>
@@ -666,8 +666,8 @@ export default function QuotationsPage() {
         }}
         onConfirm={confirmDeleteQuotation}
         loading={deleting}
-        title="Delete Commercial Quotation"
-        message={`Are you sure you want to permanently delete quotation ${quotationToDelete?.quotation_number} (v${quotationToDelete?.version}) for ${quotationToDelete?.client_name}? This action cannot be undone.`}
+        title="Delete Commercial Estimate"
+        message={`Are you sure you want to permanently delete estimate ${quotationToDelete?.quotation_number} (v${quotationToDelete?.version}) for ${quotationToDelete?.client_name}? This action cannot be undone.`}
       />
     </AppLayout>
   );
