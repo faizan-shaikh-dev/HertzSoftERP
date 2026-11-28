@@ -872,7 +872,7 @@ export default function QuotationModal({
                 <table className="w-full text-left text-xs">
                   <thead className="bg-[#0077B6] text-white text-[11px] font-bold uppercase tracking-wide">
                     <tr>
-                      <th className="py-2.5 px-3 w-8 text-center">#</th>
+                      <th className="py-2.5 px-3 w-8 text-center">Sr.</th>
                       <th className="py-2.5 px-3 min-w-[240px]">Description *</th>
                       <th className="py-2.5 px-3 w-16 text-center">Qty</th>
                       <th className="py-2.5 px-3 w-28 text-right">Base Amount (₹) *</th>

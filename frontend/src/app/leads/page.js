@@ -791,7 +791,7 @@ export default function LeadsPage() {
                               title="View Project Contracts for this Client"
                             >
                               <UserCheck className="w-2.5 h-2.5 text-[#20A36B]" />
-                              <span>Client #{lead.converted_client_number || 'Linked'}</span>
+                              <span>Client {lead.converted_client_number || 'Linked'}</span>
                             </Link>
                           )}
                         </div>

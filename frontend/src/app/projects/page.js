@@ -441,7 +441,7 @@ export default function ProjectsPage() {
                                   title="View Client Directory"
                                 >
                                   <UserCheck className="w-2.5 h-2.5" />
-                                  <span>Client #{project.client_number || 'Linked'}</span>
+                                  <span>Client {project.client_number || 'Linked'}</span>
                                 </Link>
 
                                 {project.converted_from_lead_id && (
@@ -451,7 +451,7 @@ export default function ProjectsPage() {
                                     title="View Original Lead Pipeline"
                                   >
                                     <Tag className="w-2.5 h-2.5" />
-                                    <span>Lead #{project.lead_number}</span>
+                                    <span>Lead {project.lead_number}</span>
                                   </Link>
                                 )}
                               </div>

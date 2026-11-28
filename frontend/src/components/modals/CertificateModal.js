@@ -4,13 +4,16 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { toast } from 'react-toastify';
 import certificateService from '@/services/certificateService';
+import employeeService from '@/services/employeeService';
 import { 
   XCircle, 
   Award,
   IndianRupee, 
   Loader2, 
   CheckCircle2,
-  AlertCircle 
+  AlertCircle,
+  UserCheck,
+  Sparkles 
 } from 'lucide-react';
 
 const DOCUMENT_TYPES = [
@@ -38,7 +41,7 @@ const PERFORMANCE_RATINGS = [
   'Good (B)'
 ];
 
-export default function CertificateModal({ isOpen, onClose, onSuccess }) {
+export default function CertificateModal({ isOpen, onClose, onSuccess, initialCandidate = null }) {
   const [mounted, setMounted] = useState(false);
 
   const [documentType, setDocumentType] = useState(DOCUMENT_TYPES[0]);
@@ -53,6 +56,9 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
   const [performanceRating, setPerformanceRating] = useState('Excellent (A)');
   const [stipend, setStipend] = useState('');
 
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState('');
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -63,19 +69,58 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
   useEffect(() => {
     if (isOpen) {
       setDocumentType(DOCUMENT_TYPES[0]);
-      setCandidateName('');
-      setCandidateEmail('');
-      setCandidatePhone('');
+      setCandidateName(initialCandidate?.name || '');
+      setCandidateEmail(initialCandidate?.email || '');
+      setCandidatePhone(initialCandidate?.phone || '');
       setCourseOrDomain(DOMAIN_OPTIONS[0]);
-      setCustomDomain('');
-      setStartDate('');
+      setCustomDomain(initialCandidate?.designation || '');
+      setStartDate(initialCandidate?.joining_date ? initialCandidate.joining_date.slice(0, 10) : '');
       setEndDate(new Date().toISOString().slice(0, 10));
       setIssueDate(new Date().toISOString().slice(0, 10));
       setPerformanceRating('Excellent (A)');
-      setStipend('');
+      setStipend(initialCandidate?.stipend_monthly || initialCandidate?.salary_monthly || '');
       setError('');
+      setSelectedEmployeeId(initialCandidate?.id ? String(initialCandidate.id) : '');
+
+      // Load employees and interns list for quick auto-fill
+      employeeService.getEmployees().then(res => {
+        setEmployees(res.data || []);
+      }).catch(err => {
+        console.error('Failed to load employee list in document modal:', err);
+      });
     }
-  }, [isOpen]);
+  }, [isOpen, initialCandidate]);
+
+  const handleSelectEmployee = (empId) => {
+    setSelectedEmployeeId(empId);
+    if (!empId) return;
+    const emp = employees.find(e => String(e.id) === String(empId));
+    if (emp) {
+      setCandidateName(emp.name || '');
+      setCandidateEmail(emp.email || emp.personal_email || '');
+      setCandidatePhone(emp.phone || '');
+      if (emp.joining_date) {
+        setStartDate(emp.joining_date.slice(0, 10));
+      }
+      if (emp.internship_end_date) {
+        setEndDate(emp.internship_end_date.slice(0, 10));
+      }
+      if (emp.designation) {
+        setCustomDomain(emp.designation);
+      }
+      if (emp.stipend_monthly) {
+        setStipend(emp.stipend_monthly);
+      } else if (emp.salary_monthly) {
+        setStipend(emp.salary_monthly);
+      }
+      if (emp.type === 'Intern') {
+        setDocumentType('Internship Certificate');
+      } else {
+        setDocumentType('Offer Letter');
+      }
+      toast.info(`Auto-filled details for ${emp.name} (${emp.employee_code})`);
+    }
+  };
 
   if (!isOpen || !mounted) return null;
 
@@ -111,7 +156,7 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
       };
 
       const res = await certificateService.issueCertificate(payload);
-      toast.success(`${documentType} issued! Cert #${res.data?.certificate_number || ''}`);
+      toast.success(`${documentType} issued! ${res.data?.certificate_number || ''}`);
 
       if (onSuccess) onSuccess();
       onClose();
@@ -177,13 +222,44 @@ export default function CertificateModal({ isOpen, onClose, onSuccess }) {
             <select
               value={documentType}
               onChange={(e) => setDocumentType(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-white text-[#19324D] text-sm rounded-md border border-[#DFEAF2] focus:border-[#4689C8] outline-none transition cursor-pointer font-semibold"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-[#0F172A] text-[#19324D] dark:text-[#F8FAFC] text-sm rounded-md border border-[#DFEAF2] dark:border-[#334155] focus:border-[#4689C8] outline-none transition cursor-pointer font-semibold"
             >
               {DOCUMENT_TYPES.map((dt) => (
                 <option key={dt} value={dt}>{dt}</option>
               ))}
             </select>
           </div>
+
+          {/* Quick Auto-fill from Employee Directory */}
+          {employees.length > 0 && (
+            <div className="p-3 bg-[#F4F8FC] dark:bg-[#0F172A] border border-[#DFEAF2] dark:border-[#334155] rounded-lg">
+              <label className="flex items-center gap-1.5 text-xs font-bold text-[#0077B6] dark:text-[#5FC8D6] mb-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span>Auto-fill from Employee / Trainee (Optional)</span>
+              </label>
+              <select
+                value={selectedEmployeeId}
+                onChange={(e) => handleSelectEmployee(e.target.value)}
+                className="w-full px-3 py-2 bg-white dark:bg-[#1E293B] text-[#19324D] dark:text-[#F8FAFC] text-xs rounded-md border border-[#DFEAF2] dark:border-[#334155] focus:border-[#0077B6] outline-none cursor-pointer"
+              >
+                <option value="">-- Choose employee to pre-fill details --</option>
+                <optgroup label="Staff & Core Team">
+                  {employees.filter(e => e.type !== 'Intern').map(emp => (
+                    <option key={emp.id} value={emp.id}>
+                      {emp.name} ({emp.employee_code}) - {emp.designation || emp.department}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="Trainees & Interns">
+                  {employees.filter(e => e.type === 'Intern').map(intern => (
+                    <option key={intern.id} value={intern.id}>
+                      {intern.name} ({intern.employee_code}) - {intern.degree || intern.department}
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
+            </div>
+          )}
 
           {/* Candidate Name */}
           <div>

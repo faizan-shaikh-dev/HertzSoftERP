@@ -318,15 +318,15 @@ export default function ClientsPage() {
                               <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30">
                                   <UserCheck className="w-2.5 h-2.5" />
-                                  <span>Client #{item.converted_client_number || 'Linked'}</span>
+                                  <span>Client {item.converted_client_number || 'Linked'}</span>
                                 </span>
                                 {item.lead_number && (
                                   <span 
                                     className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#EAF3FB] text-[#4689C8] border border-[#78A9D7]/30"
-                                    title={`Origin Lead #${item.lead_number}`}
+                                    title={`Origin Lead ${item.lead_number}`}
                                   >
                                     <Tag className="w-2.5 h-2.5" />
-                                    <span>Lead #{item.lead_number}</span>
+                                    <span>Lead {item.lead_number}</span>
                                   </span>
                                 )}
                                 {companyName && item.name && (

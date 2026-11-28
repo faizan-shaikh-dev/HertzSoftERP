@@ -661,7 +661,7 @@ export default function PaymentsPage() {
                   <table className="table table-hover table-striped table-bordered w-full min-w-[980px] text-xs text-left">
                     <thead className="thead-light bg-[#EAF3FB] text-[#71869B] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#DFEAF2]">
                       <tr>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[150px] whitespace-nowrap">Receipt / Ref ID</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[150px] whitespace-nowrap">Receipt &amp; Reference</th>
                         <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[220px]">Client &amp; Project</th>
                         <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[150px] whitespace-nowrap text-right">Amount Credited</th>
                         <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[130px] whitespace-nowrap">Payment Date</th>
@@ -707,7 +707,7 @@ export default function PaymentsPage() {
                                   {receiptId}
                                 </div>
                                 <div className="text-[11px] text-[#71869B] font-mono mt-0.5">
-                                  UTR: <span className="text-[#71869B]">{p.transaction_reference || 'N/A'}</span>
+                                  UTR: <span className="text-[#71869B]">{p.transaction_reference ? p.transaction_reference.replace(/^ID:\s*/i, '') : 'N/A'}</span>
                                 </div>
                               </td>
 
@@ -1089,7 +1089,7 @@ export default function PaymentsPage() {
                   <table className="table table-hover table-striped table-bordered w-full min-w-[960px] text-xs text-left">
                     <thead className="thead-light bg-[#EAF3FB] text-[#71869B] text-[11px] font-bold uppercase tracking-wider border-b-2 border-[#DFEAF2]">
                       <tr>
-                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[140px] whitespace-nowrap">Voucher / Ref #</th>
+                        <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[140px] whitespace-nowrap">Voucher Reference</th>
                         <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[220px]">Expense Title / Description</th>
                         <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[130px] whitespace-nowrap">Category</th>
                         <th className="py-3 px-3.5 border-r border-[#DFEAF2] min-w-[140px]">Vendor / Payee</th>

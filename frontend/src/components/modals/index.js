@@ -14,3 +14,5 @@ export { default as QuotationPreviewModal } from './QuotationPreviewModal';
 export { default as PaymentReceiptModal } from './PaymentReceiptModal';
 export { default as TaxInvoiceModal } from './TaxInvoiceModal';
 export { default as ExpenseModal } from './ExpenseModal';
+export { default as EmployeeModal } from './EmployeeModal';
+export { default as EmployeeViewModal } from './EmployeeViewModal';

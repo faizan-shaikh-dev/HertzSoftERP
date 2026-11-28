@@ -96,7 +96,7 @@ export default function ConvertToClientModal({
       const res = await leadService.convertToClient(lead.id, payload);
       const clientNumber = res.data?.client?.client_number || '';
       
-      toast.success(`Deal Won! Lead converted to Client #${clientNumber} successfully!`);
+      toast.success(`Deal Won! Lead converted to Client ${clientNumber} successfully!`);
       
       if (onSuccess) {
         onSuccess();
@@ -144,7 +144,7 @@ export default function ConvertToClientModal({
           <div className="p-3.5 bg-[#F4F8FC] dark:bg-[#0F172A] rounded-md border border-[#DFEAF2] dark:border-[#334155] flex flex-wrap items-center justify-between gap-2 text-xs">
             <div className="flex items-center gap-2">
               <span className="font-mono font-bold text-[#20A36B] bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 px-2 py-0.5 rounded text-[11px]">
-                Lead #{lead.lead_number}
+                Lead {lead.lead_number}
               </span>
               <span className="font-bold text-[#19324D] dark:text-[#F8FAFC]">{lead.name}</span>
               {lead.company_name && (

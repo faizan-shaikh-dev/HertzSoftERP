@@ -548,7 +548,7 @@ function LeadViewContent() {
                     className="btn btn-sm inline-flex items-center gap-1 px-3 py-2 text-xs font-bold bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/40 rounded-lg shadow-2xs"
                   >
                     <UserCheck className="w-3.5 h-3.5" />
-                    <span>Client #{lead.converted_client_number || 'Linked'}</span>
+                    <span>Client {lead.converted_client_number || 'Linked'}</span>
                   </Link>
                 )}
 
@@ -573,7 +573,7 @@ function LeadViewContent() {
                   >
                     {LEAD_STATUSES.map((s) => (
                       <option key={s.id} value={s.id}>
-                        Stage #{s.number}: {s.label}
+                        Stage {s.number}: {s.label}
                       </option>
                     ))}
                   </select>
@@ -645,7 +645,7 @@ function LeadViewContent() {
 
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-[#EAF3FB] text-[#4689C8] border border-[#78A9D7]/40">
                           <Tag className="w-3.5 h-3.5" />
-                          <span>Origin Lead #{lead.lead_number} (Won)</span>
+                          <span>Origin Lead {lead.lead_number} (Won)</span>
                         </span>
 
                         <ChevronRight className="w-3.5 h-3.5 text-[#71869B]" />
@@ -656,7 +656,7 @@ function LeadViewContent() {
                           title="View Client in Clients Directory"
                         >
                           <UserCheck className="w-3.5 h-3.5" />
-                          <span>Converted to Client #{lead.converted_client_number || 'Linked'}</span>
+                          <span>Converted to Client {lead.converted_client_number || 'Linked'}</span>
                           <ExternalLink className="w-3 h-3 opacity-70 group-hover:opacity-100" />
                         </Link>
 
@@ -928,7 +928,7 @@ function LeadViewContent() {
                               >
                                 {LEAD_STATUSES.map((s) => (
                                   <option key={s.id} value={s.id}>
-                                    Stage #{s.number}: {s.label}
+                                    Stage {s.number}: {s.label}
                                   </option>
                                 ))}
                               </select>
@@ -1033,7 +1033,7 @@ function LeadViewContent() {
                                       {meta.label}
                                     </h4>
                                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${meta.lightBg} ${meta.textColor} border border-current/20`}>
-                                      Stage #{meta.number}
+                                      Stage {meta.number}
                                     </span>
                                   </div>
 

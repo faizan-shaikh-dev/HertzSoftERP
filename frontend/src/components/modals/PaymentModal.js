@@ -174,7 +174,7 @@ export default function PaymentModal({ isOpen, onClose, project = null, prefille
         toast.success(`Payment installment of ${formatCurrency(numericAmount)} updated successfully!`);
       } else {
         const res = await paymentService.recordPayment(payload);
-        toast.success(`Payment recorded! Official Receipt #${res.data?.receipt_number || 'Generated'} issued.`);
+        toast.success(`Payment recorded! Official Receipt ${res.data?.receipt_number || 'Generated'} issued.`);
       }
 
       if (onSuccess) onSuccess();

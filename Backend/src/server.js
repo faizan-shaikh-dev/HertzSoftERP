@@ -16,6 +16,7 @@ import paymentRoutes from './modules/payment.routes.js';
 import certificateRoutes from './modules/certificate.routes.js';
 import dashboardRoutes from './modules/dashboard.routes.js';
 import quotationRoutes from './modules/quotation.routes.js';
+import employeeRoutes from './modules/employee.routes.js';
 import { apiLimiter, authLimiter } from './middleware/rateLimiter.js';
 
 dotenv.config();
@@ -74,6 +75,7 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/certificates', certificateRoutes);
 app.use('/api/quotations', quotationRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/employees', employeeRoutes);
 
 // Base Health Check Route
 app.get('/health', (req, res) => {

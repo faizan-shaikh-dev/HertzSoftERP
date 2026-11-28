@@ -175,7 +175,7 @@ export default function ReceiptDocument({ payment, printable = false }) {
                   Transaction Details
                 </td>
                 <td className="w-1/4 py-2 px-4 bg-[#F1F5F9]/80 font-mono font-medium text-slate-800 text-center">
-                  {payment.transaction_reference ? `ID: ${payment.transaction_reference}` : 'ID: N/A'}
+                  {payment.transaction_reference ? payment.transaction_reference.replace(/^ID:\s*/i, '') : 'N/A'}
                 </td>
               </tr>
 

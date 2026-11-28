@@ -52,3 +52,7 @@ export const authorizeRoles = (...allowedRoles) => {
     next();
   };
 };
+
+// Backward-compatible alias
+export const authenticate = authenticateToken;
+

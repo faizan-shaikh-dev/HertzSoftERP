@@ -465,7 +465,7 @@ function ProjectViewContent() {
                   >
                     {PROJECT_STATUSES.map((s) => (
                       <option key={s.id} value={s.id}>
-                        Stage #{s.number}: {s.label}
+                        Stage {s.number}: {s.label}
                       </option>
                     ))}
                   </select>
@@ -543,7 +543,7 @@ function ProjectViewContent() {
                           title="View Original Lead Pipeline Record"
                         >
                           <Tag className="w-3.5 h-3.5" />
-                          <span>Origin Lead #{project.origin_lead_number || '1'} ({project.origin_lead_name || 'Inquiry'})</span>
+                          <span>Origin Lead {project.origin_lead_number || '1'} ({project.origin_lead_name || 'Inquiry'})</span>
                           <ExternalLink className="w-3 h-3 opacity-70 group-hover:opacity-100" />
                         </Link>
                       ) : (
@@ -561,7 +561,7 @@ function ProjectViewContent() {
                         title="View Client Profile"
                       >
                         <UserCheck className="w-3.5 h-3.5" />
-                        <span>Client #{project.client_number || 'Linked'} ({project.client_company || project.client_name})</span>
+                        <span>Client {project.client_number || 'Linked'} ({project.client_company || project.client_name})</span>
                         <ExternalLink className="w-3 h-3 opacity-70 group-hover:opacity-100" />
                       </Link>
 
@@ -570,7 +570,7 @@ function ProjectViewContent() {
                       {/* 3. Active Project */}
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-[#19324D] text-white shadow-2xs">
                         <FolderKanban className="w-3.5 h-3.5 text-[#5FC8D6]" />
-                        <span>Project #{project.id.slice(0, 8)}: {project.title}</span>
+                        <span>Project {project.id.slice(0, 8)}: {project.title}</span>
                       </span>
                     </div>
 
@@ -621,7 +621,7 @@ function ProjectViewContent() {
                           <User className="w-3.5 h-3.5 text-[#4689C8]" />
                           <span>{project.client_name || '-'}</span>
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#EAF8F1] text-[#20A36B] border border-[#20A36B]/30">
-                            Client #{project.client_number || 'Linked'}
+                            Client {project.client_number || 'Linked'}
                           </span>
                         </div>
                       </div>
@@ -649,7 +649,7 @@ function ProjectViewContent() {
                               className="inline-flex items-center gap-1.5 text-xs font-bold text-[#4689C8] hover:underline"
                             >
                               <Tag className="w-3.5 h-3.5 text-[#4689C8]" />
-                              <span>Lead #{project.origin_lead_number}: {project.origin_lead_inquiry || 'Inquiry Won'}</span>
+                              <span>Lead {project.origin_lead_number}: {project.origin_lead_inquiry || 'Inquiry Won'}</span>
                               <ExternalLink className="w-3 h-3" />
                             </Link>
                           ) : (
@@ -800,7 +800,7 @@ function ProjectViewContent() {
                               >
                                 {PROJECT_STATUSES.map((s) => (
                                   <option key={s.id} value={s.id}>
-                                    Stage #{s.number}: {s.label}
+                                    Stage {s.number}: {s.label}
                                   </option>
                                 ))}
                               </select>
@@ -905,7 +905,7 @@ function ProjectViewContent() {
                                       {meta.label}
                                     </h4>
                                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${meta.lightBg} ${meta.textColor} border border-current/20`}>
-                                      Stage #{meta.number}
+                                      Stage {meta.number}
                                     </span>
                                     {item.created_by_name && (
                                       <span className="text-[10px] text-[#71869B]">
@@ -978,7 +978,7 @@ function ProjectViewContent() {
 
                           <div>
                             <div className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-                              Stage #{currentStatusMeta.number || 1}
+                              Stage {currentStatusMeta.number || 1}
                             </div>
                             <div className="text-[11px] text-white/85 font-semibold mt-0.5 uppercase tracking-wider">
                               Active Phase
