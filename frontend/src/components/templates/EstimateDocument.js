@@ -59,7 +59,7 @@ export default function EstimateDocument({ quotation, printable = false }) {
         <div>
           <div className="flex items-center gap-2.5">
             <img 
-              src="/logo.png" 
+              src="/logo-icon.svg" 
               alt="Hertzsoft" 
               className="h-10 w-auto object-contain"
               onError={(e) => {
